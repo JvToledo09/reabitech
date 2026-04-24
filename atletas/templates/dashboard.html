@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Dashboard ReabiTech</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,Arial;
+}
+
+body{
+display:flex;
+background:#031826;
+color:white;
+min-height:100vh;
+}
+
+/* MENU */
+
+.sidebar{
+width:270px;
+background:linear-gradient(180deg,#05283c,#063b45);
+padding:30px 20px;
+box-shadow:5px 0 25px rgba(0,0,0,.25);
+}
+
+.logo{
+font-size:30px;
+font-weight:800;
+margin-bottom:40px;
+color:#42ffd9;
+}
+
+.menu a{
+display:block;
+padding:16px;
+margin-bottom:12px;
+border-radius:14px;
+text-decoration:none;
+color:#d8ffff;
+transition:.3s;
+background:rgba(255,255,255,.03);
+}
+
+.menu a:hover{
+background:#14e4b5;
+color:#001d25;
+transform:translateX(6px);
+}
+
+/* CONTEUDO */
+
+.main{
+flex:1;
+padding:35px;
+}
+
+.topo{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.topo h1{
+font-size:34px;
+}
+
+.user{
+background:rgba(255,255,255,.06);
+padding:12px 18px;
+border-radius:30px;
+}
+
+/* CARDS */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:22px;
+margin-bottom:30px;
+}
+
+.card{
+background:rgba(255,255,255,.05);
+padding:28px;
+border-radius:22px;
+box-shadow:0 10px 25px rgba(0,0,0,.2);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-6px);
+}
+
+.card h2{
+font-size:40px;
+color:#40ffd6;
+margin-bottom:10px;
+}
+
+.card p{
+color:#bfeaea;
+}
+
+/* GRAFICO FAKE */
+
+.grafico{
+background:rgba(255,255,255,.05);
+padding:30px;
+border-radius:22px;
+margin-bottom:25px;
+}
+
+.barras{
+display:flex;
+align-items:flex-end;
+gap:16px;
+height:220px;
+margin-top:20px;
+}
+
+.bar{
+flex:1;
+border-radius:14px 14px 0 0;
+background:linear-gradient(180deg,#44ffe0,#00b878);
+animation:grow 1.5s ease;
+}
+
+.bar:nth-child(1){height:45%;}
+.bar:nth-child(2){height:70%;}
+.bar:nth-child(3){height:55%;}
+.bar:nth-child(4){height:90%;}
+.bar:nth-child(5){height:65%;}
+.bar:nth-child(6){height:82%;}
+
+@keyframes grow{
+from{height:0;}
+}
+
+/* TABELA */
+
+.tabela{
+background:rgba(255,255,255,.05);
+padding:25px;
+border-radius:22px;
+overflow:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:16px;
+text-align:left;
+border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+th{
+color:#42ffd9;
+}
+
+.status{
+padding:8px 12px;
+border-radius:20px;
+font-size:13px;
+display:inline-block;
+}
+
+.ok{background:#00b878;}
+.alerta{background:#ffb300;color:#000;}
+.critico{background:#ff3d57;}
+
+/* RESPONSIVO */
+
+@media(max-width:900px){
+body{
+flex-direction:column;
+}
+
+.sidebar{
+width:100%;
+}
+
+.main{
+padding:20px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+<div class="logo">ReabiTech</div>
+
+<div class="menu">
+<a href="#">Dashboard</a>
+<a href="#">Atletas</a>
+<a href="#">Fisioterapia</a>
+<a href="#">Psicologia</a>
+<a href="#">Relatórios</a>
+<a href="#">Agenda</a>
+<a href="#">Configurações</a>
+</div>
+</div>
+
+<div class="main">
+
+<div class="topo">
+<h1>Painel Estratégico</h1>
+<div class="user">Olá, Administrador</div>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h2>128</h2>
+<p>Atletas Cadastrados</p>
+</div>
+
+<div class="card">
+<h2>94%</h2>
+<p>Recuperação Média</p>
+</div>
+
+<div class="card">
+<h2>36</h2>
+<p>Planos Ativos</p>
+</div>
+
+<div class="card">
+<h2>12</h2>
+<p>Lesões em Monitoramento</p>
+</div>
+
+</div>
+
+<div class="grafico">
+<h2>Evolução Mensal</h2>
+
+<div class="barras">
+<div class="bar"></div>
+<div class="bar"></div>
+<div class="bar"></div>
+<div class="bar"></div>
+<div class="bar"></div>
+<div class="bar"></div>
+</div>
+</div>
+
+<div class="tabela">
+<h2 style="margin-bottom:20px;">Status de Atletas</h2>
+
+<table>
+<tr>
+<th>Nome</th>
+<th>Lesão</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>Lucas Andrade</td>
+<td>Joelho</td>
+<td><span class="status ok">Recuperando</span></td>
+</tr>
+
+<tr>
+<td>Bruno Silva</td>
+<td>Ombro</td>
+<td><span class="status alerta">Atenção</span></td>
+</tr>
+
+<tr>
+<td>Caio Mendes</td>
+<td>Tornozelo</td>
+<td><span class="status critico">Crítico</span></td>
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</body>
+</html>
