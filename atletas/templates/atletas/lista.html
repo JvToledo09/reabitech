@@ -2,111 +2,332 @@
 
 {% block content %}
 
-<div class="topo-pagina">
-    <h1>Atletas</h1>
-
-    <a href="/atletas/novo/" class="btn">
-        + Novo Atleta
-    </a>
-</div>
-
-<div class="card-grid">
-
-{% for atleta in atletas %}
-
-<div class="card-atleta">
-
-    <div class="avatar">
-        {{ atleta.nome|first }}
-    </div>
-
-    <h2>{{ atleta.nome }}</h2>
-
-    <div class="info">
-        <p><strong>Idade:</strong> {{ atleta.idade }}</p>
-        <p><strong>Esporte:</strong> {{ atleta.esporte }}</p>
-        <p><strong>Lesão:</strong> {{ atleta.lesao }}</p>
-    </div>
-
-</div>
-
-{% empty %}
-
-<div class="vazio">
-    Nenhum atleta cadastrado.
-</div>
-
-{% endfor %}
-
-</div>
-
 <style>
 
-.topo-pagina{
+.page-header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:30px;
+margin-bottom:35px;
+gap:20px;
+flex-wrap:wrap;
 }
 
-.btn{
-background:linear-gradient(135deg,#00e0ff,#00ffb3);
-padding:14px 22px;
-border-radius:14px;
+.page-header h1{
+font-size:34px;
+font-weight:800;
+margin-bottom:8px;
+}
+
+.page-header p{
+color:#8ea4bd;
+font-size:15px;
+}
+
+.btn-primary{
+padding:16px 24px;
+border-radius:18px;
 text-decoration:none;
-color:#001018;
 font-weight:700;
+background:linear-gradient(135deg,#00d2ff,#00ffbf);
+color:#001018;
+transition:.35s;
+box-shadow:0 10px 30px rgba(0,210,255,.2);
 }
 
-.card-grid{
+.btn-primary:hover{
+transform:translateY(-4px);
+box-shadow:0 15px 40px rgba(0,210,255,.3);
+}
+
+.filters{
+display:flex;
+gap:18px;
+margin-bottom:30px;
+flex-wrap:wrap;
+}
+
+.filter-box{
+flex:1;
+min-width:220px;
+background:linear-gradient(145deg,#111d2d,#15263b);
+padding:18px 22px;
+border-radius:22px;
+border:1px solid rgba(255,255,255,.05);
+}
+
+.filter-box span{
+display:block;
+font-size:13px;
+color:#8ea4bd;
+margin-bottom:8px;
+}
+
+.filter-box strong{
+font-size:20px;
+}
+
+.cards{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:25px;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:28px;
 }
 
-.card-atleta{
-background:rgba(255,255,255,.05);
-backdrop-filter:blur(15px);
-border:1px solid rgba(255,255,255,.06);
+.card{
+background:linear-gradient(145deg,#111d2d,#15263b);
+border-radius:30px;
 padding:30px;
-border-radius:24px;
+border:1px solid rgba(255,255,255,.05);
+position:relative;
+overflow:hidden;
 transition:.4s;
-box-shadow:0 10px 30px rgba(0,0,0,.25);
+box-shadow:0 20px 50px rgba(0,0,0,.25);
 }
 
-.card-atleta:hover{
-transform:translateY(-10px) scale(1.02);
+.card:hover{
+transform:translateY(-10px);
+}
+
+.card::before{
+content:"";
+position:absolute;
+width:220px;
+height:220px;
+background:radial-gradient(circle, rgba(0,210,255,.12), transparent 70%);
+top:-80px;
+right:-80px;
+}
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
 }
 
 .avatar{
-width:70px;
-height:70px;
-border-radius:50%;
-background:linear-gradient(135deg,#00f0ff,#00ff99);
+width:72px;
+height:72px;
+border-radius:24px;
+background:linear-gradient(135deg,#00d2ff,#00ffbf);
 display:flex;
 align-items:center;
 justify-content:center;
 font-size:28px;
 font-weight:800;
 color:#001018;
-margin-bottom:20px;
+box-shadow:0 10px 30px rgba(0,210,255,.25);
 }
 
-.card-atleta h2{
-margin-bottom:15px;
+.badge{
+padding:10px 14px;
+border-radius:30px;
+font-size:12px;
+font-weight:700;
 }
 
-.info p{
+.ok{
+background:rgba(0,255,191,.12);
+color:#00ffbf;
+}
+
+.warning{
+background:rgba(255,184,0,.12);
+color:#ffcc40;
+}
+
+.card h2{
+font-size:26px;
 margin-bottom:10px;
-color:#b7d4df;
 }
 
-.vazio{
-padding:50px;
-background:rgba(255,255,255,.04);
-border-radius:20px;
+.subtitle{
+color:#8ea4bd;
+margin-bottom:24px;
+font-size:14px;
+}
+
+.info{
+display:flex;
+flex-direction:column;
+gap:18px;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+padding-bottom:14px;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.row:last-child{
+border:none;
+padding-bottom:0;
+}
+
+.label{
+color:#8ea4bd;
+font-size:14px;
+}
+
+.value{
+font-weight:600;
+}
+
+.actions{
+margin-top:28px;
+display:flex;
+gap:14px;
+}
+
+.btn-outline{
+flex:1;
+padding:14px;
+border-radius:16px;
+text-align:center;
+text-decoration:none;
+font-weight:600;
+border:1px solid rgba(255,255,255,.08);
+color:white;
+transition:.3s;
+background:rgba(255,255,255,.02);
+}
+
+.btn-outline:hover{
+background:rgba(255,255,255,.06);
+}
+
+.empty{
+background:linear-gradient(145deg,#111d2d,#15263b);
+padding:60px;
+border-radius:30px;
+text-align:center;
+border:1px solid rgba(255,255,255,.05);
+}
+
+.empty h2{
+margin-bottom:14px;
+}
+
+.empty p{
+color:#8ea4bd;
 }
 
 </style>
+
+<div class="page-header">
+
+<div>
+<h1>Atletas</h1>
+<p>Gestão completa dos atletas cadastrados na plataforma</p>
+</div>
+
+<a href="/atletas/novo/" class="btn-primary">
+Novo Atleta
+</a>
+
+</div>
+
+<div class="filters">
+
+<div class="filter-box">
+<span>Total de atletas</span>
+<strong>{{ atletas|length }}</strong>
+</div>
+
+<div class="filter-box">
+<span>Recuperação ativa</span>
+<strong>94%</strong>
+</div>
+
+<div class="filter-box">
+<span>Consultas realizadas</span>
+<strong>1.240</strong>
+</div>
+
+<div class="filter-box">
+<span>Alertas clínicos</span>
+<strong>12</strong>
+</div>
+
+</div>
+
+{% if atletas %}
+
+<div class="cards">
+
+{% for atleta in atletas %}
+
+<div class="card">
+
+<div class="top">
+
+<div class="avatar">
+{{ atleta.nome|first }}
+</div>
+
+<div class="badge ok">
+Ativo
+</div>
+
+</div>
+
+<h2>{{ atleta.nome }}</h2>
+
+<div class="subtitle">
+Monitoramento esportivo inteligente
+</div>
+
+<div class="info">
+
+<div class="row">
+<div class="label">Idade</div>
+<div class="value">{{ atleta.idade }} anos</div>
+</div>
+
+<div class="row">
+<div class="label">Esporte</div>
+<div class="value">{{ atleta.esporte }}</div>
+</div>
+
+<div class="row">
+<div class="label">Lesão</div>
+<div class="value">{{ atleta.lesao }}</div>
+</div>
+
+</div>
+
+<div class="actions">
+
+<a href="#" class="btn-outline">
+Detalhes
+</a>
+
+<a href="#" class="btn-outline">
+Evolução
+</a>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="empty">
+
+<h2>Nenhum atleta cadastrado</h2>
+
+<p>
+Cadastre atletas para iniciar o acompanhamento clínico
+e monitoramento esportivo.
+</p>
+
+</div>
+
+{% endif %}
 
 {% endblock %}

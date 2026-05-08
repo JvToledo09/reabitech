@@ -2,80 +2,201 @@
 
 {% block content %}
 
-<div class="form-container glass">
+<style>
+    .form-container {
+        max-width: 900px;
+        margin: auto;
+        background: linear-gradient(145deg, #111d2d, #15263b);
+        padding: 40px;
+        border-radius: 34px;
+        border: 1px solid rgba(255, 255, 255, .05);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, .25);
+        position: relative;
+        overflow: hidden;
+    }
 
-<h1>Novo Atleta</h1>
+    .form-container::before {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(0, 210, 255, .12), transparent 70%);
+        top: -120px;
+        right: -120px;
+    }
 
-<form method="POST">
+    .form-header {
+        margin-bottom: 35px;
+        position: relative;
+        z-index: 2;
+    }
 
-{% csrf_token %}
+    .form-header h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+    }
 
-<input type="text" name="nome" placeholder="Nome do atleta" required>
+    .form-header p {
+        color: #8ea4bd;
+        line-height: 1.7;
+    }
 
-<input type="number" name="idade" placeholder="Idade" required>
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        position: relative;
+        z-index: 2;
+    }
 
-<input type="text" name="esporte" placeholder="Esporte" required>
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
 
-<input type="text" name="lesao" placeholder="Lesão" required>
+    .form-group.full {
+        grid-column: 1/-1;
+    }
 
-<button type="submit">
-Cadastrar Atleta
-</button>
+    label {
+        margin-bottom: 12px;
+        font-weight: 600;
+        font-size: 14px;
+    }
 
-</form>
+    input,
+    select,
+    textarea {
+        padding: 18px;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, .06);
+        background: rgba(255, 255, 255, .03);
+        color: white;
+        font-size: 15px;
+        outline: none;
+        transition: .3s;
+    }
+
+    textarea {
+        min-height: 130px;
+        resize: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: rgba(0, 210, 255, .4);
+        box-shadow: 0 0 0 4px rgba(0, 210, 255, .08);
+    }
+
+    .actions {
+        margin-top: 35px;
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 2;
+    }
+
+    .btn-save {
+        padding: 18px 28px;
+        border: none;
+        border-radius: 18px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #00d2ff, #00ffbf);
+        color: #001018;
+        cursor: pointer;
+        transition: .35s;
+    }
+
+    .btn-save:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 15px 40px rgba(0, 210, 255, .3);
+    }
+
+    .btn-cancel {
+        padding: 18px 28px;
+        border-radius: 18px;
+        text-decoration: none;
+        border: 1px solid rgba(255, 255, 255, .08);
+        color: white;
+        background: rgba(255, 255, 255, .03);
+        transition: .3s;
+    }
+
+    .btn-cancel:hover {
+        background: rgba(255, 255, 255, .06);
+    }
+
+    @media(max-width:800px) {
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+    }
+</style>
+
+<div class="form-container">
+
+    <div class="form-header">
+
+        <h1>Cadastrar Atleta</h1>
+
+        <p>
+            Adicione informações clínicas e esportivas
+            para iniciar o monitoramento inteligente.
+        </p>
+
+    </div>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>Nome completo</label>
+                <input type="text" name="nome" required>
+            </div>
+
+            <div class="form-group">
+                <label>Idade</label>
+                <input type="number" name="idade" required>
+            </div>
+
+            <div class="form-group">
+                <label>Esporte</label>
+                <input type="text" name="esporte" required>
+            </div>
+
+            <div class="form-group">
+                <label>Lesão</label>
+                <input type="text" name="lesao" required>
+            </div>
+
+            <div class="form-group full">
+                <label>Observações clínicas</label>
+                <textarea name="obs"></textarea>
+            </div>
+
+        </div>
+
+        <div class="actions">
+
+            <button class="btn-save">
+                Salvar atleta
+            </button>
+
+            <a href="/atletas/" class="btn-cancel">
+                Cancelar
+            </a>
+
+        </div>
+
+    </form>
 
 </div>
-
-<style>
-
-.form-container{
-max-width:700px;
-padding:40px;
-border-radius:30px;
-}
-
-.form-container h1{
-margin-bottom:30px;
-font-size:38px;
-}
-
-form{
-display:flex;
-flex-direction:column;
-gap:20px;
-}
-
-input{
-padding:18px;
-border:none;
-outline:none;
-border-radius:16px;
-background:rgba(255,255,255,.06);
-color:white;
-font-size:16px;
-border:1px solid rgba(255,255,255,.08);
-}
-
-input::placeholder{
-color:#b8c9d1;
-}
-
-button{
-padding:18px;
-border:none;
-border-radius:18px;
-background:linear-gradient(135deg,#00e5ff,#00ffa3);
-font-size:17px;
-font-weight:700;
-cursor:pointer;
-transition:.3s;
-}
-
-button:hover{
-transform:translateY(-4px);
-box-shadow:0 10px 30px rgba(0,255,180,.25);
-}
-
-</style>
 
 {% endblock %}

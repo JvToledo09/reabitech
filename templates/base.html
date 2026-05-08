@@ -1,237 +1,433 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ReabiTech</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
+    <title>ReabiTech</title>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI;
-}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
-body{
-background:#071b2a;
-color:white;
-display:flex;
-min-height:100vh;
-overflow-x:hidden;
-}
+    <style>
+        :root {
+            --bg: #07111f;
+            --bg2: #0b1728;
+            --card: #101c2c;
+            --card2: #132235;
+            --line: rgba(255, 255, 255, .06);
 
-.sidebar{
-width:270px;
-background:linear-gradient(180deg,#041824,#062d3d);
-padding:30px 20px;
-position:fixed;
-height:100%;
-box-shadow:5px 0 25px rgba(0,0,0,.4);
-}
+            --primary: #00d2ff;
+            --secondary: #00ffbf;
 
-.logo{
-font-size:32px;
-font-weight:900;
-margin-bottom:40px;
-color:#42ffd9;
-}
+            --text: #ffffff;
+            --muted: #8ea4bd;
 
-.menu a{
-display:block;
-padding:16px;
-margin-bottom:12px;
-text-decoration:none;
-color:white;
-border-radius:14px;
-transition:.3s;
-background:rgba(255,255,255,.03);
-}
+            --shadow: 0 20px 60px rgba(0, 0, 0, .45);
+        }
 
-.menu a:hover{
-background:#18e0b5;
-color:#00222c;
-transform:translateX(8px);
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-.main{
-margin-left:270px;
-padding:40px;
-width:100%;
-}
+        body {
+            font-family: 'Inter', sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(0, 210, 255, .15), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(0, 255, 191, .10), transparent 30%),
+                linear-gradient(135deg, var(--bg), var(--bg2));
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+        }
 
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
-flex-wrap:wrap;
-gap:20px;
-}
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
 
-.topbar h1{
-font-size:36px;
-}
+        .sidebar {
+            width: 280px;
+            background: rgba(10, 18, 30, .75);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--line);
+            padding: 30px 22px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 100;
+        }
 
-.user{
-background:rgba(255,255,255,.06);
-padding:12px 20px;
-border-radius:30px;
-}
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 40px;
+        }
 
-.card-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-gap:25px;
-margin-top:30px;
-}
+        .logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 800;
+            color: #001018;
+            box-shadow: 0 10px 30px rgba(0, 210, 255, .3);
+        }
 
-.card{
-background:rgba(255,255,255,.05);
-padding:30px;
-border-radius:24px;
-box-shadow:0 10px 25px rgba(0,0,0,.25);
-transition:.3s;
-backdrop-filter:blur(10px);
-}
+        .logo-text h1 {
+            font-size: 22px;
+            font-weight: 800;
+        }
 
-.card:hover{
-transform:translateY(-8px);
-}
+        .logo-text p {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
 
-.card h2{
-font-size:42px;
-color:#42ffd9;
-margin-bottom:10px;
-}
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-.btn{
-display:inline-block;
-padding:14px 24px;
-border-radius:14px;
-background:#19e4b8;
-color:#00242d;
-text-decoration:none;
-font-weight:700;
-margin-top:20px;
-transition:.3s;
-}
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            border-radius: 18px;
+            text-decoration: none;
+            color: #dce8f5;
+            font-size: 15px;
+            font-weight: 500;
+            transition: .35s;
+            border: 1px solid transparent;
+            background: rgba(255, 255, 255, .02);
+        }
 
-.btn:hover{
-transform:scale(1.05);
-}
+        .menu a:hover {
+            background: linear-gradient(135deg, rgba(0, 210, 255, .18), rgba(0, 255, 191, .12));
+            border-color: rgba(0, 210, 255, .18);
+            transform: translateX(6px);
+        }
 
-.table-area{
-margin-top:40px;
-background:rgba(255,255,255,.04);
-padding:25px;
-border-radius:24px;
-overflow:auto;
-}
+        .bottom-card {
+            margin-top: 30px;
+            padding: 22px;
+            border-radius: 24px;
+            background: linear-gradient(145deg, #0e1b2d, #15263b);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+        }
 
-table{
-width:100%;
-border-collapse:collapse;
-}
+        .bottom-card h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
 
-th,td{
-padding:18px;
-text-align:left;
-border-bottom:1px solid rgba(255,255,255,.06);
-}
+        .bottom-card p {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
 
-th{
-color:#42ffd9;
-}
+        .bottom-card button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            font-weight: 700;
+            cursor: pointer;
+            color: #001018;
+            transition: .3s;
+        }
 
-.status{
-padding:8px 14px;
-border-radius:20px;
-font-size:13px;
-font-weight:700;
-}
+        .bottom-card button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 210, 255, .25);
+        }
 
-.ok{
-background:#00c07a;
-}
+        .main {
+            margin-left: 280px;
+            width: calc(100% - 280px);
+            padding: 40px;
+        }
 
-.alerta{
-background:#ffb300;
-color:#000;
-}
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
 
-.critico{
-background:#ff3d57;
-}
+        .top-left h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
 
-input,select,textarea{
-width:100%;
-padding:15px;
-margin-top:10px;
-margin-bottom:20px;
-border:none;
-border-radius:14px;
-background:#0c2b3d;
-color:white;
-}
+        .top-left p {
+            color: var(--muted);
+            font-size: 15px;
+        }
 
-button{
-padding:14px 24px;
-border:none;
-border-radius:14px;
-background:#19e4b8;
-font-weight:700;
-cursor:pointer;
-}
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
 
-@media(max-width:900px){
+        .search {
+            width: 300px;
+            position: relative;
+        }
 
-.sidebar{
-position:relative;
-width:100%;
-height:auto;
-}
+        .search input {
+            width: 100%;
+            padding: 16px 20px;
+            border: none;
+            outline: none;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .05);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, .05);
+        }
 
-.main{
-margin-left:0;
-}
+        .search input:focus {
+            border-color: rgba(0, 210, 255, .4);
+            box-shadow: 0 0 0 4px rgba(0, 210, 255, .08);
+        }
 
-body{
-flex-direction:column;
-}
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, .04);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, .05);
+        }
 
-}
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #001018;
+        }
 
-</style>
+        .profile h4 {
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+
+        .profile p {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .content {
+            animation: fade .5s ease;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media(max-width:1100px) {
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            body {
+                flex-direction: column;
+            }
+
+        }
+
+        @media(max-width:700px) {
+
+            .main {
+                padding: 25px;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .search {
+                width: 100%;
+            }
+
+        }
+    </style>
 
 </head>
 
 <body>
 
-<div class="sidebar">
+    <div class="sidebar">
 
-<div class="logo">
-ReabiTech
-</div>
+        <div>
 
-<div class="menu">
-<a href="/">Home</a>
-<a href="/dashboard/">Dashboard</a>
-<a href="/atletas/">Atletas</a>
-<a href="/atletas/novo/">Cadastrar</a>
-</div>
+            <div class="logo-area">
 
-</div>
+                <div class="logo">
+                    R
+                </div>
 
-<div class="main">
+                <div class="logo-text">
+                    <h1>ReabiTech</h1>
+                    <p>Sports Recovery Platform</p>
+                </div>
 
-{% block content %}
+            </div>
 
-{% endblock %}
+            <div class="menu">
 
-</div>
+                <a href="/dashboard/">
+                    Dashboard
+                </a>
+
+                <a href="/atletas/">
+                    Atletas
+                </a>
+
+                <a href="#">
+                    Fisioterapia
+                </a>
+
+                <a href="#">
+                    Psicologia
+                </a>
+
+                <a href="#">
+                    Agenda
+                </a>
+
+                <a href="#">
+                    Relatórios
+                </a>
+
+                <a href="#">
+                    Analytics
+                </a>
+
+                <a href="#">
+                    Configurações
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="bottom-card">
+
+            <h3>Centro de Controle</h3>
+
+            <p>
+                Gerencie atletas, monitore evolução clínica
+                e acompanhe indicadores estratégicos.
+            </p>
+
+            <button>
+                Painel Avançado
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="main">
+
+        <div class="topbar">
+
+            <div class="top-left">
+                <h1>Dashboard</h1>
+                <p>Plataforma inteligente de acompanhamento esportivo</p>
+            </div>
+
+            <div class="top-right">
+
+                <div class="search">
+                    <input type="text" placeholder="Pesquisar atleta, relatório ou sessão">
+                </div>
+
+                <div class="profile">
+
+                    <div class="avatar">
+                        A
+                    </div>
+
+                    <div>
+                        <h4>Administrador</h4>
+                        <p>Controle Geral</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="content">
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
+    </div>
 
 </body>
+
 </html>
