@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ReabiTech</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+body{
+background:#071b2a;
+color:white;
+display:flex;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+.sidebar{
+width:270px;
+background:linear-gradient(180deg,#041824,#062d3d);
+padding:30px 20px;
+position:fixed;
+height:100%;
+box-shadow:5px 0 25px rgba(0,0,0,.4);
+}
+
+.logo{
+font-size:32px;
+font-weight:900;
+margin-bottom:40px;
+color:#42ffd9;
+}
+
+.menu a{
+display:block;
+padding:16px;
+margin-bottom:12px;
+text-decoration:none;
+color:white;
+border-radius:14px;
+transition:.3s;
+background:rgba(255,255,255,.03);
+}
+
+.menu a:hover{
+background:#18e0b5;
+color:#00222c;
+transform:translateX(8px);
+}
+
+.main{
+margin-left:270px;
+padding:40px;
+width:100%;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.topbar h1{
+font-size:36px;
+}
+
+.user{
+background:rgba(255,255,255,.06);
+padding:12px 20px;
+border-radius:30px;
+}
+
+.card-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+gap:25px;
+margin-top:30px;
+}
+
+.card{
+background:rgba(255,255,255,.05);
+padding:30px;
+border-radius:24px;
+box-shadow:0 10px 25px rgba(0,0,0,.25);
+transition:.3s;
+backdrop-filter:blur(10px);
+}
+
+.card:hover{
+transform:translateY(-8px);
+}
+
+.card h2{
+font-size:42px;
+color:#42ffd9;
+margin-bottom:10px;
+}
+
+.btn{
+display:inline-block;
+padding:14px 24px;
+border-radius:14px;
+background:#19e4b8;
+color:#00242d;
+text-decoration:none;
+font-weight:700;
+margin-top:20px;
+transition:.3s;
+}
+
+.btn:hover{
+transform:scale(1.05);
+}
+
+.table-area{
+margin-top:40px;
+background:rgba(255,255,255,.04);
+padding:25px;
+border-radius:24px;
+overflow:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:18px;
+text-align:left;
+border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+th{
+color:#42ffd9;
+}
+
+.status{
+padding:8px 14px;
+border-radius:20px;
+font-size:13px;
+font-weight:700;
+}
+
+.ok{
+background:#00c07a;
+}
+
+.alerta{
+background:#ffb300;
+color:#000;
+}
+
+.critico{
+background:#ff3d57;
+}
+
+input,select,textarea{
+width:100%;
+padding:15px;
+margin-top:10px;
+margin-bottom:20px;
+border:none;
+border-radius:14px;
+background:#0c2b3d;
+color:white;
+}
+
+button{
+padding:14px 24px;
+border:none;
+border-radius:14px;
+background:#19e4b8;
+font-weight:700;
+cursor:pointer;
+}
+
+@media(max-width:900px){
+
+.sidebar{
+position:relative;
+width:100%;
+height:auto;
+}
+
+.main{
+margin-left:0;
+}
+
+body{
+flex-direction:column;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<div class="logo">
+ReabiTech
+</div>
+
+<div class="menu">
+<a href="/">Home</a>
+<a href="/dashboard/">Dashboard</a>
+<a href="/atletas/">Atletas</a>
+<a href="/atletas/novo/">Cadastrar</a>
+</div>
+
+</div>
+
+<div class="main">
+
+{% block content %}
+
+{% endblock %}
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="topo-pagina">
+    <h1>Atletas</h1>
+
+    <a href="/atletas/novo/" class="btn">
+        + Novo Atleta
+    </a>
+</div>
+
+<div class="card-grid">
+
+{% for atleta in atletas %}
+
+<div class="card-atleta">
+
+    <div class="avatar">
+        {{ atleta.nome|first }}
+    </div>
+
+    <h2>{{ atleta.nome }}</h2>
+
+    <div class="info">
+        <p><strong>Idade:</strong> {{ atleta.idade }}</p>
+        <p><strong>Esporte:</strong> {{ atleta.esporte }}</p>
+        <p><strong>Lesão:</strong> {{ atleta.lesao }}</p>
+    </div>
+
+</div>
+
+{% empty %}
+
+<div class="vazio">
+    Nenhum atleta cadastrado.
+</div>
+
+{% endfor %}
+
+</div>
+
+<style>
+
+.topo-pagina{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.btn{
+background:linear-gradient(135deg,#00e0ff,#00ffb3);
+padding:14px 22px;
+border-radius:14px;
+text-decoration:none;
+color:#001018;
+font-weight:700;
+}
+
+.card-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:25px;
+}
+
+.card-atleta{
+background:rgba(255,255,255,.05);
+backdrop-filter:blur(15px);
+border:1px solid rgba(255,255,255,.06);
+padding:30px;
+border-radius:24px;
+transition:.4s;
+box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.card-atleta:hover{
+transform:translateY(-10px) scale(1.02);
+}
+
+.avatar{
+width:70px;
+height:70px;
+border-radius:50%;
+background:linear-gradient(135deg,#00f0ff,#00ff99);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+font-weight:800;
+color:#001018;
+margin-bottom:20px;
+}
+
+.card-atleta h2{
+margin-bottom:15px;
+}
+
+.info p{
+margin-bottom:10px;
+color:#b7d4df;
+}
+
+.vazio{
+padding:50px;
+background:rgba(255,255,255,.04);
+border-radius:20px;
+}
+
+</style>
+
+{% endblock %}

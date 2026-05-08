@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="form-container glass">
+
+<h1>Novo Atleta</h1>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<input type="text" name="nome" placeholder="Nome do atleta" required>
+
+<input type="number" name="idade" placeholder="Idade" required>
+
+<input type="text" name="esporte" placeholder="Esporte" required>
+
+<input type="text" name="lesao" placeholder="Lesão" required>
+
+<button type="submit">
+Cadastrar Atleta
+</button>
+
+</form>
+
+</div>
+
+<style>
+
+.form-container{
+max-width:700px;
+padding:40px;
+border-radius:30px;
+}
+
+.form-container h1{
+margin-bottom:30px;
+font-size:38px;
+}
+
+form{
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+input{
+padding:18px;
+border:none;
+outline:none;
+border-radius:16px;
+background:rgba(255,255,255,.06);
+color:white;
+font-size:16px;
+border:1px solid rgba(255,255,255,.08);
+}
+
+input::placeholder{
+color:#b8c9d1;
+}
+
+button{
+padding:18px;
+border:none;
+border-radius:18px;
+background:linear-gradient(135deg,#00e5ff,#00ffa3);
+font-size:17px;
+font-weight:700;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+transform:translateY(-4px);
+box-shadow:0 10px 30px rgba(0,255,180,.25);
+}
+
+</style>
+
+{% endblock %}

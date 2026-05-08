@@ -1,0 +1,60 @@
+body{
+    scroll-behavior:smooth;
+    }
+    
+    .card{
+    position:relative;
+    overflow:hidden;
+    }
+    
+    .card::before{
+    content:'';
+    position:absolute;
+    width:180px;
+    height:180px;
+    background:rgba(66,255,217,.08);
+    border-radius:50%;
+    top:-60px;
+    right:-60px;
+    }
+    
+    .menu a.active{
+    background:#18e0b5;
+    color:#00222c;
+    }
+    
+    .table-area::-webkit-scrollbar{
+    height:10px;
+    }
+    
+    .table-area::-webkit-scrollbar-thumb{
+    background:#19e4b8;
+    border-radius:20px;
+    }
+    
+    input:focus,
+    select:focus{
+    outline:none;
+    box-shadow:0 0 15px rgba(25,228,184,.5);
+    }
+    
+    button:hover{
+    transform:scale(1.05);
+    transition:.3s;
+    }
+    
+    .fade{
+    animation:fade .8s ease;
+    }
+    
+    @keyframes fade{
+    from{
+    opacity:0;
+    transform:translateY(20px);
+    }
+    
+    to{
+    opacity:1;
+    transform:translateY(0);
+    }
+    }

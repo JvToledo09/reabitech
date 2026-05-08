@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="topbar">
+
+<h1>Dashboard</h1>
+
+<div class="user">
+Administrador
+</div>
+
+</div>
+
+<div class="card-grid">
+
+<div class="card">
+<h2>12</h2>
+<p>Lesões monitoradas</p>
+</div>
+
+<div class="card">
+<h2>87%</h2>
+<p>Evolução mensal</p>
+</div>
+
+<div class="card">
+<h2>54</h2>
+<p>Sessões realizadas</p>
+</div>
+
+<div class="card">
+<h2>8</h2>
+<p>Alertas críticos</p>
+</div>
+
+</div>
+
+<div class="table-area">
+
+<h2 style="margin-bottom:20px;">
+Status dos Atletas
+</h2>
+
+<table>
+
+<tr>
+<th>Nome</th>
+<th>Lesão</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>Lucas Andrade</td>
+<td>Joelho</td>
+<td><span class="status ok">Recuperando</span></td>
+</tr>
+
+<tr>
+<td>Bruno Silva</td>
+<td>Ombro</td>
+<td><span class="status alerta">Atenção</span></td>
+</tr>
+
+<tr>
+<td>Caio Mendes</td>
+<td>Tornozelo</td>
+<td><span class="status critico">Crítico</span></td>
+</tr>
+
+</table>
+
+</div>
+
+{% endblock %}
