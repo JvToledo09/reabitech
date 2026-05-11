@@ -2,20 +2,75 @@
 
 {% block content %}
 
-<div class="topbar">
-<h1>Cadastrar Atleta</h1>
+<div class="hero">
+
+<div>
+<h1>Novo Atleta</h1>
+<p>
+Cadastro clínico esportivo
+</p>
 </div>
 
-<div class="table-area fade">
+</div>
 
-<form method="post">
+<div class="glass form-box">
+
+<form method="POST"
+enctype="multipart/form-data">
 
 {% csrf_token %}
 
-{{ form.as_p }}
+<div class="form-grid">
 
-<button type="submit">
-Salvar Atleta
+<div class="input-group">
+<label>Nome</label>
+{{ form.nome }}
+</div>
+
+<div class="input-group">
+<label>Idade</label>
+{{ form.idade }}
+</div>
+
+<div class="input-group">
+<label>Esporte</label>
+{{ form.esporte }}
+</div>
+
+<div class="input-group">
+<label>Lesão</label>
+{{ form.lesao }}
+</div>
+
+<div class="input-group">
+<label>Altura</label>
+{{ form.altura }}
+</div>
+
+<div class="input-group">
+<label>Peso</label>
+{{ form.peso }}
+</div>
+
+<div class="input-group">
+<label>Status</label>
+{{ form.status }}
+</div>
+
+<div class="input-group">
+<label>Foto</label>
+{{ form.foto }}
+</div>
+
+</div>
+
+<div class="input-group">
+<label>Observações</label>
+{{ form.observacoes }}
+</div>
+
+<button class="btn">
+Salvar atleta
 </button>
 
 </form>

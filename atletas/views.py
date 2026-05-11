@@ -1,36 +1,55 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Atleta
+from .forms import AtletaForm
 
 
 def lista_atletas(request):
 
-    atletas = Atleta.objects.all()
+    atletas = Atleta.objects.all().order_by('-id')
 
-    return render(request,'atletas/lista.html',{
-        'atletas': atletas
-    })
+    return render(
+        request,
+        'atletas/lista.html',
+        {'atletas': atletas}
+    )
 
 
 def novo_atleta(request):
 
     if request.method == 'POST':
 
-        nome = request.POST.get('nome')
-
-        idade = request.POST.get('idade')
-
-        esporte = request.POST.get('esporte')
-
-        lesao = request.POST.get('lesao')
-
-        Atleta.objects.create(
-            nome=nome,
-            idade=idade,
-            esporte=esporte,
-            lesao=lesao
+        form = AtletaForm(
+            request.POST,
+            request.FILES
         )
 
-        return redirect('/atletas/')
+        if form.is_valid():
 
-    return render(request,'atletas/form.html')
+            form.save()
+
+            return redirect('/atletas/')
+
+    else:
+
+        form = AtletaForm()
+
+    return render(
+        request,
+        'atletas/form.html',
+        {'form': form}
+    )
+
+
+def detalhes_atleta(request, id):
+
+    atleta = get_object_or_404(
+        Atleta,
+        id=id
+    )
+
+    return render(
+        request,
+        'atletas/detalhes.html',
+        {'atleta': atleta}
+    )

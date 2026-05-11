@@ -5,429 +5,90 @@
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>ReabiTech</title>
+<title>ReabiTech</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-    <style>
-        :root {
-            --bg: #07111f;
-            --bg2: #0b1728;
-            --card: #101c2c;
-            --card2: #132235;
-            --line: rgba(255, 255, 255, .06);
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-            --primary: #00d2ff;
-            --secondary: #00ffbf;
-
-            --text: #ffffff;
-            --muted: #8ea4bd;
-
-            --shadow: 0 20px 60px rgba(0, 0, 0, .45);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background:
-                radial-gradient(circle at top left, rgba(0, 210, 255, .15), transparent 30%),
-                radial-gradient(circle at bottom right, rgba(0, 255, 191, .10), transparent 30%),
-                linear-gradient(135deg, var(--bg), var(--bg2));
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-            display: flex;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(255, 255, 255, .02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, .02) 1px, transparent 1px);
-            background-size: 40px 40px;
-            pointer-events: none;
-        }
-
-        .sidebar {
-            width: 280px;
-            background: rgba(10, 18, 30, .75);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid var(--line);
-            padding: 30px 22px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            z-index: 100;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 40px;
-        }
-
-        .logo {
-            width: 52px;
-            height: 52px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            font-weight: 800;
-            color: #001018;
-            box-shadow: 0 10px 30px rgba(0, 210, 255, .3);
-        }
-
-        .logo-text h1 {
-            font-size: 22px;
-            font-weight: 800;
-        }
-
-        .logo-text p {
-            font-size: 13px;
-            color: var(--muted);
-            margin-top: 3px;
-        }
-
-        .menu {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .menu a {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 16px 18px;
-            border-radius: 18px;
-            text-decoration: none;
-            color: #dce8f5;
-            font-size: 15px;
-            font-weight: 500;
-            transition: .35s;
-            border: 1px solid transparent;
-            background: rgba(255, 255, 255, .02);
-        }
-
-        .menu a:hover {
-            background: linear-gradient(135deg, rgba(0, 210, 255, .18), rgba(0, 255, 191, .12));
-            border-color: rgba(0, 210, 255, .18);
-            transform: translateX(6px);
-        }
-
-        .bottom-card {
-            margin-top: 30px;
-            padding: 22px;
-            border-radius: 24px;
-            background: linear-gradient(145deg, #0e1b2d, #15263b);
-            border: 1px solid var(--line);
-            box-shadow: var(--shadow);
-        }
-
-        .bottom-card h3 {
-            font-size: 16px;
-            margin-bottom: 8px;
-        }
-
-        .bottom-card p {
-            font-size: 14px;
-            color: var(--muted);
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .bottom-card button {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 16px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            font-weight: 700;
-            cursor: pointer;
-            color: #001018;
-            transition: .3s;
-        }
-
-        .bottom-card button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 210, 255, .25);
-        }
-
-        .main {
-            margin-left: 280px;
-            width: calc(100% - 280px);
-            padding: 40px;
-        }
-
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .top-left h1 {
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-
-        .top-left p {
-            color: var(--muted);
-            font-size: 15px;
-        }
-
-        .top-right {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-        }
-
-        .search {
-            width: 300px;
-            position: relative;
-        }
-
-        .search input {
-            width: 100%;
-            padding: 16px 20px;
-            border: none;
-            outline: none;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, .05);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, .05);
-        }
-
-        .search input:focus {
-            border-color: rgba(0, 210, 255, .4);
-            box-shadow: 0 0 0 4px rgba(0, 210, 255, .08);
-        }
-
-        .profile {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 10px 16px;
-            background: rgba(255, 255, 255, .04);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, .05);
-        }
-
-        .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            color: #001018;
-        }
-
-        .profile h4 {
-            font-size: 15px;
-            margin-bottom: 2px;
-        }
-
-        .profile p {
-            font-size: 12px;
-            color: var(--muted);
-        }
-
-        .content {
-            animation: fade .5s ease;
-        }
-
-        @keyframes fade {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media(max-width:1100px) {
-
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-            }
-
-            .main {
-                margin-left: 0;
-                width: 100%;
-            }
-
-            body {
-                flex-direction: column;
-            }
-
-        }
-
-        @media(max-width:700px) {
-
-            .main {
-                padding: 25px;
-            }
-
-            .topbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .search {
-                width: 100%;
-            }
-
-        }
-    </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
 <body>
 
-    <div class="sidebar">
+<div class="bg-animation"></div>
 
-        <div>
+<aside class="sidebar">
 
-            <div class="logo-area">
+<div class="logo">
+ReabiTech
+</div>
 
-                <div class="logo">
-                    R
-                </div>
+<div class="profile-mini">
 
-                <div class="logo-text">
-                    <h1>ReabiTech</h1>
-                    <p>Sports Recovery Platform</p>
-                </div>
+<div class="profile-avatar">
+A
+</div>
 
-            </div>
+<div>
+<h3>Administrador</h3>
+<p>Sistema Online</p>
+</div>
 
-            <div class="menu">
+</div>
 
-                <a href="/dashboard/">
-                    Dashboard
-                </a>
+<nav class="menu">
 
-                <a href="/atletas/">
-                    Atletas
-                </a>
+<a href="/dashboard/" class="active">
+<i class="fa-solid fa-chart-line"></i>
+<span>Dashboard</span>
+</a>
 
-                <a href="#">
-                    Fisioterapia
-                </a>
+<a href="/atletas/">
+<i class="fa-solid fa-users"></i>
+<span>Atletas</span>
+</a>
 
-                <a href="#">
-                    Psicologia
-                </a>
+<a href="#">
+<i class="fa-solid fa-heart-pulse"></i>
+<span>Fisioterapia</span>
+</a>
 
-                <a href="#">
-                    Agenda
-                </a>
+<a href="#">
+<i class="fa-solid fa-brain"></i>
+<span>Psicologia</span>
+</a>
 
-                <a href="#">
-                    Relatórios
-                </a>
+<a href="#">
+<i class="fa-solid fa-chart-column"></i>
+<span>Analytics</span>
+</a>
 
-                <a href="#">
-                    Analytics
-                </a>
+<a href="#">
+<i class="fa-solid fa-calendar"></i>
+<span>Agenda</span>
+</a>
 
-                <a href="#">
-                    Configurações
-                </a>
+<a href="#">
+<i class="fa-solid fa-gear"></i>
+<span>Configurações</span>
+</a>
 
-            </div>
+</nav>
 
-        </div>
+</aside>
 
-        <div class="bottom-card">
+<main class="main-content">
 
-            <h3>Centro de Controle</h3>
+{% block content %}
+{% endblock %}
 
-            <p>
-                Gerencie atletas, monitore evolução clínica
-                e acompanhe indicadores estratégicos.
-            </p>
-
-            <button>
-                Painel Avançado
-            </button>
-
-        </div>
-
-    </div>
-
-    <div class="main">
-
-        <div class="topbar">
-
-            <div class="top-left">
-                <h1>Dashboard</h1>
-                <p>Plataforma inteligente de acompanhamento esportivo</p>
-            </div>
-
-            <div class="top-right">
-
-                <div class="search">
-                    <input type="text" placeholder="Pesquisar atleta, relatório ou sessão">
-                </div>
-
-                <div class="profile">
-
-                    <div class="avatar">
-                        A
-                    </div>
-
-                    <div>
-                        <h4>Administrador</h4>
-                        <p>Controle Geral</p>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="content">
-
-            {% block content %}
-            {% endblock %}
-
-        </div>
-
-    </div>
+</main>
 
 </body>
-
 </html>

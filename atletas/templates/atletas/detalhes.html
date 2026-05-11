@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="glass"
+style="
+padding:40px;
+margin-bottom:30px;
+position:relative;
+overflow:hidden;
+">
+
+<div style="
+display:flex;
+align-items:center;
+gap:30px;
+flex-wrap:wrap;
+">
+
+<div class="avatar"
+style="
+width:120px;
+height:120px;
+font-size:45px;
+">
+
+{% if atleta.foto %}
+<img src="{{ atleta.foto.url }}"
+style="
+width:100%;
+height:100%;
+object-fit:cover;
+border-radius:50%;
+">
+{% else %}
+{{ atleta.nome|first }}
+{% endif %}
+
+</div>
+
+<div>
+
+<h1 style="font-size:42px;">
+{{ atleta.nome }}
+</h1>
+
+<p style="color:#9fb2c6;">
+{{ atleta.esporte }}
+</p>
+
+<div style="
+margin-top:15px;
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+">
+
+<span class="status ok">
+{{ atleta.status }}
+</span>
+
+<span class="status alert">
+Monitoramento ativo
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+<h2>94%</h2>
+<p>Recuperação</p>
+</div>
+
+<div class="card">
+<h2>12</h2>
+<p>Sessões realizadas</p>
+</div>
+
+<div class="card">
+<h2>78%</h2>
+<p>Performance física</p>
+</div>
+
+<div class="card">
+<h2>6</h2>
+<p>Semanas monitoradas</p>
+</div>
+
+</div>
+
+<div class="grid-2">
+
+<div class="chart-box glass">
+
+<h2 style="margin-bottom:25px;">
+Evolução clínica
+</h2>
+
+<canvas id="chart"></canvas>
+
+</div>
+
+<div class="timeline glass">
+
+<h2 style="margin-bottom:25px;">
+IA Clínica
+</h2>
+
+<div class="timeline-item">
+<h3>Fadiga muscular</h3>
+
+<p>
+Níveis controlados.
+</p>
+</div>
+
+<div class="timeline-item">
+<h3>Recuperação</h3>
+
+<p>
+Excelente progresso fisioterapêutico.
+</p>
+</div>
+
+<div class="timeline-item">
+<h3>Risco</h3>
+
+<p>
+Baixo risco de reincidência.
+</p>
+</div>
+
+</div>
+
+</div>
+
+<div class="timeline glass"
+style="
+margin-top:30px;
+">
+
+<h2 style="margin-bottom:25px;">
+Observações clínicas
+</h2>
+
+<p style="
+color:#9fb2c6;
+line-height:1.8;
+">
+
+{{ atleta.observacoes }}
+
+</p>
+
+</div>
+
+<script>
+
+const ctx =
+document.getElementById('chart');
+
+new Chart(ctx, {
+
+type:'line',
+
+data:{
+
+labels:[
+'Sem 1',
+'Sem 2',
+'Sem 3',
+'Sem 4',
+'Sem 5',
+'Sem 6'
+],
+
+datasets:[{
+
+label:'Recuperação',
+
+data:[
+20,
+35,
+52,
+68,
+80,
+94
+],
+
+tension:.4
+
+}]
+
+},
+
+options:{
+responsive:true
+}
+
+});
+
+</script>
+
+{% endblock %}

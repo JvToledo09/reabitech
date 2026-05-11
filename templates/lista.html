@@ -2,46 +2,66 @@
 
 {% block content %}
 
-<div class="topbar">
-<h1>Atletas</h1>
+<div class="hero">
 
-<a href="/atletas/novo/" class="btn">
-Novo Atleta
-</a>
+<div>
+<h1>Atletas</h1>
+<p>
+Monitoramento completo dos atletas
+</p>
 </div>
 
-<div class="table-area">
+<a href="/atletas/novo/" class="btn">
+Novo atleta
+</a>
 
-<table>
+</div>
 
-<tr>
-<th>Nome</th>
-<th>Idade</th>
-<th>Esporte</th>
-<th>Status</th>
-</tr>
+<div class="card-grid">
 
 {% for atleta in atletas %}
 
-<tr>
+<div class="card-atleta">
 
-<td>{{ atleta.nome }}</td>
+<div class="avatar">
 
-<td>{{ atleta.idade }}</td>
+{% if atleta.foto %}
+<img src="{{ atleta.foto.url }}">
+{% else %}
+{{ atleta.nome|first }}
+{% endif %}
 
-<td>{{ atleta.esporte }}</td>
+</div>
 
-<td>
-<span class="status ok">
+<h2>{{ atleta.nome }}</h2>
+
+<div class="info">
+
+<p>
+<strong>Esporte:</strong>
+{{ atleta.esporte }}
+</p>
+
+<p>
+<strong>Lesão:</strong>
+{{ atleta.lesao }}
+</p>
+
+<p>
+<strong>Status:</strong>
 {{ atleta.status }}
-</span>
-</td>
+</p>
 
-</tr>
+</div>
+
+<a href="/atletas/{{ atleta.id }}/"
+class="btn">
+Ver detalhes
+</a>
+
+</div>
 
 {% endfor %}
-
-</table>
 
 </div>
 
