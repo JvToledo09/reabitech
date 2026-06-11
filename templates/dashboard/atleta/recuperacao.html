@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %}Minha Recuperação{% endblock %}
+{% block content %}
+<div class="animate-fadeInUp">
+    <h2><i class="fas fa-heartbeat me-2" style="color: var(--cor-secundaria);"></i> Minha Recuperação</h2>
+    <p class="text-muted">Acompanhamento da sua evolução física e recuperação de lesões</p>
+    
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card-modern">
+                <div class="card-header-custom">
+                    <i class="fas fa-chart-line me-2"></i> Evolução Física
+                </div>
+                <div class="card-body">
+                    {% if evolucoes %}
+                        {% for evolucao in evolucoes|slice:":5" %}
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-1">
+                                <strong>{{ evolucao.data_registro|date:"d/m/Y" }}</strong>
+                                <span class="badge-success">{{ evolucao.percentual_recuperacao }}% recuperado</span>
+                            </div>
+                            <div class="progress-custom mt-1">
+                                <div class="progress-bar-custom" style="width: {{ evolucao.percentual_recuperacao }}%;"></div>
+                            </div>
+                            <div class="row mt-2 small text-muted">
+                                <div class="col-4">Dor: {{ evolucao.dor }}/10</div>
+                                <div class="col-4">Fadiga: {{ evolucao.fadiga }}/10</div>
+                                <div class="col-4">Desempenho: {{ evolucao.desempenho }}/10</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Nenhuma evolução registrada ainda</p>
+                            <p class="small text-muted">Seu fisioterapeuta irá registrar suas evoluções</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card-modern">
+                <div class="card-header-custom">
+                    <i class="fas fa-notes-medical me-2"></i> Lesões e Tratamentos
+                </div>
+                <div class="card-body">
+                    {% if lesoes %}
+                        {% for lesao in lesoes %}
+                        <div class="alert alert-warning mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ lesao.get_tipo_display }}</strong><br>
+                                    <small>Local: {{ lesao.local }}</small><br>
+                                    <small>Gravidade: {{ lesao.get_gravidade_display }}</small>
+                                </div>
+                                <span class="badge-warning">Em tratamento</span>
+                            </div>
+                            <div class="mt-2">
+                                <small class="text-muted">Data da lesão: {{ lesao.data_ocorrencia|date:"d/m/Y" }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-heartbeat fa-3x text-success mb-3"></i>
+                            <p class="text-muted">Nenhuma lesão registrada</p>
+                            <p class="small text-muted">Continue se cuidando!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="card-modern">
+                <div class="card-header-custom">
+                    <i class="fas fa-calendar-alt me-2"></i> Próximos Compromissos
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center p-3 border rounded mb-2">
+                                <i class="fas fa-dumbbell fa-2x me-3" style="color: var(--cor-secundaria);"></i>
+                                <div>
+                                    <strong>Fisioterapia</strong><br>
+                                    <small class="text-muted">Próxima sessão: Amanhã às 14:00</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center p-3 border rounded mb-2">
+                                <i class="fas fa-brain fa-2x me-3" style="color: var(--cor-secundaria);"></i>
+                                <div>
+                                    <strong>Acompanhamento Psicológico</strong><br>
+                                    <small class="text-muted">Próxima sessão: Quarta-feira às 10:00</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

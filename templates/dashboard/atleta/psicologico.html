@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Saúde Mental{% endblock %}
+{% block content %}
+<div class="animate-fadeInUp">
+    <h2><i class="fas fa-brain me-2" style="color: var(--cor-secundaria);"></i> Saúde Mental</h2>
+    <p class="text-muted">Acompanhamento psicológico</p>
+    
+    <div class="card-modern mt-4">
+        <div class="card-header-custom">Histórico de Avaliações</div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-custom mb-0">
+                    <thead><tr><th>Data</th><th>Score</th><th>Status</th></tr></thead>
+                    <tbody>
+                        {% for avaliacao in avaliacoes %}
+                        <tr>
+                            <td>{{ avaliacao.data|date:"d/m/Y" }}</td>
+                            <td>{{ avaliacao.score_total }}/10</td>
+                            <td><span class="badge-success">{{ avaliacao.status_emocional }}</span></td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="3" class="text-center">Nenhuma avaliação registrada</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Relatórios - Coordenador{% endblock %}
+{% block content %}
+<div class="animate-fadeInUp">
+    <h2><i class="fas fa-chart-line me-2" style="color: var(--cor-secundaria);"></i> Relatórios</h2>
+    <p class="text-muted">Relatórios e estatísticas do sistema</p>
+    
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <h3 class="stat-number">{{ total_atletas }}</h3>
+                <p>Total de Atletas</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-icon"><i class="fas fa-heartbeat"></i></div>
+                <h3 class="stat-number">{{ total_lesoes }}</h3>
+                <p>Total de Lesões</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-icon"><i class="fas fa-brain"></i></div>
+                <h3 class="stat-number">{{ total_avaliacoes }}</h3>
+                <p>Avaliações Psicológicas</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <h3 class="stat-number">{{ taxa_recuperacao }}%</h3>
+                <p>Taxa de Recuperação</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

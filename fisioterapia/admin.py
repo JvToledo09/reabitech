@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Lesao, TratamentoFisioterapico, ExercicioRecuperacao, EvolucaoFisica
 
-# Register your models here.
+admin.site.register(Lesao)
+admin.site.register(TratamentoFisioterapico)
+admin.site.register(ExercicioRecuperacao)
+admin.site.register(EvolucaoFisica)

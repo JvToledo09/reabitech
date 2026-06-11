@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center min-vh-75">
+    <div class="col-md-5">
+        <div class="card-modern animate-fadeInUp">
+            <div class="card-header-custom text-center">
+                <h3 class="mb-0">REABITECH</h3>
+                <p class="mb-0 opacity-75">Acesse sua conta</p>
+            </div>
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">RM / Usuário</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-user" style="color: var(--cor-secundaria);"></i>
+                            </span>
+                            <input type="text" name="username" class="form-control" placeholder="Digite seu RM" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Senha</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="fas fa-lock" style="color: var(--cor-secundaria);"></i>
+                            </span>
+                            <input type="password" name="password" class="form-control" placeholder="Digite sua senha" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary-custom w-100 py-2">
+                        <i class="fas fa-sign-in-alt me-2"></i> Entrar
+                    </button>
+                </form>
+                <div class="text-center mt-4">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Atletas: utilize seu RM como usuário
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
