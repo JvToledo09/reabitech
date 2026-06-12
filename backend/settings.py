@@ -6,7 +6,7 @@ SECRET_KEY = 'django-insecure-reabitech-tcc-final-2024'
 DEBUG = True
 ALLOWED_HOSTS = []
 
-# Application definition - REMOVA crispy_forms se não quiser usar
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -14,10 +14,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Comente ou remova estas linhas se der erro
-    # 'crispy_forms',
-    # 'crispy_bootstrap5',
-    # Seus apps
     'usuarios',
     'atletas',
     'fisioterapia',
@@ -75,6 +71,7 @@ TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_TZ = True
 
+# Arquivos estáticos
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -83,10 +80,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Comente ou remova estas linhas
-# CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-# CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
