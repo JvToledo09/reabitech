@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
@@ -184,19 +185,14 @@
         
         /* Main Content */
         .main-content {
-            margin-left: 280px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             padding: 20px;
             min-height: 100vh;
         }
         
-        .main-content.expanded {
-            margin-left: 0;
-        }
-        
-        /* Quando NÃO está logado - centraliza tudo */
+        /* Quando NÃO está logado - centraliza tudo (landing page) */
         .main-content.no-sidebar {
-            margin-left: 0;
+            margin-left: 0 !important;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -207,6 +203,11 @@
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
+        }
+        
+        /* Quando está logado - sidebar aparece */
+        .main-content:not(.no-sidebar) {
+            margin-left: 280px;
         }
         
         /* Top Navbar */
@@ -642,7 +643,7 @@
             .sidebar.active {
                 left: 0;
             }
-            .main-content {
+            .main-content:not(.no-sidebar) {
                 margin-left: 0;
             }
             .toggle-btn {
@@ -693,8 +694,8 @@
         <div class="spinner"></div>
     </div>
     
+    <!-- SIDEBAR - SÓ APARECE SE USUÁRIO ESTIVER LOGADO -->
     {% if user.is_authenticated %}
-    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-logo">
             {% load static %}

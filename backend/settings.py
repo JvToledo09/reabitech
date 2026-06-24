@@ -6,7 +6,6 @@ SECRET_KEY = 'django-insecure-reabitech-tcc-final-2024'
 DEBUG = True
 ALLOWED_HOSTS = []
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -20,6 +19,7 @@ INSTALLED_APPS = [
     'psicologia',
     'dashboard',
     'painel',
+    'projetos',  # ← ADICIONADO
 ]
 
 MIDDLEWARE = [
@@ -71,7 +71,6 @@ TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_TZ = True
 
-# Arquivos estáticos
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Criar Projeto - REABITECH{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <h1 class="display-4 fw-bold">Criar Novo Projeto</h1>
+                <p class="lead text-muted">Dê o primeiro passo para gerenciar sua equipe</p>
+            </div>
+            
+            <div class="card-modern p-4">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Nome do Projeto *</label>
+                            <input type="text" name="nome" class="form-control form-control-lg" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Descrição</label>
+                            <textarea name="descricao" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">E-mail de Contato</label>
+                            <input type="email" name="email_contato" class="form-control form-control-lg">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Plano *</label>
+                            <select name="plano" class="form-select form-select-lg" required>
+                                <option value="">Selecione um plano</option>
+                                {% for plano in planos %}
+                                <option value="{{ plano.id }}">{{ plano.get_nome_display }} - R$ {{ plano.valor_mensal }}/mês</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn-primary-custom w-100 py-3">
+                                <i class="fas fa-rocket me-2"></i> Criar Projeto
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

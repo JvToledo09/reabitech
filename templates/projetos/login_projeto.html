@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - {{ projeto.nome }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 60px auto; padding: 20px;">
+
+    <div style="text-align: center; margin-bottom: 30px;">
+        <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="width: 80px; height: 80px; object-fit: contain;" onerror="this.style.display='none'">
+        <h2 style="margin: 10px 0 5px 0;">{{ projeto.nome }}</h2>
+        <p style="color: #888;">Faça login para acessar o projeto</p>
+    </div>
+
+    <div style="background: white; border-radius: 20px; padding: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);">
+        <form method="post">
+            {% csrf_token %}
+            <div style="margin-bottom: 20px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Usuário</label>
+                <input type="text" name="username" placeholder="Atleta: RM | Profissional: Email" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem;">
+                <small style="color: #888;">Atletas usam RM | Profissionais usam email</small>
+            </div>
+            <div style="margin-bottom: 25px;">
+                <label style="font-weight: 600; display: block; margin-bottom: 5px;">Senha</label>
+                <input type="password" name="password" placeholder="Digite sua senha" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem;">
+            </div>
+            <button type="submit" style="width: 100%; background: linear-gradient(135deg, #2BA181, #5A6461); color: white; padding: 14px; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer;">
+                <i class="fas fa-sign-in-alt"></i> Entrar no Projeto
+            </button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+            <a href="{% url 'landing_page' %}" style="color: #888; text-decoration: none;">
+                <i class="fas fa-arrow-left"></i> Voltar para projetos
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
