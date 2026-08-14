@@ -1,198 +1,38 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block title %}Login - REABITECH{% endblock %}
-
 {% block content %}
-<style>
-    .login-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    
-    .login-logo {
-        max-width: 200px;
-        width: 100%;
-        height: auto;
-        margin-bottom: 15px;
-    }
-    
-    .login-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 10px;
-    }
-    
-    .login-subtitle {
-        font-size: 1.1rem;
-        color: #6c757d;
-        margin-bottom: 30px;
-    }
-    
-    .card-modern {
-        background: white;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        overflow: hidden;
-        height: 100%;
-    }
-    
-    [data-bs-theme="dark"] .card-modern {
-        background: #1e1e32;
-        color: white;
-    }
-    
-    .card-header-custom {
-        background: linear-gradient(135deg, #2BA181 0%, #5A6461 100%);
-        color: white;
-        padding: 16px 20px;
-        font-weight: 600;
-        text-align: center;
-    }
-    
-    .profile-card {
-        text-align: center;
-        padding: 20px;
-        border-radius: 15px;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        height: 100%;
-    }
-    
-    .profile-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-    
-    .profile-icon {
-        font-size: 40px;
-        margin-bottom: 10px;
-    }
-    
-    .info-badge {
-        background: linear-gradient(135deg, #2BA181 0%, #5A6461 100%);
-        color: white;
-        padding: 10px;
-        border-radius: 10px;
-        text-align: center;
-    }
-    
-    @media (max-width: 768px) {
-        .login-logo {
-            max-width: 150px;
-        }
-        .login-title {
-            font-size: 1.8rem;
-        }
-        .login-subtitle {
-            font-size: 0.9rem;
-        }
-    }
-</style>
 
-<div class="login-container">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <!-- Logo e Título -->
-            <div class="text-center mb-4">
-                <img src="{% static 'images/logo.png' %}" alt="REABITECH" class="login-logo" onerror="this.src='https://via.placeholder.com/200x200?text=REABITECH'">
-                <h1 class="login-title" style="background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent;">
-                    REABITECH
-                </h1>
-                <p class="login-subtitle">Plataforma de Supervisão e Monitoramento da Reabilitação de Atletas</p>
+<div class="container py-5" style="max-width: 500px;">
+    <div class="card-modern p-4" data-aos="fade-up">
+        <div class="text-center mb-4">
+            <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="max-height: 80px;" onerror="this.src='https://via.placeholder.com/80x80?text=RE'">
+            <h3 class="mt-3">Bem-vindo ao REABITECH</h3>
+            <p class="text-muted">Entre com seu RM ou E-mail</p>
+        </div>
+        
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">RM ou E-mail</label>
+                <input type="text" name="username" class="form-control form-control-custom" placeholder="Digite seu RM ou E-mail" required>
             </div>
-            
-            <div class="row g-4">
-                <!-- Formulário de Login -->
-                <div class="col-md-6">
-                    <div class="card-modern h-100">
-                        <div class="card-header-custom">
-                            <i class="fas fa-sign-in-alt me-2"></i> Acesse sua conta
-                        </div>
-                        <div class="card-body p-4">
-                            <form method="post">
-                                {% csrf_token %}
-                                <div class="mb-3">
-                                    <label class="form-label fw-bold">
-                                        <i class="fas fa-user me-1" style="color: var(--secondary);"></i> Usuário
-                                    </label>
-                                    <input type="text" name="username" class="form-control form-control-lg" 
-                                           placeholder="Atleta: RM | Profissional: E-mail" required>
-                                    <small class="text-muted d-block mt-1">
-                                        <i class="fas fa-info-circle me-1"></i>
-                                        Atletas usam RM | Profissionais usam e-mail
-                                    </small>
-                                </div>
-                                <div class="mb-4">
-                                    <label class="form-label fw-bold">
-                                        <i class="fas fa-lock me-1" style="color: var(--secondary);"></i> Senha
-                                    </label>
-                                    <input type="password" name="password" class="form-control form-control-lg" 
-                                           placeholder="Digite sua senha" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary-custom w-100 btn-lg py-3">
-                                    <i class="fas fa-sign-in-alt me-2"></i> Entrar
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Cards dos Perfis -->
-                <div class="col-md-6">
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <div class="card-modern profile-card" data-bs-toggle="tooltip" title="Acesso completo ao sistema - Login com E-mail">
-                                <i class="fas fa-crown profile-icon" style="color: #2BA181;"></i>
-                                <h5 class="mt-2 mb-0">Coordenador</h5>
-                                <small class="text-muted">E-mail institucional</small>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="card-modern profile-card" data-bs-toggle="tooltip" title="Acesso aos atletas da sua modalidade - Login com E-mail">
-                                <i class="fas fa-chalkboard-user profile-icon" style="color: #5A6461;"></i>
-                                <h5 class="mt-2 mb-0">Técnico</h5>
-                                <small class="text-muted">E-mail profissional</small>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="card-modern profile-card" data-bs-toggle="tooltip" title="Acesso aos seus dados de recuperação - Login com RM">
-                                <i class="fas fa-heartbeat profile-icon" style="color: #dc3545;"></i>
-                                <h5 class="mt-2 mb-0">Atleta</h5>
-                                <small class="text-muted">RM do aluno</small>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="card-modern profile-card" data-bs-toggle="tooltip" title="Acompanhamento clínico e psicológico - Login com E-mail">
-                                <i class="fas fa-brain profile-icon" style="color: #17a2b8;"></i>
-                                <h5 class="mt-2 mb-0">Especialista</h5>
-                                <small class="text-muted">E-mail profissional</small>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="info-badge mt-3">
-                        <i class="fas fa-shield-alt me-2"></i>
-                        <small>Sistema seguro com criptografia de dados</small>
-                    </div>
-                </div>
+            <div class="mb-3">
+                <label class="form-label">Senha</label>
+                <input type="password" name="password" class="form-control form-control-custom" placeholder="Digite sua senha" required>
             </div>
-            
-            <!-- Footer -->
-            <div class="text-center mt-5">
-                <p class="text-muted small">
-                    &copy; {% now "Y" %} REABITECH - Soluções em Reabilitação Esportiva
-                </p>
-            </div>
+            <button type="submit" class="btn btn-primary-custom w-100">
+                <i class="fas fa-sign-in-alt"></i> Entrar
+            </button>
+        </form>
+        
+        <div class="text-center mt-3">
+            <p class="text-muted small">
+                Não tem uma conta? 
+                <a href="{% url 'landing' %}#planos" class="text-secondary-custom">Contrate um plano</a>
+            </p>
         </div>
     </div>
 </div>
 
-<script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    });
-</script>
 {% endblock %}

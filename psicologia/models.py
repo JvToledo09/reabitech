@@ -1,10 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 from usuarios.models import Atleta
+from projetos.models import Projeto
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 class AvaliacaoPsicologica(models.Model):
     atleta = models.ForeignKey(Atleta, on_delete=models.CASCADE, related_name='avaliacoes_psicologicas')
+    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, related_name='avaliacoes_psico', null=True)
     data = models.DateField(auto_now_add=True)
     ansiedade = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])
     motivacao = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])
@@ -33,6 +35,7 @@ class AvaliacaoPsicologica(models.Model):
 
 class QuestionarioPeriodico(models.Model):
     atleta = models.ForeignKey(Atleta, on_delete=models.CASCADE, related_name='questionarios')
+    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, related_name='questionarios', null=True)
     data = models.DateField(auto_now_add=True)
     pergunta_1 = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     pergunta_2 = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])

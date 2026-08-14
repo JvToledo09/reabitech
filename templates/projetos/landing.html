@@ -1,68 +1,109 @@
 {% extends 'base.html' %}
 {% load static %}
-
-{% block title %}REABITECH - Plataforma de Reabilitação Esportiva{% endblock %}
-
+{% block title %}REABITECH - Reabilitação de Atletas{% endblock %}
 {% block content %}
+
 <div class="container py-5">
-    <!-- Hero Section -->
+    <!-- Hero -->
     <div class="row align-items-center mb-5">
-        <div class="col-lg-6">
-            <h1 class="display-4 fw-bold">REABITECH</h1>
-            <p class="lead">Plataforma de Supervisão e Monitoramento da Reabilitação de Atletas</p>
-            <p class="text-muted">Conectamos profissionais e atletas para uma recuperação mais eficiente.</p>
-            <div class="mt-4">
-                <a href="{% url 'criar_projeto' %}" class="btn btn-primary-custom btn-lg me-3">
-                    <i class="fas fa-rocket"></i> Criar seu Projeto
-                </a>
-                <a href="{% url 'login' %}" class="btn btn-outline-custom btn-lg">
+        <div class="col-lg-6" data-aos="fade-right">
+            <h1 class="display-3 fw-bold mb-3">
+                <span style="color: var(--secondary);">REABITECH</span>
+                <span class="text-muted">Reabilitação</span>
+            </h1>
+            <p class="lead text-muted">
+                Plataforma completa para supervisão e monitoramento da reabilitação de atletas.
+                Gerencie lesões, acompanhe evoluções e otimize a recuperação dos seus atletas.
+            </p>
+            <div class="d-flex gap-3 flex-wrap mt-4">
+                <a href="{% url 'login' %}" class="btn btn-primary-custom">
                     <i class="fas fa-sign-in-alt"></i> Entrar
                 </a>
+                <a href="#planos" class="btn btn-outline-custom">
+                    <i class="fas fa-rocket"></i> Ver Planos
+                </a>
             </div>
         </div>
-        <div class="col-lg-6 text-center">
-            <img src="{% static 'images/hero.svg' %}" alt="REABITECH" class="img-fluid" style="max-height:300px;" onerror="this.style.display='none'">
+        <div class="col-lg-6 text-center" data-aos="fade-left">
+            <img src="{% static 'images/logo.png' %}" alt="REABITECH" class="img-fluid" style="max-height: 350px;" onerror="this.src='https://via.placeholder.com/350x350?text=REABITECH'">
         </div>
     </div>
-
+    
     <!-- Projetos Parceiros -->
     {% if projetos %}
-    <div class="row mt-5">
-        <h2 class="text-center mb-4">Projetos Parceiros</h2>
-        {% for projeto in projetos %}
-        <div class="col-md-4">
-            <div class="card-modern p-4 text-center">
-                {% if projeto.logo %}
-                <img src="{{ projeto.logo.url }}" alt="{{ projeto.nome }}" class="img-fluid mb-3" style="max-height:80px;">
-                {% endif %}
-                <h5>{{ projeto.nome }}</h5>
-                <p>{{ projeto.descricao|truncatechars:80 }}</p>
-                <a href="{{ projeto.site_oficial }}" target="_blank" class="btn btn-outline-custom btn-sm">Visitar</a>
+    <div class="mb-5" data-aos="fade-up">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-handshake me-2" style="color: var(--secondary);"></i>
+            Projetos Parceiros
+        </h2>
+        <div class="row g-4">
+            {% for projeto in projetos %}
+            <div class="col-md-4">
+                <div class="card-modern text-center p-4">
+                    {% if projeto.logo %}
+                    <img src="{{ projeto.logo.url }}" alt="{{ projeto.nome }}" style="max-height: 80px; margin-bottom: 15px;">
+                    {% else %}
+                    <div class="stat-icon mx-auto mb-3"><i class="fas fa-project-diagram"></i></div>
+                    {% endif %}
+                    <h5>{{ projeto.nome }}</h5>
+                    <p class="text-muted small">{{ projeto.descricao|truncatechars:100 }}</p>
+                    <span class="badge-success">{{ projeto.get_tipo_display }}</span>
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
     {% endif %}
-
+    
     <!-- Planos -->
-    <div class="row mt-5">
-        <h2 class="text-center mb-4">Escolha o plano ideal para seu projeto</h2>
-        {% for plano in planos %}
-        <div class="col-md-4">
-            <div class="card-modern p-4">
-                <h4>{{ plano.nome }}</h4>
-                <p class="display-6 fw-bold">R$ {{ plano.preco_mensal }}</p>
-                <p>{{ plano.descricao }}</p>
-                <ul class="list-unstyled">
-                    <li><i class="fas fa-check text-success"></i> Até {{ plano.max_usuarios }} usuários</li>
-                    {% if plano.inclui_fisioterapia %}<li><i class="fas fa-check text-success"></i> Fisioterapia</li>{% endif %}
-                    {% if plano.inclui_psicologia %}<li><i class="fas fa-check text-success"></i> Psicologia</li>{% endif %}
-                    {% if plano.inclui_relatorios %}<li><i class="fas fa-check text-success"></i> Relatórios</li>{% endif %}
-                </ul>
-                <a href="{% url 'criar_projeto' %}?plano={{ plano.id }}" class="btn btn-primary-custom w-100">Assinar</a>
+    <div id="planos" data-aos="fade-up">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-crown me-2" style="color: var(--secondary);"></i>
+            Escolha seu Plano
+        </h2>
+        <div class="row g-4">
+            {% if planos %}
+                {% for plano in planos %}
+                <div class="col-md-4">
+                    <div class="card-modern text-center p-4">
+                        <h4 class="fw-bold">{{ plano.nome }}</h4>
+                        <p class="display-5 fw-bold" style="color: var(--secondary);">
+                            R$ {{ plano.preco_mensal }}
+                            <small class="text-muted fs-6">/mês</small>
+                        </p>
+                        <ul class="list-unstyled text-start">
+                            <li class="py-2"><i class="fas fa-check-circle me-2" style="color: var(--secondary);"></i> {{ plano.max_usuarios }} usuários</li>
+                            <li class="py-2"><i class="fas fa-check-circle me-2" style="color: var(--secondary);"></i> {% if plano.inclui_fisioterapia %}✓{% else %}✗{% endif %} Fisioterapia</li>
+                            <li class="py-2"><i class="fas fa-check-circle me-2" style="color: var(--secondary);"></i> {% if plano.inclui_psicologia %}✓{% else %}✗{% endif %} Psicologia</li>
+                            <li class="py-2"><i class="fas fa-check-circle me-2" style="color: var(--secondary);"></i> {% if plano.inclui_relatorios %}✓{% else %}✗{% endif %} Relatórios</li>
+                        </ul>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'criar_projeto' %}?plano={{ plano.id }}" class="btn btn-primary-custom w-100">
+                            <i class="fas fa-plus"></i> Contratar
+                        </a>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary-custom w-100">
+                            <i class="fas fa-sign-in-alt"></i> Faça login
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="col-12 text-center">
+                <p class="text-muted">Nenhum plano disponível no momento.</p>
             </div>
+            {% endif %}
         </div>
-        {% endfor %}
+    </div>
+    
+    <!-- Footer -->
+    <div class="text-center mt-5 pt-4 border-top">
+        <p class="text-muted small">
+            © 2024 REABITECH - Todos os direitos reservados.<br>
+            Desenvolvido para o TCC - ETEC Pref. Alberto Feres
+        </p>
     </div>
 </div>
+
 {% endblock %}

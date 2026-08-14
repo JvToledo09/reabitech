@@ -3,15 +3,13 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Avg
+from datetime import datetime
 
-# Models do projeto
-from usuarios.models import Perfil, Atleta
+from usuarios.models import Perfil, Atleta, ModalidadeEsportiva
 from fisioterapia.models import Lesao, EvolucaoFisica, TratamentoFisioterapico, ExercicioRecuperacao
-from psicologia.models import AvaliacaoPsicologica
-from projetos.models import Projeto, MembroProjeto   # <-- NOVO
-
-# Decorator de permissão
+from psicologia.models import AvaliacaoPsicologica, QuestionarioPeriodico
+from projetos.models import Projeto, MembroProjeto
 from usuarios.decorators import perfil_required
 
 
@@ -19,84 +17,99 @@ from usuarios.decorators import perfil_required
 # UTILITÁRIO: Projeto ativo na sessão
 # ==============================================
 def get_projeto_ativo(request):
-    """
-    Retorna o projeto ativo da sessão, se existir e se o usuário for membro.
-    """
     projeto_id = request.session.get('projeto_id')
     if projeto_id:
         try:
             projeto = Projeto.objects.get(id=projeto_id, ativo=True)
-            # Verifica se o usuário é membro deste projeto
             if MembroProjeto.objects.filter(projeto=projeto, usuario=request.user, ativo=True).exists():
                 return projeto
         except Projeto.DoesNotExist:
             pass
     return None
 
-
 def set_projeto_ativo(request, projeto_id):
-    """Define o projeto ativo na sessão."""
     request.session['projeto_id'] = projeto_id
 
 
 # ==============================================
-# 1. LOGIN (aceita RM ou E-mail)
+# 1. LOGIN (aceita username, email, RM)
 # ==============================================
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+
     if request.method == 'POST':
         login_input = request.POST.get('username')
         password = request.POST.get('password')
         user = None
 
-        if '@' in login_input:
+        print(f"🔑 Tentativa de login: {login_input}")
+
+        # 1. Tenta por username (coordenador, tecnico, etc)
+        try:
+            user_obj = User.objects.get(username=login_input)
+            user = authenticate(request, username=user_obj.username, password=password)
+            if user:
+                print(f"   ✅ Login via username: {login_input}")
+        except User.DoesNotExist:
+            pass
+
+        # 2. Tenta por email
+        if not user and '@' in login_input:
             try:
                 user_obj = User.objects.get(email=login_input)
                 user = authenticate(request, username=user_obj.username, password=password)
+                if user:
+                    print(f"   ✅ Login via email: {login_input}")
             except User.DoesNotExist:
-                user = None
-        else:
+                pass
+
+        # 3. Tenta por RM (atleta)
+        if not user:
             try:
                 atleta = Atleta.objects.get(rm=login_input)
                 user = authenticate(request, username=atleta.usuario.username, password=password)
+                if user:
+                    print(f"   ✅ Login via RM: {login_input}")
             except Atleta.DoesNotExist:
-                user = None
+                print(f"   ❌ RM não encontrado: {login_input}")
 
         if user is not None:
             auth_login(request, user)
 
-            # Após login, tenta definir um projeto ativo
-            # Se o usuário for coordenador e tiver vários projetos, deixamos sem projeto (será escolhido depois)
+            # Verifica se o usuário tem perfil, se não tiver, cria um padrão
+            if not hasattr(user, 'perfil'):
+                print(f"   ⚠️ Usuário {user.username} sem perfil. Criando perfil 'atleta'.")
+                Perfil.objects.create(usuario=user, tipo='atleta', senha_temporaria=False)
+
+            # Define projeto ativo
             membros = MembroProjeto.objects.filter(usuario=user, ativo=True)
             if membros.count() == 1:
                 set_projeto_ativo(request, membros.first().projeto.id)
-            elif membros.count() > 1:
-                # Se for coordenador, redireciona para uma tela de escolha (opcional)
-                # Por enquanto, não define projeto ativo
-                pass
 
-            if hasattr(user, 'perfil'):
-                tipo = user.perfil.tipo
-                if tipo == 'atleta':
-                    messages.success(request, f'Bem-vindo, Atleta {user.get_full_name() or user.username}!')
-                    return redirect('dashboard_atleta')
-                elif tipo == 'tecnico':
-                    messages.success(request, f'Bem-vindo, Técnico {user.get_full_name() or user.username}!')
-                    return redirect('dashboard_tecnico')
-                elif tipo == 'coordenador':
-                    messages.success(request, f'Bem-vindo, Coordenador {user.get_full_name() or user.username}!')
-                    return redirect('dashboard_coordenador')
-                elif tipo == 'fisioterapeuta':
-                    messages.success(request, f'Bem-vindo, Fisioterapeuta {user.get_full_name() or user.username}!')
-                    return redirect('dashboard_fisioterapeuta')
-                elif tipo == 'psicologo':
-                    messages.success(request, f'Bem-vindo, Psicólogo {user.get_full_name() or user.username}!')
-                    return redirect('dashboard_psicologo')
-                else:
-                    return redirect('dashboard')
+            # Verifica senha temporária
+            if user.perfil.senha_temporaria:
+                messages.warning(request, 'Você está usando uma senha temporária. Por favor, altere sua senha.')
+                return redirect('alterar_senha')
+
+            tipo = user.perfil.tipo
+            messages.success(request, f'Bem-vindo, {user.get_full_name() or user.username}!')
+
+            # Redireciona conforme o perfil
+            if tipo == 'atleta':
+                return redirect('dashboard_atleta')
+            elif tipo == 'tecnico':
+                return redirect('dashboard_tecnico')
+            elif tipo == 'coordenador':
+                return redirect('dashboard_coordenador')
+            elif tipo == 'fisioterapeuta':
+                return redirect('dashboard_fisioterapeuta')
+            elif tipo == 'psicologo':
+                return redirect('dashboard_psicologo')
             else:
-                messages.warning(request, 'Perfil não definido. Contate o administrador.')
                 return redirect('dashboard')
         else:
+            print(f"   ❌ Falha no login para: {login_input}")
             messages.error(request, 'RM/E-mail ou senha inválidos.')
 
     return render(request, 'dashboard/login.html')
@@ -109,11 +122,11 @@ def logout_view(request):
     logout(request)
     request.session.flush()
     messages.info(request, 'Você saiu do sistema.')
-    return redirect('landing')   # Redireciona para a landing page (app projetos)
+    return redirect('landing')
 
 
 # ==============================================
-# 3. DASHBOARD GENÉRICA (REDIRECIONA)
+# 3. DASHBOARD GENÉRICA
 # ==============================================
 @login_required
 def dashboard(request):
@@ -141,12 +154,16 @@ def dashboard(request):
 def dashboard_atleta(request):
     projeto = get_projeto_ativo(request)
     if not projeto:
-        messages.warning(request, 'Nenhum projeto ativo. Selecione um projeto.')
-        # Redireciona para uma tela de escolha de projetos (criar depois)
+        messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
+    # Verifica se o usuário tem um Atleta vinculado
+    if not hasattr(request.user, 'atleta'):
+        messages.error(request, 'Seu perfil de atleta não está configurado. Contate o coordenador.')
+        return redirect('dashboard')
+
     atleta = request.user.atleta
-    # Filtra evoluções, exercícios e avaliações apenas deste projeto
+
     evolucoes = EvolucaoFisica.objects.filter(atleta=atleta, projeto=projeto).order_by('-data_registro')[:5]
     exercicios = ExercicioRecuperacao.objects.filter(
         tratamento__lesao__atleta=atleta,
@@ -154,17 +171,26 @@ def dashboard_atleta(request):
         tratamento__lesao__projeto=projeto
     )[:3]
     avaliacoes = AvaliacaoPsicologica.objects.filter(atleta=atleta, projeto=projeto).order_by('-data')[:5]
+    lesoes = Lesao.objects.filter(atleta=atleta, projeto=projeto, tratamentos__ativo=True).distinct()
+
+    ultima_evolucao = evolucoes.first()
+    progresso = ultima_evolucao.percentual_recuperacao if ultima_evolucao else 0
+
+    ultima_avaliacao = avaliacoes.first()
+    score_mental = ultima_avaliacao.score_total if ultima_avaliacao else 0
+    status_mental = ultima_avaliacao.status_emocional if ultima_avaliacao else "Não avaliado"
 
     context = {
         'atleta': atleta,
         'projeto': projeto,
         'evolucoes': evolucoes,
         'exercicios': exercicios,
-        'avaliacoes_psico': avaliacoes,
-        'progresso_recuperacao': 75,
-        'ultimo_desempenho': 7,
-        'score_mental': 8,
-        'status_mental': 'Bom',
+        'avaliacoes': avaliacoes,
+        'lesoes': lesoes,
+        'progresso_recuperacao': progresso,
+        'score_mental': score_mental,
+        'status_mental': status_mental,
+        'ultimo_desempenho': ultima_evolucao.desempenho if ultima_evolucao else 0,
     }
     return render(request, 'dashboard/atleta/dashboard.html', context)
 
@@ -179,17 +205,23 @@ def dashboard_tecnico(request):
 
     meus_atletas = Atleta.objects.filter(
         tecnico_responsavel=request.user,
-        membros_projeto__projeto=projeto
+        membros_projeto__projeto=projeto,
+        membros_projeto__ativo=True
     )
     total = meus_atletas.count()
     lesionados = meus_atletas.filter(lesoes__tratamentos__ativo=True).distinct().count()
+
+    desempenho_medio = EvolucaoFisica.objects.filter(
+        atleta__in=meus_atletas,
+        projeto=projeto
+    ).aggregate(Avg('desempenho'))['desempenho__avg'] or 0
 
     context = {
         'projeto': projeto,
         'meus_atletas': meus_atletas,
         'total_meus_atletas': total,
         'meus_atletas_lesionados': lesionados,
-        'desempenho_medio': 7.2,
+        'desempenho_medio': round(desempenho_medio, 1),
     }
     return render(request, 'dashboard/tecnico/dashboard.html', context)
 
@@ -197,25 +229,40 @@ def dashboard_tecnico(request):
 @login_required
 @perfil_required('coordenador')
 def dashboard_coordenador(request):
-    # O coordenador vê todos os seus projetos
     projetos = Projeto.objects.filter(coordenador=request.user, ativo=True)
+
     if not projetos:
         messages.info(request, 'Você não possui nenhum projeto ativo. Crie um novo.')
         return redirect('criar_projeto')
 
-    # Se não houver projeto ativo na sessão, define o primeiro
     if not request.session.get('projeto_id') and projetos.exists():
         set_projeto_ativo(request, projetos.first().id)
 
     projeto = get_projeto_ativo(request)
 
+    if projeto:
+        atletas = Atleta.objects.filter(membros_projeto__projeto=projeto, membros_projeto__ativo=True)
+        lesoes_ativas = Lesao.objects.filter(projeto=projeto, tratamentos__ativo=True).distinct().count()
+        avaliacoes_psico = AvaliacaoPsicologica.objects.filter(projeto=projeto).count()
+
+        evolucoes = EvolucaoFisica.objects.filter(projeto=projeto)
+        if evolucoes.exists():
+            taxa_media = sum(e.percentual_recuperacao for e in evolucoes) / evolucoes.count()
+        else:
+            taxa_media = 0
+    else:
+        atletas = []
+        lesoes_ativas = 0
+        avaliacoes_psico = 0
+        taxa_media = 0
+
     context = {
         'projetos': projetos,
         'projeto_ativo': projeto,
-        'total_atletas': Atleta.objects.filter(membros_projeto__projeto=projeto).count() if projeto else 0,
-        'lesoes_ativas': Lesao.objects.filter(tratamentos__ativo=True, projeto=projeto).distinct().count() if projeto else 0,
-        'total_avaliacoes_psico': AvaliacaoPsicologica.objects.filter(projeto=projeto).count() if projeto else 0,
-        'taxa_recuperacao_media': 85,
+        'total_atletas': atletas.count() if projeto else 0,
+        'lesoes_ativas': lesoes_ativas,
+        'total_avaliacoes_psico': avaliacoes_psico,
+        'taxa_recuperacao_media': round(taxa_media, 1),
     }
     return render(request, 'dashboard/coordenador/dashboard.html', context)
 
@@ -228,8 +275,16 @@ def dashboard_fisioterapeuta(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    atletas = Atleta.objects.filter(membros_projeto__projeto=projeto, lesoes__tratamentos__ativo=True).distinct()
-    tratamentos_ativos = TratamentoFisioterapico.objects.filter(ativo=True, lesao__projeto=projeto).count()
+    atletas = Atleta.objects.filter(
+        membros_projeto__projeto=projeto,
+        membros_projeto__ativo=True,
+        lesoes__tratamentos__ativo=True
+    ).distinct()
+
+    tratamentos_ativos = TratamentoFisioterapico.objects.filter(
+        ativo=True,
+        lesao__projeto=projeto
+    ).count()
 
     context = {
         'projeto': projeto,
@@ -250,10 +305,16 @@ def dashboard_psicologo(request):
     avaliacoes = AvaliacaoPsicologica.objects.filter(projeto=projeto).order_by('-data')[:10]
     total_avaliacoes = AvaliacaoPsicologica.objects.filter(projeto=projeto).count()
 
+    atletas_com_psico = Atleta.objects.filter(
+        avaliacoes_psicologicas__isnull=False,
+        membros_projeto__projeto=projeto
+    ).distinct().count()
+
     context = {
         'projeto': projeto,
         'avaliacoes_recentes': avaliacoes,
         'total_avaliacoes': total_avaliacoes,
+        'atletas_acompanhados': atletas_com_psico,
     }
     return render(request, 'dashboard/psicologo/dashboard.html', context)
 
@@ -269,9 +330,12 @@ def coordenador_atletas(request):
     if not projeto:
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
-    atletas = Atleta.objects.filter(membros_projeto__projeto=projeto)
-    return render(request, 'dashboard/coordenador/atletas.html', {'atletas': atletas, 'projeto': projeto})
 
+    atletas = Atleta.objects.filter(membros_projeto__projeto=projeto, membros_projeto__ativo=True)
+    return render(request, 'dashboard/coordenador/atletas.html', {
+        'atletas': atletas,
+        'projeto': projeto
+    })
 
 @login_required
 @perfil_required('coordenador')
@@ -280,9 +344,12 @@ def coordenador_fisioterapia(request):
     if not projeto:
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
-    lesoes = Lesao.objects.filter(projeto=projeto)
-    return render(request, 'dashboard/coordenador/fisioterapia.html', {'lesoes': lesoes, 'projeto': projeto})
 
+    lesoes = Lesao.objects.filter(projeto=projeto)
+    return render(request, 'dashboard/coordenador/fisioterapia.html', {
+        'lesoes': lesoes,
+        'projeto': projeto
+    })
 
 @login_required
 @perfil_required('coordenador')
@@ -291,15 +358,50 @@ def coordenador_psicologia(request):
     if not projeto:
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
-    avaliacoes = AvaliacaoPsicologica.objects.filter(projeto=projeto)
-    return render(request, 'dashboard/coordenador/psicologia.html', {'avaliacoes': avaliacoes, 'projeto': projeto})
 
+    avaliacoes = AvaliacaoPsicologica.objects.filter(projeto=projeto).order_by('-data')
+    return render(request, 'dashboard/coordenador/psicologia.html', {
+        'avaliacoes': avaliacoes,
+        'projeto': projeto
+    })
 
 @login_required
 @perfil_required('coordenador')
 def coordenador_relatorios(request):
     projeto = get_projeto_ativo(request)
-    return render(request, 'dashboard/coordenador/relatorios.html', {'projeto': projeto})
+    if not projeto:
+        messages.warning(request, 'Nenhum projeto ativo.')
+        return redirect('landing')
+
+    total_atletas = Atleta.objects.filter(membros_projeto__projeto=projeto).count()
+    total_lesoes = Lesao.objects.filter(projeto=projeto).count()
+    total_avaliacoes = AvaliacaoPsicologica.objects.filter(projeto=projeto).count()
+
+    evolucoes = EvolucaoFisica.objects.filter(projeto=projeto)
+    taxa_recuperacao = sum(e.percentual_recuperacao for e in evolucoes) / evolucoes.count() if evolucoes.exists() else 0
+
+    context = {
+        'projeto': projeto,
+        'total_atletas': total_atletas,
+        'total_lesoes': total_lesoes,
+        'total_avaliacoes': total_avaliacoes,
+        'taxa_recuperacao': round(taxa_recuperacao, 1),
+    }
+    return render(request, 'dashboard/coordenador/relatorios.html', context)
+
+@login_required
+@perfil_required('coordenador')
+def coordenador_membros(request):
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        messages.warning(request, 'Nenhum projeto ativo.')
+        return redirect('landing')
+
+    membros = MembroProjeto.objects.filter(projeto=projeto, ativo=True).select_related('usuario', 'usuario__perfil')
+    return render(request, 'dashboard/coordenador/membros.html', {
+        'projeto': projeto,
+        'membros': membros,
+    })
 
 
 # ==============================================
@@ -313,22 +415,52 @@ def tecnico_atletas(request):
     if not projeto:
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
-    atletas = Atleta.objects.filter(tecnico_responsavel=request.user, membros_projeto__projeto=projeto)
-    return render(request, 'dashboard/tecnico/atletas.html', {'atletas': atletas, 'projeto': projeto})
 
+    atletas = Atleta.objects.filter(
+        tecnico_responsavel=request.user,
+        membros_projeto__projeto=projeto,
+        membros_projeto__ativo=True
+    )
+    return render(request, 'dashboard/tecnico/atletas.html', {
+        'atletas': atletas,
+        'projeto': projeto
+    })
 
 @login_required
 @perfil_required('tecnico')
 def tecnico_desempenho(request):
     projeto = get_projeto_ativo(request)
-    return render(request, 'dashboard/tecnico/desempenho.html', {'projeto': projeto})
+    if not projeto:
+        messages.warning(request, 'Nenhum projeto ativo.')
+        return redirect('landing')
 
+    atletas = Atleta.objects.filter(
+        tecnico_responsavel=request.user,
+        membros_projeto__projeto=projeto
+    )
+    return render(request, 'dashboard/tecnico/desempenho.html', {
+        'atletas': atletas,
+        'projeto': projeto
+    })
 
 @login_required
 @perfil_required('tecnico')
 def tecnico_recuperacao(request):
     projeto = get_projeto_ativo(request)
-    return render(request, 'dashboard/tecnico/recuperacao.html', {'projeto': projeto})
+    if not projeto:
+        messages.warning(request, 'Nenhum projeto ativo.')
+        return redirect('landing')
+
+    atletas = Atleta.objects.filter(
+        tecnico_responsavel=request.user,
+        membros_projeto__projeto=projeto,
+        lesoes__tratamentos__ativo=True
+    ).distinct()
+
+    return render(request, 'dashboard/tecnico/recuperacao.html', {
+        'atletas': atletas,
+        'projeto': projeto
+    })
 
 
 # ==============================================
@@ -342,15 +474,20 @@ def atleta_recuperacao(request):
     if not projeto:
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
+
+    if not hasattr(request.user, 'atleta'):
+        messages.error(request, 'Perfil de atleta não configurado.')
+        return redirect('dashboard')
+
     atleta = request.user.atleta
     evolucoes = EvolucaoFisica.objects.filter(atleta=atleta, projeto=projeto).order_by('-data_registro')
     lesoes = Lesao.objects.filter(atleta=atleta, projeto=projeto)
+
     return render(request, 'dashboard/atleta/recuperacao.html', {
         'evolucoes': evolucoes,
         'lesoes': lesoes,
         'projeto': projeto,
     })
-
 
 @login_required
 @perfil_required('atleta')
@@ -359,9 +496,26 @@ def atleta_psicologico(request):
     if not projeto:
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
-    avaliacoes = AvaliacaoPsicologica.objects.filter(atleta=request.user.atleta, projeto=projeto).order_by('-data')
-    return render(request, 'dashboard/atleta/psicologico.html', {'avaliacoes': avaliacoes, 'projeto': projeto})
 
+    if not hasattr(request.user, 'atleta'):
+        messages.error(request, 'Perfil de atleta não configurado.')
+        return redirect('dashboard')
+
+    avaliacoes = AvaliacaoPsicologica.objects.filter(
+        atleta=request.user.atleta,
+        projeto=projeto
+    ).order_by('-data')
+
+    questionarios = QuestionarioPeriodico.objects.filter(
+        atleta=request.user.atleta,
+        projeto=projeto
+    ).order_by('-data')
+
+    return render(request, 'dashboard/atleta/psicologico.html', {
+        'avaliacoes': avaliacoes,
+        'questionarios': questionarios,
+        'projeto': projeto
+    })
 
 @login_required
 @perfil_required('atleta')
@@ -370,12 +524,21 @@ def atleta_exercicios(request):
     if not projeto:
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
+
+    if not hasattr(request.user, 'atleta'):
+        messages.error(request, 'Perfil de atleta não configurado.')
+        return redirect('dashboard')
+
     exercicios = ExercicioRecuperacao.objects.filter(
         tratamento__lesao__atleta=request.user.atleta,
         tratamento__ativo=True,
         tratamento__lesao__projeto=projeto
     )
-    return render(request, 'dashboard/atleta/exercicios.html', {'exercicios': exercicios, 'projeto': projeto})
+
+    return render(request, 'dashboard/atleta/exercicios.html', {
+        'exercicios': exercicios,
+        'projeto': projeto
+    })
 
 
 # ==============================================
@@ -389,9 +552,17 @@ def fisioterapeuta_atletas(request):
     if not projeto:
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
-    atletas = Atleta.objects.filter(membros_projeto__projeto=projeto, lesoes__tratamentos__ativo=True).distinct()
-    return render(request, 'dashboard/fisioterapeuta/atletas.html', {'atletas': atletas, 'projeto': projeto})
 
+    atletas = Atleta.objects.filter(
+        membros_projeto__projeto=projeto,
+        membros_projeto__ativo=True,
+        lesoes__tratamentos__ativo=True
+    ).distinct()
+
+    return render(request, 'dashboard/fisioterapeuta/atletas.html', {
+        'atletas': atletas,
+        'projeto': projeto
+    })
 
 @login_required
 @perfil_required('fisioterapeuta')
@@ -400,9 +571,16 @@ def fisioterapeuta_tratamentos(request):
     if not projeto:
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
-    tratamentos = TratamentoFisioterapico.objects.filter(ativo=True, lesao__projeto=projeto)
-    return render(request, 'dashboard/fisioterapeuta/tratamentos.html', {'tratamentos': tratamentos, 'projeto': projeto})
 
+    tratamentos = TratamentoFisioterapico.objects.filter(
+        ativo=True,
+        lesao__projeto=projeto
+    ).select_related('lesao', 'lesao__atleta')
+
+    return render(request, 'dashboard/fisioterapeuta/tratamentos.html', {
+        'tratamentos': tratamentos,
+        'projeto': projeto
+    })
 
 @login_required
 @perfil_required('fisioterapeuta')
@@ -411,8 +589,12 @@ def fisioterapeuta_evolucoes(request):
     if not projeto:
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
+
     evolucoes = EvolucaoFisica.objects.filter(projeto=projeto).order_by('-data_registro')[:20]
-    return render(request, 'dashboard/fisioterapeuta/evolucoes.html', {'evolucoes': evolucoes, 'projeto': projeto})
+    return render(request, 'dashboard/fisioterapeuta/evolucoes.html', {
+        'evolucoes': evolucoes,
+        'projeto': projeto
+    })
 
 
 # ==============================================
@@ -426,9 +608,12 @@ def psicologo_avaliacoes(request):
     if not projeto:
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
-    avaliacoes = AvaliacaoPsicologica.objects.filter(projeto=projeto).order_by('-data')
-    return render(request, 'dashboard/psicologo/avaliacoes.html', {'avaliacoes': avaliacoes, 'projeto': projeto})
 
+    avaliacoes = AvaliacaoPsicologica.objects.filter(projeto=projeto).order_by('-data')
+    return render(request, 'dashboard/psicologo/avaliacoes.html', {
+        'avaliacoes': avaliacoes,
+        'projeto': projeto
+    })
 
 @login_required
 @perfil_required('psicologo')
@@ -437,5 +622,14 @@ def psicologo_atletas(request):
     if not projeto:
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
-    atletas = Atleta.objects.filter(avaliacaopsicologica__isnull=False, membros_projeto__projeto=projeto).distinct()
-    return render(request, 'dashboard/psicologo/atletas.html', {'atletas': atletas, 'projeto': projeto})
+
+    atletas = Atleta.objects.filter(
+        avaliacoes_psicologicas__isnull=False,
+        membros_projeto__projeto=projeto,
+        membros_projeto__ativo=True
+    ).distinct()
+
+    return render(request, 'dashboard/psicologo/atletas.html', {
+        'atletas': atletas,
+        'projeto': projeto
+    })

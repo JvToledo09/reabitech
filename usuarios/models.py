@@ -6,8 +6,8 @@ class Perfil(models.Model):
     TIPO_USUARIO = [
         ('coordenador', 'Coordenador'),
         ('tecnico', 'Técnico'),
-        ('estagiario_fisio', 'Estagiário - Fisioterapia'),
-        ('estagiario_psico', 'Estagiário - Psicologia'),
+        ('fisioterapeuta', 'Fisioterapeuta'),
+        ('psicologo', 'Psicólogo'),
         ('atleta', 'Atleta'),
     ]
     
@@ -15,9 +15,13 @@ class Perfil(models.Model):
     tipo = models.CharField(max_length=20, choices=TIPO_USUARIO)
     telefone = models.CharField(max_length=15, blank=True)
     foto = models.ImageField(upload_to='perfil_fotos/', null=True, blank=True)
+    senha_temporaria = models.BooleanField(default=False)  # Indica se precisa trocar a senha
     
     def __str__(self):
         return f"{self.usuario.get_full_name()} - {self.get_tipo_display()}"
+    
+    def get_tipo_display(self):
+        return dict(self.TIPO_USUARIO).get(self.tipo, self.tipo)
 
 class ModalidadeEsportiva(models.Model):
     nome = models.CharField(max_length=100)
@@ -29,8 +33,11 @@ class ModalidadeEsportiva(models.Model):
 class Atleta(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='atleta')
     rm = models.CharField(max_length=20, unique=True)
-    modalidade = models.ForeignKey(ModalidadeEsportiva, on_delete=models.SET_NULL, null=True)
-    tecnico_responsavel = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='atletas_orientados')
+    modalidade = models.ForeignKey(ModalidadeEsportiva, on_delete=models.SET_NULL, null=True, blank=True)
+    tecnico_responsavel = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True, 
+        related_name='atletas_orientados'
+    )
     data_ingresso = models.DateField(auto_now_add=True)
     altura = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     peso = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
