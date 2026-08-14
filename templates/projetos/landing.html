@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}REABITECH - Plataforma de Reabilitação Esportiva{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold">REABITECH</h1>
+            <p class="lead">Plataforma de Supervisão e Monitoramento da Reabilitação de Atletas</p>
+            <p class="text-muted">Conectamos profissionais e atletas para uma recuperação mais eficiente.</p>
+            <div class="mt-4">
+                <a href="{% url 'criar_projeto' %}" class="btn btn-primary-custom btn-lg me-3">
+                    <i class="fas fa-rocket"></i> Criar seu Projeto
+                </a>
+                <a href="{% url 'login' %}" class="btn btn-outline-custom btn-lg">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-6 text-center">
+            <img src="{% static 'images/hero.svg' %}" alt="REABITECH" class="img-fluid" style="max-height:300px;" onerror="this.style.display='none'">
+        </div>
+    </div>
+
+    <!-- Projetos Parceiros -->
+    {% if projetos %}
+    <div class="row mt-5">
+        <h2 class="text-center mb-4">Projetos Parceiros</h2>
+        {% for projeto in projetos %}
+        <div class="col-md-4">
+            <div class="card-modern p-4 text-center">
+                {% if projeto.logo %}
+                <img src="{{ projeto.logo.url }}" alt="{{ projeto.nome }}" class="img-fluid mb-3" style="max-height:80px;">
+                {% endif %}
+                <h5>{{ projeto.nome }}</h5>
+                <p>{{ projeto.descricao|truncatechars:80 }}</p>
+                <a href="{{ projeto.site_oficial }}" target="_blank" class="btn btn-outline-custom btn-sm">Visitar</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Planos -->
+    <div class="row mt-5">
+        <h2 class="text-center mb-4">Escolha o plano ideal para seu projeto</h2>
+        {% for plano in planos %}
+        <div class="col-md-4">
+            <div class="card-modern p-4">
+                <h4>{{ plano.nome }}</h4>
+                <p class="display-6 fw-bold">R$ {{ plano.preco_mensal }}</p>
+                <p>{{ plano.descricao }}</p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success"></i> Até {{ plano.max_usuarios }} usuários</li>
+                    {% if plano.inclui_fisioterapia %}<li><i class="fas fa-check text-success"></i> Fisioterapia</li>{% endif %}
+                    {% if plano.inclui_psicologia %}<li><i class="fas fa-check text-success"></i> Psicologia</li>{% endif %}
+                    {% if plano.inclui_relatorios %}<li><i class="fas fa-check text-success"></i> Relatórios</li>{% endif %}
+                </ul>
+                <a href="{% url 'criar_projeto' %}?plano={{ plano.id }}" class="btn btn-primary-custom w-100">Assinar</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

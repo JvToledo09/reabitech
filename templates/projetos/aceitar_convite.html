@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Aceitar Convite{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card-modern p-4">
+                <h3>Você foi convidado para o projeto "{{ convite.projeto.nome }}"</h3>
+                <p>Como <strong>{{ convite.get_tipo_membro_display }}</strong></p>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="senha" class="form-label">Crie sua senha</label>
+                        <input type="password" class="form-control" id="senha" name="senha" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary-custom w-100">Aceitar e Criar Conta</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

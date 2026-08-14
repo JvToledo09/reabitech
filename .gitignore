@@ -1,22 +1,22 @@
-# Django
-*.log
-*.pot
-*.pyc
-__pycache__/
-local_settings.py
+# Banco de dados
 db.sqlite3
+
+# Variáveis de ambiente (segredos)
+.env
+
+# Arquivos Python compilados
+__pycache__/
+*.pyc
+*.pyo
+
+# Arquivos de mídia e estáticos
 media/
 staticfiles/
 
-# Environment
-venv/
-env/
-.env
-
-# IDE
-.vscode/
+# Editores de código
 .idea/
+.vscode/
+*.swp
 
-# OS
-.DS_Store
-Thumbs.db
+# Logs
+*.log

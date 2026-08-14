@@ -1,14 +1,16 @@
-version: '3'
+version: '3.8'
 
 services:
-  mysql:
-    image: mysql:8
-    container_name: reabitech_db
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: reabitech
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin123
+  web:
+    build: .
+    container_name: reabitech_django
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - ./db.sqlite3:/app/db.sqlite3   # Mantém o banco de dados salvo
     ports:
-      - "3307:3306"
+      - "8000:8000"
+    environment:
+      - SECRET_KEY=django-insecure-dev
+      - DEBUG=True
+      - ALLOWED_HOSTS=localhost,127.0.0.1

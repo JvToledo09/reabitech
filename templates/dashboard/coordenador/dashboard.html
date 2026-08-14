@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard do Coordenador{% endblock %}
+{% block page_title %}Visão Geral do Projeto{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Bem-vindo, {{ user.get_full_name }}!</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-number">{{ total_atletas }}</div>
+                <p>Total de Atletas</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-procedures"></i></div>
+                <div class="stat-number">{{ lesoes_ativas }}</div>
+                <p>Lesões em tratamento</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-percent"></i></div>
+                <div class="stat-number">{{ taxa_recuperacao_media }}%</div>
+                <p>Taxa de recuperação média</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-brain"></i></div>
+                <div class="stat-number">{{ total_avaliacoes_psico }}</div>
+                <p>Avaliações psicológicas</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard do Psicólogo{% endblock %}
+{% block page_title %}Acompanhamento Psicológico{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Olá, {{ user.get_full_name }}!</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-clipboard-list"></i></div>
+                <div class="stat-number">{{ total_avaliacoes }}</div>
+                <p>Total de avaliações realizadas</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+                <div class="stat-number">{{ avaliacoes_recentes.count }}</div>
+                <p>Avaliações recentes (últimas 10)</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

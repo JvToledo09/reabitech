@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard do Técnico{% endblock %}
+{% block page_title %}Minha Equipe{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Olá, {{ user.get_full_name }}!</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-number">{{ total_meus_atletas }}</div>
+                <p>Atletas sob minha responsabilidade</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-ambulance"></i></div>
+                <div class="stat-number">{{ meus_atletas_lesionados }}</div>
+                <p>Atletas lesionados</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-number">{{ desempenho_medio }}</div>
+                <p>Desempenho médio da equipe</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

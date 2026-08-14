@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard do Fisioterapeuta{% endblock %}
+{% block page_title %}Atendimentos de Fisioterapia{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Olá, {{ user.get_full_name }}!</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-user-injured"></i></div>
+                <div class="stat-number">{{ atletas_em_atendimento.count }}</div>
+                <p>Atletas em tratamento</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-notes-medical"></i></div>
+                <div class="stat-number">{{ total_tratamentos_ativos }}</div>
+                <p>Tratamentos ativos</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
