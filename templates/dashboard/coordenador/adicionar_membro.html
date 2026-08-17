@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Adicionar Membro{% endblock %}
+{% block page_title %}Adicionar Membro{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card-modern p-4">
+            <h5 class="mb-3 fw-bold"><i class="fas fa-user-plus me-2 text-success"></i>Adicionar novo membro</h5>
+            <p class="text-muted small mb-4">Selecione um usuário para adicionar ao projeto <strong>{{ projeto.nome }}</strong>.</p>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="usuario" class="form-label fw-bold">Selecione o Usuário</label>
+                    <select name="usuario" id="usuario" class="form-select shadow-sm border-0 bg-light" style="padding: 12px;" required>
+                        <option value="" selected disabled>-- Escolha um usuário --</option>
+                        {% for usuario in usuarios_disponiveis %}
+                            <option value="{{ usuario.id }}">
+                                {{ usuario.get_full_name|default:usuario.username }} ({{ usuario.email }})
+                            </option>
+                        {% empty %}
+                            <option value="" disabled>Nenhum usuário disponível para adicionar.</option>
+                        {% endfor %}
+                    </select>
+                    <small class="text-muted mt-2 d-block">* Lista apenas usuários que ainda não são membros ativos deste projeto.</small>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary-custom shadow-sm">
+                        <i class="fas fa-save me-2"></i>Adicionar Membro
+                    </button>
+                    <a href="{% url 'coordenador_membros' %}" class="btn btn-outline-secondary border-0 bg-light">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

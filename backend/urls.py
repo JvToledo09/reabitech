@@ -8,6 +8,7 @@ from projetos import views as projetos_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('dashboard.urls', namespace='dashboard')),
     
     # Landing page (raiz)
     path('', projetos_views.lista_projetos_publicos, name='landing'),

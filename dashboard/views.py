@@ -203,11 +203,13 @@ def dashboard_tecnico(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
+    # CORREÇÃO: Usar subconsulta para evitar erro de OneToOneField
+    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto, ativo=True).values_list('usuario', flat=True)
     meus_atletas = Atleta.objects.filter(
         tecnico_responsavel=request.user,
-        membros_projeto__projeto=projeto,
-        membros_projeto__ativo=True
-    )
+        usuario__in=membros_usuario_ids
+    ).distinct()
+    
     total = meus_atletas.count()
     lesionados = meus_atletas.filter(lesoes__tratamentos__ativo=True).distinct().count()
 
@@ -241,7 +243,10 @@ def dashboard_coordenador(request):
     projeto = get_projeto_ativo(request)
 
     if projeto:
-        atletas = Atleta.objects.filter(membros_projeto__projeto=projeto, membros_projeto__ativo=True)
+        # CORREÇÃO: Usar subconsulta para evitar erro de OneToOneField
+        membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto, ativo=True).values_list('usuario', flat=True)
+        atletas = Atleta.objects.filter(usuario__in=membros_usuario_ids).distinct()
+        
         lesoes_ativas = Lesao.objects.filter(projeto=projeto, tratamentos__ativo=True).distinct().count()
         avaliacoes_psico = AvaliacaoPsicologica.objects.filter(projeto=projeto).count()
 
@@ -275,9 +280,10 @@ def dashboard_fisioterapeuta(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
+    # CORREÇÃO: Usar subconsulta
+    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto, ativo=True).values_list('usuario', flat=True)
     atletas = Atleta.objects.filter(
-        membros_projeto__projeto=projeto,
-        membros_projeto__ativo=True,
+        usuario__in=membros_usuario_ids,
         lesoes__tratamentos__ativo=True
     ).distinct()
 
@@ -305,9 +311,11 @@ def dashboard_psicologo(request):
     avaliacoes = AvaliacaoPsicologica.objects.filter(projeto=projeto).order_by('-data')[:10]
     total_avaliacoes = AvaliacaoPsicologica.objects.filter(projeto=projeto).count()
 
+    # CORREÇÃO: Usar subconsulta (o "ativo=True" não é obrigatório aqui, apenas para garantir integridade)
+    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto).values_list('usuario', flat=True)
     atletas_com_psico = Atleta.objects.filter(
         avaliacoes_psicologicas__isnull=False,
-        membros_projeto__projeto=projeto
+        usuario__in=membros_usuario_ids
     ).distinct().count()
 
     context = {
@@ -331,7 +339,9 @@ def coordenador_atletas(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    atletas = Atleta.objects.filter(membros_projeto__projeto=projeto, membros_projeto__ativo=True)
+    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto, ativo=True).values_list('usuario', flat=True)
+    atletas = Atleta.objects.filter(usuario__in=membros_usuario_ids).distinct()
+    
     return render(request, 'dashboard/coordenador/atletas.html', {
         'atletas': atletas,
         'projeto': projeto
@@ -373,7 +383,9 @@ def coordenador_relatorios(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    total_atletas = Atleta.objects.filter(membros_projeto__projeto=projeto).count()
+    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto).values_list('usuario', flat=True)
+    total_atletas = Atleta.objects.filter(usuario__in=membros_usuario_ids).distinct().count()
+    
     total_lesoes = Lesao.objects.filter(projeto=projeto).count()
     total_avaliacoes = AvaliacaoPsicologica.objects.filter(projeto=projeto).count()
 
@@ -389,6 +401,10 @@ def coordenador_relatorios(request):
     }
     return render(request, 'dashboard/coordenador/relatorios.html', context)
 
+# ==============================================
+# 5.1 VIEWS DE MEMBROS DO COORDENADOR (COM AS NOVAS ADIÇÕES)
+# ==============================================
+
 @login_required
 @perfil_required('coordenador')
 def coordenador_membros(request):
@@ -397,10 +413,57 @@ def coordenador_membros(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    membros = MembroProjeto.objects.filter(projeto=projeto, ativo=True).select_related('usuario', 'usuario__perfil')
+    # 🔥 ADIÇÃO 1: Adicionei o .order_by para organizar por perfil e depois alfabeticamente
+    membros = MembroProjeto.objects.filter(projeto=projeto, ativo=True).select_related('usuario', 'usuario__perfil').order_by(
+        'usuario__perfil__tipo',      # Agrupa por tipo de perfil (Coordenador, Técnico, etc)
+        'usuario__first_name',        # Ordem alfabética por nome
+        'usuario__last_name'          # E por sobrenome
+    )
+    
     return render(request, 'dashboard/coordenador/membros.html', {
         'projeto': projeto,
         'membros': membros,
+    })
+
+# 🔥 ADIÇÃO 2: Nova view para o botão "Adicionar Membro"
+@login_required
+@perfil_required('coordenador')
+def coordenador_adicionar_membro(request):
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        messages.warning(request, 'Nenhum projeto ativo.')
+        return redirect('landing')
+
+    if request.method == 'POST':
+        usuario_id = request.POST.get('usuario')
+        if usuario_id:
+            try:
+                usuario = User.objects.get(id=usuario_id)
+                # get_or_create evita duplicatas
+                membro, created = MembroProjeto.objects.get_or_create(
+                    projeto=projeto,
+                    usuario=usuario
+                )
+                if not created and not membro.ativo:
+                    membro.ativo = True
+                    membro.save()
+                    messages.success(request, f'{usuario.get_full_name()} foi reativado no projeto!')
+                elif not created and membro.ativo:
+                    messages.info(request, f'{usuario.get_full_name()} já é um membro ativo deste projeto.')
+                else:
+                    messages.success(request, f'{usuario.get_full_name()} foi adicionado ao projeto com sucesso!')
+                
+                return redirect('coordenador_membros')
+            except User.DoesNotExist:
+                messages.error(request, 'Usuário não encontrado.')
+
+    # Pega apenas os usuários que NÃO são membros ativos deste projeto
+    membros_ativos_ids = MembroProjeto.objects.filter(projeto=projeto, ativo=True).values_list('usuario_id', flat=True)
+    usuarios_disponiveis = User.objects.exclude(id__in=membros_ativos_ids).order_by('first_name', 'last_name')
+
+    return render(request, 'dashboard/coordenador/adicionar_membro.html', {
+        'projeto': projeto,
+        'usuarios_disponiveis': usuarios_disponiveis,
     })
 
 
@@ -416,11 +479,12 @@ def tecnico_atletas(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
+    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto, ativo=True).values_list('usuario', flat=True)
     atletas = Atleta.objects.filter(
         tecnico_responsavel=request.user,
-        membros_projeto__projeto=projeto,
-        membros_projeto__ativo=True
-    )
+        usuario__in=membros_usuario_ids
+    ).distinct()
+    
     return render(request, 'dashboard/tecnico/atletas.html', {
         'atletas': atletas,
         'projeto': projeto
@@ -434,10 +498,12 @@ def tecnico_desempenho(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
+    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto).values_list('usuario', flat=True)
     atletas = Atleta.objects.filter(
         tecnico_responsavel=request.user,
-        membros_projeto__projeto=projeto
-    )
+        usuario__in=membros_usuario_ids
+    ).distinct()
+    
     return render(request, 'dashboard/tecnico/desempenho.html', {
         'atletas': atletas,
         'projeto': projeto
@@ -451,9 +517,10 @@ def tecnico_recuperacao(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
+    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto).values_list('usuario', flat=True)
     atletas = Atleta.objects.filter(
         tecnico_responsavel=request.user,
-        membros_projeto__projeto=projeto,
+        usuario__in=membros_usuario_ids,
         lesoes__tratamentos__ativo=True
     ).distinct()
 
@@ -553,9 +620,9 @@ def fisioterapeuta_atletas(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
+    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto, ativo=True).values_list('usuario', flat=True)
     atletas = Atleta.objects.filter(
-        membros_projeto__projeto=projeto,
-        membros_projeto__ativo=True,
+        usuario__in=membros_usuario_ids,
         lesoes__tratamentos__ativo=True
     ).distinct()
 
@@ -623,10 +690,10 @@ def psicologo_atletas(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
+    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto, ativo=True).values_list('usuario', flat=True)
     atletas = Atleta.objects.filter(
         avaliacoes_psicologicas__isnull=False,
-        membros_projeto__projeto=projeto,
-        membros_projeto__ativo=True
+        usuario__in=membros_usuario_ids
     ).distinct()
 
     return render(request, 'dashboard/psicologo/atletas.html', {

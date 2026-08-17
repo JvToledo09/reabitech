@@ -185,7 +185,7 @@
             margin-left: 280px;
         }
         
-        /* Top Navbar */
+        /* Top Navbar (Botão Toggle integrado aqui!) */
         .top-navbar {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
@@ -205,6 +205,31 @@
             color: white;
         }
         
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .toggle-btn-integrated {
+            background: var(--gradient);
+            border: none;
+            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+        
+        .toggle-btn-integrated:hover {
+            transform: scale(1.05);
+        }
+        
         .page-title h2 {
             font-size: 1.5rem;
             font-weight: 600;
@@ -217,30 +242,7 @@
             color: var(--secondary);
         }
         
-        /* Toggle Button */
-        .toggle-btn {
-            background: var(--gradient);
-            border: none;
-            border-radius: 12px;
-            width: 40px;
-            height: 40px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: fixed;
-            left: 290px;
-            top: 20px;
-            z-index: 1001;
-        }
-        
-        .toggle-btn.active {
-            left: 20px;
-        }
-        
-        /* Cards Modernos */
+        /* Cards Modernos (Compartilhados globalmente) */
         .card-modern {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
@@ -261,15 +263,6 @@
             box-shadow: var(--shadow-hover);
         }
         
-        .card-header-custom {
-            background: var(--gradient);
-            color: white;
-            padding: 16px 20px;
-            font-weight: 600;
-            border: none;
-        }
-        
-        /* Stat Cards */
         .stat-card {
             background: white;
             border-radius: 20px;
@@ -333,7 +326,7 @@
             margin-bottom: 5px;
         }
         
-        /* Botões */
+        /* Botões Globais */
         .btn-primary-custom {
             background: var(--gradient);
             border: none;
@@ -374,49 +367,6 @@
             transform: translateY(-1px);
         }
         
-        /* Badges */
-        .badge-success {
-            background: var(--secondary);
-            color: white;
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            display: inline-block;
-        }
-        
-        .badge-warning {
-            background: #ffc107;
-            color: #000;
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            display: inline-block;
-        }
-        
-        .badge-danger {
-            background: #dc3545;
-            color: white;
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            display: inline-block;
-        }
-        
-        /* Progress */
-        .progress-custom {
-            height: 10px;
-            border-radius: 10px;
-            background: var(--neutral);
-            overflow: hidden;
-        }
-        
-        .progress-bar-custom {
-            background: var(--gradient);
-            border-radius: 10px;
-            transition: width 1s ease;
-            height: 100%;
-        }
-        
         /* Dark Mode Toggle */
         .dark-mode-toggle {
             background: var(--gradient);
@@ -429,31 +379,6 @@
             justify-content: center;
             cursor: pointer;
             color: white;
-        }
-        
-        /* Animações */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .animate-fadeInUp {
-            animation: fadeInUp 0.6s ease forwards;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        .animate-pulse {
-            animation: pulse 2s ease-in-out infinite;
         }
         
         /* Loading */
@@ -489,39 +414,24 @@
             to { transform: rotate(360deg); }
         }
         
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeInUp { animation: fadeInUp 0.6s ease forwards; }
+        
         /* Responsividade */
         @media (max-width: 992px) {
             .sidebar {
                 left: -280px;
+                box-shadow: none; /* Remove shadow quando escondido */
             }
             .sidebar.active {
                 left: 0;
+                box-shadow: var(--shadow-lg);
             }
             .main-content:not(.no-sidebar) {
                 margin-left: 0;
-            }
-            .toggle-btn {
-                left: 20px;
-            }
-            .toggle-btn.active {
-                left: 300px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 15px;
-            }
-            .top-navbar {
-                flex-direction: column;
-                text-align: center;
-            }
-            .stat-number {
-                font-size: 28px;
-            }
-            .col-md-3, .col-md-4 {
-                flex: 0 0 100%;
-                max-width: 100%;
             }
         }
     </style>
@@ -544,31 +454,35 @@
         
         <div class="sidebar-menu">
             {% if user.perfil.tipo == 'coordenador' %}
-            <a href="{% url 'dashboard_coordenador' %}" class="sidebar-item active"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-            <a href="{% url 'coordenador_atletas' %}" class="sidebar-item"><i class="fas fa-users"></i><span>Atletas</span></a>
-            <a href="{% url 'coordenador_fisioterapia' %}" class="sidebar-item"><i class="fas fa-dumbbell"></i><span>Fisioterapia</span></a>
-            <a href="{% url 'coordenador_psicologia' %}" class="sidebar-item"><i class="fas fa-brain"></i><span>Psicologia</span></a>
-            <a href="{% url 'coordenador_relatorios' %}" class="sidebar-item"><i class="fas fa-chart-line"></i><span>Relatórios</span></a>
-            <a href="{% url 'coordenador_membros' %}" class="sidebar-item"><i class="fas fa-user-plus"></i><span>Membros</span></a>
+            <a href="{% url 'dashboard_coordenador' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_coordenador' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+            <a href="{% url 'coordenador_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_atletas' %}active{% endif %}"><i class="fas fa-users"></i><span>Atletas</span></a>
+            <a href="{% url 'coordenador_fisioterapia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_fisioterapia' %}active{% endif %}"><i class="fas fa-dumbbell"></i><span>Fisioterapia</span></a>
+            <a href="{% url 'coordenador_psicologia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_psicologia' %}active{% endif %}"><i class="fas fa-brain"></i><span>Psicologia</span></a>
+            <a href="{% url 'coordenador_relatorios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_relatorios' %}active{% endif %}"><i class="fas fa-chart-line"></i><span>Relatórios</span></a>
+            <a href="{% url 'coordenador_membros' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_membros' %}active{% endif %}"><i class="fas fa-user-plus"></i><span>Membros</span></a>
+            
             {% elif user.perfil.tipo == 'tecnico' %}
-            <a href="{% url 'dashboard_tecnico' %}" class="sidebar-item active"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-            <a href="{% url 'tecnico_atletas' %}" class="sidebar-item"><i class="fas fa-futbol"></i><span>Meus Atletas</span></a>
-            <a href="{% url 'tecnico_desempenho' %}" class="sidebar-item"><i class="fas fa-chart-simple"></i><span>Desempenho</span></a>
-            <a href="{% url 'tecnico_recuperacao' %}" class="sidebar-item"><i class="fas fa-heartbeat"></i><span>Recuperação</span></a>
+            <a href="{% url 'dashboard_tecnico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_tecnico' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+            <a href="{% url 'tecnico_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_atletas' %}active{% endif %}"><i class="fas fa-futbol"></i><span>Meus Atletas</span></a>
+            <a href="{% url 'tecnico_desempenho' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_desempenho' %}active{% endif %}"><i class="fas fa-chart-simple"></i><span>Desempenho</span></a>
+            <a href="{% url 'tecnico_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_recuperacao' %}active{% endif %}"><i class="fas fa-heartbeat"></i><span>Recuperação</span></a>
+            
             {% elif user.perfil.tipo == 'atleta' %}
-            <a href="{% url 'dashboard_atleta' %}" class="sidebar-item active"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-            <a href="{% url 'atleta_recuperacao' %}" class="sidebar-item"><i class="fas fa-heartbeat"></i><span>Minha Recuperação</span></a>
-            <a href="{% url 'atleta_psicologico' %}" class="sidebar-item"><i class="fas fa-brain"></i><span>Saúde Mental</span></a>
-            <a href="{% url 'atleta_exercicios' %}" class="sidebar-item"><i class="fas fa-running"></i><span>Exercícios</span></a>
+            <a href="{% url 'dashboard_atleta' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_atleta' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+            <a href="{% url 'atleta_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_recuperacao' %}active{% endif %}"><i class="fas fa-heartbeat"></i><span>Minha Recuperação</span></a>
+            <a href="{% url 'atleta_psicologico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_psicologico' %}active{% endif %}"><i class="fas fa-brain"></i><span>Saúde Mental</span></a>
+            <a href="{% url 'atleta_exercicios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_exercicios' %}active{% endif %}"><i class="fas fa-running"></i><span>Exercícios</span></a>
+            
             {% elif user.perfil.tipo == 'fisioterapeuta' %}
-            <a href="{% url 'dashboard_fisioterapeuta' %}" class="sidebar-item active"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-            <a href="{% url 'fisioterapeuta_atletas' %}" class="sidebar-item"><i class="fas fa-user-injured"></i><span>Pacientes</span></a>
-            <a href="{% url 'fisioterapeuta_tratamentos' %}" class="sidebar-item"><i class="fas fa-notes-medical"></i><span>Tratamentos</span></a>
-            <a href="{% url 'fisioterapeuta_evolucoes' %}" class="sidebar-item"><i class="fas fa-chart-line"></i><span>Evoluções</span></a>
+            <a href="{% url 'dashboard_fisioterapeuta' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_fisioterapeuta' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+            <a href="{% url 'fisioterapeuta_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_atletas' %}active{% endif %}"><i class="fas fa-user-injured"></i><span>Pacientes</span></a>
+            <a href="{% url 'fisioterapeuta_tratamentos' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_tratamentos' %}active{% endif %}"><i class="fas fa-notes-medical"></i><span>Tratamentos</span></a>
+            <a href="{% url 'fisioterapeuta_evolucoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_evolucoes' %}active{% endif %}"><i class="fas fa-chart-line"></i><span>Evoluções</span></a>
+            
             {% elif user.perfil.tipo == 'psicologo' %}
-            <a href="{% url 'dashboard_psicologo' %}" class="sidebar-item active"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-            <a href="{% url 'psicologo_atletas' %}" class="sidebar-item"><i class="fas fa-users"></i><span>Atendimentos</span></a>
-            <a href="{% url 'psicologo_avaliacoes' %}" class="sidebar-item"><i class="fas fa-clipboard-list"></i><span>Avaliações</span></a>
+            <a href="{% url 'dashboard_psicologo' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_psicologo' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+            <a href="{% url 'psicologo_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_atletas' %}active{% endif %}"><i class="fas fa-users"></i><span>Atendimentos</span></a>
+            <a href="{% url 'psicologo_avaliacoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_avaliacoes' %}active{% endif %}"><i class="fas fa-clipboard-list"></i><span>Avaliações</span></a>
             {% endif %}
             
             <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0;"></div>
@@ -581,10 +495,6 @@
             <span class="badge">{{ user.perfil.get_tipo_display }}</span>
         </div>
     </div>
-    
-    <button class="toggle-btn" id="toggleBtn">
-        <i class="fas fa-bars"></i>
-    </button>
     {% endif %}
     
     <!-- MAIN CONTENT -->
@@ -592,11 +502,21 @@
         {% if user.is_authenticated %}
         <div class="top-navbar">
             <div class="page-title">
-                <h2>{% block page_title %}Dashboard{% endblock %}</h2>
-                <p class="mb-0">Bem-vindo de volta, {{ user.get_full_name|default:user.username }}!</p>
+                <!-- Botão Toggle agora DENTRO da Navbar -->
+                <button class="toggle-btn-integrated d-flex d-lg-none" id="mobileToggleBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <button class="toggle-btn-integrated d-none d-lg-flex" id="desktopToggleBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div>
+                    <h2>{% block page_title %}Dashboard{% endblock %}</h2>
+                    <p class="mb-0">Bem-vindo de volta, {{ user.get_full_name|default:user.username }}!</p>
+                </div>
             </div>
             <div class="d-flex align-items-center gap-3">
-                <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="height: 60px; width: auto; border-radius: 12px;" onerror="this.style.display='none'">
+                <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="height: 60px; width: auto; border-radius: 12px; display:none;" onerror="this.style.display='none'" onload="this.style.display='block'">
                 <button class="dark-mode-toggle" id="darkModeToggle"><i class="fas fa-moon"></i></button>
                 <div class="dropdown">
                     <button class="btn btn-outline-custom dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -654,15 +574,16 @@
             if(loading) setTimeout(() => loading.classList.add('hide'), 500);
         });
         
-        const toggleBtn = document.getElementById('toggleBtn');
         const sidebar = document.getElementById('sidebar');
+        const mobileToggleBtn = document.getElementById('mobileToggleBtn');
+        const desktopToggleBtn = document.getElementById('desktopToggleBtn');
         
-        if(toggleBtn) {
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('active');
-                toggleBtn.classList.toggle('active');
-            });
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
         }
+        
+        if(mobileToggleBtn) mobileToggleBtn.addEventListener('click', toggleSidebar);
+        if(desktopToggleBtn) desktopToggleBtn.addEventListener('click', toggleSidebar);
         
         const darkModeToggle = document.getElementById('darkModeToggle');
         const htmlElement = document.documentElement;

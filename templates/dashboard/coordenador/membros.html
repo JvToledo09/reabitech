@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Membros do Projeto{% endblock %}
+{% block page_title %}Membros{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <p class="text-muted mb-0">Gerenciamento de membros do projeto <strong>{{ projeto.nome }}</strong></p>
+        </div>
+        <!-- CORRIGIDO: Apenas uma tag de abertura e uma de fechamento -->
+        <a href="{% url 'dashboard:coordenador_adicionar_membro' %}" class="btn btn-primary-custom shadow-sm">
+            <i class="fas fa-plus me-2"></i>Adicionar Membro
+        </a>
+    </div>
+
+    <div class="card-modern p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light text-muted small fw-bold" style="border-bottom: 1px solid var(--border-color);">
+                    <tr>
+                        <th scope="col" class="ps-4 py-3">Usuário</th>
+                        <th scope="col">Perfil</th>
+                        <th scope="col">Status</th>
+                        <th scope="col" class="text-end pe-4">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% regroup membros by usuario.perfil.get_tipo_display as membros_agrupados %}
+                    {% for grupo in membros_agrupados %}
+                        <!-- Cabeçalho do Grupo -->
+                        <tr class="bg-light">
+                            <td colspan="4" class="ps-4 py-2 text-muted fw-bold">
+                                <i class="fas fa-users-cog me-2"></i> {{ grupo.grouper }} <span class="badge bg-light text-dark border ms-2">{{ grupo.list|length }}</span>
+                            </td>
+                        </tr>
+
+                        <!-- Itens do Grupo -->
+                        {% for membro in grupo.list %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-secondary bg-opacity-10 text-secondary rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-user fs-6"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">{{ membro.usuario.get_full_name|default:membro.usuario.username }}</h6>
+                                        <small class="text-muted">{{ membro.usuario.email }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-dark rounded-pill px-3 py-2 border">
+                                    {{ membro.usuario.perfil.get_tipo_display|default:membro.usuario.perfil.tipo|title }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if membro.ativo %}
+                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">Ativo</span>
+                                {% else %}
+                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">Inativo</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end pe-4">
+                                <button class="btn btn-sm btn-outline-secondary rounded-circle" title="Ver detalhes"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-danger rounded-circle" title="Remover"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted">
+                            <i class="fas fa-users fs-1 d-block mb-3 opacity-25"></i>
+                            <p class="mb-0">Nenhum membro encontrado neste projeto.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
