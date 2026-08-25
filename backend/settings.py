@@ -99,7 +99,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Configurações de Login e Redirecionamento (Agora usando o nome da rota 'login')
-LOGIN_URL = 'login'
+LOGIN_URL = '/dashboard/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
 

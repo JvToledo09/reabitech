@@ -45,10 +45,21 @@ class MembroProjeto(models.Model):
         ('psicologo', 'Psicólogo'),
         ('atleta', 'Atleta'),
     ]
+
+    SEXO_CHOICES = [
+        ('masculino', 'Masculino'),
+        ('feminino', 'Feminino'),
+        ('outro', 'Outro'),
+    ]
     
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, related_name='membros')
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='membros_projeto')
     tipo = models.CharField(max_length=20, choices=TIPO_MEMBRO)
+    
+    # 🔥 NOVOS CAMPOS
+    sexo = models.CharField(max_length=20, choices=SEXO_CHOICES, blank=True, null=True)
+    modalidade = models.ForeignKey('usuarios.ModalidadeEsportiva', on_delete=models.SET_NULL, blank=True, null=True)
+    
     data_entrada = models.DateTimeField(auto_now_add=True)
     ativo = models.BooleanField(default=True)
     

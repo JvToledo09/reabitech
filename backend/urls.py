@@ -3,56 +3,23 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+# Importando as views do dashboard para o login e logout na raiz
 from dashboard import views as dashboard_views
 from projetos import views as projetos_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('dashboard.urls', namespace='dashboard')),
     
-    # Landing page (raiz)
-    path('', projetos_views.lista_projetos_publicos, name='landing'),
+    # O dashboard cuida de todo o seu próprio fluxo (coordenador, atleta, etc) dentro de /dashboard/
+    path('dashboard/', include('dashboard.urls', namespace='dashboard')),
     
-    # Autenticação
+    # Rotas de Login e Logout na RAIZ do site (para os botões da navbar funcionarem)
     path('login/', dashboard_views.login_view, name='login'),
     path('logout/', dashboard_views.logout_view, name='logout'),
     
-    # Dashboards
-    path('dashboard/', dashboard_views.dashboard, name='dashboard'),
-    path('dashboard/atleta/', dashboard_views.dashboard_atleta, name='dashboard_atleta'),
-    path('dashboard/tecnico/', dashboard_views.dashboard_tecnico, name='dashboard_tecnico'),
-    path('dashboard/coordenador/', dashboard_views.dashboard_coordenador, name='dashboard_coordenador'),
-    path('dashboard/fisioterapeuta/', dashboard_views.dashboard_fisioterapeuta, name='dashboard_fisioterapeuta'),
-    path('dashboard/psicologo/', dashboard_views.dashboard_psicologo, name='dashboard_psicologo'),
-    
-    # Coordenador
-    path('coordenador/atletas/', dashboard_views.coordenador_atletas, name='coordenador_atletas'),
-    path('coordenador/fisioterapia/', dashboard_views.coordenador_fisioterapia, name='coordenador_fisioterapia'),
-    path('coordenador/psicologia/', dashboard_views.coordenador_psicologia, name='coordenador_psicologia'),
-    path('coordenador/relatorios/', dashboard_views.coordenador_relatorios, name='coordenador_relatorios'),
-    path('coordenador/membros/', dashboard_views.coordenador_membros, name='coordenador_membros'),
-    
-    # Técnico
-    path('tecnico/atletas/', dashboard_views.tecnico_atletas, name='tecnico_atletas'),
-    path('tecnico/desempenho/', dashboard_views.tecnico_desempenho, name='tecnico_desempenho'),
-    path('tecnico/recuperacao/', dashboard_views.tecnico_recuperacao, name='tecnico_recuperacao'),
-    
-    # Atleta
-    path('atleta/recuperacao/', dashboard_views.atleta_recuperacao, name='atleta_recuperacao'),
-    path('atleta/psicologico/', dashboard_views.atleta_psicologico, name='atleta_psicologico'),
-    path('atleta/exercicios/', dashboard_views.atleta_exercicios, name='atleta_exercicios'),
-    
-    # Fisioterapeuta
-    path('fisioterapeuta/atletas/', dashboard_views.fisioterapeuta_atletas, name='fisioterapeuta_atletas'),
-    path('fisioterapeuta/tratamentos/', dashboard_views.fisioterapeuta_tratamentos, name='fisioterapeuta_tratamentos'),
-    path('fisioterapeuta/evolucoes/', dashboard_views.fisioterapeuta_evolucoes, name='fisioterapeuta_evolucoes'),
-    
-    # Psicólogo
-    path('psicologo/avaliacoes/', dashboard_views.psicologo_avaliacoes, name='psicologo_avaliacoes'),
-    path('psicologo/atletas/', dashboard_views.psicologo_atletas, name='psicologo_atletas'),
-    
-    # Projetos
+    # Projetos e a Landing Page na raiz
     path('projetos/', include('projetos.urls')),
+    path('', projetos_views.lista_projetos_publicos, name='landing'),
 ]
 
 if settings.DEBUG:

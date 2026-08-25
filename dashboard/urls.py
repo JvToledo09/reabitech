@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
 
-# 🔥 Isso cria o espaço de nomes que o backend precisa
 app_name = 'dashboard'
 
 urlpatterns = [
@@ -24,8 +23,11 @@ urlpatterns = [
     path('coordenador/relatorios/', views.coordenador_relatorios, name='coordenador_relatorios'),
     path('coordenador/membros/', views.coordenador_membros, name='coordenador_membros'),
     
-    # Rota de Adicionar Membro
+    # 🔥 Rota de Adicionar Membro
     path('coordenador/membros/adicionar/', views.coordenador_adicionar_membro, name='coordenador_adicionar_membro'),
+    
+    # 🔥 Rota de Detalhes do Membro (NOVA!)
+    path('coordenador/membros/<int:membro_id>/', views.coordenador_detalhes_membro, name='coordenador_detalhes_membro'),
 
     # Views do Técnico
     path('tecnico/atletas/', views.tecnico_atletas, name='tecnico_atletas'),

@@ -424,7 +424,7 @@
         @media (max-width: 992px) {
             .sidebar {
                 left: -280px;
-                box-shadow: none; /* Remove shadow quando escondido */
+                box-shadow: none;
             }
             .sidebar.active {
                 left: 0;
@@ -454,39 +454,39 @@
         
         <div class="sidebar-menu">
             {% if user.perfil.tipo == 'coordenador' %}
-            <a href="{% url 'dashboard_coordenador' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_coordenador' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-            <a href="{% url 'coordenador_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_atletas' %}active{% endif %}"><i class="fas fa-users"></i><span>Atletas</span></a>
-            <a href="{% url 'coordenador_fisioterapia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_fisioterapia' %}active{% endif %}"><i class="fas fa-dumbbell"></i><span>Fisioterapia</span></a>
-            <a href="{% url 'coordenador_psicologia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_psicologia' %}active{% endif %}"><i class="fas fa-brain"></i><span>Psicologia</span></a>
-            <a href="{% url 'coordenador_relatorios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_relatorios' %}active{% endif %}"><i class="fas fa-chart-line"></i><span>Relatórios</span></a>
-            <a href="{% url 'coordenador_membros' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_membros' %}active{% endif %}"><i class="fas fa-user-plus"></i><span>Membros</span></a>
+            <a href="{% url 'dashboard:dashboard_coordenador' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_coordenador' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+            <a href="{% url 'dashboard:coordenador_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_atletas' %}active{% endif %}"><i class="fas fa-users"></i><span>Atletas</span></a>
+            <a href="{% url 'dashboard:coordenador_fisioterapia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_fisioterapia' %}active{% endif %}"><i class="fas fa-dumbbell"></i><span>Fisioterapia</span></a>
+            <a href="{% url 'dashboard:coordenador_psicologia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_psicologia' %}active{% endif %}"><i class="fas fa-brain"></i><span>Psicologia</span></a>
+            <a href="{% url 'dashboard:coordenador_relatorios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_relatorios' %}active{% endif %}"><i class="fas fa-chart-line"></i><span>Relatórios</span></a>
+            <a href="{% url 'dashboard:coordenador_membros' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_membros' %}active{% endif %}"><i class="fas fa-user-plus"></i><span>Membros</span></a>
             
             {% elif user.perfil.tipo == 'tecnico' %}
-            <a href="{% url 'dashboard_tecnico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_tecnico' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-            <a href="{% url 'tecnico_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_atletas' %}active{% endif %}"><i class="fas fa-futbol"></i><span>Meus Atletas</span></a>
-            <a href="{% url 'tecnico_desempenho' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_desempenho' %}active{% endif %}"><i class="fas fa-chart-simple"></i><span>Desempenho</span></a>
-            <a href="{% url 'tecnico_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_recuperacao' %}active{% endif %}"><i class="fas fa-heartbeat"></i><span>Recuperação</span></a>
+            <a href="{% url 'dashboard:dashboard_tecnico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_tecnico' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+            <a href="{% url 'dashboard:tecnico_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_atletas' %}active{% endif %}"><i class="fas fa-futbol"></i><span>Meus Atletas</span></a>
+            <a href="{% url 'dashboard:tecnico_desempenho' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_desempenho' %}active{% endif %}"><i class="fas fa-chart-simple"></i><span>Desempenho</span></a>
+            <a href="{% url 'dashboard:tecnico_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_recuperacao' %}active{% endif %}"><i class="fas fa-heartbeat"></i><span>Recuperação</span></a>
             
             {% elif user.perfil.tipo == 'atleta' %}
-            <a href="{% url 'dashboard_atleta' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_atleta' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-            <a href="{% url 'atleta_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_recuperacao' %}active{% endif %}"><i class="fas fa-heartbeat"></i><span>Minha Recuperação</span></a>
-            <a href="{% url 'atleta_psicologico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_psicologico' %}active{% endif %}"><i class="fas fa-brain"></i><span>Saúde Mental</span></a>
-            <a href="{% url 'atleta_exercicios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_exercicios' %}active{% endif %}"><i class="fas fa-running"></i><span>Exercícios</span></a>
+            <a href="{% url 'dashboard:dashboard_atleta' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_atleta' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+            <a href="{% url 'dashboard:atleta_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_recuperacao' %}active{% endif %}"><i class="fas fa-heartbeat"></i><span>Minha Recuperação</span></a>
+            <a href="{% url 'dashboard:atleta_psicologico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_psicologico' %}active{% endif %}"><i class="fas fa-brain"></i><span>Saúde Mental</span></a>
+            <a href="{% url 'dashboard:atleta_exercicios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_exercicios' %}active{% endif %}"><i class="fas fa-running"></i><span>Exercícios</span></a>
             
             {% elif user.perfil.tipo == 'fisioterapeuta' %}
-            <a href="{% url 'dashboard_fisioterapeuta' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_fisioterapeuta' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-            <a href="{% url 'fisioterapeuta_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_atletas' %}active{% endif %}"><i class="fas fa-user-injured"></i><span>Pacientes</span></a>
-            <a href="{% url 'fisioterapeuta_tratamentos' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_tratamentos' %}active{% endif %}"><i class="fas fa-notes-medical"></i><span>Tratamentos</span></a>
-            <a href="{% url 'fisioterapeuta_evolucoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_evolucoes' %}active{% endif %}"><i class="fas fa-chart-line"></i><span>Evoluções</span></a>
+            <a href="{% url 'dashboard:dashboard_fisioterapeuta' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_fisioterapeuta' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+            <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_atletas' %}active{% endif %}"><i class="fas fa-user-injured"></i><span>Pacientes</span></a>
+            <a href="{% url 'dashboard:fisioterapeuta_tratamentos' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_tratamentos' %}active{% endif %}"><i class="fas fa-notes-medical"></i><span>Tratamentos</span></a>
+            <a href="{% url 'dashboard:fisioterapeuta_evolucoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_evolucoes' %}active{% endif %}"><i class="fas fa-chart-line"></i><span>Evoluções</span></a>
             
             {% elif user.perfil.tipo == 'psicologo' %}
-            <a href="{% url 'dashboard_psicologo' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_psicologo' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-            <a href="{% url 'psicologo_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_atletas' %}active{% endif %}"><i class="fas fa-users"></i><span>Atendimentos</span></a>
-            <a href="{% url 'psicologo_avaliacoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_avaliacoes' %}active{% endif %}"><i class="fas fa-clipboard-list"></i><span>Avaliações</span></a>
+            <a href="{% url 'dashboard:dashboard_psicologo' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_psicologo' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
+            <a href="{% url 'dashboard:psicologo_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_atletas' %}active{% endif %}"><i class="fas fa-users"></i><span>Atendimentos</span></a>
+            <a href="{% url 'dashboard:psicologo_avaliacoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_avaliacoes' %}active{% endif %}"><i class="fas fa-clipboard-list"></i><span>Avaliações</span></a>
             {% endif %}
             
             <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0;"></div>
-            <a href="{% url 'logout' %}" class="sidebar-item"><i class="fas fa-sign-out-alt"></i><span>Sair</span></a>
+            <a href="{% url 'dashboard:logout' %}" class="sidebar-item"><i class="fas fa-sign-out-alt"></i><span>Sair</span></a>
         </div>
         
         <div class="sidebar-user">
@@ -502,7 +502,6 @@
         {% if user.is_authenticated %}
         <div class="top-navbar">
             <div class="page-title">
-                <!-- Botão Toggle agora DENTRO da Navbar -->
                 <button class="toggle-btn-integrated d-flex d-lg-none" id="mobileToggleBtn">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -539,7 +538,7 @@
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
                         <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configurações</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'dashboard:logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
                     </ul>
                 </div>
             </div>

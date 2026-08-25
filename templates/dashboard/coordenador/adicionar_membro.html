@@ -1,43 +1,157 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Adicionar Membro{% endblock %}
-{% block page_title %}Adicionar Membro{% endblock %}
+{% block title %}Gerenciar Membro{% endblock %}
+{% block page_title %}Gerenciar Membro{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-lg-6 col-md-8">
+    <div class="col-lg-8 col-md-10">
         <div class="card-modern p-4">
-            <h5 class="mb-3 fw-bold"><i class="fas fa-user-plus me-2 text-success"></i>Adicionar novo membro</h5>
-            <p class="text-muted small mb-4">Selecione um usuário para adicionar ao projeto <strong>{{ projeto.nome }}</strong>.</p>
+            <h5 class="mb-3 fw-bold"><i class="fas fa-user-cog me-2 text-success"></i>Gerenciar membros do projeto</h5>
+            <p class="text-muted small mb-4">Altere a função de um membro existente ou cadastre um novo usuário para o projeto <strong>{{ projeto.nome }}</strong>.</p>
 
-            <form method="POST">
-                {% csrf_token %}
-                <div class="mb-3">
-                    <label for="usuario" class="form-label fw-bold">Selecione o Usuário</label>
-                    <select name="usuario" id="usuario" class="form-select shadow-sm border-0 bg-light" style="padding: 12px;" required>
-                        <option value="" selected disabled>-- Escolha um usuário --</option>
-                        {% for usuario in usuarios_disponiveis %}
-                            <option value="{{ usuario.id }}">
-                                {{ usuario.get_full_name|default:usuario.username }} ({{ usuario.email }})
-                            </option>
-                        {% empty %}
-                            <option value="" disabled>Nenhum usuário disponível para adicionar.</option>
-                        {% endfor %}
-                    </select>
-                    <small class="text-muted mt-2 d-block">* Lista apenas usuários que ainda não são membros ativos deste projeto.</small>
+            <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" id="existing-tab" data-bs-toggle="tab" data-bs-target="#existing" type="button">Alterar Função</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="new-tab" data-bs-toggle="tab" data-bs-target="#new" type="button">Cadastrar Novo</button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- Aba 1: Alterar Função -->
+                <div class="tab-pane fade show active" id="existing">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Membro</label>
+                            <select name="membro_id" class="form-select bg-light border-0 shadow-sm" required>
+                                <option value="">-- Escolha um membro --</option>
+                                {% for membro in membros_ativos %}
+                                    <option value="{{ membro.id }}">{{ membro.usuario.get_full_name|default:membro.usuario.username }} (Atual: {{ membro.get_tipo_display }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Nova Função</label>
+                                <select name="nova_funcao" id="edit_funcao" class="form-select bg-light border-0 shadow-sm" required>
+                                    <option value="">-- Escolha --</option>
+                                    {% for value, label in funcoes %}
+                                        <option value="{{ value }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label fw-bold">Sexo</label>
+                                <select name="novo_sexo" class="form-select bg-light border-0 shadow-sm">
+                                    <option value="">--</option>
+                                    {% for value, label in sexos %}
+                                        <option value="{{ value }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3" id="edit_modalidade_wrap" style="display:none;">
+                                <label class="form-label fw-bold">Modalidade</label>
+                                <select name="nova_modalidade" class="form-select bg-light border-0 shadow-sm">
+                                    <option value="">--</option>
+                                    {% for modalidade in modalidades %}
+                                        <option value="{{ modalidade.id }}">{{ modalidade.nome }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary-custom"><i class="fas fa-save me-2"></i>Salvar Alteração</button>
+                    </form>
                 </div>
 
-                <div class="d-flex gap-2 mt-4">
-                    <button type="submit" class="btn btn-primary-custom shadow-sm">
-                        <i class="fas fa-save me-2"></i>Adicionar Membro
-                    </button>
-                    <a href="{% url 'coordenador_membros' %}" class="btn btn-outline-secondary border-0 bg-light">
-                        Cancelar
-                    </a>
+                <!-- Aba 2: Cadastrar Novo -->
+                <div class="tab-pane fade" id="new">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Nome</label>
+                                <input type="text" name="novo_nome" class="form-control bg-light border-0 shadow-sm">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Sobrenome</label>
+                                <input type="text" name="novo_sobrenome" class="form-control bg-light border-0 shadow-sm">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Username</label>
+                                <input type="text" name="novo_username" required class="form-control bg-light border-0 shadow-sm">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Email</label>
+                                <input type="email" name="novo_email" class="form-control bg-light border-0 shadow-sm">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Senha</label>
+                                <input type="password" name="novo_senha" required class="form-control bg-light border-0 shadow-sm">
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Função</label>
+                                <select name="nova_funcao" id="new_funcao" required class="form-select bg-light border-0 shadow-sm">
+                                    <option value="">-- Escolha --</option>
+                                    {% for value, label in funcoes %}
+                                        <option value="{{ value }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Sexo</label>
+                                <select name="novo_sexo" class="form-select bg-light border-0 shadow-sm">
+                                    <option value="">--</option>
+                                    {% for value, label in sexos %}
+                                        <option value="{{ value }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3" id="new_modalidade_wrap" style="display:none;">
+                                <label class="form-label fw-bold">Modalidade</label>
+                                <select name="nova_modalidade" class="form-select bg-light border-0 shadow-sm">
+                                    <option value="">--</option>
+                                    {% for modalidade in modalidades %}
+                                        <option value="{{ modalidade.id }}">{{ modalidade.nome }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary-custom mt-3"><i class="fas fa-user-plus me-2"></i>Criar e Adicionar</button>
+                    </form>
                 </div>
-            </form>
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+                <a href="{% url 'dashboard:coordenador_membros' %}" class="btn btn-outline-secondary border-0 bg-light">
+                    Cancelar
+                </a>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+    function toggleModalidade(funcaoSelect, wrapId) {
+        var val = funcaoSelect.value;
+        var wrap = document.getElementById(wrapId);
+        if(val === 'atleta' || val === 'tecnico') {
+            wrap.style.display = 'block';
+        } else {
+            wrap.style.display = 'none';
+        }
+    }
+
+    // Edit section
+    var editFuncao = document.getElementById('edit_funcao');
+    if(editFuncao) editFuncao.addEventListener('change', function() { toggleModalidade(this, 'edit_modalidade_wrap'); });
+
+    // New section
+    var newFuncao = document.getElementById('new_funcao');
+    if(newFuncao) newFuncao.addEventListener('change', function() { toggleModalidade(this, 'new_modalidade_wrap'); });
+</script>
 {% endblock %}
