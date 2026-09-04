@@ -19,4 +19,4 @@ staticfiles/
 *.swp
 
 # Logs
-*.log
+*.logdb.sqlite3
