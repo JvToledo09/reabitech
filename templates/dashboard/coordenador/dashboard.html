@@ -3,37 +3,142 @@
 {% block page_title %}Visão Geral do Projeto{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Bem-vindo, {{ user.get_full_name }}!</h2>
-    <div class="row">
-        <div class="col-md-3">
-            <div class="stat-card">
+<div class="container-fluid p-0">
+    <!-- Saudação -->
+    <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: var(--gradient); color: white; border: none;">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h3 class="fw-bold mb-1">Olá, {{ user.get_full_name }}! 👋</h3>
+                <p class="mb-0 opacity-75">Aqui está o resumo do projeto <strong>{{ projeto_ativo.nome }}</strong></p>
+            </div>
+            <i class="fas fa-chart-pie fa-4x opacity-50"></i>
+        </div>
+    </div>
+
+    <!-- Indicadores -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt">
                 <div class="stat-icon"><i class="fas fa-users"></i></div>
                 <div class="stat-number">{{ total_atletas }}</div>
                 <p>Total de Atletas</p>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-procedures"></i></div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #dc3545 0%, #f8b4b4 100%);"><i class="fas fa-procedures"></i></div>
                 <div class="stat-number">{{ lesoes_ativas }}</div>
                 <p>Lesões em tratamento</p>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-percent"></i></div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #ffc107 0%, #ffe69c 100%);"><i class="fas fa-percent"></i></div>
                 <div class="stat-number">{{ taxa_recuperacao_media }}%</div>
                 <p>Taxa de recuperação média</p>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-brain"></i></div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #0dcaf0 0%, #a6e7f7 100%);"><i class="fas fa-brain"></i></div>
                 <div class="stat-number">{{ total_avaliacoes_psico }}</div>
                 <p>Avaliações psicológicas</p>
             </div>
         </div>
     </div>
+
+    <!-- Seção de Gráficos -->
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card-modern p-4 card-tilt">
+                <h5 class="fw-bold mb-3"><i class="fas fa-chart-line me-2 text-success"></i>Evolução dos Atletas</h5>
+                <div style="height: 300px;">
+                    <canvas id="evolutionChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card-modern p-4 card-tilt">
+                <h5 class="fw-bold mb-3"><i class="fas fa-heartbeat me-2 text-danger"></i>Taxa de Recuperação</h5>
+                <div style="height: 300px;">
+                    <canvas id="recoveryChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Inicializa gráfico de linha com dados reais
+        const ctxLine = document.getElementById('evolutionChart').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: {{ chart_labels|safe }},
+                datasets: [{
+                    label: 'Desempenho',
+                    data: {{ chart_data|safe }},
+                    borderColor: '#2BA181',
+                    backgroundColor: 'rgba(43, 161, 129, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', titleColor: 'white' }
+                },
+                scales: {
+                    y: { beginAtZero: true, max: 10, grid: { color: 'rgba(0,0,0,0.05)' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Inicializa gráfico de recuperação
+        const ctxDoughnut = document.getElementById('recoveryChart').getContext('2d');
+        const recoveryValue = {{ taxa_recuperacao_media }};
+        new Chart(ctxDoughnut, {
+            type: 'doughnut',
+            data: {
+                labels: ['Recuperado', 'Restante'],
+                datasets: [{
+                    data: [recoveryValue, 100 - recoveryValue],
+                    backgroundColor: ['#2BA181', '#e9ecef'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { callbacks: { label: function(context) { return context.parsed + '%'; } } }
+                }
+            },
+            plugins: [{
+                id: 'textCenter',
+                beforeDraw: function(chart) {
+                    const { width, height, ctx } = chart;
+                    ctx.save();
+                    ctx.font = 'bold 28px Poppins, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#333';
+                    ctx.fillText(`${recoveryValue}%`, width / 2, height / 2 - 5);
+                    ctx.font = '12px Poppins, sans-serif';
+                    ctx.fillStyle = '#666';
+                    ctx.fillText('Recuperado', width / 2, height / 2 + 25);
+                    ctx.restore();
+                }
+            }]
+        });
+    });
+</script>
 {% endblock %}

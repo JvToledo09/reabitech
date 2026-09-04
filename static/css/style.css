@@ -1,5 +1,5 @@
 /* ============================================
-   REABITECH - ESTILOS GLOBAIS
+   REABITECH - ESTILOS GLOBAIS (VERSÃO PREMIUM)
    ============================================ */
 
 * {
@@ -15,48 +15,51 @@ body {
 
 /* ===== SCROLLBAR PERSONALIZADA ===== */
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
 }
-
 ::-webkit-scrollbar-track {
-    background: var(--neutral);
+    background: #f1f1f1;
     border-radius: 10px;
 }
-
 ::-webkit-scrollbar-thumb {
     background: var(--secondary);
     border-radius: 10px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
     background: var(--complementar);
 }
 
 /* ===== GLASS EFFECT ===== */
 .glass {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
-
 [data-bs-theme="dark"] .glass {
     background: rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* ===== TABELAS ===== */
+/* ===== ANIMAÇÕES ===== */
+.animate-fadeInUp {
+    animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== TABELAS CLÁSSICAS ===== */
 .table-custom {
     width: 100%;
     border-collapse: collapse;
 }
-
 .table-custom thead {
     background: var(--gradient);
     color: white;
 }
-
 .table-custom thead th {
     padding: 14px 16px;
     font-weight: 600;
@@ -64,46 +67,95 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-
 .table-custom tbody td {
     padding: 12px 16px;
     border-bottom: 1px solid rgba(0,0,0,0.05);
     vertical-align: middle;
 }
-
-[data-bs-theme="dark"] .table-custom tbody td {
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-
 .table-custom tbody tr:hover {
     background: rgba(43, 161, 129, 0.05);
+}
+
+/* ===== TABELAS PREMIUM (PARA NOVAS PÁGINAS) ===== */
+.table-premium {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+.table-premium thead th {
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    padding: 12px 16px;
+}
+.table-premium tbody tr {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.table-premium tbody tr:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    background: #f8f9fa;
+}
+[data-bs-theme="dark"] .table-premium tbody tr {
+    background: #1e1e32;
+    color: white;
+}
+.table-premium tbody td {
+    border: none;
+    padding: 16px;
+    vertical-align: middle;
+}
+
+/* ===== CARDS COM EFEITO TILT (3D) ===== */
+.card-tilt {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-tilt:hover {
+    transform: perspective(1000px) rotateY(2deg) rotateX(2deg) translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+/* ===== SKELETON LOADING ===== */
+.skeleton {
+    background: linear-gradient(90deg, #e0e0e0 25%, #f5f5f5 50%, #e0e0e0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+}
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
 }
 
 /* ===== FORMULÁRIOS ===== */
 .form-control-custom {
     width: 100%;
-    padding: 12px 16px;
-    border-radius: 12px;
-    border: 1px solid var(--neutral);
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
     background: white;
-    transition: all 0.3s ease;
     font-size: 0.95rem;
+    transition: all 0.3s ease;
 }
-
-[data-bs-theme="dark"] .form-control-custom {
-    background: #1a1a2e;
-    border-color: #333;
-    color: white;
-}
-
 .form-control-custom:focus {
     border-color: var(--secondary);
-    box-shadow: 0 0 0 3px rgba(43, 161, 129, 0.2);
+    box-shadow: 0 0 0 4px rgba(43, 161, 129, 0.1);
     outline: none;
 }
 
-.form-control-custom::placeholder {
-    color: #999;
+/* ===== BADGES PREMIUM ===== */
+.badge-premium {
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
 }
 
 /* ===== LINKS ===== */
@@ -112,34 +164,15 @@ a {
     color: var(--secondary);
     transition: all 0.3s ease;
 }
-
 a:hover {
     color: var(--complementar);
 }
 
-/* ===== UTILITÁRIOS ===== */
-.text-secondary-custom {
-    color: var(--secondary);
-}
-
-.bg-gradient-custom {
-    background: var(--gradient);
-}
-
-.shadow-hover {
-    transition: all 0.3s ease;
-}
-
-.shadow-hover:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-4px);
-}
-
-/* ===== RESPONSIVO ===== */
+/* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
     .table-responsive {
-        display: block;
-        width: 100%;
-        overflow-x: auto;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 }

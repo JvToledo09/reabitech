@@ -9,12 +9,18 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
 
+     # 🔥 Rota de emergência para alterar senha
+    path('alterar-senha/', views.alterar_senha, name='alterar_senha'),
+
     # Dashboard por Perfil
     path('atleta/', views.dashboard_atleta, name='dashboard_atleta'),
     path('tecnico/', views.dashboard_tecnico, name='dashboard_tecnico'),
     path('coordenador/', views.dashboard_coordenador, name='dashboard_coordenador'),
     path('fisioterapeuta/', views.dashboard_fisioterapeuta, name='dashboard_fisioterapeuta'),
     path('psicologo/', views.dashboard_psicologo, name='dashboard_psicologo'),
+
+    # 🔥 Nova rota de notificações
+    path('notificacoes/', views.notificacoes, name='notificacoes'),
 
     # Views do Coordenador
     path('coordenador/atletas/', views.coordenador_atletas, name='coordenador_atletas'),
@@ -23,10 +29,10 @@ urlpatterns = [
     path('coordenador/relatorios/', views.coordenador_relatorios, name='coordenador_relatorios'),
     path('coordenador/membros/', views.coordenador_membros, name='coordenador_membros'),
     
-    # 🔥 Rota de Adicionar Membro
+    # Rota de Adicionar Membro
     path('coordenador/membros/adicionar/', views.coordenador_adicionar_membro, name='coordenador_adicionar_membro'),
     
-    # 🔥 Rota de Detalhes do Membro (NOVA!)
+    # Rota de Detalhes do Membro (NOVA!)
     path('coordenador/membros/<int:membro_id>/', views.coordenador_detalhes_membro, name='coordenador_detalhes_membro'),
 
     # Views do Técnico

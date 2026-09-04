@@ -2,9 +2,6 @@
  * REABITECH - Charts & Graphs
  */
 
-// ============================================
-// CONFIGURAÇÕES GLOBAIS DO CHART.JS
-// ============================================
 Chart.defaults.font.family = "'Poppins', sans-serif";
 Chart.defaults.font.size = 12;
 Chart.defaults.color = '#5A6461';
@@ -278,6 +275,40 @@ function createRecoveryChart(canvasId, percent) {
         }]
     });
 }
+
+// ============================================
+// AUTO-INIT: Inicializa os gráficos automaticamente
+// ============================================
+document.addEventListener("DOMContentLoaded", function() {
+    // Busca todos os gráficos pelos IDs e inicia
+    const evolutionEl = document.getElementById('evolutionChart');
+    if (evolutionEl) {
+        // Pega os dados do atributo data, se existir
+        const dataAttr = evolutionEl.getAttribute('data-data');
+        const labelsAttr = evolutionEl.getAttribute('data-labels');
+        createEvolutionChart('evolutionChart', dataAttr ? JSON.parse(dataAttr) : null, labelsAttr ? JSON.parse(labelsAttr) : null);
+    }
+
+    const recoveryEl = document.getElementById('recoveryChart');
+    if (recoveryEl) {
+        // Pega o valor do atributo data-percent para inicializar
+        const percent = recoveryEl.getAttribute('data-percent') || 75;
+        createRecoveryChart('recoveryChart', parseFloat(percent));
+    }
+
+    const performanceEl = document.getElementById('performanceChart');
+    if (performanceEl) {
+        const dataAttr = performanceEl.getAttribute('data-data');
+        const labelsAttr = performanceEl.getAttribute('data-labels');
+        createPerformanceChart('performanceChart', dataAttr ? JSON.parse(dataAttr) : null, labelsAttr ? JSON.parse(labelsAttr) : null);
+    }
+
+    const mentalEl = document.getElementById('mentalHealthChart');
+    if (mentalEl) {
+        const dataAttr = mentalEl.getAttribute('data-data');
+        createMentalHealthChart('mentalHealthChart', dataAttr ? JSON.parse(dataAttr) : null);
+    }
+});
 
 // ============================================
 // EXPORT

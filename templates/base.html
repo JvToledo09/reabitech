@@ -185,7 +185,7 @@
             margin-left: 280px;
         }
         
-        /* Top Navbar (Botão Toggle integrado aqui!) */
+        /* 🔥 CORREÇÃO PRINCIPAL: Top Navbar acima de tudo */
         .top-navbar {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
@@ -198,6 +198,8 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
+            position: relative;
+            z-index: 1050; 
         }
         
         [data-bs-theme="dark"] .top-navbar {
@@ -241,6 +243,31 @@
             font-size: 0.8rem;
             color: var(--secondary);
         }
+        
+        /* 🔥 CORREÇÃO DOS DROPDOWNS (Notificações e Perfil) */
+        .dropdown-menu {
+            z-index: 1060 !important;
+            border: 1px solid var(--neutral);
+            box-shadow: var(--shadow-lg);
+            border-radius: 12px;
+            padding: 8px 0;
+            margin-top: 8px !important;
+            position: absolute;
+            background-color: white;
+        }
+        
+        .dropdown-item {
+            font-size: 0.875rem;
+            padding: 8px 16px;
+            color: #333;
+        }
+        
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            color: var(--secondary);
+        }
+        
+        .dropdown-item i { width: 20px; text-align: center; margin-right: 8px; }
         
         /* Cards Modernos (Compartilhados globalmente) */
         .card-modern {
@@ -517,18 +544,17 @@
             <div class="d-flex align-items-center gap-3">
                 <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="height: 60px; width: auto; border-radius: 12px; display:none;" onerror="this.style.display='none'" onload="this.style.display='block'">
                 <button class="dark-mode-toggle" id="darkModeToggle"><i class="fas fa-moon"></i></button>
-                <div class="dropdown">
-                    <button class="btn btn-outline-custom dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge bg-danger" style="font-size: 10px;">3</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-heartbeat me-2"></i>Nova avaliação</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-calendar me-2"></i>Consulta agendada</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-center" href="#">Ver todas</a></li>
-                    </ul>
-                </div>
+                
+                <!-- 🔥 LINK DIRETO PARA NOTIFICAÇÕES COM CONTADOR -->
+                <a href="{% url 'dashboard:notificacoes' %}" class="btn btn-outline-custom position-relative">
+                    <i class="fas fa-bell"></i>
+                    {% if user.notificacoes.count > 0 %}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{ user.notificacoes.count }}
+                    </span>
+                    {% endif %}
+                </a>
+                
                 <div class="dropdown">
                     <button class="btn btn-outline-custom dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         <i class="fas fa-user-circle"></i>

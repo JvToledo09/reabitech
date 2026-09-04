@@ -1,33 +1,107 @@
 {% extends 'base.html' %}
 {% block title %}Dashboard do Atleta{% endblock %}
-{% block page_title %}Minha Dashboard{% endblock %}
+{% block page_title %}Minha Evolução{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Olá, {{ atleta.usuario.get_full_name }}!</h2>
-    <p>Bem-vindo ao seu painel de atleta.</p>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-heartbeat"></i></div>
-                <div class="stat-number">{{ progresso_recuperacao }}%</div>
-                <p>Progresso de Recuperação</p>
+<div class="container-fluid p-0">
+    <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: linear-gradient(135deg, #2BA181, #5A6461); color: white;">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h3 class="fw-bold mb-1">Olá, {{ atleta.usuario.get_full_name }}! 💪</h3>
+                <p class="mb-0 opacity-75">Continue seu tratamento. Seu progresso é nossa maior vitória.</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <span class="badge bg-white text-dark p-2 rounded-pill"><i class="fas fa-fire me-1"></i>{{ progresso_recuperacao }}% Recuperado</span>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-brain"></i></div>
-                <div class="stat-number">{{ score_mental }}</div>
-                <p>Saúde Mental ({{ status_mental }})</p>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="stat-card card-tilt">
+                <div class="stat-icon"><i class="fas fa-dumbbell"></i></div>
+                <div class="stat-number">{{ exercicios|length }}</div>
+                <p>Exercícios Ativos</p>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-running"></i></div>
+        <div class="col-md-3">
+            <div class="stat-card card-tilt">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #ffc107, #ffca2c);"><i class="fas fa-chart-line"></i></div>
                 <div class="stat-number">{{ ultimo_desempenho }}</div>
                 <p>Último Desempenho</p>
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="stat-card card-tilt">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #0dcaf0, #0aa2c0);"><i class="fas fa-brain"></i></div>
+                <div class="stat-number">{{ score_mental }}</div>
+                <p>Saúde Mental (0-10)</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card card-tilt">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #dc3545, #bb2d3b);"><i class="fas fa-notes-medical"></i></div>
+                <div class="stat-number">{{ lesoes|length }}</div>
+                <p>Lesões Ativas</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card-modern p-4 card-tilt">
+                <h5 class="fw-bold mb-3"><i class="fas fa-chart-area me-2 text-success"></i>Minha Evolução Semanal</h5>
+                <div style="height: 250px;">
+                    <canvas id="atletaEvolutionChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card-modern p-4 card-tilt">
+                <h5 class="fw-bold mb-3"><i class="fas fa-list-check me-2 text-warning"></i>Próximos Exercícios</h5>
+                <ul class="list-group list-group-flush">
+                    {% for ex in exercicios %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
+                        <div>
+                            <strong class="d-block">{{ ex.nome }}</strong>
+                            <small class="text-muted">{{ ex.series }}x{{ ex.repeticoes }} repetições</small>
+                        </div>
+                        <i class="fas fa-circle-check text-success"></i>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item bg-transparent text-muted">Nenhum exercício pendente.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('atletaEvolutionChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Início', 'Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Agora'],
+                    datasets: [{
+                        label: 'Progresso',
+                        data: [0, 20, 45, 60, 80, {{ progresso_recuperacao }}],
+                        borderColor: '#2BA181',
+                        backgroundColor: 'rgba(43, 161, 129, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { max: 100, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false } } }
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

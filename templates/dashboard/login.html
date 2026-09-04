@@ -1,38 +1,46 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Login - REABITECH{% endblock %}
-{% block content %}
 
-<div class="container py-5" style="max-width: 500px;">
-    <div class="card-modern p-4" data-aos="fade-up">
-        <div class="text-center mb-4">
-            <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="max-height: 80px;" onerror="this.src='https://via.placeholder.com/80x80?text=RE'">
-            <h3 class="mt-3">Bem-vindo ao REABITECH</h3>
-            <p class="text-muted">Entre com seu RM ou E-mail</p>
-        </div>
-        
-        <form method="POST">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label class="form-label">RM ou E-mail</label>
-                <input type="text" name="username" class="form-control form-control-custom" placeholder="Digite seu RM ou E-mail" required>
+{% block title %}Login - REABITECH{% endblock %}
+
+{% block content %}
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #0f172a 0%, #1a1a2e 100%);">
+    <div class="row w-100 justify-content-center">
+        <div class="col-lg-5 col-md-8">
+            <div class="card-modern p-5 shadow-lg animate-fadeInUp" style="border-radius: 24px; background: rgba(255,255,255,0.98);">
+                <div class="text-center mb-4">
+                    <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="max-width: 120px; margin-bottom: 15px;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏥</text></svg>'">
+                    <h2 class="fw-bold" style="color: #0f172a;">Bem-vindo de volta</h2>
+                    <p class="text-muted">Acesse sua conta para continuar</p>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Usuário, E-mail ou RM</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0"><i class="fas fa-user"></i></span>
+                            <input type="text" name="username" class="form-control bg-light border-0 shadow-sm" placeholder="Digite suas credenciais" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Senha</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0"><i class="fas fa-lock"></i></span>
+                            <input type="password" name="password" class="form-control bg-light border-0 shadow-sm" placeholder="Digite sua senha" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100 py-3 shadow" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; border-radius: 12px;">
+                        <i class="fas fa-sign-in-alt me-2"></i>Entrar no Sistema
+                    </button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <small class="text-muted">Não tem conta? <a href="#" class="fw-bold text-decoration-none">Solicite ao seu coordenador</a></small>
+                </div>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Senha</label>
-                <input type="password" name="password" class="form-control form-control-custom" placeholder="Digite sua senha" required>
-            </div>
-            <button type="submit" class="btn btn-primary-custom w-100">
-                <i class="fas fa-sign-in-alt"></i> Entrar
-            </button>
-        </form>
-        
-        <div class="text-center mt-3">
-            <p class="text-muted small">
-                Não tem uma conta? 
-                <a href="{% url 'landing' %}#planos" class="text-secondary-custom">Contrate um plano</a>
-            </p>
         </div>
     </div>
 </div>
-
 {% endblock %}

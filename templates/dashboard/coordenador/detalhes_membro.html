@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Detalhes do Membro{% endblock %}
+{% block page_title %}Detalhes do Membro{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card-modern p-4">
+            <div class="d-flex align-items-center mb-4">
+                <div class="bg-secondary bg-opacity-10 rounded-circle p-3 me-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-user fa-2x text-secondary"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-1">{{ membro.usuario.get_full_name|default:membro.usuario.username }}</h4>
+                    <p class="text-muted mb-0">{{ membro.usuario.email|default:"Sem email" }}</p>
+                </div>
+            </div>
+
+            <!-- Abas -->
+            <ul class="nav nav-tabs mb-4" id="profileTab" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button">Informações</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="fisio-tab" data-bs-toggle="tab" data-bs-target="#fisio" type="button">Fisioterapia</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="psico-tab" data-bs-toggle="tab" data-bs-target="#psico" type="button">Psicologia</button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- Aba Informações -->
+                <div class="tab-pane fade show active" id="info">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="text-muted mb-1 small">Nome Completo</p>
+                            <p class="fw-bold">{{ membro.usuario.get_full_name|default:"Não informado" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-muted mb-1 small">Sexo</p>
+                            <p class="fw-bold">{{ membro.get_sexo_display|default:"Não informado" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-muted mb-1 small">Idade</p>
+                            <p class="fw-bold">
+                                {% if membro.usuario.perfil.data_nascimento %}
+                                    {{ membro.usuario.perfil.idade }} anos
+                                {% else %}
+                                    Não informado
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-muted mb-1 small">Função</p>
+                            <p class="fw-bold">{{ membro.get_tipo_display }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-muted mb-1 small">Modalidade</p>
+                            <p class="fw-bold">{{ membro.modalidade.nome|default:"Não informado" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-muted mb-1 small">Status</p>
+                            <p class="fw-bold text-{% if membro.ativo %}success{% else %}danger{% endif %}">
+                                {% if membro.ativo %}Ativo{% else %}Inativo{% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aba Fisioterapia -->
+                <div class="tab-pane fade" id="fisio">
+                    <h6 class="fw-bold mb-3">Evoluções Físicas Recentes</h6>
+                    {% for evolucao in evolucoes %}
+                        <div class="border rounded p-3 mb-2">
+                            <strong>{{ evolucao.data_registro|date:"d/m/Y" }}</strong> - Desempenho: {{ evolucao.desempenho }}/10
+                        </div>
+                    {% empty %}
+                        <p class="text-muted">Nenhuma evolução registrada.</p>
+                    {% endfor %}
+                </div>
+
+                <!-- Aba Psicologia -->
+                <div class="tab-pane fade" id="psico">
+                    <h6 class="fw-bold mb-3">Avaliações Psicológicas Recentes</h6>
+                    {% for avaliacao in avaliacoes %}
+                        <div class="border rounded p-3 mb-2">
+                            <strong>{{ avaliacao.data|date:"d/m/Y" }}</strong> - Status: {{ avaliacao.status_emocional }}
+                        </div>
+                    {% empty %}
+                        <p class="text-muted">Nenhuma avaliação registrada.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <a href="{% url 'dashboard:coordenador_membros' %}" class="btn btn-outline-secondary border-0 bg-light">
+                    <i class="fas fa-arrow-left me-2"></i>Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

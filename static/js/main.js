@@ -120,3 +120,59 @@ window.ReabiTech = {
     maskCPF,
     maskPhone
 };
+
+// ============================================
+// 🔥 NOVAS FUNÇÕES: Animações, máscaras extras e utilitários premium
+// ============================================
+
+// ===== ANIMAÇÃO DE ENTRADA (PARA ELEMENTOS COM .animate-fadeInUp) =====
+document.addEventListener('DOMContentLoaded', function() {
+    const elements = document.querySelectorAll('.animate-fadeInUp');
+    elements.forEach((el, index) => {
+        setTimeout(() => {
+            el.classList.add('show');
+        }, index * 100); // Efeito cascata
+    });
+});
+
+// ===== MÁSCARA DE CEP =====
+function maskCEP(value) {
+    value = value.replace(/\D/g, '');
+    return value.replace(/(\d{5})(\d{3})/, '$1-$2');
+}
+
+// ===== MÁSCARA DE DATA =====
+function maskDate(value) {
+    value = value.replace(/\D/g, '');
+    if (value.length <= 2) return value;
+    if (value.length <= 4) return value.replace(/(\d{2})(\d{2})/, '$1/$2');
+    return value.replace(/(\d{2})(\d{2})(\d{4})/, '$1/$2/$3');
+}
+
+// ===== TOGGLE DE TEMA (DARK MODE) =====
+function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-bs-theme') === 'dark';
+    html.setAttribute('data-bs-theme', isDark ? 'light' : 'dark');
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    return !isDark;
+}
+
+// ===== SCROLL SUAVE PARA ÂNCORAS =====
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+});
+
+// Adicionando as novas funções ao export
+window.ReabiTech = {
+    ...window.ReabiTech,
+    maskCEP,
+    maskDate,
+    toggleTheme
+};

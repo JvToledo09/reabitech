@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Perfil(models.Model):
     TIPO_USUARIO = [
@@ -10,13 +9,31 @@ class Perfil(models.Model):
         ('psicologo', 'Psicólogo'),
         ('atleta', 'Atleta'),
     ]
+
+    SEXO_CHOICES = [
+        ('masculino', 'Masculino'),
+        ('feminino', 'Feminino'),
+        ('outro', 'Outro'),
+    ]
     
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil')
     tipo = models.CharField(max_length=20, choices=TIPO_USUARIO)
     telefone = models.CharField(max_length=15, blank=True)
     foto = models.ImageField(upload_to='perfil_fotos/', null=True, blank=True)
-    senha_temporaria = models.BooleanField(default=False)  # Indica se precisa trocar a senha
+    senha_temporaria = models.BooleanField(default=False)
     
+    # 🔥 Campos extras para enriquecer o perfil
+    data_nascimento = models.DateField(null=True, blank=True)
+    sexo = models.CharField(max_length=20, choices=SEXO_CHOICES, blank=True, null=True)
+    
+    @property
+    def idade(self):
+        if self.data_nascimento:
+            from datetime import date
+            hoje = date.today()
+            return hoje.year - self.data_nascimento.year - ((hoje.month, hoje.day) < (self.data_nascimento.month, self.data_nascimento.day))
+        return None
+
     def __str__(self):
         return f"{self.usuario.get_full_name()} - {self.get_tipo_display()}"
     
@@ -51,3 +68,14 @@ class Atleta(models.Model):
             altura_m = float(self.altura) / 100
             return round(float(self.peso) / (altura_m ** 2), 2)
         return None
+
+# 🔥 NOVO MODELO DE NOTIFICAÇÕES
+class Notificacao(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notificacoes')
+    titulo = models.CharField(max_length=200)
+    mensagem = models.TextField()
+    criada_em = models.DateTimeField(auto_now_add=True)
+    lida = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.titulo} - {self.usuario.username}"
