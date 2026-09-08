@@ -69,13 +69,46 @@ class Atleta(models.Model):
             return round(float(self.peso) / (altura_m ** 2), 2)
         return None
 
-# 🔥 NOVO MODELO DE NOTIFICAÇÕES
+# ==============================================
+# 🔥 NOVOS MODELOS DE GESTÃO (AUDITORIA, ALERTAS e NOTIFICAÇÃO MELHORADA)
+# ==============================================
+
 class Notificacao(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notificacoes')
     titulo = models.CharField(max_length=200)
     mensagem = models.TextField()
     criada_em = models.DateTimeField(auto_now_add=True)
     lida = models.BooleanField(default=False)
+    # Adicionar link para onde a notificação leva
+    link = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return f"{self.titulo} - {self.usuario.username}"
+
+class Auditoria(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    acao = models.CharField(max_length=200)
+    descricao = models.TextField()
+    data = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.usuario} - {self.acao} - {self.data}"
+
+class Alerta(models.Model):
+    # Alertas de recuperação (Ex: Dor subiu para 8, falta exercício)
+    TIPO_ALERTA = [
+        ('dor_alta', 'Dor Alta'),
+        ('falta_exercicio', 'Falta de Exercício'),
+        ('evolucao_baixa', 'Evolução Baixa'),
+        ('avaliacao_pendente', 'Avaliação Pendente'),
+        ('tratamento_prazo', 'Tratamento no Prazo'),
+        ('recuperacao_estagnada', 'Recuperação Estagnada'),
+    ]
+    atleta = models.ForeignKey(Atleta, on_delete=models.CASCADE, related_name='alertas')
+    tipo = models.CharField(max_length=30, choices=TIPO_ALERTA)
+    mensagem = models.TextField()
+    criado_em = models.DateTimeField(auto_now_add=True)
+    resolvido = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.atleta} - {self.get_tipo_display()}"

@@ -11,7 +11,7 @@ import secrets
 from django.core.mail import send_mail
 from django.conf import settings
 
-from usuarios.models import Perfil, Atleta, ModalidadeEsportiva, Notificacao
+from usuarios.models import Perfil, Atleta, ModalidadeEsportiva, Notificacao, Alerta
 from fisioterapia.models import Lesao, EvolucaoFisica, TratamentoFisioterapico, ExercicioRecuperacao
 from psicologia.models import AvaliacaoPsicologica, QuestionarioPeriodico
 from projetos.models import Projeto, MembroProjeto
@@ -261,29 +261,105 @@ def dashboard_coordenador(request):
     projeto = get_projeto_ativo(request)
 
     if projeto:
-        atletas = MembroProjeto.objects.filter(projeto=projeto, ativo=True, tipo='atleta')
+        # 🔥 CORREÇÃO: Pega os IDs dos usuários que são atletas do projeto
+        membros_atletas_ids = MembroProjeto.objects.filter(
+            projeto=projeto, tipo='atleta', ativo=True
+        ).values_list('usuario_id', flat=True)
+
+        total_atletas = len(membros_atletas_ids)
+        atletas_ativos = total_atletas
+        
+        # Atletas com lesão ativa (para gráfico de status)
+        atletas_lesionados = Atleta.objects.filter(
+            usuario_id__in=membros_atletas_ids, 
+            lesoes__tratamentos__ativo=True
+        ).distinct().count()
+        
+        atletas_em_recuperacao = atletas_lesionados
+        atletas_liberados = max(total_atletas - atletas_lesionados, 0)
+
         lesoes_ativas = Lesao.objects.filter(projeto=projeto, tratamentos__ativo=True).distinct().count()
         avaliacoes_psico = AvaliacaoPsicologica.objects.filter(projeto=projeto).count()
+        tratamentos_ativos = TratamentoFisioterapico.objects.filter(ativo=True, lesao__projeto=projeto).count()
+
+        # Dados para gráficos
         evolucoes = EvolucaoFisica.objects.filter(projeto=projeto).order_by('-data_registro')[:6]
-        chart_labels = [e.data_registro.strftime('%d/%m') for e in evolucoes]
-        chart_data = [e.desempenho for e in evolucoes]
-        if evolucoes.exists():
-            taxa_media = sum(e.percentual_recuperacao for e in evolucoes) / evolucoes.count()
+        
+        # Gráfico 1: Evolução dos atletas
+        chart_evo_labels = [e.data_registro.strftime('%d/%m') for e in evolucoes]
+        chart_evo_data = [e.percentual_recuperacao for e in evolucoes]
+
+        # Gráfico 2: Distribuição por status (Pizza)
+        chart_status_labels = ['Lesionados', 'Liberados', 'Em Recuperação']
+        chart_status_data = [atletas_lesionados, atletas_liberados, atletas_em_recuperacao]
+
+        # Gráfico 3: Lesões por modalidade (Barras)
+        modalidades = ModalidadeEsportiva.objects.all()
+        chart_modal_labels = [m.nome for m in modalidades]
+        chart_modal_data = [Lesao.objects.filter(projeto=projeto, atleta__modalidade=m).count() for m in modalidades]
+
+        # Gráfico 4: Tipos de lesões mais frequentes (Barras)
+        chart_tipos_labels = [t[1] for t in Lesao.TIPO_LESAO]
+        chart_tipos_data = [Lesao.objects.filter(projeto=projeto, tipo=t[0]).count() for t in Lesao.TIPO_LESAO]
+
+        # Gráfico 5: Taxa média de recuperação (Doughnut)
+        taxa_media = sum(e.percentual_recuperacao for e in evolucoes) / len(evolucoes) if evolucoes else 0
+        
+        # Gráfico 6: Indicadores psicológicos (Radar)
+        ultimas_avaliacoes = AvaliacaoPsicologica.objects.filter(projeto=projeto).order_by('-data')[:5]
+        if ultimas_avaliacoes:
+            chart_psi_labels = ['Ansiedade', 'Motivação', 'Estresse', 'Autoestima', 'Sono']
+            chart_psi_data = [
+                sum(a.ansiedade for a in ultimas_avaliacoes) / len(ultimas_avaliacoes),
+                sum(a.motivacao for a in ultimas_avaliacoes) / len(ultimas_avaliacoes),
+                sum(a.estresse for a in ultimas_avaliacoes) / len(ultimas_avaliacoes),
+                sum(a.autoestima for a in ultimas_avaliacoes) / len(ultimas_avaliacoes),
+                sum(a.qualidade_sono for a in ultimas_avaliacoes) / len(ultimas_avaliacoes),
+            ]
         else:
-            taxa_media = 0
+            chart_psi_labels = []
+            chart_psi_data = []
+
+        # Gráfico 7: Desempenho por modalidade (Barras)
+        chart_perf_labels = [m.nome for m in modalidades]
+        chart_perf_data = []
+        for m in modalidades:
+            perf = EvolucaoFisica.objects.filter(projeto=projeto, atleta__modalidade=m).aggregate(Avg('desempenho'))['desempenho__avg']
+            chart_perf_data.append(round(perf, 1) if perf else 0)
+
+        # Alertas e Notificações (últimos 5)
+        alertas_recentes = Alerta.objects.filter(resolvido=False).order_by('-criado_em')[:5]
+
     else:
-        atletas, lesoes_ativas, avaliacoes_psico, taxa_media = [], 0, 0, 0
-        chart_labels, chart_data = [], []
+        # Inicialização de variáveis vazias para evitar erro
+        total_atletas = atletas_ativos = atletas_lesionados = atletas_em_recuperacao = atletas_liberados = 0
+        lesoes_ativas = avaliacoes_psico = tratamentos_ativos = 0
+        chart_evo_labels = chart_evo_data = chart_status_labels = chart_status_data = []
+        chart_modal_labels = chart_modal_data = chart_tipos_labels = chart_tipos_data = []
+        taxa_media = 0
+        chart_psi_labels = chart_psi_data = chart_perf_labels = chart_perf_data = []
+        alertas_recentes = []
 
     context = {
         'projetos': projetos,
         'projeto_ativo': projeto,
-        'total_atletas': atletas.count() if projeto else 0,
+        'total_atletas': total_atletas,
+        'atletas_ativos': atletas_ativos,
+        'atletas_lesionados': atletas_lesionados,
+        'atletas_liberados': atletas_liberados,
+        'atletas_em_recuperacao': atletas_em_recuperacao,
         'lesoes_ativas': lesoes_ativas,
-        'total_avaliacoes_psico': avaliacoes_psico,
+        'avaliacoes_psico': avaliacoes_psico,
+        'tratamentos_ativos': tratamentos_ativos,
         'taxa_recuperacao_media': round(taxa_media, 1),
-        'chart_labels': chart_labels,
-        'chart_data': chart_data,
+        # Dados para gráficos
+        'chart_evo_labels': chart_evo_labels, 'chart_evo_data': chart_evo_data,
+        'chart_status_labels': chart_status_labels, 'chart_status_data': chart_status_data,
+        'chart_modal_labels': chart_modal_labels, 'chart_modal_data': chart_modal_data,
+        'chart_tipos_labels': chart_tipos_labels, 'chart_tipos_data': chart_tipos_data,
+        'chart_psi_labels': chart_psi_labels, 'chart_psi_data': chart_psi_data,
+        'chart_perf_labels': chart_perf_labels, 'chart_perf_data': chart_perf_data,
+        'alertas_recentes': alertas_recentes,
     }
     return render(request, 'dashboard/coordenador/dashboard.html', context)
 
@@ -768,6 +844,195 @@ def fisioterapeuta_evolucoes(request):
         'projeto': projeto
     })
 
+# ==============================================
+# 🔥 NOVAS FUNÇÕES PARA CRUD DE FISIOTERAPIA
+# ==============================================
+
+@login_required
+@perfil_required('fisioterapeuta')
+def fisioterapeuta_todos_atletas(request):
+    """Lista todos os atletas do projeto para criar nova lesão"""
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        messages.warning(request, 'Nenhum projeto ativo.')
+        return redirect('landing')
+
+    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto, ativo=True, tipo='atleta').values_list('usuario', flat=True)
+    atletas = Atleta.objects.filter(usuario__in=membros_usuario_ids).distinct()
+
+    return render(request, 'dashboard/fisioterapeuta/todos_atletas.html', {
+        'atletas': atletas,
+        'projeto': projeto
+    })
+
+@login_required
+@perfil_required('fisioterapeuta')
+def fisioterapeuta_criar_lesao(request, atleta_id):
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        return redirect('landing')
+
+    atleta = get_object_or_404(Atleta, id=atleta_id)
+
+    if request.method == 'POST':
+        lesao = Lesao.objects.create(
+            atleta=atleta,
+            projeto=projeto,
+            tipo=request.POST.get('tipo'),
+            gravidade=request.POST.get('gravidade'),
+            regiao_corporal=request.POST.get('regiao_corporal'),
+            lado=request.POST.get('lado'),
+            causa=request.POST.get('causa'),
+            local=request.POST.get('local'),
+            data_ocorrencia=request.POST.get('data_ocorrencia'),
+            descricao=request.POST.get('descricao'),
+            diagnostico=request.POST.get('diagnostico'),
+            previsao_recuperacao=request.POST.get('previsao_recuperacao') or None,
+            fisioterapeuta_responsavel=request.user,
+        )
+        
+        # Alerta automático de nova lesão
+        Alerta.objects.create(
+            atleta=atleta,
+            tipo='dor_alta',
+            mensagem=f"Nova lesão registrada: {lesao.get_tipo_display()}",
+        )
+        
+        messages.success(request, 'Lesão registrada com sucesso!')
+        return redirect('dashboard:fisioterapeuta_atletas')
+
+    tipos = Lesao.TIPO_LESAO
+    gravidades = Lesao.GRAVIDADE
+    return render(request, 'dashboard/fisioterapeuta/criar_lesao.html', {
+        'atleta': atleta,
+        'projeto': projeto,
+        'tipos': tipos,
+        'gravidades': gravidades,
+    })
+
+@login_required
+@perfil_required('fisioterapeuta')
+def fisioterapeuta_criar_tratamento(request, lesao_id):
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        return redirect('landing')
+    
+    lesao = get_object_or_404(Lesao, id=lesao_id)
+    
+    if request.method == 'POST':
+        TratamentoFisioterapico.objects.create(
+            lesao=lesao,
+            descricao=request.POST.get('descricao'),
+            data_previsao_termino=request.POST.get('data_previsao_termino') or None
+        )
+        lesao.status = 'em_tratamento'
+        lesao.save()
+        
+        messages.success(request, 'Tratamento iniciado com sucesso!')
+        return redirect('dashboard:fisioterapeuta_detalhes_lesao', lesao_id=lesao.id)
+    
+    return render(request, 'dashboard/fisioterapeuta/criar_tratamento.html', {'lesao': lesao})
+
+@login_required
+@perfil_required('fisioterapeuta')
+def fisioterapeuta_detalhes_lesao(request, lesao_id):
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        return redirect('landing')
+    
+    lesao = get_object_or_404(Lesao, id=lesao_id)
+    tratamentos = lesao.tratamentos.all().order_by('-data_inicio')
+    exercicios = ExercicioRecuperacao.objects.filter(tratamento__lesao=lesao)
+    
+    return render(request, 'dashboard/fisioterapeuta/detalhes_lesao.html', {
+        'lesao': lesao,
+        'tratamentos': tratamentos,
+        'exercicios': exercicios,
+    })
+
+@login_required
+@perfil_required('fisioterapeuta')
+def fisioterapeuta_adicionar_exercicio(request, tratamento_id):
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        return redirect('landing')
+    
+    tratamento = get_object_or_404(TratamentoFisioterapico, id=tratamento_id)
+    
+    if request.method == 'POST':
+        exercicio = ExercicioRecuperacao.objects.create(
+            tratamento=tratamento,
+            nome=request.POST.get('nome'),
+            descricao=request.POST.get('descricao'),
+            grupo_muscular=request.POST.get('grupo_muscular'),
+            dificuldade=request.POST.get('dificuldade'),
+            series=request.POST.get('series'),
+            repeticoes=request.POST.get('repeticoes'),
+            duracao_minutos=request.POST.get('duracao_minutos'),
+            frequencia=request.POST.get('frequencia'),
+            video_url=request.POST.get('video_url'),
+            observacoes=request.POST.get('observacoes'),
+        )
+        
+        Notificacao.objects.create(
+            usuario=tratamento.lesao.atleta.usuario,
+            titulo='Novo exercício atribuído',
+            mensagem=f'Você recebeu um novo exercício: {exercicio.nome}',
+            link=f'/dashboard/atleta/exercicios/'
+        )
+        
+        messages.success(request, 'Exercício adicionado com sucesso!')
+        return redirect('dashboard:fisioterapeuta_detalhes_lesao', lesao_id=tratamento.lesao.id)
+    
+    dificuldades = [(1, 'Fácil'), (2, 'Médio'), (3, 'Difícil')]
+    return render(request, 'dashboard/fisioterapeuta/adicionar_exercicio.html', {
+        'tratamento': tratamento,
+        'dificuldades': dificuldades,
+    })
+
+@login_required
+@perfil_required('fisioterapeuta')
+def fisioterapeuta_registrar_evolucao(request, atleta_id):
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        return redirect('landing')
+    
+    atleta = get_object_or_404(Atleta, id=atleta_id)
+    
+    if request.method == 'POST':
+        evolucao = EvolucaoFisica.objects.create(
+            atleta=atleta,
+            projeto=projeto,
+            dor=request.POST.get('dor'),
+            mobilidade=request.POST.get('mobilidade'),
+            forca=request.POST.get('forca'),
+            desempenho=request.POST.get('desempenho'),
+            resistencia=request.POST.get('resistencia'),
+            flexibilidade=request.POST.get('flexibilidade'),
+            observacoes=request.POST.get('observacoes'),
+            estagiario_responsavel=request.user,
+        )
+        
+        if int(evolucao.dor) >= 7:
+            Alerta.objects.create(
+                atleta=atleta,
+                tipo='dor_alta',
+                mensagem=f'Dor alta registrada ({evolucao.dor}/10) no dia {evolucao.data_registro}',
+            )
+        
+        ultimas = EvolucaoFisica.objects.filter(atleta=atleta, projeto=projeto).order_by('-data_registro')[:3]
+        if len(ultimas) == 3:
+            if ultimas[0].percentual_recuperacao == ultimas[1].percentual_recuperacao == ultimas[2].percentual_recuperacao:
+                Alerta.objects.create(
+                    atleta=atleta,
+                    tipo='recuperacao_estagnada',
+                    mensagem='A recuperação do atleta está estagnada. Verifique o tratamento.',
+                )
+        
+        messages.success(request, 'Evolução registrada com sucesso!')
+        return redirect('dashboard:fisioterapeuta_atletas')
+    
+    return render(request, 'dashboard/fisioterapeuta/registrar_evolucao.html', {'atleta': atleta})
 # ==============================================
 # 9. VIEWS DO PSICÓLOGO
 # ==============================================

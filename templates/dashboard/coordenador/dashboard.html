@@ -15,70 +15,159 @@
         </div>
     </div>
 
-    <!-- Indicadores -->
-    <div class="row g-4 mb-4">
-        <div class="col-xl-3 col-md-6">
-            <div class="stat-card card-tilt">
+    <!-- Indicadores Principais -->
+    <div class="row g-3 mb-4">
+        <div class="col-xl-2 col-md-4 col-6">
+            <div class="stat-card p-3">
                 <div class="stat-icon"><i class="fas fa-users"></i></div>
-                <div class="stat-number">{{ total_atletas }}</div>
-                <p>Total de Atletas</p>
+                <div class="stat-number fs-2">{{ total_atletas }}</div>
+                <p class="small">Total Atletas</p>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #dc3545 0%, #f8b4b4 100%);"><i class="fas fa-procedures"></i></div>
-                <div class="stat-number">{{ lesoes_ativas }}</div>
-                <p>Lesões em tratamento</p>
+        <div class="col-xl-2 col-md-4 col-6">
+            <div class="stat-card p-3">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #ffc107, #ffca2c);"><i class="fas fa-user-injured"></i></div>
+                <div class="stat-number fs-2">{{ atletas_lesionados }}</div>
+                <p class="small">Lesionados</p>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #ffc107 0%, #ffe69c 100%);"><i class="fas fa-percent"></i></div>
-                <div class="stat-number">{{ taxa_recuperacao_media }}%</div>
-                <p>Taxa de recuperação média</p>
+        <div class="col-xl-2 col-md-4 col-6">
+            <div class="stat-card p-3">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #0dcaf0, #0aa2c0);"><i class="fas fa-heart-pulse"></i></div>
+                <div class="stat-number fs-2">{{ atletas_em_recuperacao }}</div>
+                <p class="small">Em Recuperação</p>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #0dcaf0 0%, #a6e7f7 100%);"><i class="fas fa-brain"></i></div>
-                <div class="stat-number">{{ total_avaliacoes_psico }}</div>
-                <p>Avaliações psicológicas</p>
+        <div class="col-xl-2 col-md-4 col-6">
+            <div class="stat-card p-3">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #2BA181, #2BA181);"><i class="fas fa-check-double"></i></div>
+                <div class="stat-number fs-2">{{ atletas_liberados }}</div>
+                <p class="small">Liberados</p>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-6">
+            <div class="stat-card p-3">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #dc3545, #bb2d3b);"><i class="fas fa-notes-medical"></i></div>
+                <div class="stat-number fs-2">{{ tratamentos_ativos }}</div>
+                <p class="small">Trat. Ativos</p>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 col-6">
+            <div class="stat-card p-3">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #6f42c1, #8047d5);"><i class="fas fa-brain"></i></div>
+                <div class="stat-number fs-2">{{ avaliacoes_psico }}</div>
+                <p class="small">Avaliações</p>
             </div>
         </div>
     </div>
 
-    <!-- Seção de Gráficos -->
-    <div class="row g-4">
+    <!-- Gráficos (Parte 1) -->
+    <div class="row g-4 mb-4">
         <div class="col-lg-8">
             <div class="card-modern p-4 card-tilt">
-                <h5 class="fw-bold mb-3"><i class="fas fa-chart-line me-2 text-success"></i>Evolução dos Atletas</h5>
-                <div style="height: 300px;">
-                    <canvas id="evolutionChart"></canvas>
-                </div>
+                <h5 class="fw-bold mb-3"><i class="fas fa-chart-line me-2 text-success"></i>Evolução da Recuperação</h5>
+                <div style="height: 300px;"><canvas id="evolutionChart"></canvas></div>
             </div>
         </div>
         <div class="col-lg-4">
             <div class="card-modern p-4 card-tilt">
-                <h5 class="fw-bold mb-3"><i class="fas fa-heartbeat me-2 text-danger"></i>Taxa de Recuperação</h5>
-                <div style="height: 300px;">
-                    <canvas id="recoveryChart"></canvas>
-                </div>
+                <h5 class="fw-bold mb-3"><i class="fas fa-chart-pie me-2 text-info"></i>Status dos Atletas</h5>
+                <div style="height: 300px;"><canvas id="statusChart"></canvas></div>
             </div>
         </div>
     </div>
+
+    <!-- Gráficos (Parte 2) -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="card-modern p-4 card-tilt">
+                <h5 class="fw-bold mb-3"><i class="fas fa-dumbbell me-2 text-warning"></i>Lesões por Modalidade</h5>
+                <div style="height: 250px;"><canvas id="modalChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card-modern p-4 card-tilt">
+                <h5 class="fw-bold mb-3"><i class="fas fa-notes-medical me-2 text-danger"></i>Tipos de Lesões</h5>
+                <div style="height: 250px;"><canvas id="tiposChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos (Parte 3) -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-4">
+            <div class="card-modern p-4 card-tilt">
+                <h5 class="fw-bold mb-3"><i class="fas fa-heartbeat me-2 text-success"></i>Taxa de Recuperação</h5>
+                <div style="height: 250px;"><canvas id="recuperacaoChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card-modern p-4 card-tilt">
+                <h5 class="fw-bold mb-3"><i class="fas fa-brain me-2 text-primary"></i>Indicadores Psicológicos</h5>
+                <div style="height: 250px;"><canvas id="psicologicoChart"></canvas></div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card-modern p-4 card-tilt">
+                <h5 class="fw-bold mb-3"><i class="fas fa-chart-bar me-2 text-warning"></i>Desempenho por Modalidade</h5>
+                <div style="height: 250px;"><canvas id="desempenhoChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alertas Recentes -->
+    {% if alertas_recentes %}
+    <div class="card-modern p-4">
+        <h5 class="fw-bold mb-3"><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Alertas Recentes</h5>
+        <div class="row g-3">
+            {% for alerta in alertas_recentes %}
+            <div class="col-md-6">
+                <div class="alert alert-warning d-flex align-items-center" role="alert">
+                    <i class="fas fa-circle-exclamation me-3"></i>
+                    <div>
+                        <strong>{{ alerta.get_tipo_display }}:</strong> {{ alerta.mensagem }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 </div>
 
+<!-- Dados seguros para o JavaScript (json_script) -->
+{{ chart_evo_labels|json_script:"evo_labels" }}
+{{ chart_evo_data|json_script:"evo_data" }}
+{{ chart_status_labels|json_script:"status_labels" }}
+{{ chart_status_data|json_script:"status_data" }}
+{{ chart_modal_labels|json_script:"modal_labels" }}
+{{ chart_modal_data|json_script:"modal_data" }}
+{{ chart_tipos_labels|json_script:"tipos_labels" }}
+{{ chart_tipos_data|json_script:"tipos_data" }}
+{{ chart_psi_labels|json_script:"psi_labels" }}
+{{ chart_psi_data|json_script:"psi_data" }}
+{{ chart_perf_labels|json_script:"perf_labels" }}
+{{ chart_perf_data|json_script:"perf_data" }}
+
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Inicializa gráfico de linha com dados reais
-        const ctxLine = document.getElementById('evolutionChart').getContext('2d');
-        new Chart(ctxLine, {
+    document.addEventListener('DOMContentLoaded', function() {
+        // 🔥 Função auxiliar para ler os dados do json_script com segurança
+        function getJSON(id) {
+            const element = document.getElementById(id);
+            return element ? JSON.parse(element.textContent) : [];
+        }
+
+        // ==========================================
+        // GRÁFICO 1: Evolução da Recuperação
+        // ==========================================
+        const ctxEvo = document.getElementById('evolutionChart').getContext('2d');
+        new Chart(ctxEvo, {
             type: 'line',
             data: {
-                labels: {{ chart_labels|safe }},
+                labels: getJSON('evo_labels'),
                 datasets: [{
-                    label: 'Desempenho',
-                    data: {{ chart_data|safe }},
+                    label: '% Recuperação',
+                    data: getJSON('evo_data'),
                     borderColor: '#2BA181',
                     backgroundColor: 'rgba(43, 161, 129, 0.1)',
                     fill: true,
@@ -88,26 +177,86 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', titleColor: 'white' }
-                },
-                scales: {
-                    y: { beginAtZero: true, max: 10, grid: { color: 'rgba(0,0,0,0.05)' } },
-                    x: { grid: { display: false } }
-                }
+                plugins: { legend: { display: false } }
             }
         });
 
-        // Inicializa gráfico de recuperação
-        const ctxDoughnut = document.getElementById('recoveryChart').getContext('2d');
-        const recoveryValue = {{ taxa_recuperacao_media }};
-        new Chart(ctxDoughnut, {
+        // ==========================================
+        // GRÁFICO 2: Status dos Atletas (Pizza)
+        // ==========================================
+        const ctxStatus = document.getElementById('statusChart').getContext('2d');
+        new Chart(ctxStatus, {
+            type: 'pie',
+            data: {
+                labels: getJSON('status_labels'),
+                datasets: [{
+                    data: getJSON('status_data'),
+                    backgroundColor: ['#dc3545', '#2BA181', '#ffc107'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+
+        // ==========================================
+        // GRÁFICO 3: Lesões por Modalidade (Barras)
+        // ==========================================
+        const ctxModal = document.getElementById('modalChart').getContext('2d');
+        new Chart(ctxModal, {
+            type: 'bar',
+            data: {
+                labels: getJSON('modal_labels'),
+                datasets: [{
+                    data: getJSON('modal_data'),
+                    backgroundColor: '#2BA181',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // ==========================================
+        // GRÁFICO 4: Tipos de Lesões (Barras)
+        // ==========================================
+        const ctxTipos = document.getElementById('tiposChart').getContext('2d');
+        new Chart(ctxTipos, {
+            type: 'bar',
+            data: {
+                labels: getJSON('tipos_labels'),
+                datasets: [{
+                    data: getJSON('tipos_data'),
+                    backgroundColor: '#dc3545',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // ==========================================
+        // GRÁFICO 5: Taxa de Recuperação (Doughnut)
+        // ==========================================
+        const ctxRec = document.getElementById('recuperacaoChart').getContext('2d');
+        const recuperacao = {{ taxa_recuperacao_media }};
+        new Chart(ctxRec, {
             type: 'doughnut',
             data: {
                 labels: ['Recuperado', 'Restante'],
                 datasets: [{
-                    data: [recoveryValue, 100 - recoveryValue],
+                    data: [recuperacao, 100 - recuperacao],
                     backgroundColor: ['#2BA181', '#e9ecef'],
                     borderWidth: 0,
                     hoverOffset: 10
@@ -117,10 +266,7 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 cutout: '75%',
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { callbacks: { label: function(context) { return context.parsed + '%'; } } }
-                }
+                plugins: { legend: { display: false } }
             },
             plugins: [{
                 id: 'textCenter',
@@ -131,13 +277,62 @@
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillStyle = '#333';
-                    ctx.fillText(`${recoveryValue}%`, width / 2, height / 2 - 5);
+                    ctx.fillText(recuperacao + '%', width / 2, height / 2 - 5);
                     ctx.font = '12px Poppins, sans-serif';
                     ctx.fillStyle = '#666';
                     ctx.fillText('Recuperado', width / 2, height / 2 + 25);
                     ctx.restore();
                 }
             }]
+        });
+
+        // ==========================================
+        // GRÁFICO 6: Indicadores Psicológicos (Radar)
+        // ==========================================
+        const psiLabels = getJSON('psi_labels');
+        if (psiLabels.length > 0) {
+            const ctxPsi = document.getElementById('psicologicoChart').getContext('2d');
+            new Chart(ctxPsi, {
+                type: 'radar',
+                data: {
+                    labels: psiLabels,
+                    datasets: [{
+                        label: 'Média',
+                        data: getJSON('psi_data'),
+                        backgroundColor: 'rgba(43, 161, 129, 0.2)',
+                        borderColor: '#2BA181',
+                        pointBackgroundColor: '#2BA181'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { r: { beginAtZero: true, max: 10 } }
+                }
+            });
+        }
+
+        // ==========================================
+        // GRÁFICO 7: Desempenho por Modalidade (Barras)
+        // ==========================================
+        const ctxPerf = document.getElementById('desempenhoChart').getContext('2d');
+        new Chart(ctxPerf, {
+            type: 'bar',
+            data: {
+                labels: getJSON('perf_labels'),
+                datasets: [{
+                    label: 'Desempenho',
+                    data: getJSON('perf_data'),
+                    backgroundColor: '#ffc107',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, max: 10 } }
+            }
         });
     });
 </script>

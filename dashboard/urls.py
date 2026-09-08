@@ -45,10 +45,20 @@ urlpatterns = [
     path('atleta/psicologico/', views.atleta_psicologico, name='atleta_psicologico'),
     path('atleta/exercicios/', views.atleta_exercicios, name='atleta_exercicios'),
 
-    # Views do Fisioterapeuta
+    # ==========================================
+    # 🔥 Views do Fisioterapeuta (Com CRUD completo)
+    # ==========================================
     path('fisioterapeuta/atletas/', views.fisioterapeuta_atletas, name='fisioterapeuta_atletas'),
     path('fisioterapeuta/tratamentos/', views.fisioterapeuta_tratamentos, name='fisioterapeuta_tratamentos'),
     path('fisioterapeuta/evolucoes/', views.fisioterapeuta_evolucoes, name='fisioterapeuta_evolucoes'),
+    
+    # 🔥 Novas rotas para CRUD da Fisioterapia
+    path('fisioterapeuta/todos-atletas/', views.fisioterapeuta_todos_atletas, name='fisioterapeuta_todos_atletas'),
+    path('fisioterapeuta/criar-lesao/<int:atleta_id>/', views.fisioterapeuta_criar_lesao, name='fisioterapeuta_criar_lesao'),
+    path('fisioterapeuta/criar-tratamento/<int:lesao_id>/', views.fisioterapeuta_criar_tratamento, name='fisioterapeuta_criar_tratamento'),
+    path('fisioterapeuta/lesao/<int:lesao_id>/', views.fisioterapeuta_detalhes_lesao, name='fisioterapeuta_detalhes_lesao'),
+    path('fisioterapeuta/adicionar-exercicio/<int:tratamento_id>/', views.fisioterapeuta_adicionar_exercicio, name='fisioterapeuta_adicionar_exercicio'),
+    path('fisioterapeuta/registrar-evolucao/<int:atleta_id>/', views.fisioterapeuta_registrar_evolucao, name='fisioterapeuta_registrar_evolucao'),
 
     # Views do Psicólogo
     path('psicologo/avaliacoes/', views.psicologo_avaliacoes, name='psicologo_avaliacoes'),
