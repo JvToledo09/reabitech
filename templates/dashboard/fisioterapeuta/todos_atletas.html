@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Selecionar Atleta{% endblock %}
+{% block page_title %}Todos os Atletas{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold mb-1"><i class="fas fa-users me-2 text-info"></i>Selecionar Atleta</h4>
+            <p class="text-muted mb-0">Escolha um atleta para registrar uma nova lesão ou uma evolução física.</p>
+        </div>
+        <a href="{% url 'dashboard:dashboard_fisioterapeuta' %}" class="btn btn-outline-custom">
+            <i class="fas fa-arrow-left me-2"></i> Voltar
+        </a>
+    </div>
+
+    <!-- Busca -->
+    <div class="card-modern p-3 mb-4">
+        <div class="input-group">
+            <span class="input-group-text bg-light border-0"><i class="fas fa-search"></i></span>
+            <input type="text" id="searchAtleta" class="form-control bg-light border-0 shadow-sm" placeholder="Pesquisar atleta por nome ou RM...">
+        </div>
+    </div>
+
+    <!-- Grid de Atletas -->
+    <div class="row g-4" id="gridAtletas">
+        {% for atleta in atletas %}
+        <div class="col-xl-4 col-md-6 atleta-card" data-nome="{{ atleta.usuario.get_full_name|lower }}" data-rm="{{ atleta.rm|lower }}">
+            <div class="card-modern p-4 h-100 card-tilt">
+
+                <!-- Header -->
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-info bg-opacity-10 rounded-circle p-3 me-3" style="width: 55px; height: 55px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-user fa-lg text-info"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="fw-bold mb-0">{{ atleta.usuario.get_full_name|default:atleta.usuario.username }}</h5>
+                        <small class="text-muted">RM: {{ atleta.rm }}</small>
+                    </div>
+                </div>
+
+                <!-- Info -->
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <small class="text-muted d-block">Modalidade</small>
+                        <strong class="small">{{ atleta.modalidade.nome|default:"-" }}</strong>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted d-block">Lesões</small>
+                        <strong class="small">{{ atleta.lesoes.count }}</strong>
+                    </div>
+                </div>
+
+                <!-- Ações -->
+                <div class="d-grid gap-2">
+                    <a href="{% url 'dashboard:fisioterapeuta_criar_lesao' atleta.id %}" class="btn btn-sm btn-primary-custom">
+                        <i class="fas fa-plus me-1"></i> Registrar Nova Lesão
+                    </a>
+                    <a href="{% url 'dashboard:fisioterapeuta_registrar_evolucao' atleta.id %}" class="btn btn-sm btn-outline-custom">
+                        <i class="fas fa-chart-line me-1"></i> Registrar Evolução
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="card-modern p-5 text-center">
+                <i class="fas fa-users fs-1 d-block mb-3 opacity-25 text-muted"></i>
+                <h5 class="text-muted">Nenhum atleta cadastrado no projeto</h5>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+<script>
+    document.getElementById('searchAtleta').addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        document.querySelectorAll('.atleta-card').forEach(card => {
+            const nome = card.dataset.nome;
+            const rm = card.dataset.rm;
+            if (nome.includes(query) || rm.includes(query)) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

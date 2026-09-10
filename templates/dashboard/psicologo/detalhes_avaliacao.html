@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Detalhes da Avaliação{% endblock %}
+{% block page_title %}Detalhes da Avaliação{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center">
+            <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-brain fa-2x text-primary"></i>
+            </div>
+            <div>
+                <h3 class="fw-bold mb-0">{{ atleta.usuario.get_full_name|default:atleta.usuario.username }}</h3>
+                <p class="text-muted mb-0">Avaliação de {{ avaliacao.data|date:"d/m/Y" }}</p>
+            </div>
+        </div>
+        <a href="{% url 'dashboard:psicologo_avaliacoes' %}" class="btn btn-outline-custom">
+            <i class="fas fa-arrow-left me-2"></i> Voltar
+        </a>
+    </div>
+
+    <!-- Score Principal -->
+    <div class="card-modern p-5 mb-4 text-center" style="background: linear-gradient(135deg, #6f42c1 0%, #4c2a85 100%); color: white;">
+        <h5 class="opacity-75 mb-2">Score Total</h5>
+        <h1 class="display-1 fw-bold mb-3">{{ avaliacao.score_total }}<span class="fs-3 opacity-50">/10</span></h1>
+        <span class="badge bg-white text-dark px-4 py-2 rounded-pill fs-6">{{ avaliacao.status_emocional }}</span>
+    </div>
+
+    <!-- Indicadores Detalhados -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card-modern p-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-danger bg-opacity-10 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-fire text-danger"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <small class="text-muted d-block">Ansiedade</small>
+                        <h4 class="fw-bold mb-0">{{ avaliacao.ansiedade }}/10</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern p-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-success bg-opacity-10 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-bolt text-success"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <small class="text-muted d-block">Motivação</small>
+                        <h4 class="fw-bold mb-0">{{ avaliacao.motivacao }}/10</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern p-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-brain text-warning"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <small class="text-muted d-block">Estresse</small>
+                        <h4 class="fw-bold mb-0">{{ avaliacao.estresse }}/10</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern p-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-info bg-opacity-10 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-heart text-info"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <small class="text-muted d-block">Autoestima</small>
+                        <h4 class="fw-bold mb-0">{{ avaliacao.autoestima }}/10</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern p-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-moon text-primary"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <small class="text-muted d-block">Qualidade do Sono</small>
+                        <h4 class="fw-bold mb-0">{{ avaliacao.qualidade_sono }}/10</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern p-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-secondary bg-opacity-10 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-user-md text-secondary"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <small class="text-muted d-block">Responsável</small>
+                        <strong class="small">{{ avaliacao.psicologo_responsavel.get_full_name|default:"-" }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Observações -->
+    {% if avaliacao.observacoes %}
+    <div class="card-modern p-4 mb-4">
+        <h5 class="fw-bold mb-3"><i class="fas fa-comment me-2 text-primary"></i>Observações</h5>
+        <p class="mb-0">{{ avaliacao.observacoes }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Avaliações Anteriores -->
+    {% if avaliacoes_anteriores %}
+    <div class="card-modern p-4">
+        <h5 class="fw-bold mb-3"><i class="fas fa-history me-2 text-info"></i>Avaliações Anteriores</h5>
+        <div class="row g-3">
+            {% for av in avaliacoes_anteriores %}
+            <div class="col-md-4">
+                <div class="card p-3 border-0 shadow-sm rounded-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <small class="text-muted">{{ av.data|date:"d/m/Y" }}</small>
+                        <span class="badge
+                            {% if av.score_total >= 7 %}bg-success bg-opacity-10 text-success
+                            {% elif av.score_total >= 4 %}bg-warning bg-opacity-10 text-warning
+                            {% else %}bg-danger bg-opacity-10 text-danger{% endif %}">
+                            {{ av.score_total }}/10
+                        </span>
+                    </div>
+                    <a href="{% url 'dashboard:psicologo_detalhes_avaliacao' av.id %}" class="btn btn-sm btn-outline-custom mt-2">
+                        Ver Detalhes
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

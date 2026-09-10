@@ -1,68 +1,256 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %}Dashboard do Psicólogo{% endblock %}
-{% block page_title %}Saúde Mental dos Atletas{% endblock %}
+{% block page_title %}Central de Psicologia{% endblock %}
 
 {% block content %}
 <div class="container-fluid p-0">
-    <!-- Indicadores -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-4">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon"><i class="fas fa-brain"></i></div>
-                <div class="stat-number">{{ atletas_acompanhados }}</div>
-                <p>Atletas Acompanhados</p>
-            </div>
+
+    <!-- Hero / Saudação -->
+    <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: linear-gradient(135deg, #6f42c1 0%, #4c2a85 100%); color: white; border: none; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -50px; right: -50px; font-size: 15rem; opacity: 0.08;">
+            <i class="fas fa-brain"></i>
         </div>
-        <div class="col-md-4">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #0dcaf0, #0aa2c0);"><i class="fas fa-clipboard-list"></i></div>
-                <div class="stat-number">{{ total_avaliacoes }}</div>
-                <p>Total de Avaliações</p>
+        <div class="row align-items-center position-relative">
+            <div class="col-md-8">
+                <h3 class="fw-bold mb-2">Olá, {{ user.get_full_name }}! 🧠</h3>
+                <p class="mb-2 opacity-75">Bem-vindo à sua central de psicologia. Aqui você acompanha a saúde mental dos atletas.</p>
+                <div class="d-flex gap-3 mt-3 flex-wrap">
+                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
+                        <i class="fas fa-users me-1"></i> {{ atletas_acompanhados }} em acompanhamento
+                    </span>
+                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
+                        <i class="fas fa-clipboard-list me-1"></i> {{ total_avaliacoes }} avaliações
+                    </span>
+                    {% if atletas_atencao %}
+                    <span class="badge bg-danger text-white px-3 py-2 rounded-pill">
+                        <i class="fas fa-exclamation-triangle me-1"></i> {{ atletas_atencao|length }} em atenção
+                    </span>
+                    {% endif %}
+                </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #ffc107, #ffca2c);"><i class="fas fa-heart-pulse"></i></div>
-                <div class="stat-number">-</div>
-                <p>Estado Emocional Médio</p>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'dashboard:psicologo_avaliacoes' %}" class="btn btn-light btn-lg shadow-sm">
+                    <i class="fas fa-plus me-2"></i> Nova Avaliação
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Tabela de Avaliações Recentes -->
-    <div class="card-modern p-4 card-tilt">
-        <h5 class="fw-bold mb-4"><i class="fas fa-clock me-2 text-info"></i>Avaliações Recentes</h5>
+    <!-- Indicadores Principais -->
+    <div class="row g-3 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #6f42c1, #4c2a85);">
+                        <i class="fas fa-users" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-primary bg-opacity-10 text-primary">Atletas</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ atletas_total }}</h2>
+                <p class="text-muted small mb-0">Total de Atletas</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #0dcaf0, #0aa2c0);">
+                        <i class="fas fa-clipboard-check" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-info bg-opacity-10 text-info">Ativos</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ atletas_acompanhados }}</h2>
+                <p class="text-muted small mb-0">Em Acompanhamento</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #ffc107, #ffca2c);">
+                        <i class="fas fa-file-alt" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-warning bg-opacity-10 text-warning">Total</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ total_avaliacoes }}</h2>
+                <p class="text-muted small mb-0">Avaliações Realizadas</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #dc3545, #bb2d3b);">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-danger bg-opacity-10 text-danger">Atenção</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ atletas_atencao|length }}</h2>
+                <p class="text-muted small mb-0">Precisam de Atenção</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Médias dos Indicadores -->
+    <div class="card-modern p-4 mb-4">
+        <h5 class="fw-bold mb-4"><i class="fas fa-chart-bar me-2 text-primary"></i>Médias dos Últimos 30 Dias</h5>
+        <div class="row g-3">
+            <div class="col-md-2 col-6">
+                <div class="text-center p-3 bg-light rounded-4">
+                    <div class="bg-danger bg-opacity-10 rounded-circle p-2 mx-auto mb-2" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-fire text-danger"></i>
+                    </div>
+                    <small class="text-muted d-block">Ansiedade</small>
+                    <h4 class="fw-bold mb-0 text-danger">{{ media_ansiedade }}</h4>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="text-center p-3 bg-light rounded-4">
+                    <div class="bg-success bg-opacity-10 rounded-circle p-2 mx-auto mb-2" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-bolt text-success"></i>
+                    </div>
+                    <small class="text-muted d-block">Motivação</small>
+                    <h4 class="fw-bold mb-0 text-success">{{ media_motivacao }}</h4>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="text-center p-3 bg-light rounded-4">
+                    <div class="bg-warning bg-opacity-10 rounded-circle p-2 mx-auto mb-2" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-brain text-warning"></i>
+                    </div>
+                    <small class="text-muted d-block">Estresse</small>
+                    <h4 class="fw-bold mb-0 text-warning">{{ media_estresse }}</h4>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="text-center p-3 bg-light rounded-4">
+                    <div class="bg-info bg-opacity-10 rounded-circle p-2 mx-auto mb-2" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-heart text-info"></i>
+                    </div>
+                    <small class="text-muted d-block">Autoestima</small>
+                    <h4 class="fw-bold mb-0 text-info">{{ media_autoestima }}</h4>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="text-center p-3 bg-light rounded-4">
+                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 mx-auto mb-2" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-moon text-primary"></i>
+                    </div>
+                    <small class="text-muted d-block">Sono</small>
+                    <h4 class="fw-bold mb-0 text-primary">{{ media_sono }}</h4>
+                </div>
+            </div>
+            <div class="col-md-2 col-6">
+                <div class="text-center p-3 bg-light rounded-4">
+                    <div class="bg-success bg-opacity-10 rounded-circle p-2 mx-auto mb-2" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-check-circle text-success"></i>
+                    </div>
+                    <small class="text-muted d-block">Bem Estar</small>
+                    <h4 class="fw-bold mb-0 text-success">
+                        {% widthratio media_motivacao|add:media_autoestima 2 1 %}
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-8">
+            <div class="card-modern p-4 card-tilt">
+                <h5 class="fw-bold mb-3"><i class="fas fa-chart-line me-2 text-primary"></i>Evolução dos Indicadores</h5>
+                <div style="height: 320px;">
+                    <canvas id="evolucaoPsicoChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card-modern p-4 card-tilt">
+                <h5 class="fw-bold mb-3"><i class="fas fa-chart-pie me-2 text-info"></i>Distribuição Emocional</h5>
+                <div style="height: 320px;">
+                    <canvas id="distribuicaoPsicoChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Atletas que Precisam de Atenção -->
+    {% if atletas_atencao %}
+    <div class="card-modern p-4 mb-4" style="border-left: 4px solid #dc3545;">
+        <h5 class="fw-bold mb-3"><i class="fas fa-exclamation-triangle me-2 text-danger"></i>Atletas que Precisam de Atenção</h5>
+        <div class="row g-3">
+            {% for item in atletas_atencao %}
+            <div class="col-md-4">
+                <div class="card p-3 border-0 shadow-sm rounded-4 h-100" style="background: linear-gradient(135deg, #fff5f5, #ffe0e0);">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="bg-danger bg-opacity-20 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user text-danger"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0">{{ item.atleta.usuario.get_full_name|default:item.atleta.usuario.username }}</h6>
+                            <small class="text-muted">{{ item.atleta.modalidade.nome|default:"Sem modalidade" }}</small>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                        <span class="badge bg-danger bg-opacity-20 text-danger">Score: {{ item.score }}/10</span>
+                        <small class="text-muted">{{ item.ultima_avaliacao.data|date:"d/m/Y" }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Avaliações Recentes -->
+    <div class="card-modern p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="fw-bold mb-0"><i class="fas fa-clipboard-list me-2 text-info"></i>Avaliações Recentes</h5>
+            <a href="{% url 'dashboard:psicologo_avaliacoes' %}" class="btn btn-sm btn-outline-custom">Ver Todas</a>
+        </div>
         <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead class="bg-light text-muted small fw-bold">
                     <tr>
                         <th class="ps-4">Atleta</th>
                         <th>Data</th>
-                        <th>Score Total</th>
+                        <th>Score</th>
                         <th>Status</th>
+                        <th>Ansiedade</th>
+                        <th>Motivação</th>
+                        <th>Estresse</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for avaliacao in avaliacoes_recentes %}
+                    {% for av in avaliacoes_recentes %}
                     <tr>
-                        <td class="ps-4">{{ avaliacao.atleta.usuario.get_full_name|default:avaliacao.atleta.usuario.username }}</td>
-                        <td>{{ avaliacao.data|date:"d/m/Y" }}</td>
-                        <td><strong>{{ avaliacao.score_total }}</strong>/10</td>
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-info bg-opacity-10 text-info rounded-circle p-2 me-2" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-user small"></i>
+                                </div>
+                                <strong class="small">{{ av.atleta.usuario.get_full_name|default:av.atleta.usuario.username }}</strong>
+                            </div>
+                        </td>
+                        <td>{{ av.data|date:"d/m/Y" }}</td>
+                        <td><strong>{{ av.score_total }}</strong>/10</td>
                         <td>
-                            {% if avaliacao.score_total >= 7 %}
+                            {% if av.score_total >= 7 %}
                                 <span class="badge bg-success bg-opacity-10 text-success">Bom</span>
-                            {% elif avaliacao.score_total >= 4 %}
+                            {% elif av.score_total >= 4 %}
                                 <span class="badge bg-warning bg-opacity-10 text-warning">Regular</span>
                             {% else %}
                                 <span class="badge bg-danger bg-opacity-10 text-danger">Atenção</span>
                             {% endif %}
                         </td>
+                        <td>{{ av.ansiedade }}/10</td>
+                        <td>{{ av.motivacao }}/10</td>
+                        <td>{{ av.estresse }}/10</td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="4" class="text-center text-muted py-4">
-                            <i class="fas fa-file-alt fs-1 d-block mb-3 opacity-25"></i>
-                            Nenhuma avaliação registrada recentemente.
+                        <td colspan="7" class="text-center py-4 text-muted">
+                            <i class="fas fa-clipboard-list fs-3 d-block mb-2 opacity-25"></i>
+                            Nenhuma avaliação registrada ainda.
                         </td>
                     </tr>
                     {% endfor %}
@@ -70,5 +258,150 @@
             </table>
         </div>
     </div>
+
+    <!-- Timeline de Avaliações -->
+    <div class="card-modern p-4">
+        <h5 class="fw-bold mb-4"><i class="fas fa-history me-2 text-primary"></i>Timeline de Avaliações</h5>
+        {% for evento in timeline %}
+        <div class="d-flex mb-3">
+            <div class="bg-{{ evento.cor }} bg-opacity-10 text-{{ evento.cor }} rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div class="flex-grow-1 border-bottom pb-3">
+                <div class="d-flex justify-content-between">
+                    <h6 class="fw-bold mb-1">{{ evento.atleta_nome }}</h6>
+                    <small class="text-muted">{{ evento.data|date:"d/m/Y" }}</small>
+                </div>
+                <p class="text-muted small mb-0">
+                    Score: <strong>{{ evento.score }}/10</strong> - {{ evento.status }}
+                </p>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-4">
+            <i class="fas fa-history fs-1 d-block mb-2 opacity-25 text-muted"></i>
+            <p class="text-muted mb-0">Nenhuma avaliação registrada ainda.</p>
+        </div>
+        {% endfor %}
+    </div>
+
 </div>
+
+<!-- Dados para JS -->
+{{ chart_labels|json_script:"psico_labels" }}
+{{ chart_ansiedade|json_script:"psico_ansiedade" }}
+{{ chart_motivacao|json_script:"psico_motivacao" }}
+{{ chart_estresse|json_script:"psico_estresse" }}
+{{ chart_autoestima|json_script:"psico_autoestima" }}
+{{ chart_sono|json_script:"psico_sono" }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function getJSON(id) {
+            const el = document.getElementById(id);
+            return el ? JSON.parse(el.textContent) : [];
+        }
+
+        // Gráfico 1: Evolução dos Indicadores
+        const ctx1 = document.getElementById('evolucaoPsicoChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: getJSON('psico_labels'),
+                datasets: [
+                    {
+                        label: 'Ansiedade',
+                        data: getJSON('psico_ansiedade'),
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Motivação',
+                        data: getJSON('psico_motivacao'),
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Estresse',
+                        data: getJSON('psico_estresse'),
+                        borderColor: '#ffc107',
+                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Autoestima',
+                        data: getJSON('psico_autoestima'),
+                        borderColor: '#0dcaf0',
+                        backgroundColor: 'rgba(13, 202, 240, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Sono',
+                        data: getJSON('psico_sono'),
+                        borderColor: '#6f42c1',
+                        backgroundColor: 'rgba(111, 66, 193, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', labels: { usePointStyle: true, padding: 12, font: { size: 11 } } }
+                },
+                scales: {
+                    y: { beginAtZero: true, max: 10, grid: { color: 'rgba(0,0,0,0.05)' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Gráfico 2: Distribuição Emocional
+        const ctx2 = document.getElementById('distribuicaoPsicoChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Bom', 'Regular', 'Atenção'],
+                datasets: [{
+                    data: [{{ status_bom }}, {{ status_regular }}, {{ status_atencao }}],
+                    backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 15 } }
+                }
+            },
+            plugins: [{
+                id: 'textCenter',
+                beforeDraw: function(chart) {
+                    const { width, height, ctx } = chart;
+                    ctx.save();
+                    ctx.font = 'bold 26px Poppins, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#333';
+                    ctx.fillText({{ atletas_acompanhados }}, width / 2, height / 2 - 8);
+                    ctx.font = '11px Poppins, sans-serif';
+                    ctx.fillStyle = '#666';
+                    ctx.fillText('Atletas', width / 2, height / 2 + 15);
+                    ctx.restore();
+                }
+            }]
+        });
+    });
+</script>
 {% endblock %}

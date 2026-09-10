@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Registrar Evolução{% endblock %}
+{% block page_title %}Registrar Evolução Física{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="card-modern p-4">
+
+            <div class="d-flex align-items-center mb-4">
+                <div class="bg-success bg-opacity-10 rounded-circle p-3 me-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-chart-line fa-xl text-success"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">Nova Evolução Física</h4>
+                    <p class="text-muted mb-0">Atleta: <strong>{{ atleta.usuario.get_full_name|default:atleta.usuario.username }}</strong></p>
+                </div>
+            </div>
+
+            <div class="alert alert-info small">
+                <i class="fas fa-info-circle me-2"></i> Avalie cada indicador de <strong>0 a 10</strong>. O sistema calculará automaticamente o percentual de recuperação.
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <!-- Indicadores com Sliders -->
+                <h6 class="fw-bold text-muted text-uppercase small mb-3"><i class="fas fa-heartbeat me-2"></i>Sintomas</h6>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Dor (0 = sem dor, 10 = máxima)</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="range" name="dor" min="0" max="10" value="5" class="form-range flex-grow-1" oninput="document.getElementById('dorVal').textContent = this.value">
+                            <span class="badge bg-danger bg-opacity-10 text-danger fs-6" id="dorVal">5</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Mobilidade (0 = imóvel, 10 = total)</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="range" name="mobilidade" min="0" max="10" value="5" class="form-range flex-grow-1" oninput="document.getElementById('mobVal').textContent = this.value">
+                            <span class="badge bg-info bg-opacity-10 text-info fs-6" id="mobVal">5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h6 class="fw-bold text-muted text-uppercase small mt-4 mb-3"><i class="fas fa-dumbbell me-2"></i>Capacidades Físicas</h6>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Força</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="range" name="forca" min="0" max="10" value="5" class="form-range flex-grow-1" oninput="document.getElementById('forVal').textContent = this.value">
+                            <span class="badge bg-warning bg-opacity-10 text-warning fs-6" id="forVal">5</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Resistência</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="range" name="resistencia" min="0" max="10" value="5" class="form-range flex-grow-1" oninput="document.getElementById('resVal').textContent = this.value">
+                            <span class="badge bg-primary bg-opacity-10 text-primary fs-6" id="resVal">5</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Flexibilidade</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="range" name="flexibilidade" min="0" max="10" value="5" class="form-range flex-grow-1" oninput="document.getElementById('flexVal').textContent = this.value">
+                            <span class="badge bg-success bg-opacity-10 text-success fs-6" id="flexVal">5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h6 class="fw-bold text-muted text-uppercase small mt-4 mb-3"><i class="fas fa-trophy me-2"></i>Desempenho Geral</h6>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Desempenho (0-10) *</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="range" name="desempenho" min="0" max="10" value="5" class="form-range flex-grow-1" oninput="document.getElementById('desVal').textContent = this.value">
+                            <span class="badge bg-success bg-opacity-10 text-success fs-6" id="desVal">5</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Observações</label>
+                        <textarea name="observacoes" class="form-control bg-light border-0 shadow-sm" rows="2" placeholder="Como o atleta reagiu?"></textarea>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-4 pt-4 border-top">
+                    <button type="submit" class="btn btn-primary-custom">
+                        <i class="fas fa-save me-2"></i>Registrar Evolução
+                    </button>
+                    <a href="{% url 'dashboard:fisioterapeuta_todos_atletas' %}" class="btn btn-outline-secondary border-0 bg-light">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

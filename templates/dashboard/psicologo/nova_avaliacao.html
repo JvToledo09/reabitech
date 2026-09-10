@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Nova Avaliação{% endblock %}
+{% block page_title %}Nova Avaliação Psicológica{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="card-modern p-4">
+
+            <div class="d-flex align-items-center mb-4">
+                <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-brain fa-xl text-primary"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">Nova Avaliação Psicológica</h4>
+                    <p class="text-muted mb-0">Atleta: <strong>{{ atleta.usuario.get_full_name|default:atleta.usuario.username }}</strong> (RM: {{ atleta.rm }})</p>
+                </div>
+            </div>
+
+            <div class="alert alert-info small">
+                <i class="fas fa-info-circle me-2"></i> Avalie cada indicador de <strong>0 a 10</strong>. O sistema calculará automaticamente o score total e o status emocional.
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <h6 class="fw-bold text-muted text-uppercase small mb-3"><i class="fas fa-heartbeat me-2"></i>Indicadores Emocionais</h6>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Ansiedade (0 = calmo, 10 = ansioso)</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="range" name="ansiedade" min="0" max="10" value="5" class="form-range flex-grow-1" oninput="document.getElementById('ansVal').textContent = this.value">
+                            <span class="badge bg-danger bg-opacity-10 text-danger fs-6" id="ansVal">5</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Motivação (0 = desmotivado, 10 = motivado)</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="range" name="motivacao" min="0" max="10" value="5" class="form-range flex-grow-1" oninput="document.getElementById('motVal').textContent = this.value">
+                            <span class="badge bg-success bg-opacity-10 text-success fs-6" id="motVal">5</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Estresse (0 = relaxado, 10 = estressado)</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="range" name="estresse" min="0" max="10" value="5" class="form-range flex-grow-1" oninput="document.getElementById('estVal').textContent = this.value">
+                            <span class="badge bg-warning bg-opacity-10 text-warning fs-6" id="estVal">5</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Autoestima (0 = baixa, 10 = alta)</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="range" name="autoestima" min="0" max="10" value="5" class="form-range flex-grow-1" oninput="document.getElementById('autVal').textContent = this.value">
+                            <span class="badge bg-info bg-opacity-10 text-info fs-6" id="autVal">5</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Qualidade do Sono (0 = péssima, 10 = ótima)</label>
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="range" name="qualidade_sono" min="0" max="10" value="5" class="form-range flex-grow-1" oninput="document.getElementById('sonoVal').textContent = this.value">
+                            <span class="badge bg-primary bg-opacity-10 text-primary fs-6" id="sonoVal">5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h6 class="fw-bold text-muted text-uppercase small mt-4 mb-3"><i class="fas fa-comment me-2"></i>Observações</h6>
+                <div class="mb-3">
+                    <textarea name="observacoes" class="form-control bg-light border-0 shadow-sm" rows="4" placeholder="Anotações sobre o estado emocional do atleta, comportamentos observados, recomendações..."></textarea>
+                </div>
+
+                <div class="d-flex gap-2 mt-4 pt-4 border-top">
+                    <button type="submit" class="btn btn-primary-custom">
+                        <i class="fas fa-save me-2"></i>Registrar Avaliação
+                    </button>
+                    <a href="{% url 'dashboard:psicologo_atletas' %}" class="btn btn-outline-secondary border-0 bg-light">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

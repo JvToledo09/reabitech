@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Detalhes da Lesão{% endblock %}
+{% block page_title %}Detalhes da Lesão{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div class="d-flex align-items-center">
+            <div class="bg-danger bg-opacity-10 rounded-circle p-3 me-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-user-injured fa-2x text-danger"></i>
+            </div>
+            <div>
+                <h3 class="fw-bold mb-0">{{ lesao.atleta.usuario.get_full_name|default:lesao.atleta.usuario.username }}</h3>
+                <p class="text-muted mb-0">
+                    <span class="badge bg-danger bg-opacity-10 text-danger">{{ lesao.get_tipo_display }}</span>
+                    <span class="badge bg-warning bg-opacity-10 text-warning ms-2">{{ lesao.get_gravidade_display }}</span>
+                </p>
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'dashboard:fisioterapeuta_criar_tratamento' lesao.id %}" class="btn btn-primary-custom">
+                <i class="fas fa-plus me-2"></i> Novo Tratamento
+            </a>
+            <a href="{% url 'dashboard:fisioterapeuta_todos_atletas' %}" class="btn btn-outline-custom">
+                <i class="fas fa-arrow-left me-2"></i> Voltar
+            </a>
+        </div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card-modern p-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-danger bg-opacity-10 rounded-circle p-2 me-3">
+                        <i class="fas fa-map-marker-alt text-danger"></i>
+                    </div>
+                    <div>
+                        <small class="text-muted d-block">Local</small>
+                        <strong>{{ lesao.local }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card-modern p-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-3">
+                        <i class="fas fa-calendar-alt text-warning"></i>
+                    </div>
+                    <div>
+                        <small class="text-muted d-block">Ocorrência</small>
+                        <strong>{{ lesao.data_ocorrencia|date:"d/m/Y" }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card-modern p-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-info bg-opacity-10 rounded-circle p-2 me-3">
+                        <i class="fas fa-user-md text-info"></i>
+                    </div>
+                    <div>
+                        <small class="text-muted d-block">Fisioterapeuta</small>
+                        <strong>{{ lesao.fisioterapeuta_responsavel.get_full_name|default:"-" }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card-modern p-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-success bg-opacity-10 rounded-circle p-2 me-3">
+                        <i class="fas fa-flag-checkered text-success"></i>
+                    </div>
+                    <div>
+                        <small class="text-muted d-block">Previsão</small>
+                        <strong>{{ lesao.previsao_recuperacao|date:"d/m/Y"|default:"A definir" }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timeline Visual -->
+    <div class="card-modern p-4 mb-4">
+        <h5 class="fw-bold mb-4"><i class="fas fa-timeline me-2 text-success"></i>Timeline de Recuperação</h5>
+        <div class="timeline-horizontal">
+            <div class="row g-3 text-center">
+                <div class="col">
+                    <div class="bg-danger bg-opacity-10 text-danger rounded-circle p-3 mx-auto mb-2" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-exclamation-triangle fa-lg"></i>
+                    </div>
+                    <strong class="d-block small">Lesão</strong>
+                    <small class="text-muted">{{ lesao.data_ocorrencia|date:"d/m" }}</small>
+                </div>
+                <div class="col">
+                    <div class="bg-warning bg-opacity-10 text-warning rounded-circle p-3 mx-auto mb-2" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-notes-medical fa-lg"></i>
+                    </div>
+                    <strong class="d-block small">Tratamento</strong>
+                    <small class="text-muted">{{ tratamentos.count }} ativo(s)</small>
+                </div>
+                <div class="col">
+                    <div class="bg-info bg-opacity-10 text-info rounded-circle p-3 mx-auto mb-2" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-dumbbell fa-lg"></i>
+                    </div>
+                    <strong class="d-block small">Exercícios</strong>
+                    <small class="text-muted">{{ exercicios.count }} atribuído(s)</small>
+                </div>
+                <div class="col">
+                    <div class="bg-success bg-opacity-10 text-success rounded-circle p-3 mx-auto mb-2" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-check-circle fa-lg"></i>
+                    </div>
+                    <strong class="d-block small">Recuperação</strong>
+                    <small class="text-muted">Em andamento</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Descrição e Diagnóstico -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card-modern p-4 h-100">
+                <h6 class="fw-bold mb-3"><i class="fas fa-file-alt me-2 text-primary"></i>Descrição</h6>
+                <p class="mb-0">{{ lesao.descricao }}</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card-modern p-4 h-100">
+                <h6 class="fw-bold mb-3"><i class="fas fa-stethoscope me-2 text-success"></i>Diagnóstico</h6>
+                <p class="mb-0">{{ lesao.diagnostico|default:"Nenhum diagnóstico registrado." }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tratamentos Ativos -->
+    <div class="card-modern p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0"><i class="fas fa-list me-2 text-warning"></i>Tratamentos</h5>
+            <a href="{% url 'dashboard:fisioterapeuta_criar_tratamento' lesao.id %}" class="btn btn-primary-custom btn-sm">
+                <i class="fas fa-plus me-1"></i> Novo
+            </a>
+        </div>
+        <div class="row g-3">
+            {% for tratamento in tratamentos %}
+            <div class="col-md-6">
+                <div class="card p-3 border-0 shadow-sm rounded-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-success bg-opacity-10 text-success">Em Andamento</span>
+                        <small class="text-muted">{{ tratamento.data_inicio|date:"d/m/Y" }}</small>
+                    </div>
+                    <p class="small text-muted mb-2">{{ tratamento.descricao|truncatechars:120 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="fas fa-dumbbell me-1"></i> {{ tratamento.exercicios.count }} exercícios
+                        </small>
+                        <a href="{% url 'dashboard:fisioterapeuta_adicionar_exercicio' tratamento.id %}" class="btn btn-sm btn-outline-custom">
+                            <i class="fas fa-plus me-1"></i> Exercício
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-4">
+                <p class="text-muted">Nenhum tratamento registrado. Clique em "Novo" para começar.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Exercícios Atribuídos -->
+    <div class="card-modern p-4">
+        <h5 class="fw-bold mb-3"><i class="fas fa-dumbbell me-2 text-info"></i>Exercícios Atribuídos</h5>
+        <div class="row g-3">
+            {% for ex in exercicios %}
+            <div class="col-md-4">
+                <div class="card p-3 border-0 shadow-sm rounded-4 h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="fw-bold mb-0">{{ ex.nome }}</h6>
+                        {% if ex.check_realizado %}
+                        <span class="badge bg-success bg-opacity-10 text-success">✓</span>
+                        {% else %}
+                        <span class="badge bg-warning bg-opacity-10 text-warning">Pendente</span>
+                        {% endif %}
+                    </div>
+                    <p class="small text-muted mb-2">{{ ex.series }}x{{ ex.repeticoes }} | {{ ex.frequencia }}</p>
+                    {% if ex.grupo_muscular %}
+                    <small class="text-muted"><i class="fas fa-tag me-1"></i>{{ ex.grupo_muscular }}</small>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-4">
+                <p class="text-muted">Nenhum exercício atribuído ainda. Adicione um tratamento primeiro.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

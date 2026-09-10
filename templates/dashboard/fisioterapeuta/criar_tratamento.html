@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Novo Tratamento{% endblock %}
+{% block page_title %}Iniciar Tratamento{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card-modern p-4">
+
+            <div class="d-flex align-items-center mb-4">
+                <div class="bg-warning bg-opacity-10 rounded-circle p-3 me-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-notes-medical fa-xl text-warning"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">Novo Tratamento</h4>
+                    <p class="text-muted mb-0">Atleta: <strong>{{ lesao.atleta.usuario.get_full_name }}</strong></p>
+                </div>
+            </div>
+
+            <!-- Info da Lesão -->
+            <div class="card p-3 border-0 bg-light rounded-4 mb-4">
+                <div class="row g-2">
+                    <div class="col-md-4">
+                        <small class="text-muted d-block">Lesão</small>
+                        <strong>{{ lesao.get_tipo_display }}</strong>
+                    </div>
+                    <div class="col-md-4">
+                        <small class="text-muted d-block">Gravidade</small>
+                        <strong>{{ lesao.get_gravidade_display }}</strong>
+                    </div>
+                    <div class="col-md-4">
+                        <small class="text-muted d-block">Local</small>
+                        <strong>{{ lesao.local }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Descrição do Tratamento *</label>
+                    <textarea name="descricao" class="form-control bg-light border-0 shadow-sm" rows="5" placeholder="Descreva o plano de tratamento, objetivos, técnicas que serão utilizadas..." required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Previsão de Término</label>
+                    <input type="date" name="data_previsao_termino" class="form-control bg-light border-0 shadow-sm">
+                    <small class="text-muted">Data estimada para conclusão do tratamento</small>
+                </div>
+
+                <div class="d-flex gap-2 mt-4 pt-4 border-top">
+                    <button type="submit" class="btn btn-primary-custom">
+                        <i class="fas fa-save me-2"></i>Iniciar Tratamento
+                    </button>
+                    <a href="{% url 'dashboard:fisioterapeuta_detalhes_lesao' lesao.id %}" class="btn btn-outline-secondary border-0 bg-light">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

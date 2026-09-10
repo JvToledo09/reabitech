@@ -1,63 +1,217 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %}Dashboard do Fisioterapeuta{% endblock %}
-{% block page_title %}Tratamentos Ativos{% endblock %}
+{% block page_title %}Central de Fisioterapia{% endblock %}
 
 {% block content %}
 <div class="container-fluid p-0">
-    <!-- Indicadores -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-6">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon"><i class="fas fa-stethoscope"></i></div>
-                <div class="stat-number">{{ atletas_em_atendimento|length }}</div>
-                <p>Atletas em Atendimento</p>
-            </div>
+
+    <!-- Hero / Saudação -->
+    <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: linear-gradient(135deg, #2BA181 0%, #5A6461 100%); color: white; border: none; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -50px; right: -50px; font-size: 15rem; opacity: 0.08;">
+            <i class="fas fa-heart-pulse"></i>
         </div>
-        <div class="col-md-6">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #ffc107, #ffca2c);"><i class="fas fa-procedures"></i></div>
-                <div class="stat-number">{{ total_tratamentos_ativos }}</div>
-                <p>Tratamentos Ativos</p>
+        <div class="row align-items-center position-relative">
+            <div class="col-md-8">
+                <h3 class="fw-bold mb-2">Olá, {{ user.get_full_name }}! 🩺</h3>
+                <p class="mb-2 opacity-75">Bem-vindo à sua central de fisioterapia. Aqui você gerencia todos os tratamentos ativos.</p>
+                <div class="d-flex gap-3 mt-3 flex-wrap">
+                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
+                        <i class="fas fa-user-injured me-1"></i> {{ atletas_em_atendimento|length }} atletas em atendimento
+                    </span>
+                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
+                        <i class="fas fa-notes-medical me-1"></i> {{ total_tratamentos_ativos }} tratamentos ativos
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'dashboard:fisioterapeuta_todos_atletas' %}" class="btn btn-light btn-lg shadow-sm">
+                    <i class="fas fa-plus me-2"></i> Nova Lesão
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Lista de Atletas em Recuperação -->
-    <div class="card-modern p-4 card-tilt">
-        <h5 class="fw-bold mb-4"><i class="fas fa-user-injured me-2 text-danger"></i>Atletas em Recuperação</h5>
-        <div class="row g-4">
-            {% for atleta in atletas_em_atendimento %}
-            <div class="col-md-4">
-                <div class="card p-3 border-0 shadow-sm rounded-4 h-100">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="bg-danger bg-opacity-10 rounded-circle p-2 me-3">
-                            <i class="fas fa-user-injured text-danger"></i>
-                        </div>
-                        <div>
-                            <strong>{{ atleta.usuario.get_full_name|default:atleta.usuario.username }}</strong>
-                            <small class="text-muted d-block">{{ atleta.modalidade.nome|default:"Sem modalidade" }}</small>
+    <!-- Estatísticas Rápidas -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0;">
+                        <i class="fas fa-user-injured" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-success bg-opacity-10 text-success">Ativos</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ atletas_em_atendimento|length }}</h2>
+                <p class="text-muted small mb-0">Pacientes em tratamento</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #ffc107, #ffca2c);">
+                        <i class="fas fa-notes-medical" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-warning bg-opacity-10 text-warning">Em curso</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ total_tratamentos_ativos }}</h2>
+                <p class="text-muted small mb-0">Tratamentos ativos</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #0dcaf0, #0aa2c0);">
+                        <i class="fas fa-chart-line" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-info bg-opacity-10 text-info">Hoje</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ evolucoes_hoje|default:"0" }}</h2>
+                <p class="text-muted small mb-0">Evoluções registradas hoje</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #dc3545, #bb2d3b);">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-danger bg-opacity-10 text-danger">Atenção</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ alertas_ativos|default:"0" }}</h2>
+                <p class="text-muted small mb-0">Alertas de dor alta</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ações Rápidas -->
+    <div class="card-modern p-4 mb-4">
+        <h5 class="fw-bold mb-4"><i class="fas fa-bolt me-2 text-warning"></i>Ações Rápidas</h5>
+        <div class="row g-3">
+            <div class="col-lg-3 col-md-6">
+                <a href="{% url 'dashboard:fisioterapeuta_todos_atletas' %}" class="text-decoration-none">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 p-3 card-tilt" style="background: linear-gradient(135deg, #fff5f5, #ffe0e0);">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-danger bg-opacity-20 rounded-circle p-3 me-3">
+                                <i class="fas fa-user-injured fa-lg text-danger"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark">Registrar Lesão</h6>
+                                <small class="text-muted">Nova ocorrência</small>
+                            </div>
                         </div>
                     </div>
-                    {% if atleta.lesoes.last %}
-                    <p class="small text-muted mb-2">
-                        <i class="fas fa-notes-medical me-2"></i>{{ atleta.lesoes.last.get_tipo_display }}
-                    </p>
-                    {% else %}
-                    <p class="small text-muted mb-2">Sem lesões ativas no momento.</p>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="{% url 'dashboard:fisioterapeuta_tratamentos' %}" class="text-decoration-none">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 p-3 card-tilt" style="background: linear-gradient(135deg, #fffbf0, #fff3cd);">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-warning bg-opacity-20 rounded-circle p-3 me-3">
+                                <i class="fas fa-notes-medical fa-lg text-warning"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark">Tratamentos</h6>
+                                <small class="text-muted">Ver todos os ativos</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="{% url 'dashboard:fisioterapeuta_evolucoes' %}" class="text-decoration-none">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 p-3 card-tilt" style="background: linear-gradient(135deg, #f0fdf9, #d1f5e8);">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-success bg-opacity-20 rounded-circle p-3 me-3">
+                                <i class="fas fa-chart-line fa-lg text-success"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark">Evoluções</h6>
+                                <small class="text-muted">Histórico completo</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a href="{% url 'dashboard:coordenador_membros' %}" class="text-decoration-none">
+                    <div class="card border-0 shadow-sm rounded-4 h-100 p-3 card-tilt" style="background: linear-gradient(135deg, #f0f8ff, #d6eaff);">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-info bg-opacity-20 rounded-circle p-3 me-3">
+                                <i class="fas fa-users fa-lg text-info"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark">Equipe</h6>
+                                <small class="text-muted">Ver membros</small>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Atletas em Recuperação -->
+    <div class="card-modern p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="fw-bold mb-0"><i class="fas fa-user-injured me-2 text-danger"></i>Atletas em Recuperação</h5>
+            <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="btn btn-outline-custom btn-sm">
+                Ver Todos <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+            {% for atleta in atletas_em_atendimento %}
+            <div class="col-xl-4 col-md-6">
+                <div class="card p-4 border-0 shadow-sm rounded-4 h-100 card-tilt" style="background: #fff;">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-danger bg-opacity-10 rounded-circle p-3 me-3">
+                                <i class="fas fa-user-injured fa-lg text-danger"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0">{{ atleta.usuario.get_full_name|default:atleta.usuario.username }}</h6>
+                                <small class="text-muted">{{ atleta.modalidade.nome|default:"Sem modalidade" }}</small>
+                            </div>
+                        </div>
+                        <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill">Ativo</span>
+                    </div>
+
+                    <!-- Barra de Progresso -->
+                    {% with ultima=atleta.evolucoes.first %}
+                    {% if ultima %}
+                    <div class="mb-2">
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span class="text-muted">Recuperação</span>
+                            <strong class="text-success">{{ ultima.percentual_recuperacao }}%</strong>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-success" style="width: {{ ultima.percentual_recuperacao }}%"></div>
+                        </div>
+                    </div>
                     {% endif %}
-                    
-                    <div class="progress" style="height: 6px;">
-                        <div class="progress-bar bg-success" style="width: 70%"></div>
+                    {% endwith %}
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{% url 'dashboard:fisioterapeuta_registrar_evolucao' atleta.id %}" class="btn btn-sm btn-outline-custom">
+                            <i class="fas fa-chart-line me-1"></i> Evolução
+                        </a>
+                        <a href="{% url 'dashboard:fisioterapeuta_criar_lesao' atleta.id %}" class="btn btn-sm btn-primary-custom">
+                            <i class="fas fa-plus me-1"></i> Lesão
+                        </a>
                     </div>
                 </div>
             </div>
             {% empty %}
-            <div class="col-12 text-center text-muted py-4">
-                <i class="fas fa-clipboard-check fs-1 d-block mb-3 opacity-25"></i>
-                Nenhum atleta em atendimento ativo.
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-clipboard-check fs-1 d-block mb-3 opacity-25 text-muted"></i>
+                <h5 class="text-muted">Nenhum atleta em tratamento ativo</h5>
+                <p class="text-muted">Todos os atletas estão saudáveis no momento! 🎉</p>
             </div>
             {% endfor %}
         </div>
     </div>
+
 </div>
 {% endblock %}

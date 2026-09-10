@@ -1,107 +1,362 @@
 {% extends 'base.html' %}
-{% block title %}Dashboard do Atleta{% endblock %}
+{% load static %}
+
+{% block title %}Meu Dashboard{% endblock %}
 {% block page_title %}Minha Evolução{% endblock %}
 
 {% block content %}
 <div class="container-fluid p-0">
-    <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: linear-gradient(135deg, #2BA181, #5A6461); color: white;">
-        <div class="row align-items-center">
+
+    <!-- Hero de Boas-Vindas -->
+    <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: linear-gradient(135deg, #2BA181 0%, #5A6461 100%); color: white; border: none; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -60px; right: -60px; font-size: 16rem; opacity: 0.08;">
+            <i class="fas fa-running"></i>
+        </div>
+        <div class="row align-items-center position-relative">
             <div class="col-md-8">
-                <h3 class="fw-bold mb-1">Olá, {{ atleta.usuario.get_full_name }}! 💪</h3>
-                <p class="mb-0 opacity-75">Continue seu tratamento. Seu progresso é nossa maior vitória.</p>
+                <h2 class="fw-bold mb-2">Olá, {{ atleta.usuario.get_full_name|default:atleta.usuario.username }}! 💪</h2>
+                <p class="mb-3 opacity-75">Continue firme no seu tratamento. Cada exercício é um passo mais próximo da recuperação total!</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
+                        <i class="fas fa-trophy me-1"></i> {{ progresso_recuperacao }}% Recuperado
+                    </span>
+                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
+                        <i class="fas fa-dumbbell me-1"></i> {{ exercicios_concluidos }}/{{ total_exercicios }} Exercícios
+                    </span>
+                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
+                        <i class="fas fa-medal me-1"></i> {{ adesao }}% Adesão
+                    </span>
+                </div>
             </div>
             <div class="col-md-4 text-md-end">
-                <span class="badge bg-white text-dark p-2 rounded-pill"><i class="fas fa-fire me-1"></i>{{ progresso_recuperacao }}% Recuperado</span>
+                <div class="bg-white bg-opacity-25 rounded-circle p-4 d-inline-block" style="backdrop-filter: blur(10px);">
+                    <h1 class="fw-bold mb-0 display-3">{{ progresso_recuperacao }}%</h1>
+                    <small class="d-block">Recuperação Total</small>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Indicadores Principais -->
+    <div class="row g-3 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #dc3545, #bb2d3b);">
+                        <i class="fas fa-user-injured" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-danger bg-opacity-10 text-danger">Ativas</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ lesoes|length }}</h2>
+                <p class="text-muted small mb-0">Lesões em tratamento</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #ffc107, #ffca2c);">
+                        <i class="fas fa-notes-medical" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-warning bg-opacity-10 text-warning">Em curso</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ tratamentos_ativos }}</h2>
+                <p class="text-muted small mb-0">Tratamentos ativos</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #0dcaf0, #0aa2c0);">
+                        <i class="fas fa-brain" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-info bg-opacity-10 text-info">{{ status_mental }}</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ score_mental }}</h2>
+                <p class="text-muted small mb-0">Saúde Mental (0-10)</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #2BA181, #1a7a5f);">
+                        <i class="fas fa-fire" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-success bg-opacity-10 text-success">Ativo</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ ultimo_desempenho }}</h2>
+                <p class="text-muted small mb-0">Último Desempenho</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barra de Progresso Detalhada -->
+    <div class="card-modern p-4 mb-4">
+        <h5 class="fw-bold mb-4"><i class="fas fa-chart-line me-2 text-success"></i>Progresso de Recuperação</h5>
+        <div class="d-flex justify-content-between mb-2">
+            <span class="fw-bold">Progresso Geral</span>
+            <span class="fw-bold text-success">{{ progresso_recuperacao }}%</span>
+        </div>
+        <div class="progress mb-4" style="height: 20px; border-radius: 15px;">
+            <div class="progress-bar bg-success" style="width: {{ progresso_recuperacao }}%; border-radius: 15px;" role="progressbar">
+                {% if progresso_recuperacao >= 20 %}{{ progresso_recuperacao }}%{% endif %}
+            </div>
+        </div>
+
+        {% if ultima_evolucao %}
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="text-center p-3 bg-light rounded-4">
+                    <small class="text-muted d-block">Dor</small>
+                    <h4 class="fw-bold mb-0 text-danger">{{ ultima_evolucao.dor }}/10</h4>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center p-3 bg-light rounded-4">
+                    <small class="text-muted d-block">Mobilidade</small>
+                    <h4 class="fw-bold mb-0 text-info">{{ ultima_evolucao.mobilidade }}/10</h4>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center p-3 bg-light rounded-4">
+                    <small class="text-muted d-block">Força</small>
+                    <h4 class="fw-bold mb-0 text-warning">{{ ultima_evolucao.forca }}/10</h4>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center p-3 bg-light rounded-4">
+                    <small class="text-muted d-block">Desempenho</small>
+                    <h4 class="fw-bold mb-0 text-success">{{ ultima_evolucao.desempenho }}/10</h4>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Gráficos de Evolução -->
     <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon"><i class="fas fa-dumbbell"></i></div>
-                <div class="stat-number">{{ exercicios|length }}</div>
-                <p>Exercícios Ativos</p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #ffc107, #ffca2c);"><i class="fas fa-chart-line"></i></div>
-                <div class="stat-number">{{ ultimo_desempenho }}</div>
-                <p>Último Desempenho</p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #0dcaf0, #0aa2c0);"><i class="fas fa-brain"></i></div>
-                <div class="stat-number">{{ score_mental }}</div>
-                <p>Saúde Mental (0-10)</p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #dc3545, #bb2d3b);"><i class="fas fa-notes-medical"></i></div>
-                <div class="stat-number">{{ lesoes|length }}</div>
-                <p>Lesões Ativas</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-4">
         <div class="col-lg-8">
             <div class="card-modern p-4 card-tilt">
-                <h5 class="fw-bold mb-3"><i class="fas fa-chart-area me-2 text-success"></i>Minha Evolução Semanal</h5>
-                <div style="height: 250px;">
-                    <canvas id="atletaEvolutionChart"></canvas>
+                <h5 class="fw-bold mb-3"><i class="fas fa-chart-area me-2 text-primary"></i>Evolução dos Indicadores</h5>
+                <div style="height: 320px;">
+                    <canvas id="evolucaoAtletaChart"></canvas>
                 </div>
             </div>
         </div>
         <div class="col-lg-4">
             <div class="card-modern p-4 card-tilt">
-                <h5 class="fw-bold mb-3"><i class="fas fa-list-check me-2 text-warning"></i>Próximos Exercícios</h5>
-                <ul class="list-group list-group-flush">
-                    {% for ex in exercicios %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
-                        <div>
-                            <strong class="d-block">{{ ex.nome }}</strong>
-                            <small class="text-muted">{{ ex.series }}x{{ ex.repeticoes }} repetições</small>
-                        </div>
-                        <i class="fas fa-circle-check text-success"></i>
-                    </li>
-                    {% empty %}
-                    <li class="list-group-item bg-transparent text-muted">Nenhum exercício pendente.</li>
-                    {% endfor %}
-                </ul>
+                <h5 class="fw-bold mb-3"><i class="fas fa-heartbeat me-2 text-success"></i>Nível de Recuperação</h5>
+                <div style="height: 320px;">
+                    <canvas id="recuperacaoAtletaChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Exercícios Pendentes -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-7">
+            <div class="card-modern p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0"><i class="fas fa-dumbbell me-2 text-info"></i>Meus Exercícios Pendentes</h5>
+                    <a href="{% url 'dashboard:atleta_exercicios' %}" class="btn btn-sm btn-outline-custom">Ver Todos</a>
+                </div>
+                {% for ex in exercicios %}
+                <div class="d-flex align-items-center p-3 mb-2 bg-light rounded-4">
+                    <div class="bg-info bg-opacity-10 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-running text-info"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="fw-bold mb-0">{{ ex.nome }}</h6>
+                        <small class="text-muted">{{ ex.series }}x{{ ex.repeticoes }} | {{ ex.frequencia }}</small>
+                    </div>
+                    <span class="badge bg-warning bg-opacity-10 text-warning">Pendente</span>
+                </div>
+                {% empty %}
+                <div class="text-center py-4">
+                    <i class="fas fa-check-circle fs-1 text-success d-block mb-2 opacity-50"></i>
+                    <p class="text-muted mb-0">Você concluiu todos os exercícios! 🎉</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Card de Adesão -->
+        <div class="col-lg-5">
+            <div class="card-modern p-4 h-100 d-flex flex-column justify-content-center text-center">
+                <div class="bg-success bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-medal fa-3x text-success"></i>
+                </div>
+                <h2 class="fw-bold mb-1">{{ adesao }}%</h2>
+                <p class="text-muted">Taxa de Adesão aos Exercícios</p>
+                <div class="progress mt-3" style="height: 10px; border-radius: 10px;">
+                    <div class="progress-bar bg-success" style="width: {{ adesao }}%; border-radius: 10px;"></div>
+                </div>
+                <small class="text-muted mt-2">{{ exercicios_concluidos }} de {{ total_exercicios }} concluídos</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timeline Pessoal -->
+    <div class="card-modern p-4 mb-4">
+        <h5 class="fw-bold mb-4"><i class="fas fa-history me-2 text-primary"></i>Minha Timeline</h5>
+        {% for evento in timeline %}
+        <div class="d-flex mb-3">
+            <div class="bg-{{ evento.cor }} bg-opacity-10 text-{{ evento.cor }} rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i class="fas {{ evento.icone }}"></i>
+            </div>
+            <div class="flex-grow-1 border-bottom pb-3">
+                <div class="d-flex justify-content-between">
+                    <h6 class="fw-bold mb-1">{{ evento.titulo }}</h6>
+                    <small class="text-muted">{{ evento.data|date:"d/m/Y" }}</small>
+                </div>
+                <p class="text-muted small mb-0">{{ evento.descricao }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-4">
+            <i class="fas fa-history fs-1 d-block mb-2 opacity-25 text-muted"></i>
+            <p class="text-muted mb-0">Nenhuma atividade registrada ainda.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Últimas Avaliações Psicológicas -->
+    {% if avaliacoes %}
+    <div class="card-modern p-4">
+        <h5 class="fw-bold mb-3"><i class="fas fa-brain me-2 text-info"></i>Últimas Avaliações Psicológicas</h5>
+        <div class="row g-3">
+            {% for av in avaliacoes %}
+            <div class="col-md-4">
+                <div class="card p-3 border-0 shadow-sm rounded-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <small class="text-muted">{{ av.data|date:"d/m/Y" }}</small>
+                        <span class="badge
+                            {% if av.score_total >= 7 %}bg-success bg-opacity-10 text-success
+                            {% elif av.score_total >= 4 %}bg-warning bg-opacity-10 text-warning
+                            {% else %}bg-danger bg-opacity-10 text-danger{% endif %}">
+                            {{ av.status_emocional }}
+                        </span>
+                    </div>
+                    <h4 class="fw-bold mb-0">{{ av.score_total }}/10</h4>
+                    <small class="text-muted">Score Total</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
 </div>
+
+<!-- Dados para JavaScript -->
+{{ chart_labels|json_script:"atleta_labels" }}
+{{ chart_dor|json_script:"atleta_dor" }}
+{{ chart_mobilidade|json_script:"atleta_mob" }}
+{{ chart_forca|json_script:"atleta_for" }}
+{{ chart_desempenho|json_script:"atleta_des" }}
+{{ chart_resistencia|json_script:"atleta_res" }}
+{{ chart_flexibilidade|json_script:"atleta_flex" }}
+{{ chart_percentual|json_script:"atleta_perc" }}
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const ctx = document.getElementById('atletaEvolutionChart');
-        if (ctx) {
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Início', 'Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Agora'],
-                    datasets: [{
-                        label: 'Progresso',
-                        data: [0, 20, 45, 60, 80, {{ progresso_recuperacao }}],
+        function getJSON(id) {
+            const el = document.getElementById(id);
+            return el ? JSON.parse(el.textContent) : [];
+        }
+
+        // Gráfico 1: Evolução dos Indicadores
+        const ctx1 = document.getElementById('evolucaoAtletaChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: getJSON('atleta_labels'),
+                datasets: [
+                    {
+                        label: 'Dor',
+                        data: getJSON('atleta_dor'),
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Mobilidade',
+                        data: getJSON('atleta_mob'),
+                        borderColor: '#0dcaf0',
+                        backgroundColor: 'rgba(13, 202, 240, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Força',
+                        data: getJSON('atleta_for'),
+                        borderColor: '#ffc107',
+                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Desempenho',
+                        data: getJSON('atleta_des'),
                         borderColor: '#2BA181',
                         backgroundColor: 'rgba(43, 161, 129, 0.1)',
                         fill: true,
                         tension: 0.4
-                    }]
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', labels: { usePointStyle: true, padding: 15 } }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { max: 100, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false } } }
+                scales: {
+                    y: { beginAtZero: true, max: 10, grid: { color: 'rgba(0,0,0,0.05)' } },
+                    x: { grid: { display: false } }
                 }
-            });
-        }
+            }
+        });
+
+        // Gráfico 2: Nível de Recuperação
+        const ctx2 = document.getElementById('recuperacaoAtletaChart').getContext('2d');
+        const perc = getJSON('atleta_perc');
+        const ultimoPerc = perc.length > 0 ? perc[perc.length - 1] : 0;
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Recuperado', 'Restante'],
+                datasets: [{
+                    data: [ultimoPerc, 100 - ultimoPerc],
+                    backgroundColor: ['#2BA181', '#e9ecef'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: { legend: { display: false } }
+            },
+            plugins: [{
+                id: 'textCenter',
+                beforeDraw: function(chart) {
+                    const { width, height, ctx } = chart;
+                    ctx.save();
+                    ctx.font = 'bold 32px Poppins, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#2BA181';
+                    ctx.fillText(ultimoPerc + '%', width / 2, height / 2 - 8);
+                    ctx.font = '13px Poppins, sans-serif';
+                    ctx.fillStyle = '#666';
+                    ctx.fillText('Recuperado', width / 2, height / 2 + 20);
+                    ctx.restore();
+                }
+            }]
+        });
     });
 </script>
 {% endblock %}

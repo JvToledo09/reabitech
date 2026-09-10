@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Atendimentos{% endblock %}
+{% block page_title %}Atendimentos Psicológicos{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h4 class="fw-bold mb-1"><i class="fas fa-users me-2 text-primary"></i>Atletas em Acompanhamento</h4>
+            <p class="text-muted mb-0">Todos os atletas do projeto <strong>{{ projeto.nome }}</strong>.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'dashboard:psicologo_avaliacoes' %}" class="btn btn-outline-custom">
+                <i class="fas fa-clipboard-list me-2"></i> Ver Avaliações
+            </a>
+            <a href="{% url 'dashboard:dashboard_psicologo' %}" class="btn btn-outline-custom">
+                <i class="fas fa-arrow-left me-2"></i> Voltar
+            </a>
+        </div>
+    </div>
+
+    <!-- Cards de Resumo -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card-modern p-3 d-flex align-items-center">
+                <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                    <i class="fas fa-users fa-lg text-primary"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">{{ atletas|length }}</h4>
+                    <p class="text-muted small mb-0">Total de Atletas</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern p-3 d-flex align-items-center">
+                <div class="bg-success bg-opacity-10 rounded-circle p-3 me-3">
+                    <i class="fas fa-check-circle fa-lg text-success"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">{{ projeto.nome }}</h4>
+                    <p class="text-muted small mb-0">Projeto Ativo</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern p-3 d-flex align-items-center">
+                <div class="bg-info bg-opacity-10 rounded-circle p-3 me-3">
+                    <i class="fas fa-brain fa-lg text-info"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">{{ user.get_full_name|default:user.username }}</h4>
+                    <p class="text-muted small mb-0">Psicólogo Responsável</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid de Atletas -->
+    <div class="row g-4">
+        {% for atleta in atletas %}
+        <div class="col-xl-4 col-md-6">
+            <div class="card-modern p-4 h-100 card-tilt">
+
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-user fa-xl text-primary"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="fw-bold mb-0">{{ atleta.usuario.get_full_name|default:atleta.usuario.username }}</h5>
+                        <small class="text-muted">RM: {{ atleta.rm }}</small>
+                    </div>
+                </div>
+
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <small class="text-muted d-block">Modalidade</small>
+                        <strong class="small">{{ atleta.modalidade.nome|default:"-" }}</strong>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted d-block">Avaliações</small>
+                        <strong class="small">{{ atleta.avaliacoes_psicologicas.count }}</strong>
+                    </div>
+                </div>
+
+                {% with ultima=atleta.avaliacoes_psicologicas.last %}
+                {% if ultima %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span class="text-muted">Último Score</span>
+                        <strong>{{ ultima.score_total }}/10</strong>
+                    </div>
+                    <div class="progress" style="height: 8px; border-radius: 10px;">
+                        <div class="progress-bar
+                            {% if ultima.score_total >= 7 %}bg-success
+                            {% elif ultima.score_total >= 4 %}bg-warning
+                            {% else %}bg-danger{% endif %}"
+                            style="width: {% widthratio ultima.score_total 10 100 %}%;"></div>
+                    </div>
+                    <small class="text-muted">Avaliação: {{ ultima.data|date:"d/m/Y" }}</small>
+                </div>
+                {% else %}
+                <div class="alert alert-warning py-2 small mb-3">
+                    <i class="fas fa-info-circle me-1"></i> Sem avaliação registrada
+                </div>
+                {% endif %}
+                {% endwith %}
+
+                <div class="d-flex gap-2">
+                    <a href="{% url 'dashboard:psicologo_nova_avaliacao' atleta.id %}" class="btn btn-sm btn-primary-custom flex-grow-1">
+                        <i class="fas fa-plus me-1"></i> Nova Avaliação
+                    </a>
+                    <a href="{% url 'dashboard:psicologo_novo_questionario' atleta.id %}" class="btn btn-sm btn-outline-custom" title="Questionário">
+                        <i class="fas fa-clipboard-list"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="card-modern p-5 text-center">
+                <i class="fas fa-users fs-1 d-block mb-3 opacity-25 text-primary"></i>
+                <h5 class="text-muted">Nenhum atleta cadastrado no projeto</h5>
+                <p class="text-muted">Os atletas aparecerão aqui quando forem vinculados ao projeto.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

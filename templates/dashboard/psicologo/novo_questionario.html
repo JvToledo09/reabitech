@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Novo Questionário{% endblock %}
+{% block page_title %}Novo Questionário Periódico{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card-modern p-4">
+            <div class="d-flex align-items-center mb-4">
+                <div class="bg-info bg-opacity-10 rounded-circle p-3 me-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-clipboard-list fa-xl text-info"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">Questionário Periódico</h4>
+                    <p class="text-muted mb-0">Atleta: <strong>{{ atleta.usuario.get_full_name|default:atleta.usuario.username }}</strong></p>
+                </div>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <h6 class="fw-bold text-muted text-uppercase small mb-3"><i class="fas fa-question-circle me-2"></i>Perguntas (1 = Nunca, 5 = Sempre)</h6>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">1. Você tem se sentido motivado para treinar?</label>
+                    <select name="pergunta_1" class="form-select bg-light border-0 shadow-sm" required>
+                        <option value="1">1 - Nunca</option>
+                        <option value="2">2 - Raramente</option>
+                        <option value="3" selected>3 - Às vezes</option>
+                        <option value="4">4 - Frequentemente</option>
+                        <option value="5">5 - Sempre</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">2. Você sente ansiedade antes das competições?</label>
+                    <select name="pergunta_2" class="form-select bg-light border-0 shadow-sm" required>
+                        <option value="1">1 - Nunca</option>
+                        <option value="2">2 - Raramente</option>
+                        <option value="3" selected>3 - Às vezes</option>
+                        <option value="4">4 - Frequentemente</option>
+                        <option value="5">5 - Sempre</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">3. Você tem dormido bem?</label>
+                    <select name="pergunta_3" class="form-select bg-light border-0 shadow-sm" required>
+                        <option value="1">1 - Nunca</option>
+                        <option value="2">2 - Raramente</option>
+                        <option value="3" selected>3 - Às vezes</option>
+                        <option value="4">4 - Frequentemente</option>
+                        <option value="5">5 - Sempre</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">4. Você sente confiança na sua capacidade?</label>
+                    <select name="pergunta_4" class="form-select bg-light border-0 shadow-sm" required>
+                        <option value="1">1 - Nunca</option>
+                        <option value="2">2 - Raramente</option>
+                        <option value="3" selected>3 - Às vezes</option>
+                        <option value="4">4 - Frequentemente</option>
+                        <option value="5">5 - Sempre</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">5. Você tem se sentido feliz no dia a dia?</label>
+                    <select name="pergunta_5" class="form-select bg-light border-0 shadow-sm" required>
+                        <option value="1">1 - Nunca</option>
+                        <option value="2">2 - Raramente</option>
+                        <option value="3" selected>3 - Às vezes</option>
+                        <option value="4">4 - Frequentemente</option>
+                        <option value="5">5 - Sempre</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Comentários Adicionais</label>
+                    <textarea name="comentarios" class="form-control bg-light border-0 shadow-sm" rows="3"></textarea>
+                </div>
+
+                <div class="d-flex gap-2 mt-4 pt-4 border-top">
+                    <button type="submit" class="btn btn-primary-custom">
+                        <i class="fas fa-save me-2"></i>Registrar Questionário
+                    </button>
+                    <a href="{% url 'dashboard:psicologo_atletas' %}" class="btn btn-outline-secondary border-0 bg-light">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

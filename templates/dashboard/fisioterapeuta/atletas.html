@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pacientes{% endblock %}
+{% block page_title %}Meus Pacientes{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h4 class="fw-bold mb-1"><i class="fas fa-user-injured me-2 text-danger"></i>Atletas em Atendimento</h4>
+            <p class="text-muted mb-0">Atletas do projeto <strong>{{ projeto.nome }}</strong> que possuem tratamento ativo.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'dashboard:fisioterapeuta_todos_atletas' %}" class="btn btn-primary-custom">
+                <i class="fas fa-plus me-2"></i> Nova Lesão
+            </a>
+            <a href="{% url 'dashboard:dashboard_fisioterapeuta' %}" class="btn btn-outline-custom">
+                <i class="fas fa-arrow-left me-2"></i> Voltar
+            </a>
+        </div>
+    </div>
+
+    <!-- Cards de Resumo -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card-modern p-3 d-flex align-items-center">
+                <div class="bg-danger bg-opacity-10 rounded-circle p-3 me-3">
+                    <i class="fas fa-user-injured fa-lg text-danger"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">{{ atletas|length }}</h4>
+                    <p class="text-muted small mb-0">Total de Pacientes</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern p-3 d-flex align-items-center">
+                <div class="bg-warning bg-opacity-10 rounded-circle p-3 me-3">
+                    <i class="fas fa-notes-medical fa-lg text-warning"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">{{ projeto.membros.count }}</h4>
+                    <p class="text-muted small mb-0">Membros no Projeto</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern p-3 d-flex align-items-center">
+                <div class="bg-success bg-opacity-10 rounded-circle p-3 me-3">
+                    <i class="fas fa-check-circle fa-lg text-success"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">{{ projeto.nome }}</h4>
+                    <p class="text-muted small mb-0">Projeto Ativo</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid de Pacientes -->
+    <div class="row g-4">
+        {% for atleta in atletas %}
+        <div class="col-xl-4 col-md-6">
+            <div class="card-modern p-4 h-100 card-tilt" style="background: #fff;">
+
+                <!-- Avatar e Info -->
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-danger bg-opacity-10 rounded-circle p-3 me-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-user-injured fa-xl text-danger"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="fw-bold mb-0">{{ atleta.usuario.get_full_name|default:atleta.usuario.username }}</h5>
+                        <small class="text-muted">RM: {{ atleta.rm }}</small>
+                    </div>
+                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill">Em tratamento</span>
+                </div>
+
+                <!-- Info Adicional -->
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <small class="text-muted d-block">Modalidade</small>
+                        <strong class="small">{{ atleta.modalidade.nome|default:"-" }}</strong>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted d-block">Lesões Ativas</small>
+                        <strong class="small text-danger">{{ atleta.lesoes.count }}</strong>
+                    </div>
+                </div>
+
+                <!-- Barra de Progresso -->
+                {% with ultima=atleta.evolucoes.first %}
+                {% if ultima %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span class="text-muted">Recuperação</span>
+                        <strong class="text-success">{{ ultima.percentual_recuperacao }}%</strong>
+                    </div>
+                    <div class="progress" style="height: 8px; border-radius: 10px;">
+                        <div class="progress-bar bg-success" style="width: {{ ultima.percentual_recuperacao }}%"></div>
+                    </div>
+                    <small class="text-muted">Última avaliação: {{ ultima.data_registro|date:"d/m/Y" }}</small>
+                </div>
+                {% else %}
+                <div class="alert alert-warning py-2 small mb-3">
+                    <i class="fas fa-info-circle me-1"></i> Sem evolução registrada
+                </div>
+                {% endif %}
+                {% endwith %}
+
+                <!-- Ações -->
+                <div class="d-flex gap-2">
+                    <a href="{% url 'dashboard:fisioterapeuta_registrar_evolucao' atleta.id %}" class="btn btn-sm btn-primary-custom flex-grow-1">
+                        <i class="fas fa-chart-line me-1"></i> Evolução
+                    </a>
+                    <a href="{% url 'dashboard:fisioterapeuta_criar_lesao' atleta.id %}" class="btn btn-sm btn-outline-danger">
+                        <i class="fas fa-plus"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="card-modern p-5 text-center">
+                <i class="fas fa-clipboard-check fs-1 d-block mb-3 opacity-25 text-success"></i>
+                <h4 class="fw-bold text-muted">Nenhum atleta em tratamento ativo</h4>
+                <p class="text-muted">Quando houver atletas com lesões ativas, eles aparecerão aqui.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
