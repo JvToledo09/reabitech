@@ -46,7 +46,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'backend.urls'
-
 # Configuração de Templates
 TEMPLATES = [
     {
@@ -59,6 +58,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'dashboard.context_processors.notificacoes_context',  
             ],
         },
     },

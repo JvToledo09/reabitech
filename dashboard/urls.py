@@ -39,6 +39,7 @@ urlpatterns = [
     path('tecnico/atletas/', views.tecnico_atletas, name='tecnico_atletas'),
     path('tecnico/desempenho/', views.tecnico_desempenho, name='tecnico_desempenho'),
     path('tecnico/recuperacao/', views.tecnico_recuperacao, name='tecnico_recuperacao'),
+    path('tecnico/atleta/<int:atleta_id>/', views.tecnico_detalhes_atleta, name='tecnico_detalhes_atleta'),
 
     # ============================================
     # Views do Atleta
@@ -68,4 +69,11 @@ urlpatterns = [
     path('psicologo/nova-avaliacao/<int:atleta_id>/', views.psicologo_nova_avaliacao, name='psicologo_nova_avaliacao'),
     path('psicologo/avaliacoes/<int:avaliacao_id>/', views.psicologo_detalhes_avaliacao, name='psicologo_detalhes_avaliacao'),
     path('psicologo/questionario/<int:atleta_id>/', views.psicologo_novo_questionario, name='psicologo_novo_questionario'),
+
+    # ============================================
+    # Views de Notificações 
+    # ============================================
+    path('notificacoes/', views.notificacoes, name='notificacoes'),
+    path('notificacoes/<int:notificacao_id>/lida/', views.marcar_notificacao_lida, name='marcar_notificacao_lida'),
+    path('notificacoes/marcar-todas/', views.marcar_todas_lidas, name='marcar_todas_lidas'),
 ]

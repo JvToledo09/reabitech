@@ -320,26 +320,136 @@ def dashboard_tecnico(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto, ativo=True).values_list('usuario', flat=True)
+    # ==============================================
+    # Busca dos Atletas do Técnico
+    # ==============================================
+    membros_usuario_ids = MembroProjeto.objects.filter(
+        projeto=projeto, ativo=True, tipo='atleta'
+    ).values_list('usuario', flat=True)
+
     meus_atletas = Atleta.objects.filter(
         tecnico_responsavel=request.user,
         usuario__in=membros_usuario_ids
     ).distinct()
 
-    total = meus_atletas.count()
-    lesionados = meus_atletas.filter(lesoes__tratamentos__ativo=True).distinct().count()
+    # Se não tiver nenhum atleta vinculado diretamente, mostra todos do projeto
+    if not meus_atletas.exists():
+        meus_atletas = Atleta.objects.filter(usuario__in=membros_usuario_ids).distinct()
 
+    total_atletas = meus_atletas.count()
+
+    # ==============================================
+    # Estatísticas Gerais
+    # ==============================================
+    lesionados = meus_atletas.filter(
+        lesoes__tratamentos__ativo=True
+    ).distinct().count()
+
+    liberados = total_atletas - lesionados
+
+    # Desempenho médio
     desempenho_medio = EvolucaoFisica.objects.filter(
         atleta__in=meus_atletas,
         projeto=projeto
     ).aggregate(Avg('desempenho'))['desempenho__avg'] or 0
 
+    # Recuperação média
+    evolucoes = EvolucaoFisica.objects.filter(atleta__in=meus_atletas, projeto=projeto)
+    if evolucoes.exists():
+        recuperacao_media = sum(e.percentual_recuperacao for e in evolucoes) / evolucoes.count()
+    else:
+        recuperacao_media = 0
+
+    # ==============================================
+    # Atletas com Detalhes para os Cards
+    # ==============================================
+    atletas_detalhados = []
+    for atleta in meus_atletas:
+        ultima_evolucao = EvolucaoFisica.objects.filter(
+            atleta=atleta, projeto=projeto
+        ).order_by('-data_registro').first()
+
+        lesoes_ativas = atleta.lesoes.filter(tratamentos__ativo=True).distinct()
+
+        atletas_detalhados.append({
+            'atleta': atleta,
+            'ultima_evolucao': ultima_evolucao,
+            'progresso': ultima_evolucao.percentual_recuperacao if ultima_evolucao else 0,
+            'desempenho': ultima_evolucao.desempenho if ultima_evolucao else 0,
+            'dor': ultima_evolucao.dor if ultima_evolucao else 0,
+            'lesoes_ativas': lesoes_ativas,
+            'total_lesoes': lesoes_ativas.count(),
+            'status': 'lesionado' if lesoes_ativas.exists() else 'liberado',
+        })
+
+    # Ordena por desempenho (melhores primeiro)
+    atletas_detalhados.sort(key=lambda x: x['desempenho'], reverse=True)
+
+    # ==============================================
+    # Top 3 Melhores e Atenção
+    # ==============================================
+    top_atletas = atletas_detalhados[:3]
+    atletas_atencao = [a for a in atletas_detalhados if a['status'] == 'lesionado'][:3]
+
+    # ==============================================
+    # Dados para Gráficos
+    # ==============================================
+    # Gráfico 1: Desempenho dos atletas (barras)
+    chart_atletas_labels = [a['atleta'].usuario.get_full_name() or a['atleta'].usuario.username for a in atletas_detalhados[:8]]
+    chart_atletas_data = [a['desempenho'] for a in atletas_detalhados[:8]]
+
+    # Gráfico 2: Distribuição por status (doughnut)
+    chart_status_data = [lesionados, liberados]
+
+    # Gráfico 3: Evolução média do grupo (últimas 6 semanas)
+    evolucoes_recentes = EvolucaoFisica.objects.filter(
+        atleta__in=meus_atletas,
+        projeto=projeto
+    ).order_by('-data_registro')[:12]
+
+    # Agrupa por data
+    from collections import defaultdict
+    agrupado = defaultdict(list)
+    for e in evolucoes_recentes:
+        agrupado[e.data_registro.strftime('%d/%m')].append(e.desempenho)
+
+    chart_evo_labels = list(agrupado.keys())[::-1]
+    chart_evo_data = [round(sum(v)/len(v), 1) for v in list(agrupado.values())[::-1]]
+
+    # ==============================================
+    # Timeline de Atividades
+    # ==============================================
+    timeline = []
+    for a in atletas_detalhados[:5]:
+        if a['ultima_evolucao']:
+            timeline.append({
+                'atleta': a['atleta'],
+                'data': a['ultima_evolucao'].data_registro,
+                'tipo': 'evolucao',
+                'descricao': f"Desempenho: {a['ultima_evolucao'].desempenho}/10 | Recuperação: {a['progresso']}%",
+                'icone': 'fa-chart-line',
+                'cor': 'success' if a['progresso'] >= 70 else ('warning' if a['progresso'] >= 40 else 'danger'),
+            })
+    timeline.sort(key=lambda x: x['data'], reverse=True)
+
     context = {
         'projeto': projeto,
         'meus_atletas': meus_atletas,
-        'total_meus_atletas': total,
+        'total_meus_atletas': total_atletas,
         'meus_atletas_lesionados': lesionados,
+        'atletas_liberados': liberados,
         'desempenho_medio': round(desempenho_medio, 1),
+        'recuperacao_media': round(recuperacao_media, 1),
+        'atletas_detalhados': atletas_detalhados,
+        'top_atletas': top_atletas,
+        'atletas_atencao': atletas_atencao,
+        'timeline': timeline,
+        # Gráficos
+        'chart_atletas_labels': chart_atletas_labels,
+        'chart_atletas_data': chart_atletas_data,
+        'chart_status_data': chart_status_data,
+        'chart_evo_labels': chart_evo_labels,
+        'chart_evo_data': chart_evo_data,
     }
     return render(request, 'dashboard/tecnico/dashboard.html', context)
 
@@ -1436,3 +1546,19 @@ def alterar_senha(request):
             messages.error(request, 'As senhas não coincidem ou são muito curtas.')
     
     return render(request, 'dashboard/alterar_senha.html')
+
+    @login_required
+def marcar_notificacao_lida(request, notificacao_id):
+    notificacao = get_object_or_404(Notificacao, id=notificacao_id, usuario=request.user)
+    notificacao.lida = True
+    notificacao.save()
+    if notificacao.link:
+        return redirect(notificacao.link)
+    return redirect('dashboard:notificacoes')
+
+
+@login_required
+def marcar_todas_lidas(request):
+    request.user.notificacoes.filter(lida=False).update(lida=True)
+    messages.success(request, 'Todas as notificações foram marcadas como lidas.')
+    return redirect('dashboard:notificacoes')

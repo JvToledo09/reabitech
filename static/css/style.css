@@ -176,3 +176,120 @@ a:hover {
         box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 }
+/* ==================================================================
+   RESPONSIVIDADE MOBILE - TRANSFORMAÇÃO DE TABELAS EM CARDS
+   ================================================================== */
+   @media (max-width: 768px) {
+
+    /* Transformar tabelas em cards */
+    .table-responsive table thead {
+        display: none;
+    }
+
+    .table-responsive table tbody tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 15px;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .table-responsive table tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0 !important;
+        border: none !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+    }
+
+    .table-responsive table tbody td:last-child {
+        border-bottom: none !important;
+    }
+
+    .table-responsive table tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #666;
+        font-size: 12px;
+        text-transform: uppercase;
+        margin-right: 10px;
+    }
+
+    /* Grid de estatísticas em 2 colunas no mobile */
+    .stat-card {
+        padding: 15px 10px;
+    }
+
+    .stat-number {
+        font-size: 28px !important;
+    }
+
+    /* Ajustar dashboard */
+    .card-modern {
+        border-radius: 15px !important;
+        padding: 15px !important;
+    }
+
+    /* Top navbar */
+    .top-navbar {
+        padding: 10px 15px !important;
+    }
+
+    .page-title h2 {
+        font-size: 1.2rem !important;
+    }
+
+    /* Esconder alguns elementos no mobile */
+    .hide-mobile {
+        display: none !important;
+    }
+
+    /* Botões full width no mobile */
+    .btn-mobile-full {
+        width: 100% !important;
+        margin-bottom: 8px;
+    }
+
+    /* Header de ações */
+    .d-flex.justify-content-between {
+        flex-wrap: wrap !important;
+    }
+}
+
+/* Esconde a sidebar em mobile */
+@media (max-width: 992px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .main-content:not(.no-sidebar) {
+        margin-left: 0 !important;
+    }
+}
+
+/* Ajustes em telas muito pequenas */
+@media (max-width: 480px) {
+    .display-4 {
+        font-size: 2rem !important;
+    }
+
+    .display-1 {
+        font-size: 3rem !important;
+    }
+
+    .card-modern h2 {
+        font-size: 1.5rem !important;
+    }
+
+    .btn-primary-custom {
+        padding: 10px 20px !important;
+        font-size: 14px;
+    }
+}

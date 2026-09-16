@@ -1,77 +1,298 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %}Dashboard do Técnico{% endblock %}
-{% block page_title %}Visão Geral dos Atletas{% endblock %}
+{% block page_title %}Painel do Técnico{% endblock %}
 
 {% block content %}
 <div class="container-fluid p-0">
-    <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon"><i class="fas fa-users"></i></div>
-                <div class="stat-number">{{ total_meus_atletas }}</div>
-                <p>Atletas Sob Minha Responsabilidade</p>
-            </div>
+
+    <!-- Hero / Saudação -->
+    <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: linear-gradient(135deg, #0d6efd 0%, #084298 100%); color: white; border: none; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -50px; right: -50px; font-size: 15rem; opacity: 0.08;">
+            <i class="fas fa-futbol"></i>
         </div>
-        <div class="col-md-3">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #dc3545, #bb2d3b);"><i class="fas fa-user-injured"></i></div>
-                <div class="stat-number">{{ meus_atletas_lesionados }}</div>
-                <p>Atletas em Recuperação</p>
+        <div class="row align-items-center position-relative">
+            <div class="col-md-8">
+                <h3 class="fw-bold mb-2">Olá, {{ user.get_full_name }}! ⚽</h3>
+                <p class="mb-2 opacity-75">Acompanhe o desempenho e recuperação dos seus atletas.</p>
+                <div class="d-flex gap-3 mt-3 flex-wrap">
+                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
+                        <i class="fas fa-users me-1"></i> {{ total_meus_atletas }} atletas
+                    </span>
+                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
+                        <i class="fas fa-heartbeat me-1"></i> {{ recuperacao_media }}% recuperação média
+                    </span>
+                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
+                        <i class="fas fa-chart-line me-1"></i> {{ desempenho_medio }} desempenho
+                    </span>
+                </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #ffc107, #ffca2c);"><i class="fas fa-chart-line"></i></div>
-                <div class="stat-number">{{ desempenho_medio }}</div>
-                <p>Desempenho Médio (0-10)</p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card card-tilt">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #0dcaf0, #0aa2c0);"><i class="fas fa-brain"></i></div>
-                <div class="stat-number">-</div>
-                <p>Saúde Mental Média</p>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'dashboard:tecnico_atletas' %}" class="btn btn-light btn-lg shadow-sm">
+                    <i class="fas fa-list me-2"></i> Ver Atletas
+                </a>
             </div>
         </div>
     </div>
 
-    <div class="card-modern p-4 card-tilt">
-        <h5 class="fw-bold mb-4"><i class="fas fa-list-ol me-2 text-success"></i>Meus Atletas</h5>
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="bg-light text-muted small fw-bold">
-                    <tr>
-                        <th class="ps-4">Atleta</th>
-                        <th>Modalidade</th>
-                        <th>Lesões Ativas</th>
-                        <th>Status</th>
-                        <th class="text-end pe-4">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for atleta in meus_atletas %}
-                    <tr>
-                        <td class="ps-4">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-success bg-opacity-10 rounded-circle p-2 me-3" style="width: 40px; height: 40px;">
-                                    <i class="fas fa-user text-success"></i>
-                                </div>
-                                <strong>{{ atleta.usuario.get_full_name|default:atleta.usuario.username }}</strong>
-                            </div>
-                        </td>
-                        <td>{{ atleta.modalidade.nome|default:"-" }}</td>
-                        <td>{{ atleta.lesoes.count }}</td>
-                        <td><span class="badge bg-success bg-opacity-10 text-success">Ativo</span></td>
-                        <td class="text-end pe-4">
-                            <button class="btn btn-sm btn-outline-secondary rounded-circle"><i class="fas fa-eye"></i></button>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr><td colspan="5" class="text-center text-muted py-4">Nenhum atleta atribuído a você.</td></tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <!-- Indicadores Principais -->
+    <div class="row g-3 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #0d6efd, #084298);">
+                        <i class="fas fa-users" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-primary bg-opacity-10 text-primary">Total</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ total_meus_atletas }}</h2>
+                <p class="text-muted small mb-0">Meus Atletas</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #dc3545, #bb2d3b);">
+                        <i class="fas fa-user-injured" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-danger bg-opacity-10 text-danger">Lesionados</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ meus_atletas_lesionados }}</h2>
+                <p class="text-muted small mb-0">Atletas em Recuperação</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #28a745, #1e7e34);">
+                        <i class="fas fa-check-circle" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-success bg-opacity-10 text-success">Liberados</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ atletas_liberados }}</h2>
+                <p class="text-muted small mb-0">Atletas Liberados</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card card-tilt p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #ffc107, #ffca2c);">
+                        <i class="fas fa-chart-line" style="font-size: 22px;"></i>
+                    </div>
+                    <span class="badge bg-warning bg-opacity-10 text-warning">Média</span>
+                </div>
+                <h2 class="fw-bold mt-3 mb-1">{{ desempenho_medio }}</h2>
+                <p class="text-muted small mb-0">Desempenho Médio</p>
+            </div>
         </div>
     </div>
+
+    <!-- Gráficos -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-7">
+            <div class="card-modern p-4 card-tilt">
+                <h5 class="fw-bold mb-3"><i class="fas fa-chart-bar me-2 text-primary"></i>Desempenho por Atleta</h5>
+                <div style="height: 300px;">
+                    <canvas id="desempenhoAtletasChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card-modern p-4 card-tilt">
+                <h5 class="fw-bold mb-3"><i class="fas fa-chart-pie me-2 text-info"></i>Status dos Atletas</h5>
+                <div style="height: 300px;">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Atletas e Atenção -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="card-modern p-4 h-100">
+                <h5 class="fw-bold mb-3"><i class="fas fa-trophy me-2 text-warning"></i>Top 3 Melhores Desempenhos</h5>
+                {% for item in top_atletas %}
+                <div class="d-flex align-items-center p-3 mb-2 rounded-4" style="background: linear-gradient(135deg, #fffef0, #fff9db);">
+                    <div class="bg-warning bg-opacity-20 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <strong class="text-warning">{{ forloop.counter }}º</strong>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="fw-bold mb-0">{{ item.atleta.usuario.get_full_name|default:item.atleta.usuario.username }}</h6>
+                        <small class="text-muted">{{ item.atleta.modalidade.nome|default:"-" }}</small>
+                    </div>
+                    <div class="text-end">
+                        <h5 class="fw-bold mb-0 text-success">{{ item.desempenho }}/10</h5>
+                        <small class="text-muted">Desempenho</small>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted text-center py-4">Nenhum atleta com dados suficientes.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card-modern p-4 h-100">
+                <h5 class="fw-bold mb-3"><i class="fas fa-exclamation-triangle me-2 text-danger"></i>Atletas em Recuperação</h5>
+                {% for item in atletas_atencao %}
+                <div class="d-flex align-items-center p-3 mb-2 rounded-4" style="background: linear-gradient(135deg, #fff5f5, #ffe0e0);">
+                    <div class="bg-danger bg-opacity-20 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-user-injured text-danger"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="fw-bold mb-0">{{ item.atleta.usuario.get_full_name|default:item.atleta.usuario.username }}</h6>
+                        <small class="text-muted">{{ item.total_lesoes }} lesão(ões) ativa(s)</small>
+                    </div>
+                    <div class="text-end">
+                        <h5 class="fw-bold mb-0 text-danger">{{ item.progresso }}%</h5>
+                        <small class="text-muted">Recuperação</small>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted text-center py-4">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    Todos os atletas estão liberados! 🎉
+                </p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista Detalhada dos Atletas -->
+    <div class="card-modern p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="fw-bold mb-0"><i class="fas fa-list me-2 text-primary"></i>Todos os Meus Atletas</h5>
+            <a href="{% url 'dashboard:tecnico_atletas' %}" class="btn btn-sm btn-outline-custom">
+                Ver Completo <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+        </div>
+        <div class="row g-3">
+            {% for item in atletas_detalhados %}
+            <div class="col-xl-4 col-md-6">
+                <div class="card p-3 border-0 shadow-sm rounded-4 h-100">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="{% if item.status == 'lesionado' %}bg-danger{% else %}bg-success{% endif %} bg-opacity-10 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user {% if item.status == 'lesionado' %}text-danger{% else %}text-success{% endif %}"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold mb-0">{{ item.atleta.usuario.get_full_name|default:item.atleta.usuario.username }}</h6>
+                            <small class="text-muted">{{ item.atleta.modalidade.nome|default:"-" }}</small>
+                        </div>
+                        {% if item.status == 'lesionado' %}
+                        <span class="badge bg-danger bg-opacity-10 text-danger">Lesionado</span>
+                        {% else %}
+                        <span class="badge bg-success bg-opacity-10 text-success">Liberado</span>
+                        {% endif %}
+                    </div>
+
+                    <a href="{% url 'dashboard:tecnico_detalhes_atleta' item.atleta.id %}" class="btn btn-sm btn-primary-custom w-100 mb-3">
+                        <i class="fas fa-eye me-1"></i> Ver Detalhes do Atleta
+                    </a>
+
+                    <div class="d-flex justify-content-between small mb-2">
+                        <span class="text-muted">Desempenho</span>
+                        <strong>{{ item.desempenho }}/10</strong>
+                    </div>
+                    <div class="progress mb-3" style="height: 6px; border-radius: 10px;">
+                        <div class="progress-bar bg-primary" style="width: {% widthratio item.desempenho 10 100 %}%"></div>
+                    </div>
+
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span class="text-muted">Recuperação</span>
+                        <strong class="text-success">{{ item.progresso }}%</strong>
+                    </div>
+                    <div class="progress" style="height: 6px; border-radius: 10px;">
+                        <div class="progress-bar bg-success" style="width: {{ item.progresso }}%"></div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-4">
+                <p class="text-muted">Nenhum atleta vinculado a você ainda.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
 </div>
+
+<!-- Dados para JS -->
+{{ chart_atletas_labels|json_script:"tec_labels" }}
+{{ chart_atletas_data|json_script:"tec_data" }}
+{{ chart_status_data|json_script:"tec_status" }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function getJSON(id) {
+            const el = document.getElementById(id);
+            return el ? JSON.parse(el.textContent) : [];
+        }
+
+        // Gráfico 1: Desempenho por Atleta
+        const ctx1 = document.getElementById('desempenhoAtletasChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: getJSON('tec_labels'),
+                datasets: [{
+                    label: 'Desempenho',
+                    data: getJSON('tec_data'),
+                    backgroundColor: ['#0d6efd', '#2BA181', '#ffc107', '#dc3545', '#6f42c1', '#0dcaf0', '#fd7e14', '#20c997'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, max: 10, grid: { color: 'rgba(0,0,0,0.05)' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Gráfico 2: Status
+        const ctx2 = document.getElementById('statusChart').getContext('2d');
+        const status = getJSON('tec_status');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Lesionados', 'Liberados'],
+                datasets: [{
+                    data: status,
+                    backgroundColor: ['#dc3545', '#28a745'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 15 } }
+                }
+            },
+            plugins: [{
+                id: 'textCenter',
+                beforeDraw: function(chart) {
+                    const { width, height, ctx } = chart;
+                    ctx.save();
+                    ctx.font = 'bold 28px Poppins, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#333';
+                    ctx.fillText(status[0] + status[1], width / 2, height / 2 - 8);
+                    ctx.font = '12px Poppins, sans-serif';
+                    ctx.fillStyle = '#666';
+                    ctx.fillText('Atletas', width / 2, height / 2 + 20);
+                    ctx.restore();
+                }
+            }]
+        });
+    });
+</script>
 {% endblock %}
