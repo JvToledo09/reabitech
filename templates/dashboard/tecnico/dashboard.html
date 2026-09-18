@@ -14,7 +14,7 @@
         </div>
         <div class="row align-items-center position-relative">
             <div class="col-md-8">
-                <h3 class="fw-bold mb-2">Olá, {{ user.get_full_name }}! ⚽</h3>
+               <h3 class="fw-bold mb-2">Olá, {{ user.get_full_name|default:user.username }}! ⚽</h3>
                 <p class="mb-2 opacity-75">Acompanhe o desempenho e recuperação dos seus atletas.</p>
                 <div class="d-flex gap-3 mt-3 flex-wrap">
                     <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
@@ -89,24 +89,32 @@
     </div>
 
     <!-- Gráficos -->
-    <div class="row g-4 mb-4">
-        <div class="col-lg-7">
-            <div class="card-modern p-4 card-tilt">
-                <h5 class="fw-bold mb-3"><i class="fas fa-chart-bar me-2 text-primary"></i>Desempenho por Atleta</h5>
-                <div style="height: 300px;">
-                    <canvas id="desempenhoAtletasChart"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-5">
-            <div class="card-modern p-4 card-tilt">
-                <h5 class="fw-bold mb-3"><i class="fas fa-chart-pie me-2 text-info"></i>Status dos Atletas</h5>
-                <div style="height: 300px;">
-                    <canvas id="statusChart"></canvas>
-                </div>
+<div class="row g-4 mb-4">
+    <div class="col-lg-7">
+        <div class="card-modern p-4 card-tilt">
+            <h5 class="fw-bold mb-3"><i class="fas fa-chart-bar me-2 text-primary"></i>Desempenho por Atleta</h5>
+            <div style="height: 300px;">
+                <canvas id="desempenhoAtletasChart"></canvas>
             </div>
         </div>
     </div>
+    <div class="col-lg-5">
+        <div class="card-modern p-4 card-tilt">
+            <h5 class="fw-bold mb-3"><i class="fas fa-chart-pie me-2 text-info"></i>Status dos Atletas</h5>
+            <div style="height: 300px;">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 🔥 NOVO GRÁFICO: Evolução do Grupo -->
+<div class="card-modern p-4 mb-4 card-tilt">
+    <h5 class="fw-bold mb-3"><i class="fas fa-chart-line me-2 text-success"></i>Evolução Média do Grupo</h5>
+    <div style="height: 280px;">
+        <canvas id="evolucaoGrupoChart"></canvas>
+    </div>
+</div>
 
     <!-- Top Atletas e Atenção -->
     <div class="row g-4 mb-4">
@@ -222,6 +230,8 @@
 {{ chart_atletas_labels|json_script:"tec_labels" }}
 {{ chart_atletas_data|json_script:"tec_data" }}
 {{ chart_status_data|json_script:"tec_status" }}
+{{ chart_evo_labels|json_script:"tec_evo_labels" }}    
+{{ chart_evo_data|json_script:"tec_evo_data" }}        
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -276,7 +286,7 @@
                     legend: { position: 'bottom', labels: { usePointStyle: true, padding: 15 } }
                 }
             },
-            plugins: [{
+                        plugins: [{
                 id: 'textCenter',
                 beforeDraw: function(chart) {
                     const { width, height, ctx } = chart;
@@ -292,6 +302,57 @@
                     ctx.restore();
                 }
             }]
+        });
+
+        // 🔥 NOVO GRÁFICO: Evolução Média do Grupo
+        const ctx3 = document.getElementById('evolucaoGrupoChart').getContext('2d');
+        new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: getJSON('tec_evo_labels'),
+                datasets: [{
+                    label: 'Desempenho Médio do Grupo',
+                    data: getJSON('tec_evo_data'),
+                    borderColor: '#2BA181',
+                    backgroundColor: 'rgba(43, 161, 129, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#2BA181',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#333',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        padding: 10,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return 'Desempenho: ' + context.parsed.y + '/10';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 10,
+                        grid: { color: 'rgba(0,0,0,0.05)' },
+                        ticks: { stepSize: 2 }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
         });
     });
 </script>

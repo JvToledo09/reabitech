@@ -584,21 +584,47 @@ def dashboard_fisioterapeuta(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto, ativo=True).values_list('usuario', flat=True)
+    # ==============================================
+    # Atletas em atendimento
+    # ==============================================
+    membros_usuario_ids = MembroProjeto.objects.filter(
+        projeto=projeto, ativo=True, tipo='atleta'
+    ).values_list('usuario', flat=True)
+
     atletas = Atleta.objects.filter(
         usuario__in=membros_usuario_ids,
         lesoes__tratamentos__ativo=True
     ).distinct()
 
+    # ==============================================
+    # Tratamentos ativos
+    # ==============================================
     tratamentos_ativos = TratamentoFisioterapico.objects.filter(
         ativo=True,
         lesao__projeto=projeto
+    ).count()
+
+    # ==============================================
+    # 🔥 NOVAS VARIÁVEIS: Evoluções de hoje e Alertas ativos
+    # ==============================================
+    from datetime import date
+
+    evolucoes_hoje = EvolucaoFisica.objects.filter(
+        projeto=projeto,
+        data_registro=date.today()
+    ).count()
+
+    alertas_ativos = Alerta.objects.filter(
+        resolvido=False,
+        atleta__in=atletas
     ).count()
 
     context = {
         'projeto': projeto,
         'atletas_em_atendimento': atletas,
         'total_tratamentos_ativos': tratamentos_ativos,
+        'evolucoes_hoje': evolucoes_hoje,      # 🔥 NOVO
+        'alertas_ativos': alertas_ativos,      # 🔥 NOVO
     }
     return render(request, 'dashboard/fisioterapeuta/dashboard.html', context)
 
@@ -1529,6 +1555,7 @@ def psicologo_novo_questionario(request, atleta_id):
         'projeto': projeto,
     })
     
+    
 # ==============================================
 # 🔥 FUNÇÃO EXTRA: ALTERAR SENHA (CORRIGIDA - FORA DE OUTRA FUNÇÃO)
 # ==============================================
@@ -1661,3 +1688,65 @@ def tecnico_detalhes_atleta(request, atleta_id):
         'chart_percentual': chart_percentual,
     }
     return render(request, 'dashboard/tecnico/detalhes_atleta.html', context)
+
+    
+
+# ==============================================
+# 🔥 RESOLVER ALERTA
+# ==============================================
+@login_required
+def resolver_alerta(request, alerta_id):
+    """Marca um alerta como resolvido."""
+    alerta = get_object_or_404(Alerta, id=alerta_id)
+    
+    # Verifica se o usuário tem permissão
+    if request.user.perfil.tipo not in ['coordenador', 'tecnico', 'fisioterapeuta']:
+        messages.error(request, 'Você não tem permissão para resolver este alerta.')
+        return redirect('dashboard:dashboard')
+    
+    alerta.resolvido = True
+    alerta.save()
+    
+    messages.success(request, f'Alerta "{alerta.get_tipo_display()}" resolvido com sucesso!')
+    
+    # Volta para a página anterior
+    referer = request.META.get('HTTP_REFERER')
+    if referer:
+        return redirect(referer)
+    return redirect('dashboard:dashboard')
+
+    
+
+# ==============================================
+# 🔥 PERFIL DO USUÁRIO (Qualquer perfil pode acessar)
+# ==============================================
+@login_required
+def perfil_usuario(request):
+    """Página de perfil do usuário logado."""
+    perfil = request.user.perfil
+
+    if request.method == 'POST':
+        # Atualizar dados do User
+        request.user.first_name = request.POST.get('first_name', '')
+        request.user.last_name = request.POST.get('last_name', '')
+        request.user.email = request.POST.get('email', '')
+        request.user.save()
+
+        # Atualizar dados do Perfil
+        perfil.telefone = request.POST.get('telefone', '')
+        perfil.data_nascimento = request.POST.get('data_nascimento') or None
+        perfil.sexo = request.POST.get('sexo') or None
+
+        # Upload de foto
+        if request.FILES.get('foto'):
+            perfil.foto = request.FILES.get('foto')
+
+        perfil.save()
+
+        messages.success(request, 'Perfil atualizado com sucesso!')
+        return redirect('dashboard:perfil_usuario')
+
+    context = {
+        'perfil': perfil,
+    }
+    return render(request, 'dashboard/perfil.html', context)

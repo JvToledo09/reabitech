@@ -14,7 +14,7 @@
         </div>
         <div class="row align-items-center position-relative">
             <div class="col-md-8">
-                <h3 class="fw-bold mb-2">Olá, {{ user.get_full_name }}! 🩺</h3>
+                <h3 class="fw-bold mb-2">Olá, {{ user.get_full_name|default:user.username }}! 🩺</h3>
                 <p class="mb-2 opacity-75">Bem-vindo à sua central de fisioterapia. Aqui você gerencia todos os tratamentos ativos.</p>
                 <div class="d-flex gap-3 mt-3 flex-wrap">
                     <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
@@ -135,20 +135,20 @@
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a href="{% url 'dashboard:coordenador_membros' %}" class="text-decoration-none">
-                    <div class="card border-0 shadow-sm rounded-4 h-100 p-3 card-tilt" style="background: linear-gradient(135deg, #f0f8ff, #d6eaff);">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-info bg-opacity-20 rounded-circle p-3 me-3">
-                                <i class="fas fa-users fa-lg text-info"></i>
-                            </div>
-                            <div>
-                                <h6 class="fw-bold mb-0 text-dark">Equipe</h6>
-                                <small class="text-muted">Ver membros</small>
-                            </div>
-                        </div>
-                    </div>
-                </a>
+    <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="text-decoration-none">
+        <div class="card border-0 shadow-sm rounded-4 h-100 p-3 card-tilt" style="background: linear-gradient(135deg, #f0f8ff, #d6eaff);">
+            <div class="d-flex align-items-center">
+                <div class="bg-info bg-opacity-20 rounded-circle p-3 me-3">
+                    <i class="fas fa-users fa-lg text-info"></i>
+                </div>
+                <div>
+                    <h6 class="fw-bold mb-0 text-dark">Pacientes</h6>
+                    <small class="text-muted">Ver todos</small>
+                </div>
             </div>
+        </div>
+    </a>
+</div>
         </div>
     </div>
 

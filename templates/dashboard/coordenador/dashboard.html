@@ -8,7 +8,7 @@
     <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: var(--gradient); color: white; border: none;">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h3 class="fw-bold mb-1">Olá, {{ user.get_full_name }}! 👋</h3>
+                <h3 class="fw-bold mb-1">Olá, {{ user.get_full_name|default:user.username }}! 👋</h3>
                 <p class="mb-0 opacity-75">Aqui está o resumo do projeto <strong>{{ projeto_ativo.nome }}</strong></p>
             </div>
             <i class="fas fa-chart-pie fa-4x opacity-50"></i>
@@ -116,23 +116,51 @@
     </div>
 
     <!-- Alertas Recentes -->
-    {% if alertas_recentes %}
-    <div class="card-modern p-4">
-        <h5 class="fw-bold mb-3"><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Alertas Recentes</h5>
-        <div class="row g-3">
-            {% for alerta in alertas_recentes %}
-            <div class="col-md-6">
-                <div class="alert alert-warning d-flex align-items-center" role="alert">
-                    <i class="fas fa-circle-exclamation me-3"></i>
-                    <div>
-                        <strong>{{ alerta.get_tipo_display }}:</strong> {{ alerta.mensagem }}
+    <!-- Alertas Recentes -->
+<div class="card-modern p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">
+            <i class="fas fa-exclamation-triangle me-2 text-warning"></i>Alertas Ativos
+        </h5>
+        {% if alertas_recentes %}
+        <span class="badge bg-warning text-dark">{{ alertas_recentes|length }} ativo(s)</span>
+        {% endif %}
+    </div>
+
+    <div class="row g-3">
+        {% for alerta in alertas_recentes %}
+        <div class="col-md-6">
+            <div class="card p-3 border-0 shadow-sm rounded-4 h-100" style="background: linear-gradient(135deg, #fffbf0, #fff3cd);">
+                <div class="d-flex align-items-start">
+                    <div class="bg-warning bg-opacity-20 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="fas fa-exclamation-triangle text-warning"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="fw-bold mb-1">{{ alerta.get_tipo_display }}</h6>
+                        <p class="text-muted small mb-2">{{ alerta.mensagem }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-user me-1"></i>{{ alerta.atleta.usuario.get_full_name|default:alerta.atleta.usuario.username }}
+                            </small>
+                            <a href="{% url 'dashboard:resolver_alerta' alerta.id %}" class="btn btn-sm btn-success">
+                                <i class="fas fa-check me-1"></i> Resolver
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-4">
+                <i class="fas fa-check-circle fs-1 text-success d-block mb-3 opacity-50"></i>
+                <h5 class="text-muted">Nenhum alerta ativo</h5>
+                <p class="text-muted mb-0">Todos os atletas estão sob controle! 🎉</p>
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endif %}
+</div>
 </div>
 
 <!-- Dados seguros para o JavaScript (json_script) -->

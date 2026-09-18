@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Meu Perfil{% endblock %}
+{% block page_title %}Meu Perfil{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="row g-4">
+        <!-- Coluna da esquerda: Foto e info -->
+        <div class="col-lg-4">
+            <div class="card-modern p-4 text-center">
+                <div class="position-relative d-inline-block mx-auto mb-3">
+                    {% if perfil.foto %}
+                    <img src="{{ perfil.foto.url }}" alt="Foto de perfil"
+                         class="rounded-circle" style="width: 130px; height: 130px; object-fit: cover; border: 4px solid white; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                    {% else %}
+                    <div class="bg-gradient-custom rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                         style="width: 130px; height: 130px; background: var(--gradient);">
+                        <i class="fas fa-user fa-4x text-white"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <h4 class="fw-bold mb-1">{{ request.user.get_full_name|default:request.user.username }}</h4>
+                <p class="text-muted small mb-3">{{ request.user.email|default:"Sem e-mail" }}</p>
+                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">
+                    {{ perfil.get_tipo_display }}
+                </span>
+                <hr class="my-4">
+                <div class="text-start">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-user me-3 text-secondary"></i>
+                        <div>
+                            <small class="text-muted d-block">Nome de usuário</small>
+                            <strong>{{ request.user.username }}</strong>
+                        </div>
+                    </div>
+                    {% if perfil.telefone %}
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-phone me-3 text-secondary"></i>
+                        <div>
+                            <small class="text-muted d-block">Telefone</small>
+                            <strong>{{ perfil.telefone }}</strong>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if perfil.data_nascimento %}
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-calendar me-3 text-secondary"></i>
+                        <div>
+                            <small class="text-muted d-block">Data de Nascimento</small>
+                            <strong>{{ perfil.data_nascimento|date:"d/m/Y" }}</strong>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-sign-in-alt me-3 text-secondary"></i>
+                        <div>
+                            <small class="text-muted d-block">Último acesso</small>
+                            <strong>{{ request.user.last_login|date:"d/m/Y H:i"|default:"Primeiro acesso" }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna da direita: Formulário -->
+        <div class="col-lg-8">
+            <div class="card-modern p-4">
+                <h5 class="fw-bold mb-4"><i class="fas fa-edit me-2 text-success"></i>Editar Informações</h5>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <h6 class="fw-bold text-muted text-uppercase small mb-3">Dados Pessoais</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Nome</label>
+                            <input type="text" name="first_name" value="{{ request.user.first_name }}" class="form-control bg-light border-0 shadow-sm">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Sobrenome</label>
+                            <input type="text" name="last_name" value="{{ request.user.last_name }}" class="form-control bg-light border-0 shadow-sm">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">E-mail</label>
+                            <input type="email" name="email" value="{{ request.user.email }}" class="form-control bg-light border-0 shadow-sm">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Telefone</label>
+                            <input type="text" name="telefone" value="{{ perfil.telefone }}" class="form-control bg-light border-0 shadow-sm" placeholder="(00) 00000-0000">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Data de Nascimento</label>
+                            <input type="date" name="data_nascimento" value="{{ perfil.data_nascimento|date:'Y-m-d' }}" class="form-control bg-light border-0 shadow-sm">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Sexo</label>
+                            <select name="sexo" class="form-select bg-light border-0 shadow-sm">
+                                <option value="">-- Selecione --</option>
+                                <option value="masculino" {% if perfil.sexo == 'masculino' %}selected{% endif %}>Masculino</option>
+                                <option value="feminino" {% if perfil.sexo == 'feminino' %}selected{% endif %}>Feminino</option>
+                                <option value="outro" {% if perfil.sexo == 'outro' %}selected{% endif %}>Outro</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h6 class="fw-bold text-muted text-uppercase small mb-3 mt-4">Foto de Perfil</h6>
+                    <div class="mb-3">
+                        <input type="file" name="foto" accept="image/*" class="form-control bg-light border-0 shadow-sm">
+                        <small class="text-muted">Formatos aceitos: JPG, PNG. Tamanho máximo: 5MB.</small>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4 pt-4 border-top">
+                        <button type="submit" class="btn btn-primary-custom">
+                            <i class="fas fa-save me-2"></i>Salvar Alterações
+                        </button>
+                        <a href="{% url 'dashboard:alterar_senha' %}" class="btn btn-outline-custom">
+                            <i class="fas fa-key me-2"></i>Alterar Senha
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

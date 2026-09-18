@@ -611,7 +611,13 @@
         </div>
         
         <div class="sidebar-user">
-            <div class="avatar"><i class="fas fa-user"></i></div>
+            {% if user.perfil.foto %}
+<div class="avatar">
+    <img src="{{ user.perfil.foto.url }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+</div>
+{% else %}
+<div class="avatar"><i class="fas fa-user"></i></div>
+{% endif %}
             <h6>{{ user.get_full_name|default:user.username }}</h6>
             <span class="badge">{{ user.perfil.get_tipo_display }}</span>
         </div>
@@ -691,7 +697,7 @@
                         <span>{{ user.get_short_name|default:user.username|truncatechars:15 }}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
+                        <li><a class="dropdown-item" href="{% url 'dashboard:perfil_usuario' %}"><i class="fas fa-user me-2"></i>Perfil</a></li>
                         <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configurações</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>

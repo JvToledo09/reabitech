@@ -14,7 +14,7 @@
         </div>
         <div class="row align-items-center position-relative">
             <div class="col-md-8">
-                <h3 class="fw-bold mb-2">Olá, {{ user.get_full_name }}! 🧠</h3>
+                <h3 class="fw-bold mb-2">Olá, {{ user.get_full_name|default:user.username }}! 🧠</h3>
                 <p class="mb-2 opacity-75">Bem-vindo à sua central de psicologia. Aqui você acompanha a saúde mental dos atletas.</p>
                 <div class="d-flex gap-3 mt-3 flex-wrap">
                     <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
@@ -223,7 +223,7 @@
                 <tbody>
                     {% for av in avaliacoes_recentes %}
                     <tr>
-                        <td class="ps-4">
+                        <td data-label="Atleta" class="ps-4">
                             <div class="d-flex align-items-center">
                                 <div class="bg-info bg-opacity-10 text-info rounded-circle p-2 me-2" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;">
                                     <i class="fas fa-user small"></i>
@@ -231,9 +231,9 @@
                                 <strong class="small">{{ av.atleta.usuario.get_full_name|default:av.atleta.usuario.username }}</strong>
                             </div>
                         </td>
-                        <td>{{ av.data|date:"d/m/Y" }}</td>
-                        <td><strong>{{ av.score_total }}</strong>/10</td>
-                        <td>
+                        <td data-label="Data">{{ av.data|date:"d/m/Y" }}</td>
+                        <td data-label="Score"><strong>{{ av.score_total }}</strong>/10</td>
+                        <td data-label="Status">
                             {% if av.score_total >= 7 %}
                                 <span class="badge bg-success bg-opacity-10 text-success">Bom</span>
                             {% elif av.score_total >= 4 %}
@@ -242,9 +242,9 @@
                                 <span class="badge bg-danger bg-opacity-10 text-danger">Atenção</span>
                             {% endif %}
                         </td>
-                        <td>{{ av.ansiedade }}/10</td>
-                        <td>{{ av.motivacao }}/10</td>
-                        <td>{{ av.estresse }}/10</td>
+                        <td data-label="Ansiedade">{{ av.ansiedade }}/10</td>
+                        <td data-label="Motivação">{{ av.motivacao }}/10</td>
+                        <td data-label="Estresse">{{ av.estresse }}/10</td>
                     </tr>
                     {% empty %}
                     <tr>
@@ -287,22 +287,35 @@
 
 </div>
 
-<!-- Dados para JS -->
+<!-- Dados para JS (usando json_script para evitar erros de sintaxe) -->
 {{ chart_labels|json_script:"psico_labels" }}
 {{ chart_ansiedade|json_script:"psico_ansiedade" }}
 {{ chart_motivacao|json_script:"psico_motivacao" }}
 {{ chart_estresse|json_script:"psico_estresse" }}
 {{ chart_autoestima|json_script:"psico_autoestima" }}
 {{ chart_sono|json_script:"psico_sono" }}
+{{ status_bom|json_script:"psico_status_bom" }}
+{{ status_regular|json_script:"psico_status_regular" }}
+{{ status_atencao|json_script:"psico_status_atencao" }}
+{{ atletas_acompanhados|json_script:"psico_total_atletas" }}
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // 🔥 Função auxiliar para ler dados com segurança
         function getJSON(id) {
             const el = document.getElementById(id);
             return el ? JSON.parse(el.textContent) : [];
         }
 
-        // Gráfico 1: Evolução dos Indicadores
+        // Função para pegar um valor único (não array)
+        function getValue(id, defaultValue = 0) {
+            const arr = getJSON(id);
+            return arr.length > 0 ? arr[0] : defaultValue;
+        }
+
+        // ==========================================
+        // Gráfico 1: Evolução dos Indicadores (Linha)
+        // ==========================================
         const ctx1 = document.getElementById('evolucaoPsicoChart').getContext('2d');
         new Chart(ctx1, {
             type: 'line',
@@ -364,14 +377,21 @@
             }
         });
 
-        // Gráfico 2: Distribuição Emocional
+        // ==========================================
+        // Gráfico 2: Distribuição Emocional (Doughnut)
+        // ==========================================
         const ctx2 = document.getElementById('distribuicaoPsicoChart').getContext('2d');
+        const statusBom = getValue('psico_status_bom');
+        const statusRegular = getValue('psico_status_regular');
+        const statusAtencao = getValue('psico_status_atencao');
+        const totalAtletas = getValue('psico_total_atletas');
+
         new Chart(ctx2, {
             type: 'doughnut',
             data: {
                 labels: ['Bom', 'Regular', 'Atenção'],
                 datasets: [{
-                    data: [{{ status_bom }}, {{ status_regular }}, {{ status_atencao }}],
+                    data: [statusBom, statusRegular, statusAtencao],
                     backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
                     borderWidth: 0,
                     hoverOffset: 10
@@ -394,7 +414,7 @@
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillStyle = '#333';
-                    ctx.fillText({{ atletas_acompanhados }}, width / 2, height / 2 - 8);
+                    ctx.fillText(totalAtletas, width / 2, height / 2 - 8);
                     ctx.font = '11px Poppins, sans-serif';
                     ctx.fillStyle = '#666';
                     ctx.fillText('Atletas', width / 2, height / 2 + 15);

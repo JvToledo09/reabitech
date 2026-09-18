@@ -9,6 +9,7 @@ urlpatterns = [
     # ============================================
     path('', views.dashboard, name='dashboard'),
     path('alterar-senha/', views.alterar_senha, name='alterar_senha'),
+    path('perfil/', views.perfil_usuario, name='perfil_usuario'),
 
     # ============================================
     # Dashboards por Perfil
@@ -73,4 +74,5 @@ urlpatterns = [
     path('notificacoes/', views.notificacoes, name='notificacoes'),
     path('notificacoes/<int:notificacao_id>/lida/', views.marcar_notificacao_lida, name='marcar_notificacao_lida'),
     path('notificacoes/marcar-todas/', views.marcar_todas_lidas, name='marcar_todas_lidas'),
+    path('alertas/<int:alerta_id>/resolver/', views.resolver_alerta, name='resolver_alerta'),
 ]
