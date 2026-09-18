@@ -416,7 +416,7 @@
             width: 100%;
             height: 100%;
             background: var(--primary);
-            z-index: 9999;
+            z-index: 9998;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -607,7 +607,7 @@
             {% endif %}
             
             <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0;"></div>
-            <a href="{% url 'dashboard:logout' %}" class="sidebar-item"><i class="fas fa-sign-out-alt"></i><span>Sair</span></a>
+            <a href="{% url 'logout' %}" class="sidebar-item"><i class="fas fa-sign-out-alt"></i><span>Sair</span></a>
         </div>
         
         <div class="sidebar-user">
@@ -639,7 +639,7 @@
                 <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="height: 60px; width: auto; border-radius: 12px; display:none;" onerror="this.style.display='none'" onload="this.style.display='block'">
                 <button class="dark-mode-toggle" id="darkModeToggle"><i class="fas fa-moon"></i></button>
                 
-                <<!-- 🔥 DROPDOWN DE NOTIFICAÇÕES -->
+                <!-- 🔥 DROPDOWN DE NOTIFICAÇÕES -->
 <div class="dropdown">
     <button class="btn btn-outline-custom position-relative dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="fas fa-bell"></i>
@@ -694,7 +694,7 @@
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
                         <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configurações</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="{% url 'dashboard:logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
                     </ul>
                 </div>
             </div>

@@ -1,12 +1,23 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+import uuid                                        
+from django.utils import timezone                  
+from datetime import timedelta 
 
 class Plano(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.TextField()
-    preco_mensal = models.DecimalField(max_digits=10, decimal_places=2)
-    max_usuarios = models.IntegerField(default=10)
+
+    preco_mensal = models.DecimalField(
+    max_digits=10, 
+    decimal_places=2,
+    validators=[MinValueValidator(0)]    
+)
+    max_usuarios = models.IntegerField(
+    default=10,
+    validators=[MinValueValidator(1)]     
+)
     inclui_fisioterapia = models.BooleanField(default=True)
     inclui_psicologia = models.BooleanField(default=True)
     inclui_relatorios = models.BooleanField(default=True)
@@ -73,10 +84,21 @@ class ConviteProjeto(models.Model):
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, related_name='convites')
     email = models.EmailField()
     tipo_membro = models.CharField(max_length=20, choices=MembroProjeto.TIPO_MEMBRO)
-    token = models.CharField(max_length=64, unique=True)
+    token = models.CharField(max_length=64, unique=True, blank=True)
     criado_em = models.DateTimeField(auto_now_add=True)
     expiracao = models.DateTimeField()
     aceito = models.BooleanField(default=False)
+    
+    def save(self, *args, **kwargs):
+        # 🔥 Auto-gera o token se não foi passado
+        if not self.token:
+            self.token = uuid.uuid4().hex
+        
+        # 🔥 Auto-define a expiração para 7 dias se não foi passada
+        if not self.expiracao:
+            self.expiracao = timezone.now() + timedelta(days=7)
+        
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return f"Convite para {self.email} - {self.projeto.nome}"

@@ -46,6 +46,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'backend.urls'
+
 # Configuração de Templates
 TEMPLATES = [
     {
@@ -58,7 +59,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'dashboard.context_processors.notificacoes_context',  
+                'dashboard.context_processors.notificacoes_context',
             ],
         },
     },
@@ -98,8 +99,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Configurações de Login e Redirecionamento (Agora usando o nome da rota 'login')
-LOGIN_URL = '/dashboard/login/'
+# Configurações de Login e Redirecionamento (CORRIGIDO)
+LOGIN_URL = '/login/'          # ✅ CORRIGIDO: aponta para a rota raiz
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
 
@@ -109,7 +110,6 @@ LOGOUT_REDIRECT_URL = '/'
 LANGUAGE_CODE = 'pt-br'
 TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
-USE_L10N = True  # Formatação de números e datas localizada
 USE_TZ = True
 
 # ==============================================================================
@@ -117,20 +117,17 @@ USE_TZ = True
 # ==============================================================================
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # Pasta onde os arquivos serão coletados em produção
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'         # Pasta para upload de imagens e documentos
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # ==============================================================================
-# CONFIGURAÇÃO DE E-MAIL (Configurado para Console por padrão)
+# CONFIGURAÇÃO DE E-MAIL
 # ==============================================================================
-# Em produção, para enviar e-mails de convite, configure um servidor SMTP real:
 if DEBUG:
-    # Desenvolvimento: exibe os e-mails no terminal
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
-    # Produção: Use as variáveis abaixo no seu arquivo .env
     # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
     # EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
     # EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
@@ -145,19 +142,12 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@reabitech.com')
 # CONFIGURAÇÕES DE SEGURANÇA PARA PRODUÇÃO
 # ==============================================================================
 if not DEBUG:
-    # Força redirecionamento para HTTPS em produção
     SECURE_SSL_REDIRECT = True
-    
-    # Os cookies de sessão e CSRF só serão enviados via HTTPS
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    
-    # HSTS (HTTP Strict Transport Security) - Garante que o navegador só use HTTPS
-    SECURE_HSTS_SECONDS = 31536000  # 1 ano
+    SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    
-    # Proteção contra clickjacking
     X_FRAME_OPTIONS = 'DENY'
 
 # ==============================================================================
@@ -168,7 +158,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ==============================================================================
 # UTILITÁRIOS DE DESENVOLVIMENTO
 # ==============================================================================
-# INTERNAL_IPS permite que ferramentas como django-debug-toolbar funcionem
 INTERNAL_IPS = [
     '127.0.0.1',
 ]

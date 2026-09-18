@@ -88,7 +88,7 @@ class EvolucaoFisica(models.Model):
     atleta = models.ForeignKey(Atleta, on_delete=models.CASCADE, related_name='evolucoes')
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE, related_name='evolucoes', null=True)
     data_registro = models.DateField(auto_now_add=True)
-    # Novos campos para uma análise completa
+    # Campos para uma análise completa
     dor = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])
     mobilidade = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)], default=5)
     forca = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)], default=5)
@@ -103,7 +103,19 @@ class EvolucaoFisica(models.Model):
     
     @property
     def percentual_recuperacao(self):
-        # Fórmula: (10 - dor) + mobilidade + forca + desempenho + resistencia + flexibilidade
-        # Total possível é 60, então dividimos por 60 e multiplicamos por 100
-        total = (10 - self.dor) + self.mobilidade + self.forca + self.desempenho + self.resistencia + self.flexibilidade
+        """
+        Calcula o percentual de recuperação do atleta.
+        Fórmula: (10 - dor) + mobilidade + forca + desempenho + resistencia + flexibilidade
+        Total possível: 60 pontos = 100%
+        Proteção contra valores nulos para evitar TypeError.
+        """
+        # 🔥 Proteção: se algum campo for None, considera 0
+        dor = self.dor if self.dor is not None else 0
+        mobilidade = self.mobilidade if self.mobilidade is not None else 0
+        forca = self.forca if self.forca is not None else 0
+        desempenho = self.desempenho if self.desempenho is not None else 0
+        resistencia = self.resistencia if self.resistencia is not None else 0
+        flexibilidade = self.flexibilidade if self.flexibilidade is not None else 0
+        
+        total = (10 - dor) + mobilidade + forca + desempenho + resistencia + flexibilidade
         return int((total / 60) * 100)

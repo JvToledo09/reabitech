@@ -35,8 +35,14 @@ def set_projeto_ativo(request, projeto_id):
     request.session['projeto_id'] = projeto_id
 
 # 🔥 Função auxiliar para criar notificações
-def criar_notificacao(usuario, titulo, mensagem):
-    Notificacao.objects.create(usuario=usuario, titulo=titulo, mensagem=mensagem)
+def criar_notificacao(usuario, titulo, mensagem, link=None):
+    """Cria uma notificação de forma padronizada."""
+    return Notificacao.objects.create(
+        usuario=usuario,
+        titulo=titulo,
+        mensagem=mensagem,
+        link=link
+    )
 
 # ==============================================
 # 1. LOGIN (aceita username, email, RM)
@@ -1545,9 +1551,10 @@ def alterar_senha(request):
         else:
             messages.error(request, 'As senhas não coincidem ou são muito curtas.')
     
-    return render(request, 'dashboard/alterar_senha.html')
+        return render(request, 'dashboard/alterar_senha.html')
 
-    @login_required
+
+@login_required
 def marcar_notificacao_lida(request, notificacao_id):
     notificacao = get_object_or_404(Notificacao, id=notificacao_id, usuario=request.user)
     notificacao.lida = True
@@ -1562,3 +1569,95 @@ def marcar_todas_lidas(request):
     request.user.notificacoes.filter(lida=False).update(lida=True)
     messages.success(request, 'Todas as notificações foram marcadas como lidas.')
     return redirect('dashboard:notificacoes')
+
+    
+
+# ==============================================
+# 🔥 VIEW: Detalhes do Atleta para o Técnico
+# ==============================================
+@login_required
+@perfil_required('tecnico')
+def tecnico_detalhes_atleta(request, atleta_id):
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        messages.warning(request, 'Nenhum projeto ativo.')
+        return redirect('landing')
+
+    atleta = get_object_or_404(Atleta, id=atleta_id)
+
+    evolucoes = EvolucaoFisica.objects.filter(
+        atleta=atleta, projeto=projeto
+    ).order_by('-data_registro')
+
+    lesoes = Lesao.objects.filter(atleta=atleta, projeto=projeto).order_by('-data_ocorrencia')
+    lesoes_ativas = lesoes.filter(tratamentos__ativo=True).distinct()
+    tratamentos_ativos = TratamentoFisioterapico.objects.filter(
+        lesao__atleta=atleta, ativo=True
+    )
+
+    ultima_evolucao = evolucoes.first()
+    progresso = ultima_evolucao.percentual_recuperacao if ultima_evolucao else 0
+
+    ultimos_6 = list(evolucoes[:6])[::-1]
+    chart_labels = [e.data_registro.strftime('%d/%m') for e in ultimos_6]
+    chart_dor = [e.dor for e in ultimos_6]
+    chart_mobilidade = [e.mobilidade for e in ultimos_6]
+    chart_forca = [e.forca for e in ultimos_6]
+    chart_desempenho = [e.desempenho for e in ultimos_6]
+    chart_percentual = [e.percentual_recuperacao for e in ultimos_6]
+
+    total_evolucoes = evolucoes.count()
+    total_lesoes = lesoes.count()
+    total_tratamentos = TratamentoFisioterapico.objects.filter(lesao__atleta=atleta).count()
+    media_desempenho = evolucoes.aggregate(Avg('desempenho'))['desempenho__avg'] or 0
+    media_dor = evolucoes.aggregate(Avg('dor'))['dor__avg'] or 0
+
+    avaliacoes = AvaliacaoPsicologica.objects.filter(
+        atleta=atleta, projeto=projeto
+    ).order_by('-data')[:5]
+    ultima_avaliacao = avaliacoes.first() if avaliacoes.exists() else None
+
+    timeline = []
+    for e in evolucoes[:3]:
+        timeline.append({
+            'data': e.data_registro,
+            'titulo': 'Evolução Registrada',
+            'descricao': f'Dor: {e.dor}/10 | Recuperação: {e.percentual_recuperacao}%',
+            'icone': 'fa-chart-line',
+            'cor': 'success'
+        })
+    for l in lesoes[:2]:
+        timeline.append({
+            'data': l.data_ocorrencia,
+            'titulo': f'Lesão: {l.get_tipo_display()}',
+            'descricao': f'{l.local} - {l.get_gravidade_display()}',
+            'icone': 'fa-exclamation-triangle',
+            'cor': 'danger'
+        })
+    timeline.sort(key=lambda x: x['data'], reverse=True)
+
+    context = {
+        'atleta': atleta,
+        'projeto': projeto,
+        'evolucoes': evolucoes[:10],
+        'lesoes': lesoes,
+        'lesoes_ativas': lesoes_ativas,
+        'tratamentos_ativos': tratamentos_ativos,
+        'progresso': progresso,
+        'ultima_evolucao': ultima_evolucao,
+        'total_evolucoes': total_evolucoes,
+        'total_lesoes': total_lesoes,
+        'total_tratamentos': total_tratamentos,
+        'media_desempenho': round(media_desempenho, 1),
+        'media_dor': round(media_dor, 1),
+        'avaliacoes': avaliacoes,
+        'ultima_avaliacao': ultima_avaliacao,
+        'timeline': timeline,
+        'chart_labels': chart_labels,
+        'chart_dor': chart_dor,
+        'chart_mobilidade': chart_mobilidade,
+        'chart_forca': chart_forca,
+        'chart_desempenho': chart_desempenho,
+        'chart_percentual': chart_percentual,
+    }
+    return render(request, 'dashboard/tecnico/detalhes_atleta.html', context)

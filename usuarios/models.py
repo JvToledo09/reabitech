@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 
 class Perfil(models.Model):
     TIPO_USUARIO = [
@@ -29,7 +30,6 @@ class Perfil(models.Model):
     @property
     def idade(self):
         if self.data_nascimento:
-            from datetime import date
             hoje = date.today()
             return hoje.year - self.data_nascimento.year - ((hoje.month, hoje.day) < (self.data_nascimento.month, self.data_nascimento.day))
         return None
@@ -37,9 +37,6 @@ class Perfil(models.Model):
     def __str__(self):
         return f"{self.usuario.get_full_name()} - {self.get_tipo_display()}"
     
-    def get_tipo_display(self):
-        return dict(self.TIPO_USUARIO).get(self.tipo, self.tipo)
-
 class ModalidadeEsportiva(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.TextField(blank=True)
@@ -79,11 +76,17 @@ class Notificacao(models.Model):
     mensagem = models.TextField()
     criada_em = models.DateTimeField(auto_now_add=True)
     lida = models.BooleanField(default=False)
-    # Adicionar link para onde a notificação leva
     link = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:                    # 🔥 ADICIONAR ESSE BLOCO
+        ordering = ['-criada_em']
+        indexes = [
+            models.Index(fields=['usuario', 'lida']),
+        ]
 
     def __str__(self):
         return f"{self.titulo} - {self.usuario.username}"
+        
 
 class Auditoria(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)

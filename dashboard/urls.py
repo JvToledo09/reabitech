@@ -8,10 +8,7 @@ urlpatterns = [
     # Rotas Gerais
     # ============================================
     path('', views.dashboard, name='dashboard'),
-    path('login/', views.login_view, name='login'),
-    path('logout/', views.logout_view, name='logout'),
     path('alterar-senha/', views.alterar_senha, name='alterar_senha'),
-    path('notificacoes/', views.notificacoes, name='notificacoes'),
 
     # ============================================
     # Dashboards por Perfil
@@ -49,7 +46,7 @@ urlpatterns = [
     path('atleta/exercicios/', views.atleta_exercicios, name='atleta_exercicios'),
 
     # ============================================
-    # Views do Fisioterapeuta (CRUD Completo)
+    # Views do Fisioterapeuta
     # ============================================
     path('fisioterapeuta/atletas/', views.fisioterapeuta_atletas, name='fisioterapeuta_atletas'),
     path('fisioterapeuta/tratamentos/', views.fisioterapeuta_tratamentos, name='fisioterapeuta_tratamentos'),
@@ -62,7 +59,7 @@ urlpatterns = [
     path('fisioterapeuta/registrar-evolucao/<int:atleta_id>/', views.fisioterapeuta_registrar_evolucao, name='fisioterapeuta_registrar_evolucao'),
 
     # ============================================
-    # Views do Psicólogo (CRUD Completo)
+    # Views do Psicólogo
     # ============================================
     path('psicologo/atletas/', views.psicologo_atletas, name='psicologo_atletas'),
     path('psicologo/avaliacoes/', views.psicologo_avaliacoes, name='psicologo_avaliacoes'),
@@ -71,7 +68,7 @@ urlpatterns = [
     path('psicologo/questionario/<int:atleta_id>/', views.psicologo_novo_questionario, name='psicologo_novo_questionario'),
 
     # ============================================
-    # Views de Notificações 
+    # Notificações
     # ============================================
     path('notificacoes/', views.notificacoes, name='notificacoes'),
     path('notificacoes/<int:notificacao_id>/lida/', views.marcar_notificacao_lida, name='marcar_notificacao_lida'),
