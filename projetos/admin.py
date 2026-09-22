@@ -1,29 +1,74 @@
 from django.contrib import admin
 from .models import Plano, Projeto, MembroProjeto, ConviteProjeto
 
+
+# ==============================================
+# PLANO
+# ==============================================
 @admin.register(Plano)
 class PlanoAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'preco_mensal', 'max_usuarios', 'ativo')
-    list_filter = ('ativo',)
-    search_fields = ('nome',)
+    list_display = ('nome', 'tipo', 'preco_mensal', 'max_usuarios', 'max_projetos', 'destaque', 'ativo')
+    list_filter = ('tipo', 'destaque', 'ativo')
+    search_fields = ('nome', 'descricao')
+    ordering = ('ordem', 'preco_mensal')
+    list_editable = ('destaque', 'ativo')
 
+
+# ==============================================
+# PROJETO
+# ==============================================
 @admin.register(Projeto)
 class ProjetoAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'tipo', 'coordenador', 'data_criacao', 'ativo', 'publico')
-    list_filter = ('tipo', 'ativo', 'publico')
-    search_fields = ('nome', 'descricao')
-    raw_id_fields = ('coordenador',)
+    list_display = ('nome', 'tipo', 'coordenador', 'plano', 'total_membros', 'publico', 'ativo', 'criado_em')
+    list_filter = ('tipo', 'publico', 'ativo', 'plano')
+    search_fields = ('nome', 'descricao', 'coordenador__username', 'coordenador__email')
+    prepopulated_fields = {'slug': ('nome',)}
+    readonly_fields = ('criado_em', 'atualizado_em')
+    date_hierarchy = 'criado_em'
+    ordering = ('-criado_em',)
 
+    fieldsets = (
+        ('Identificação', {
+            'fields': ('nome', 'slug', 'tipo', 'descricao', 'logo')
+        }),
+        ('Configurações', {
+            'fields': ('plano', 'coordenador', 'modulos_ativos')
+        }),
+        ('Visibilidade', {
+            'fields': ('publico', 'ativo')
+        }),
+        ('Auditoria', {
+            'fields': ('criado_em', 'atualizado_em'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def total_membros(self, obj):
+        return obj.membros.filter(ativo=True).count()
+    total_membros.short_description = 'Membros ativos'
+
+
+# ==============================================
+# MEMBRO DO PROJETO
+# ==============================================
 @admin.register(MembroProjeto)
 class MembroProjetoAdmin(admin.ModelAdmin):
-    list_display = ('projeto', 'usuario', 'tipo', 'data_entrada', 'ativo')
+    list_display = ('usuario', 'projeto', 'tipo', 'modalidade', 'ativo', 'entrou_em')
     list_filter = ('tipo', 'ativo', 'projeto')
-    search_fields = ('usuario__username', 'usuario__email')
-    raw_id_fields = ('projeto', 'usuario')
+    search_fields = ('usuario__username', 'usuario__email', 'usuario__first_name', 'usuario__last_name', 'projeto__nome')
+    autocomplete_fields = ('usuario', 'projeto')
+    date_hierarchy = 'entrou_em'
+    ordering = ('-entrou_em',)
 
+
+# ==============================================
+# CONVITE
+# ==============================================
 @admin.register(ConviteProjeto)
 class ConviteProjetoAdmin(admin.ModelAdmin):
-    list_display = ('projeto', 'email', 'tipo_membro', 'criado_em', 'expiracao', 'aceito')
-    list_filter = ('tipo_membro', 'aceito', 'projeto')
-    search_fields = ('email',)
-    raw_id_fields = ('projeto',)
+    list_display = ('email', 'projeto', 'tipo_membro', 'aceito', 'criado_em', 'expiracao')
+    list_filter = ('aceito', 'tipo_membro', 'projeto')
+    search_fields = ('email', 'projeto__nome', 'token')
+    readonly_fields = ('token', 'criado_em')
+    date_hierarchy = 'criado_em'
+    ordering = ('-criado_em',)

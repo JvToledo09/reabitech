@@ -1,61 +1,1083 @@
-{% extends 'base.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="REABITECH — Plataforma integrada de reabilitação esportiva para atletas, fisioterapeutas, psicólogos e técnicos.">
+    <title>REABITECH — Reabilitação Esportiva Inteligente</title>
 
-{% block title %}REABITECH - Soluções em Reabilitação{% endblock %}
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-{% block content %}
-<!-- Hero Section -->
-<section class="py-5" style="background: linear-gradient(135deg, #0f172a, #1e293b); color: white; min-height: 80vh; display: flex; align-items: center;">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <span class="badge bg-success bg-opacity-10 text-success mb-3">Plataforma Completa de Gestão</span>
-                <h1 class="display-4 fw-bold mb-4">Reabilite seus atletas com <span style="color: #10b981;">dados e eficiência</span></h1>
-                <p class="lead mb-4 opacity-75">O REABITECH conecta coordenadores, técnicos, fisioterapeutas e psicólogos em uma única plataforma, oferecendo acompanhamento completo da recuperação física e mental dos seus atletas.</p>
-                <div class="d-flex gap-3">
-                    <a href="{% url 'login' %}" class="btn btn-primary-custom btn-lg shadow" style="background: #10b981; border: none;">
-                        <i class="fas fa-rocket me-2"></i>Começar Agora
-                    </a>
-                    <a href="#projetos" class="btn btn-outline-light btn-lg">Ver Projetos</a>
-                </div>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="{% static 'css/design-system.css' %}">
+
+    <style>
+        /* ============================================
+           NAVBAR PREMIUM
+           ============================================ */
+        .lp-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: var(--z-fixed);
+            padding: 16px 0;
+            transition: all var(--ease-base);
+        }
+
+        .lp-nav.scrolled {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-sm);
+            padding: 10px 0;
+        }
+
+        .lp-nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .lp-logo {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: #0a3d2e;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lp-logo i {
+            color: var(--primary-500);
+        }
+
+        .lp-nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .lp-nav-links a {
+            color: #334155;
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            transition: color var(--ease-fast);
+        }
+
+        .lp-nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-500);
+            transition: width var(--ease-base);
+        }
+
+        .lp-nav-links a:hover {
+            color: var(--primary-600);
+        }
+
+        .lp-nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .lp-nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        @media (max-width: 900px) {
+            .lp-nav-links { display: none; }
+        }
+
+        /* ============================================
+           HERO COM VÍDEO
+           ============================================ */
+        .lp-hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            padding: 140px 0 100px;
+        }
+
+        .lp-hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .lp-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(10, 61, 46, 0.92) 0%,
+                rgba(17, 84, 63, 0.85) 40%,
+                rgba(43, 161, 129, 0.7) 100%
+            );
+            z-index: 1;
+        }
+
+        /* Fallback com gradiente mesh se o vídeo não carregar */
+        .lp-hero-fallback {
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-mesh);
+            z-index: 0;
+        }
+
+        .lp-hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+
+        .lp-hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .lp-hero-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        .lp-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .lp-hero-badge .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #34d399;
+            box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.3);
+            animation: ds-pulse-glow 2s infinite;
+        }
+
+        .lp-hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+        }
+
+        .lp-hero-title span {
+            background: linear-gradient(135deg, #a7f3d0, #34d399, #ffffff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: ds-aurora 5s ease infinite;
+        }
+
+        .lp-hero-desc {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 32px;
+            max-width: 560px;
+        }
+
+        .lp-hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Card flutuante no hero */
+        .lp-hero-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-2xl);
+            padding: 28px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            animation: ds-float 6s ease-in-out infinite;
+        }
+
+        .lp-hero-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .lp-hero-card-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a7f3d0, #34d399);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #0a3d2e;
+            font-size: 1.1rem;
+        }
+
+        .lp-hero-card-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .lp-hero-card-sub {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        .lp-hero-stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .lp-hero-stat-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .lp-hero-stat-value {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .lp-hero-progress {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .lp-hero-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #34d399, #a7f3d0);
+            border-radius: 999px;
+            animation: ds-marquee-bar 2s ease-out forwards;
+        }
+
+        @keyframes ds-marquee-bar {
+            from { width: 0; }
+            to   { width: var(--target, 82%); }
+        }
+
+        /* ============================================
+           SEÇÃO DE ESTATÍSTICAS
+           ============================================ */
+        .lp-stats {
+            background: var(--bg-body);
+            padding: 0 0 80px;
+            position: relative;
+            z-index: 3;
+            margin-top: -60px;
+        }
+
+        .lp-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        @media (max-width: 900px) {
+            .lp-stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 480px) {
+            .lp-stats-grid { grid-template-columns: 1fr; }
+        }
+
+        .lp-stat-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            transition: all var(--ease-base);
+            border: 1px solid transparent;
+        }
+
+        .lp-stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-2xl);
+            border-color: var(--primary-200);
+        }
+
+        [data-bs-theme="dark"] .lp-stat-card {
+            background: var(--neutral-900);
+        }
+
+        .lp-stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-lg);
+            background: var(--primary-100);
+            color: var(--primary-600);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .lp-stat-number {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-color);
+            letter-spacing: -0.02em;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .lp-stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================
+           SEÇÃO DE RECURSOS
+           ============================================ */
+        .lp-section-title {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 64px;
+        }
+
+        .lp-section-eyebrow {
+            display: inline-block;
+            padding: 6px 16px;
+            background: var(--primary-100);
+            color: var(--primary-700);
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 20px;
+        }
+
+        [data-bs-theme="dark"] .lp-section-eyebrow {
+            background: rgba(43, 161, 129, 0.15);
+            color: var(--primary-300);
+        }
+
+        .lp-section-heading {
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            margin-bottom: 16px;
+        }
+
+        .lp-section-sub {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .lp-features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        @media (max-width: 900px) {
+            .lp-features-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .lp-features-grid { grid-template-columns: 1fr; }
+        }
+
+        .lp-feature-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 32px 28px;
+            transition: all var(--ease-base);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lp-feature-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                400px circle at var(--mouse-x, 0%) var(--mouse-y, 0%),
+                rgba(43, 161, 129, 0.08),
+                transparent 40%
+            );
+            opacity: 0;
+            transition: opacity var(--ease-base);
+            pointer-events: none;
+        }
+
+        .lp-feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .lp-feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary-300);
+        }
+
+        [data-bs-theme="dark"] .lp-feature-card {
+            background: var(--neutral-900);
+        }
+
+        .lp-feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-lg);
+            background: var(--gradient-primary);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .lp-feature-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .lp-feature-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           SEÇÃO COMO FUNCIONA
+           ============================================ */
+        .lp-steps {
+            background: linear-gradient(180deg, var(--bg-body) 0%, rgba(43, 161, 129, 0.05) 100%);
+        }
+
+        .lp-steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .lp-steps-grid { grid-template-columns: 1fr; }
+        }
+
+        .lp-step-card {
+            text-align: center;
+            padding: 24px;
+        }
+
+        .lp-step-number {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--primary-500);
+            color: var(--primary-600);
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-lg), 0 0 0 8px rgba(43, 161, 129, 0.1);
+            transition: all var(--ease-base);
+        }
+
+        .lp-step-card:hover .lp-step-number {
+            transform: scale(1.1) rotate(-5deg);
+            box-shadow: var(--shadow-xl), 0 0 0 12px rgba(43, 161, 129, 0.15);
+        }
+
+        [data-bs-theme="dark"] .lp-step-number {
+            background: var(--neutral-900);
+        }
+
+        .lp-step-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .lp-step-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* ============================================
+           CTA FINAL
+           ============================================ */
+        .lp-cta {
+            padding: 80px 24px;
+        }
+
+        .lp-cta-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 64px 48px;
+            border-radius: var(--radius-2xl);
+            background: var(--gradient-hero);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .lp-cta-inner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-mesh);
+            opacity: 0.4;
+            animation: ds-aurora 8s ease infinite;
+        }
+
+        .lp-cta-inner > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .lp-cta-title {
+            font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .lp-cta-desc {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .lp-footer {
+            padding: 48px 24px 24px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        .lp-footer-inner {
+            max-width: 1240px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .lp-footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
+        }
+
+        .lp-footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 12px;
+            max-width: 320px;
+        }
+
+        .lp-footer-heading {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .lp-footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .lp-footer-links a {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            opacity: 0.75;
+            transition: opacity var(--ease-fast);
+        }
+
+        .lp-footer-links a:hover {
+            opacity: 1;
+            color: var(--primary-600);
+        }
+
+        .lp-footer-bottom {
+            max-width: 1240px;
+            margin: 40px auto 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================
+           MARQUEE DE LOGOS (provas sociais)
+           ============================================ */
+        .lp-marquee {
+            overflow: hidden;
+            padding: 32px 0;
+            mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+        }
+
+        .lp-marquee-track {
+            display: flex;
+            gap: 64px;
+            animation: ds-marquee 30s linear infinite;
+            width: max-content;
+        }
+
+        .lp-marquee-item {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            opacity: 0.5;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="lp-nav" id="lpNav">
+        <div class="lp-nav-inner">
+            <a href="/" class="lp-logo">
+    <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="height: 40px; width: auto;">
+    REABITECH
+</a>
+            <ul class="lp-nav-links">
+                <li><a href="#recursos">Recursos</a></li>
+                <li><a href="#como-funciona">Como Funciona</a></li>
+                <li><a href="#projetos">Projetos</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+            <div class="lp-nav-actions">
+                <a href="{% url 'login' %}" class="ds-btn ds-btn-ghost ds-btn-sm">Entrar</a>
+                <a href="{% url 'login' %}" class="ds-btn ds-btn-primary ds-btn-sm">
+                    Começar Agora <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
-            <div class="col-lg-6 text-center">
-                <div class="card-modern p-4 animate-fadeInUp" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
-                    <i class="fas fa-chart-line fa-5x" style="color: #10b981;"></i>
-                    <h3 class="mt-3">+90% de eficácia na recuperação</h3>
-                    <p class="opacity-75">Acompanhe cada etapa com gráficos e indicadores precisos.</p>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="lp-hero">
+        <!-- Vídeo de fundo (opcional - se não existir, o gradiente fica visível) -->
+        <div class="lp-hero-fallback"></div>
+        <video class="lp-hero-video" autoplay muted loop playsinline
+               poster="{% static 'images/hero-poster.jpg' %}">
+            <!-- Substitua por um vídeo real: -->
+            <source src="{% static 'videos/hero.mp4' %}" type="video/mp4">
+        </video>
+        <div class="lp-hero-overlay"></div>
+
+        <div class="lp-hero-content">
+            <div class="lp-hero-grid">
+                <div>
+                    <div class="lp-hero-badge ds-animate-fade-up">
+                        <span class="pulse-dot"></span>
+                        Plataforma Integrada de Reabilitação
+                    </div>
+
+                    <h1 class="lp-hero-title ds-animate-fade-up ds-delay-1">
+                        Recuperação inteligente para <span>atletas de alto rendimento</span>
+                    </h1>
+
+                    <p class="lp-hero-desc ds-animate-fade-up ds-delay-2">
+                        Une fisioterapia, psicologia esportiva e desempenho técnico em uma única plataforma.
+                        Acompanhe cada etapa da recuperação com dados em tempo real.
+                    </p>
+
+                    <div class="lp-hero-actions ds-animate-fade-up ds-delay-3">
+                        <a href="{% url 'login' %}" class="ds-btn ds-btn-primary ds-btn-lg">
+                            <i class="fas fa-rocket"></i> Acessar Plataforma
+                        </a>
+                        <a href="#recursos" class="ds-btn ds-btn-outline ds-btn-lg" style="color: white; border-color: rgba(255,255,255,0.3);">
+                            <i class="fas fa-play-circle"></i> Ver Recursos
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card flutuante demo -->
+                <div class="ds-animate-fade-up ds-delay-4">
+                    <div class="lp-hero-card">
+                        <div class="lp-hero-card-header">
+                            <div class="lp-hero-card-avatar">JS</div>
+                            <div>
+                                <div class="lp-hero-card-name">João Silva</div>
+                                <div class="lp-hero-card-sub">Futebol • Sub-17</div>
+                            </div>
+                        </div>
+
+                        <div class="lp-hero-stat-row">
+                            <span class="lp-hero-stat-label">Recuperação</span>
+                            <span class="lp-hero-stat-value">82%</span>
+                        </div>
+                        <div class="lp-hero-progress">
+                            <div class="lp-hero-progress-bar" style="--target: 82%;"></div>
+                        </div>
+
+                        <div class="lp-hero-stat-row" style="margin-top: 16px;">
+                            <span class="lp-hero-stat-label">Dor atual</span>
+                            <span class="lp-hero-stat-value" style="color: #34d399;">2/10</span>
+                        </div>
+                        <div class="lp-hero-progress">
+                            <div class="lp-hero-progress-bar" style="--target: 20%; background: linear-gradient(90deg, #34d399, #a7f3d0);"></div>
+                        </div>
+
+                        <div class="lp-hero-stat-row" style="margin-top: 16px;">
+                            <span class="lp-hero-stat-label">Próxima sessão</span>
+                            <span class="lp-hero-stat-value">Hoje, 14h</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Seção de Projetos -->
-<section id="projetos" class="py-5">
-    <div class="container">
-        <h2 class="fw-bold text-center mb-5">Projetos Ativos</h2>
-        <div class="row g-4">
-            {% for projeto in projetos %}
-            <div class="col-md-4">
-                <div class="card-modern p-4 card-tilt">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="badge bg-light text-dark border">{{ projeto.get_tipo_display }}</span>
-                        <i class="fas fa-arrow-right text-muted"></i>
-                    </div>
-                    <h5 class="fw-bold">{{ projeto.nome }}</h5>
-                    <p class="text-muted small mb-3">{{ projeto.descricao|truncatechars:100 }}</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted"><i class="fas fa-user me-2"></i>{{ projeto.coordenador.get_full_name|default:projeto.coordenador.username }}</small>
-                        <a href="{% url 'login' %}" class="btn btn-sm btn-outline-custom">Acessar</a>
-                    </div>
-                </div>
+    <!-- ESTATÍSTICAS -->
+    <section class="lp-stats">
+        <div class="lp-stats-grid">
+            <div class="lp-stat-card ds-reveal">
+                <div class="lp-stat-icon"><i class="fas fa-user-group"></i></div>
+                <div class="lp-stat-number" data-counter="500" data-suffix="+">0</div>
+                <div class="lp-stat-label">Atletas acompanhados</div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center">
-                <p class="text-muted">Nenhum projeto público no momento.</p>
+            <div class="lp-stat-card ds-reveal ds-delay-1">
+                <div class="lp-stat-icon"><i class="fas fa-heart-pulse"></i></div>
+                <div class="lp-stat-number" data-counter="98" data-suffix="%">0</div>
+                <div class="lp-stat-label">Taxa de recuperação</div>
             </div>
-            {% endfor %}
+            <div class="lp-stat-card ds-reveal ds-delay-2">
+                <div class="lp-stat-icon"><i class="fas fa-user-md"></i></div>
+                <div class="lp-stat-number" data-counter="45" data-suffix="+">0</div>
+                <div class="lp-stat-label">Profissionais especializados</div>
+            </div>
+            <div class="lp-stat-card ds-reveal ds-delay-3">
+                <div class="lp-stat-icon"><i class="fas fa-trophy"></i></div>
+                <div class="lp-stat-number" data-counter="120" data-suffix="+">0</div>
+                <div class="lp-stat-label">Lesões tratadas</div>
+            </div>
         </div>
-    </div>
-</section>
-{% endblock %}
+    </section>
+
+    <!-- RECURSOS -->
+    <section class="ds-section" id="recursos">
+        <div class="lp-section-title ds-reveal">
+            <span class="lp-section-eyebrow">Recursos</span>
+            <h2 class="lp-section-heading">Uma plataforma para cada etapa da recuperação</h2>
+            <p class="lp-section-sub">
+                Do diagnóstico inicial à reintegração completa ao esporte, tudo integrado em um só lugar.
+            </p>
+        </div>
+
+        <div class="lp-features-grid">
+            <div class="lp-feature-card ds-reveal">
+                <div class="lp-feature-icon"><i class="fas fa-user-injured"></i></div>
+                <h3 class="lp-feature-title">Fisioterapia Integrada</h3>
+                <p class="lp-feature-desc">
+                    Registro de lesões, prescrição de tratamentos e acompanhamento de evolução física com gráficos detalhados.
+                </p>
+            </div>
+
+            <div class="lp-feature-card ds-reveal ds-delay-1">
+                <div class="lp-feature-icon"><i class="fas fa-brain"></i></div>
+                <h3 class="lp-feature-title">Saúde Mental</h3>
+                <p class="lp-feature-desc">
+                    Avaliações psicológicas, questionários periódicos e monitoramento do bem-estar emocional do atleta.
+                </p>
+            </div>
+
+            <div class="lp-feature-card ds-reveal ds-delay-2">
+                <div class="lp-feature-icon"><i class="fas fa-chart-line"></i></div>
+                <h3 class="lp-feature-title">Análise de Desempenho</h3>
+                <p class="lp-feature-desc">
+                    Dashboards com métricas em tempo real para técnicos acompanharem a evolução física e técnica.
+                </p>
+            </div>
+
+            <div class="lp-feature-card ds-reveal">
+                <div class="lp-feature-icon"><i class="fas fa-bell"></i></div>
+                <h3 class="lp-feature-title">Alertas Inteligentes</h3>
+                <p class="lp-feature-desc">
+                    Notificações automáticas para toda a equipe quando um atleta precisa de atenção especial.
+                </p>
+            </div>
+
+            <div class="lp-feature-card ds-reveal ds-delay-1">
+                <div class="lp-feature-icon"><i class="fas fa-mobile-screen"></i></div>
+                <h3 class="lp-feature-title">Acesso em Qualquer Lugar</h3>
+                <p class="lp-feature-desc">
+                    Interface responsiva que funciona perfeitamente em desktop, tablet e celular.
+                </p>
+            </div>
+
+            <div class="lp-feature-card ds-reveal ds-delay-2">
+                <div class="lp-feature-icon"><i class="fas fa-lock"></i></div>
+                <h3 class="lp-feature-title">Dados Seguros</h3>
+                <p class="lp-feature-desc">
+                    Cada usuário vê apenas o que precisa. Controle de acesso por perfil e proteção de dados médicos.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="ds-section lp-steps" id="como-funciona">
+        <div class="lp-section-title ds-reveal">
+            <span class="lp-section-eyebrow">Como Funciona</span>
+            <h2 class="lp-section-heading">Em três passos simples</h2>
+        </div>
+
+        <div class="lp-steps-grid">
+            <div class="lp-step-card ds-reveal">
+                <div class="lp-step-number">1</div>
+                <h3 class="lp-step-title">Cadastro</h3>
+                <p class="lp-step-desc">
+                    Coordenador cria o projeto e convida a equipe (fisioterapeutas, psicólogos, técnicos) e os atletas.
+                </p>
+            </div>
+
+            <div class="lp-step-card ds-reveal ds-delay-1">
+                <div class="lp-step-number">2</div>
+                <h3 class="lp-step-title">Acompanhamento</h3>
+                <p class="lp-step-desc">
+                    Cada especialista registra suas avaliações. Tudo fica centralizado no perfil do atleta.
+                </p>
+            </div>
+
+            <div class="lp-step-card ds-reveal ds-delay-2">
+                <div class="lp-step-number">3</div>
+                <h3 class="lp-step-title">Recuperação Total</h3>
+                <p class="lp-step-desc">
+                    Com dados integrados, a equipe toma decisões precisas e devolve o atleta ao esporte com segurança.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="lp-cta">
+        <div class="lp-cta-inner ds-reveal">
+            <h2 class="lp-cta-title">Pronto para transformar sua gestão esportiva?</h2>
+            <p class="lp-cta-desc">
+                Junte-se a centenas de profissionais que já utilizam o REABITECH para potencializar resultados.
+            </p>
+            <a href="{% url 'login' %}" class="ds-btn ds-btn-lg" style="background: white; color: #0a3d2e;">
+                <i class="fas fa-arrow-right"></i> Começar Agora
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="lp-footer" id="contato">
+        <div class="lp-footer-inner">
+            <div class="lp-footer-brand">
+                <a href="/" class="lp-logo">
+    <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="height: 40px; width: auto;">
+    REABITECH
+</a>
+                <p>Plataforma integrada de reabilitação esportiva para atletas, profissionais e gestores.</p>
+            </div>
+
+            <div>
+                <div class="lp-footer-heading">Produto</div>
+                <ul class="lp-footer-links">
+                    <li><a href="#recursos">Recursos</a></li>
+                    <li><a href="#como-funciona">Como Funciona</a></li>
+                    <li><a href="#projetos">Projetos</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="lp-footer-heading">Empresa</div>
+                <ul class="lp-footer-links">
+                    <li><a href="#">Sobre</a></li>
+                    <li><a href="#">Contato</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="lp-footer-heading">Legal</div>
+                <ul class="lp-footer-links">
+                    <li><a href="#">Termos</a></li>
+                    <li><a href="#">Privacidade</a></li>
+                    <li><a href="#">LGPD</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="lp-footer-bottom">
+            <div>&copy; 2026 REABITECH. Todos os direitos reservados.</div>
+            <div>Desenvolvido como TCC</div>
+        </div>
+    </footer>
+
+    <!-- SCRIPT DO SCROLL REVEAL + CONTADORES + PARALLAX -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // --------------------------------------------
+            // 1. NAVBAR SCROLL EFFECT
+            // --------------------------------------------
+            const nav = document.getElementById('lpNav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 40) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+
+            // --------------------------------------------
+            // 2. SCROLL REVEAL
+            // --------------------------------------------
+            const revealElements = document.querySelectorAll('.ds-reveal');
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+                revealElements.forEach(el => observer.observe(el));
+            } else {
+                revealElements.forEach(el => el.classList.add('is-visible'));
+            }
+
+            // --------------------------------------------
+            // 3. CONTADORES ANIMADOS
+            // --------------------------------------------
+            const counters = document.querySelectorAll('[data-counter]');
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        const target = parseInt(el.dataset.counter);
+                        const suffix = el.dataset.suffix || '';
+                        const duration = 1800;
+                        const start = performance.now();
+
+                        function tick(now) {
+                            const progress = Math.min((now - start) / duration, 1);
+                            const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+                            el.textContent = Math.floor(eased * target) + suffix;
+                            if (progress < 1) requestAnimationFrame(tick);
+                        }
+                        requestAnimationFrame(tick);
+
+                        counterObserver.unobserve(el);
+                    }
+                });
+            }, { threshold: 0.5 });
+            counters.forEach(c => counterObserver.observe(c));
+
+            // --------------------------------------------
+            // 4. EFEITO MOUSE TRACKING NOS FEATURE CARDS
+            // --------------------------------------------
+            document.querySelectorAll('.lp-feature-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                    card.style.setProperty('--mouse-x', x + '%');
+                    card.style.setProperty('--mouse-y', y + '%');
+                });
+            });
+
+            // --------------------------------------------
+            // 5. SCROLL SUAVE PARA ÂNCORAS
+            // --------------------------------------------
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

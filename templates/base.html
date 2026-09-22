@@ -17,6 +17,13 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/animations.css' %}">
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+    <!-- Design System v2.0 -->
+<link rel="stylesheet" href="{% static 'css/design-system.css' %}">
+
+<!-- Preconnect para fontes -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
     <style>
         /* ===== PALETA DE CORES REABITECH ===== */
@@ -800,6 +807,34 @@
             }
         });
     }
+</script>
+
+<script>
+    // ============================================
+    // SCROLL REVEAL (Intersection Observer)
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function () {
+        const revealElements = document.querySelectorAll('.ds-reveal');
+
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -60px 0px'
+            });
+
+            revealElements.forEach(el => observer.observe(el));
+        } else {
+            // Fallback para navegadores antigos
+            revealElements.forEach(el => el.classList.add('is-visible'));
+        }
+    });
 </script>
     {% block extra_js %}{% endblock %}
 </body>
