@@ -1,9 +1,502 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block title %}Dashboard do Coordenador{% endblock %}
 {% block page_title %}Visão Geral do Projeto{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* ============================================
+       ONBOARDING CARD
+       ============================================ */
+    .onboarding-card {
+        background: linear-gradient(135deg, #0a3d2e 0%, #11543f 50%, #2BA181 100%);
+        color: white;
+        border-radius: 20px;
+        padding: 32px;
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(43, 161, 129, 0.25);
+        animation: ds-fade-up 0.6s ease forwards;
+    }
+
+    .onboarding-card::before {
+        content: '';
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
+        border-radius: 50%;
+    }
+
+    .onboarding-card.hidden {
+        display: none;
+    }
+
+    .onboarding-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .onboarding-title {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin-bottom: 4px;
+    }
+
+    .onboarding-sub {
+        font-size: 0.95rem;
+        opacity: 0.85;
+        margin: 0;
+    }
+
+    .onboarding-progress-wrapper {
+        min-width: 200px;
+    }
+
+    .onboarding-progress-text {
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+        opacity: 0.9;
+    }
+
+    .onboarding-progress-bar-bg {
+        height: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 999px;
+        overflow: hidden;
+    }
+
+    .onboarding-progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #a7f3d0, #34d399);
+        border-radius: 999px;
+        transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .onboarding-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: rgba(255,255,255,0.15);
+        border: none;
+        color: white;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        z-index: 2;
+    }
+
+    .onboarding-close:hover {
+        background: rgba(255,255,255,0.25);
+    }
+
+    .onboarding-steps {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        position: relative;
+        z-index: 1;
+    }
+
+    @media (max-width: 900px) {
+        .onboarding-steps {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .onboarding-steps {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .onboarding-step {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 14px;
+        padding: 16px;
+        transition: all 0.25s ease;
+        text-decoration: none;
+        color: white;
+        display: block;
+        position: relative;
+    }
+
+    .onboarding-step:hover {
+        background: rgba(255, 255, 255, 0.18);
+        transform: translateY(-3px);
+        color: white;
+    }
+
+    .onboarding-step.done {
+        background: rgba(52, 211, 153, 0.15);
+        border-color: rgba(52, 211, 153, 0.4);
+    }
+
+    .onboarding-step.done:hover {
+        transform: none;
+    }
+
+    .onboarding-step-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+        transition: all 0.3s;
+    }
+
+    .onboarding-step.done .onboarding-step-icon {
+        background: #34d399;
+        color: #0a3d2e;
+    }
+
+    .onboarding-step-title {
+        font-weight: 700;
+        font-size: 0.95rem;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .onboarding-step-desc {
+        font-size: 0.78rem;
+        opacity: 0.75;
+        line-height: 1.4;
+        margin: 0;
+    }
+
+    .onboarding-step-num {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.15);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 700;
+    }
+
+    .onboarding-step.done .onboarding-step-num {
+        background: #34d399;
+        color: #0a3d2e;
+    }
+
+    /* ============================================
+       ESTADOS VAZIOS BONITOS
+       ============================================ */
+    .empty-state {
+        text-align: center;
+        padding: 60px 24px;
+    }
+
+    .empty-state-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+        color: #2BA181;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    .empty-state-title {
+        font-family: var(--font-display);
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #1e293b;
+    }
+
+    .empty-state-desc {
+        color: #64748b;
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* ============================================
+       SKELETON LOADING
+       ============================================ */
+    .skeleton-line {
+        height: 14px;
+        background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+        background-size: 200% 100%;
+        animation: skeleton-shimmer 1.5s infinite;
+        border-radius: 6px;
+        margin-bottom: 10px;
+    }
+
+    .skeleton-line.short { width: 40%; }
+    .skeleton-line.medium { width: 70%; }
+
+    @keyframes skeleton-shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+
+    /* ============================================
+       TOAST NOTIFICATIONS
+       ============================================ */
+    .toast-container {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .toast-item {
+        background: white;
+        border-radius: 14px;
+        padding: 16px 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 300px;
+        max-width: 420px;
+        animation: toast-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border-left: 4px solid #2BA181;
+    }
+
+    .toast-item.success { border-left-color: #10b981; }
+    .toast-item.error   { border-left-color: #ef4444; }
+    .toast-item.warning { border-left-color: #f59e0b; }
+    .toast-item.info    { border-left-color: #06b6d4; }
+
+    .toast-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .toast-item.success .toast-icon { background: #d1fae5; color: #10b981; }
+    .toast-item.error   .toast-icon { background: #fee2e2; color: #ef4444; }
+    .toast-item.warning .toast-icon { background: #fef3c7; color: #f59e0b; }
+    .toast-item.info    .toast-icon { background: #cffafe; color: #06b6d4; }
+
+    .toast-content {
+        flex: 1;
+    }
+
+    .toast-title {
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-bottom: 2px;
+        color: #1e293b;
+    }
+
+    .toast-message {
+        font-size: 0.85rem;
+        color: #64748b;
+        margin: 0;
+    }
+
+    @keyframes toast-in {
+        from {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .toast-item.hiding {
+        animation: toast-out 0.3s ease forwards;
+    }
+
+    @keyframes toast-out {
+        to {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid p-0">
+
+    <!-- ============================================
+         ONBOARDING — Guia para novos coordenadores
+         ============================================ -->
+    {% if not onboarding_completo %}
+    <div class="onboarding-card" id="onboardingCard">
+        <button class="onboarding-close" onclick="hideOnboarding()" title="Fechar guia">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="onboarding-header">
+            <div>
+                <div class="onboarding-title">
+                    <i class="fas fa-rocket me-2"></i>
+                    {% if onboarding_progresso == 0 %}
+                        Bem-vindo ao REABITECH!
+                    {% elif onboarding_progresso < 50 %}
+                        Você está quase lá!
+                    {% elif onboarding_progresso < 100 %}
+                        Falta pouco para começar!
+                    {% endif %}
+                </div>
+                <p class="onboarding-sub">
+                    Complete os passos abaixo para configurar seu projeto
+                </p>
+            </div>
+
+            <div class="onboarding-progress-wrapper">
+                <div class="onboarding-progress-text">
+                    <strong>{{ onboarding_progresso }}%</strong> concluído
+                </div>
+                <div class="onboarding-progress-bar-bg">
+                    <div class="onboarding-progress-bar-fill" style="width: {{ onboarding_progresso }}%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="onboarding-steps">
+            <!-- Passo 1: Criar projeto -->
+            <div class="onboarding-step {% if onboarding.criar_projeto %}done{% endif %}">
+                <span class="onboarding-step-num">
+                    {% if onboarding.criar_projeto %}
+                        <i class="fas fa-check"></i>
+                    {% else %}
+                        1
+                    {% endif %}
+                </span>
+                <div class="onboarding-step-icon">
+                    <i class="fas fa-{% if onboarding.criar_projeto %}check{% else %}building{% endif %}"></i>
+                </div>
+                <div class="onboarding-step-title">
+                    Criar projeto
+                </div>
+                <p class="onboarding-step-desc">
+                    {% if onboarding.criar_projeto %}
+                        Concluído ✓
+                    {% else %}
+                        Configure seu primeiro projeto
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- Passo 2: Convidar equipe -->
+            <a href="{% url 'dashboard:coordenador_adicionar_membro' %}"
+               class="onboarding-step {% if onboarding.convidar_equipe %}done{% endif %}">
+                <span class="onboarding-step-num">
+                    {% if onboarding.convidar_equipe %}
+                        <i class="fas fa-check"></i>
+                    {% else %}
+                        2
+                    {% endif %}
+                </span>
+                <div class="onboarding-step-icon">
+                    <i class="fas fa-{% if onboarding.convidar_equipe %}check{% else %}user-plus{% endif %}"></i>
+                </div>
+                <div class="onboarding-step-title">
+                    Convidar equipe
+                </div>
+                <p class="onboarding-step-desc">
+                    {% if onboarding.convidar_equipe %}
+                        Concluído ✓
+                    {% else %}
+                        Adicione fisios, psicólogos e técnicos
+                    {% endif %}
+                </p>
+            </a>
+
+            <!-- Passo 3: Cadastrar paciente -->
+            <a href="{% url 'dashboard:coordenador_adicionar_membro' %}"
+               class="onboarding-step {% if onboarding.cadastrar_paciente %}done{% endif %}">
+                <span class="onboarding-step-num">
+                    {% if onboarding.cadastrar_paciente %}
+                        <i class="fas fa-check"></i>
+                    {% else %}
+                        3
+                    {% endif %}
+                </span>
+                <div class="onboarding-step-icon">
+                    <i class="fas fa-{% if onboarding.cadastrar_paciente %}check{% else %}user-injured{% endif %}"></i>
+                </div>
+                <div class="onboarding-step-title">
+                    Cadastrar paciente
+                </div>
+                <p class="onboarding-step-desc">
+                    {% if onboarding.cadastrar_paciente %}
+                        Concluído ✓
+                    {% else %}
+                        Adicione o primeiro paciente/atleta
+                    {% endif %}
+                </p>
+            </a>
+
+            <!-- Passo 4: Criar tratamento -->
+            <a href="{% url 'dashboard:fisioterapeuta_todos_atletas' %}"
+               class="onboarding-step {% if onboarding.criar_tratamento %}done{% endif %}">
+                <span class="onboarding-step-num">
+                    {% if onboarding.criar_tratamento %}
+                        <i class="fas fa-check"></i>
+                    {% else %}
+                        4
+                    {% endif %}
+                </span>
+                <div class="onboarding-step-icon">
+                    <i class="fas fa-{% if onboarding.criar_tratamento %}check{% else %}notes-medical{% endif %}"></i>
+                </div>
+                <div class="onboarding-step-title">
+                    Criar tratamento
+                </div>
+                <p class="onboarding-step-desc">
+                    {% if onboarding.criar_tratamento %}
+                        Concluído ✓
+                    {% else %}
+                        Registre a primeira lesão e tratamento
+                    {% endif %}
+                </p>
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Saudação -->
     <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: var(--gradient); color: white; border: none;">
         <div class="d-flex justify-content-between align-items-center">
@@ -116,52 +609,61 @@
     </div>
 
     <!-- Alertas Recentes -->
-    <!-- Alertas Recentes -->
-<div class="card-modern p-4 mb-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-bold mb-0">
-            <i class="fas fa-exclamation-triangle me-2 text-warning"></i>Alertas Ativos
-        </h5>
-        {% if alertas_recentes %}
-        <span class="badge bg-warning text-dark">{{ alertas_recentes|length }} ativo(s)</span>
-        {% endif %}
-    </div>
+    <div class="card-modern p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0">
+                <i class="fas fa-exclamation-triangle me-2 text-warning"></i>Alertas Ativos
+            </h5>
+            {% if alertas_recentes %}
+            <span class="badge bg-warning text-dark">{{ alertas_recentes|length }} ativo(s)</span>
+            {% endif %}
+        </div>
 
-    <div class="row g-3">
-        {% for alerta in alertas_recentes %}
-        <div class="col-md-6">
-            <div class="card p-3 border-0 shadow-sm rounded-4 h-100" style="background: linear-gradient(135deg, #fffbf0, #fff3cd);">
-                <div class="d-flex align-items-start">
-                    <div class="bg-warning bg-opacity-20 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                        <i class="fas fa-exclamation-triangle text-warning"></i>
-                    </div>
-                    <div class="flex-grow-1">
-                        <h6 class="fw-bold mb-1">{{ alerta.get_tipo_display }}</h6>
-                        <p class="text-muted small mb-2">{{ alerta.mensagem }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">
-                                <i class="fas fa-user me-1"></i>{{ alerta.atleta.usuario.get_full_name|default:alerta.atleta.usuario.username }}
-                            </small>
-                            <a href="{% url 'dashboard:resolver_alerta' alerta.id %}" class="btn btn-sm btn-success">
-                                <i class="fas fa-check me-1"></i> Resolver
-                            </a>
+        <div class="row g-3">
+            {% for alerta in alertas_recentes %}
+            <div class="col-md-6">
+                <div class="card p-3 border-0 shadow-sm rounded-4 h-100" style="background: linear-gradient(135deg, #fffbf0, #fff3cd);">
+                    <div class="d-flex align-items-start">
+                        <div class="bg-warning bg-opacity-20 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold mb-1">{{ alerta.get_tipo_display }}</h6>
+                            <p class="text-muted small mb-2">{{ alerta.mensagem }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-user me-1"></i>{{ alerta.atleta.usuario.get_full_name|default:alerta.atleta.usuario.username }}
+                                </small>
+                                <a href="{% url 'dashboard:resolver_alerta' alerta.id %}"
+                                   class="btn btn-sm btn-success"
+                                   onclick="return confirm('Marcar este alerta como resolvido?')">
+                                    <i class="fas fa-check me-1"></i> Resolver
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        {% empty %}
-        <div class="col-12">
-            <div class="text-center py-4">
-                <i class="fas fa-check-circle fs-1 text-success d-block mb-3 opacity-50"></i>
-                <h5 class="text-muted">Nenhum alerta ativo</h5>
-                <p class="text-muted mb-0">Todos os atletas estão sob controle! 🎉</p>
+            {% empty %}
+            <div class="col-12">
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h4 class="empty-state-title">Nenhum alerta ativo</h4>
+                    <p class="empty-state-desc">
+                        Todos os atletas estão sob controle! Você será notificado aqui quando algo precisar de atenção.
+                    </p>
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
+
 </div>
-</div>
+
+<!-- Container de toasts (preenchido via JS) -->
+<div class="toast-container" id="toastContainer"></div>
 
 <!-- Dados seguros para o JavaScript (json_script) -->
 {{ chart_evo_labels|json_script:"evo_labels" }}
@@ -178,24 +680,28 @@
 {{ chart_perf_data|json_script:"perf_data" }}
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 🔥 Função auxiliar para ler os dados do json_script com segurança
-        function getJSON(id) {
-            const element = document.getElementById(id);
-            return element ? JSON.parse(element.textContent) : [];
-        }
+document.addEventListener('DOMContentLoaded', function() {
 
-        // ==========================================
-        // GRÁFICO 1: Evolução da Recuperação
-        // ==========================================
-        const ctxEvo = document.getElementById('evolutionChart').getContext('2d');
-        new Chart(ctxEvo, {
+    // 🔥 Função auxiliar para ler dados do json_script com segurança
+    function getJSON(id) {
+        const element = document.getElementById(id);
+        return element ? JSON.parse(element.textContent) : [];
+    }
+
+    // ==========================================
+    // GRÁFICO 1: Evolução da Recuperação
+    // ==========================================
+    const evoLabels = getJSON('evo_labels');
+    const evoData = getJSON('evo_data');
+
+    if (evoLabels.length > 0) {
+        new Chart(document.getElementById('evolutionChart').getContext('2d'), {
             type: 'line',
             data: {
-                labels: getJSON('evo_labels'),
+                labels: evoLabels,
                 datasets: [{
                     label: '% Recuperação',
-                    data: getJSON('evo_data'),
+                    data: evoData,
                     borderColor: '#2BA181',
                     backgroundColor: 'rgba(43, 161, 129, 0.1)',
                     fill: true,
@@ -208,17 +714,23 @@
                 plugins: { legend: { display: false } }
             }
         });
+    } else {
+        showEmptyChart('evolutionChart', 'Sem evoluções registradas ainda');
+    }
 
-        // ==========================================
-        // GRÁFICO 2: Status dos Atletas (Pizza)
-        // ==========================================
-        const ctxStatus = document.getElementById('statusChart').getContext('2d');
-        new Chart(ctxStatus, {
+    // ==========================================
+    // GRÁFICO 2: Status dos Atletas
+    // ==========================================
+    const statusData = getJSON('status_data');
+    const hasStatusData = statusData.some(v => v > 0);
+
+    if (hasStatusData) {
+        new Chart(document.getElementById('statusChart').getContext('2d'), {
             type: 'pie',
             data: {
                 labels: getJSON('status_labels'),
                 datasets: [{
-                    data: getJSON('status_data'),
+                    data: statusData,
                     backgroundColor: ['#dc3545', '#2BA181', '#ffc107'],
                     borderWidth: 0
                 }]
@@ -229,17 +741,21 @@
                 plugins: { legend: { position: 'bottom' } }
             }
         });
+    } else {
+        showEmptyChart('statusChart', 'Sem dados de status ainda');
+    }
 
-        // ==========================================
-        // GRÁFICO 3: Lesões por Modalidade (Barras)
-        // ==========================================
-        const ctxModal = document.getElementById('modalChart').getContext('2d');
-        new Chart(ctxModal, {
+    // ==========================================
+    // GRÁFICO 3: Lesões por Modalidade
+    // ==========================================
+    const modalData = getJSON('modal_data');
+    if (modalData.some(v => v > 0)) {
+        new Chart(document.getElementById('modalChart').getContext('2d'), {
             type: 'bar',
             data: {
                 labels: getJSON('modal_labels'),
                 datasets: [{
-                    data: getJSON('modal_data'),
+                    data: modalData,
                     backgroundColor: '#2BA181',
                     borderRadius: 8
                 }]
@@ -251,17 +767,21 @@
                 scales: { y: { beginAtZero: true } }
             }
         });
+    } else {
+        showEmptyChart('modalChart', 'Sem lesões registradas');
+    }
 
-        // ==========================================
-        // GRÁFICO 4: Tipos de Lesões (Barras)
-        // ==========================================
-        const ctxTipos = document.getElementById('tiposChart').getContext('2d');
-        new Chart(ctxTipos, {
+    // ==========================================
+    // GRÁFICO 4: Tipos de Lesões
+    // ==========================================
+    const tiposData = getJSON('tipos_data');
+    if (tiposData.some(v => v > 0)) {
+        new Chart(document.getElementById('tiposChart').getContext('2d'), {
             type: 'bar',
             data: {
                 labels: getJSON('tipos_labels'),
                 datasets: [{
-                    data: getJSON('tipos_data'),
+                    data: tiposData,
                     backgroundColor: '#dc3545',
                     borderRadius: 8
                 }]
@@ -273,84 +793,88 @@
                 scales: { y: { beginAtZero: true } }
             }
         });
+    } else {
+        showEmptyChart('tiposChart', 'Sem dados de lesões');
+    }
 
-        // ==========================================
-        // GRÁFICO 5: Taxa de Recuperação (Doughnut)
-        // ==========================================
-        const ctxRec = document.getElementById('recuperacaoChart').getContext('2d');
-        const recuperacao = {{ taxa_recuperacao_media }};
-        new Chart(ctxRec, {
-            type: 'doughnut',
+    // ==========================================
+    // GRÁFICO 5: Taxa de Recuperação
+    // ==========================================
+    const recuperacao = {{ taxa_recuperacao_media|default:0 }};
+    new Chart(document.getElementById('recuperacaoChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Recuperado', 'Restante'],
+            datasets: [{
+                data: [recuperacao, 100 - recuperacao],
+                backgroundColor: ['#2BA181', '#e9ecef'],
+                borderWidth: 0,
+                hoverOffset: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '75%',
+            plugins: { legend: { display: false } }
+        },
+        plugins: [{
+            id: 'textCenter',
+            beforeDraw: function(chart) {
+                const { width, height, ctx } = chart;
+                ctx.save();
+                ctx.font = 'bold 28px Poppins, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#333';
+                ctx.fillText(recuperacao + '%', width / 2, height / 2 - 5);
+                ctx.font = '12px Poppins, sans-serif';
+                ctx.fillStyle = '#666';
+                ctx.fillText('Recuperado', width / 2, height / 2 + 25);
+                ctx.restore();
+            }
+        }]
+    });
+
+    // ==========================================
+    // GRÁFICO 6: Indicadores Psicológicos (Radar)
+    // ==========================================
+    const psiLabels = getJSON('psi_labels');
+    if (psiLabels.length > 0) {
+        new Chart(document.getElementById('psicologicoChart').getContext('2d'), {
+            type: 'radar',
             data: {
-                labels: ['Recuperado', 'Restante'],
+                labels: psiLabels,
                 datasets: [{
-                    data: [recuperacao, 100 - recuperacao],
-                    backgroundColor: ['#2BA181', '#e9ecef'],
-                    borderWidth: 0,
-                    hoverOffset: 10
+                    label: 'Média',
+                    data: getJSON('psi_data'),
+                    backgroundColor: 'rgba(43, 161, 129, 0.2)',
+                    borderColor: '#2BA181',
+                    pointBackgroundColor: '#2BA181'
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '75%',
-                plugins: { legend: { display: false } }
-            },
-            plugins: [{
-                id: 'textCenter',
-                beforeDraw: function(chart) {
-                    const { width, height, ctx } = chart;
-                    ctx.save();
-                    ctx.font = 'bold 28px Poppins, sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillStyle = '#333';
-                    ctx.fillText(recuperacao + '%', width / 2, height / 2 - 5);
-                    ctx.font = '12px Poppins, sans-serif';
-                    ctx.fillStyle = '#666';
-                    ctx.fillText('Recuperado', width / 2, height / 2 + 25);
-                    ctx.restore();
-                }
-            }]
+                scales: { r: { beginAtZero: true, max: 10 } }
+            }
         });
+    } else {
+        showEmptyChart('psicologicoChart', 'Sem avaliações psicológicas');
+    }
 
-        // ==========================================
-        // GRÁFICO 6: Indicadores Psicológicos (Radar)
-        // ==========================================
-        const psiLabels = getJSON('psi_labels');
-        if (psiLabels.length > 0) {
-            const ctxPsi = document.getElementById('psicologicoChart').getContext('2d');
-            new Chart(ctxPsi, {
-                type: 'radar',
-                data: {
-                    labels: psiLabels,
-                    datasets: [{
-                        label: 'Média',
-                        data: getJSON('psi_data'),
-                        backgroundColor: 'rgba(43, 161, 129, 0.2)',
-                        borderColor: '#2BA181',
-                        pointBackgroundColor: '#2BA181'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { r: { beginAtZero: true, max: 10 } }
-                }
-            });
-        }
-
-        // ==========================================
-        // GRÁFICO 7: Desempenho por Modalidade (Barras)
-        // ==========================================
-        const ctxPerf = document.getElementById('desempenhoChart').getContext('2d');
-        new Chart(ctxPerf, {
+    // ==========================================
+    // GRÁFICO 7: Desempenho por Modalidade
+    // ==========================================
+    const perfData = getJSON('perf_data');
+    if (perfData.some(v => v > 0)) {
+        new Chart(document.getElementById('desempenhoChart').getContext('2d'), {
             type: 'bar',
             data: {
                 labels: getJSON('perf_labels'),
                 datasets: [{
                     label: 'Desempenho',
-                    data: getJSON('perf_data'),
+                    data: perfData,
                     backgroundColor: '#ffc107',
                     borderRadius: 8
                 }]
@@ -362,6 +886,83 @@
                 scales: { y: { beginAtZero: true, max: 10 } }
             }
         });
-    });
+    } else {
+        showEmptyChart('desempenhoChart', 'Sem dados de desempenho');
+    }
+
+    // ==========================================
+    // Helper: mostrar "estado vazio" em vez de gráfico
+    // ==========================================
+    function showEmptyChart(canvasId, message) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+
+        const wrapper = canvas.parentElement;
+        wrapper.innerHTML = `
+            <div class="d-flex flex-column align-items-center justify-content-center h-100 text-muted" style="opacity:0.6;">
+                <i class="fas fa-chart-line" style="font-size:2.5rem;margin-bottom:12px;"></i>
+                <p class="small mb-0 text-center px-3">${message}</p>
+            </div>
+        `;
+    }
+});
+
+// ============================================
+// ONBOARDING — Esconder card
+// ============================================
+function hideOnboarding() {
+    const card = document.getElementById('onboardingCard');
+    if (card) {
+        card.style.transition = 'opacity 0.3s, transform 0.3s';
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(-20px)';
+        setTimeout(() => {
+            card.style.display = 'none';
+            localStorage.setItem('onboarding_hidden', 'true');
+        }, 300);
+    }
+}
+
+// Se já foi escondido antes, mantém escondido
+document.addEventListener('DOMContentLoaded', function() {
+    if (localStorage.getItem('onboarding_hidden') === 'true') {
+        const card = document.getElementById('onboardingCard');
+        if (card) card.style.display = 'none';
+    }
+});
+
+// ============================================
+// SISTEMA DE TOAST GLOBAL
+// ============================================
+window.showToast = function(title, message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const icons = {
+        success: 'fa-check',
+        error: 'fa-times',
+        warning: 'fa-exclamation',
+        info: 'fa-info'
+    };
+
+    const toast = document.createElement('div');
+    toast.className = `toast-item ${type}`;
+    toast.innerHTML = `
+        <div class="toast-icon">
+            <i class="fas ${icons[type] || icons.info}"></i>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            <p class="toast-message">${message}</p>
+        </div>
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 300);
+    }, 4000);
+};
 </script>
 {% endblock %}
