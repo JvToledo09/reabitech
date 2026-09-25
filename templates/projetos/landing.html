@@ -1,101 +1,507 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-br" data-bs-theme="light">
+<html lang="pt-br" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="REABITECH — Plataforma integrada de reabilitação esportiva para atletas, fisioterapeutas, psicólogos e técnicos.">
-    <title>REABITECH — Reabilitação Esportiva Inteligente</title>
+    <meta name="description" content="REABITECH — Plataforma integrada de reabilitação para clínicas, escolas e projetos sociais.">
+    <title>REABITECH — Recuperar é avançar</title>
 
-    <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <!-- Design System -->
     <link rel="stylesheet" href="{% static 'css/design-system.css' %}">
 
     <style>
-        /* ============================================
-           NAVBAR PREMIUM
-           ============================================ */
+        /* ================================================================
+           VARIÁVEIS LIGHT / DARK (padrão: claro)
+           ================================================================ */
+        :root, [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --bg-elevated: #ffffff;
+            --bg-overlay: rgba(255, 255, 255, 0.85);
+
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #94a3b8;
+            --text-inverse: #ffffff;
+
+            --border-color: rgba(15, 23, 42, 0.08);
+            --border-strong: rgba(15, 23, 42, 0.15);
+
+            --green: #2BA181;
+            --green-deep: #1f8768;
+            --green-light: #a7f3d0;
+            --green-soft: rgba(43, 161, 129, 0.08);
+            --green-soft-2: rgba(43, 161, 129, 0.15);
+
+            --cyan: #06b6d4;
+
+            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+            --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.06);
+            --shadow-lg: 0 20px 40px rgba(15, 23, 42, 0.08);
+            --shadow-xl: 0 30px 60px rgba(15, 23, 42, 0.1);
+
+            --hero-overlay-1: rgba(255, 255, 255, 0.92);
+            --hero-overlay-2: rgba(255, 255, 255, 0.7);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #0f172a;
+            --bg-tertiary: #1e293b;
+            --bg-elevated: #1e293b;
+            --bg-overlay: rgba(10, 10, 15, 0.85);
+
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-tertiary: #64748b;
+            --text-inverse: #0f172a;
+
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.15);
+
+            --green-soft: rgba(43, 161, 129, 0.15);
+            --green-soft-2: rgba(43, 161, 129, 0.25);
+
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 30px 60px rgba(0, 0, 0, 0.6);
+
+            --hero-overlay-1: rgba(10, 10, 15, 0.85);
+            --hero-overlay-2: rgba(10, 10, 15, 0.7);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            overflow-x: hidden;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        /* ================================================================
+           FUNDO GLOBAL
+           ================================================================ */
+        .bg-animated {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            overflow: hidden;
+            background: var(--bg-primary);
+            transition: background 0.4s ease;
+        }
+
+        .bg-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.35;
+            animation: blobFloat 22s ease-in-out infinite;
+        }
+
+        [data-theme="dark"] .bg-blob { opacity: 0.45; }
+
+        .blob-1 {
+            width: 550px; height: 550px;
+            background: radial-gradient(circle, #a7f3d0, transparent 70%);
+            top: -150px; left: -150px;
+        }
+
+        [data-theme="dark"] .blob-1 {
+            background: radial-gradient(circle, #2BA181, transparent 70%);
+        }
+
+        .blob-2 {
+            width: 650px; height: 650px;
+            background: radial-gradient(circle, #cffafe, transparent 70%);
+            top: 20%; right: -250px;
+            animation-delay: -8s;
+        }
+
+        [data-theme="dark"] .blob-2 {
+            background: radial-gradient(circle, #06b6d4, transparent 70%);
+        }
+
+        .blob-3 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, #d1fae5, transparent 70%);
+            bottom: -200px; left: 30%;
+            animation-delay: -15s;
+        }
+
+        [data-theme="dark"] .blob-3 {
+            background: radial-gradient(circle, #0f8768, transparent 70%);
+        }
+
+        @keyframes blobFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33%      { transform: translate(80px, -60px) scale(1.15); }
+            66%      { transform: translate(-60px, 80px) scale(0.9); }
+        }
+
+        .bg-animated::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(var(--border-strong) 1px, transparent 1px);
+            background-size: 4px 4px;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* ================================================================
+           BOTÃO TOGGLE DARK MODE (flutuante)
+           ================================================================ */
+        .theme-toggle {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--green);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            box-shadow: 0 8px 24px rgba(43, 161, 129, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-3px) rotate(15deg);
+            box-shadow: 0 15px 40px rgba(43, 161, 129, 0.55);
+        }
+
+        @media (max-width: 768px) {
+            .theme-toggle { bottom: 90px; right: 16px; }
+        }
+
+        /* ================================================================
+           CHAT DE SUPORTE FLUTUANTE
+           ================================================================ */
+        .chat-widget {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 999;
+        }
+
+        .chat-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green), var(--green-deep));
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            box-shadow: 0 12px 32px rgba(43, 161, 129, 0.45);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .chat-button:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(43, 161, 129, 0.6);
+        }
+
+        .chat-button::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid rgba(43, 161, 129, 0.3);
+            animation: chatPulse 2.5s infinite;
+        }
+
+        @keyframes chatPulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50%      { transform: scale(1.25); opacity: 0; }
+        }
+
+        .chat-panel {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 360px;
+            max-width: calc(100vw - 40px);
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: bottom right;
+        }
+
+        .chat-panel.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .chat-header {
+            padding: 18px 20px;
+            background: linear-gradient(135deg, var(--green), var(--green-deep));
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-header-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .chat-header-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+        }
+
+        .chat-header-status {
+            font-size: 0.75rem;
+            opacity: 0.85;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-header-status::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #34d399;
+            box-shadow: 0 0 8px #34d399;
+        }
+
+        .chat-body {
+            padding: 20px;
+            max-height: 320px;
+            overflow-y: auto;
+            background: var(--bg-secondary);
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+            animation: chatMessageIn 0.4s ease;
+        }
+
+        @keyframes chatMessageIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green), var(--green-deep));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .chat-message-bubble {
+            padding: 10px 14px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 14px 14px 14px 4px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            max-width: 260px;
+        }
+
+        .chat-footer {
+            padding: 14px 18px;
+            background: var(--bg-elevated);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 100px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus { border-color: var(--green); }
+
+        .chat-send {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--green);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .chat-send:hover { background: var(--green-deep); transform: scale(1.1); }
+
+        @media (max-width: 480px) {
+            .chat-button { width: 54px; height: 54px; font-size: 1.2rem; }
+        }
+
+        /* ================================================================
+           NAVBAR
+           ================================================================ */
         .lp-nav {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: var(--z-fixed);
-            padding: 16px 0;
-            transition: all var(--ease-base);
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 18px 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .lp-nav.scrolled {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: var(--bg-overlay);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 0;
             box-shadow: var(--shadow-sm);
-            padding: 10px 0;
         }
 
         .lp-nav-inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            max-width: 1240px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 32px;
         }
 
         .lp-logo {
-            font-family: var(--font-display);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 1.4rem;
             font-weight: 800;
             letter-spacing: -0.03em;
-            color: #0a3d2e;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            transition: transform 0.3s ease;
         }
 
-        .lp-logo i {
-            color: var(--primary-500);
+        .lp-logo:hover { transform: scale(1.03); }
+
+        /* ⭐ NOVA LOGO — MAIS DESTACADA */
+        .lp-logo-img-wrapper {
+            position: relative;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lp-logo-img-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            background: radial-gradient(circle, rgba(43, 161, 129, 0.35), transparent 70%);
+            border-radius: 50%;
+            animation: logoPulse 3s ease-in-out infinite;
+        }
+
+        .lp-logo-img-wrapper img {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 14px rgba(43, 161, 129, 0.4));
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50%      { opacity: 1; transform: scale(1.2); }
         }
 
         .lp-nav-links {
             display: flex;
-            gap: 32px;
+            gap: 36px;
             list-style: none;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .lp-nav-links a {
-            color: #334155;
+            color: var(--text-secondary);
             font-weight: 500;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
+            text-decoration: none;
             position: relative;
-            transition: color var(--ease-fast);
+            padding: 6px 0;
+            transition: color 0.25s ease;
         }
 
         .lp-nav-links a::after {
             content: '';
             position: absolute;
-            bottom: -6px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-500);
-            transition: width var(--ease-base);
+            bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, var(--green), #34d399);
+            border-radius: 2px;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .lp-nav-links a:hover {
-            color: var(--primary-600);
-        }
-
-        .lp-nav-links a:hover::after {
-            width: 100%;
-        }
+        .lp-nav-links a:hover { color: var(--green); }
+        .lp-nav-links a:hover::after { width: 100%; }
 
         .lp-nav-actions {
             display: flex;
@@ -103,13 +509,73 @@
             gap: 12px;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 992px) {
             .lp-nav-links { display: none; }
         }
 
-        /* ============================================
-           HERO COM VÍDEO
-           ============================================ */
+        /* ================================================================
+           BOTÕES
+           ================================================================ */
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .hero-btn-primary {
+            background: linear-gradient(135deg, var(--green), var(--green-deep));
+            color: white;
+            box-shadow:
+                0 10px 30px rgba(43, 161, 129, 0.35),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        }
+
+        .hero-btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 20px 50px rgba(43, 161, 129, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            color: white;
+        }
+
+        .hero-btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .hero-btn-primary:hover::before { left: 100%; }
+
+        .hero-btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1.5px solid var(--border-strong);
+        }
+
+        .hero-btn-outline:hover {
+            background: var(--green-soft);
+            border-color: var(--green);
+            color: var(--green);
+            transform: translateY(-3px);
+        }
+
+        /* ================================================================
+           HERO — AGORA COM VÍDEO + LOGO GRANDE
+           ================================================================ */
         .lp-hero {
             position: relative;
             min-height: 100vh;
@@ -117,565 +583,1329 @@
             align-items: center;
             overflow: hidden;
             padding: 140px 0 100px;
+            perspective: 1500px;
         }
 
-        .lp-hero-video {
+        /* 🎬 VÍDEO DE FUNDO — funcionando com fallback */
+        .hero-video-wrapper {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .hero-video-wrapper video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
             object-fit: cover;
             z-index: 0;
         }
 
-        .lp-hero-overlay {
+        /* Fallback: se não houver vídeo, mostra gradiente animado */
+        .hero-video-fallback {
             position: absolute;
             inset: 0;
-            background: linear-gradient(
-                135deg,
-                rgba(10, 61, 46, 0.92) 0%,
-                rgba(17, 84, 63, 0.85) 40%,
-                rgba(43, 161, 129, 0.7) 100%
-            );
-            z-index: 1;
+            background:
+                radial-gradient(ellipse at 30% 30%, var(--green-soft-2), transparent 60%),
+                radial-gradient(ellipse at 70% 70%, rgba(6, 182, 212, 0.15), transparent 60%);
+            z-index: -1;
+            animation: fallbackShift 15s ease-in-out infinite;
         }
 
-        /* Fallback com gradiente mesh se o vídeo não carregar */
-        .lp-hero-fallback {
+        @keyframes fallbackShift {
+            0%, 100% { opacity: 0.6; }
+            50%      { opacity: 1; }
+        }
+
+        .hero-video-overlay {
             position: absolute;
             inset: 0;
-            background: var(--gradient-mesh);
-            z-index: 0;
+            z-index: 1;
+            background: linear-gradient(
+                180deg,
+                var(--hero-overlay-1) 0%,
+                var(--hero-overlay-2) 40%,
+                var(--hero-overlay-1) 100%
+            );
         }
 
         .lp-hero-content {
             position: relative;
             z-index: 2;
-            color: white;
-            max-width: 1240px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 32px;
             width: 100%;
         }
 
         .lp-hero-grid {
             display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 60px;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 80px;
             align-items: center;
+            transform-style: preserve-3d;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 992px) {
             .lp-hero-grid {
                 grid-template-columns: 1fr;
-                gap: 40px;
+                gap: 60px;
+                text-align: center;
             }
         }
 
-        .lp-hero-badge {
+        /* ⭐ LOGO GRANDE DESTACADA NO HERO */
+        .hero-logo-display {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: var(--radius-full);
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 24px;
+            gap: 16px;
+            margin-bottom: 32px;
+            padding: 14px 24px 14px 18px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 100px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
         }
 
-        .lp-hero-badge .pulse-dot {
-            width: 8px;
-            height: 8px;
+        .hero-logo-display:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--green-soft-2);
+        }
+
+        .hero-logo-icon {
+            position: relative;
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .hero-logo-icon::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            background: radial-gradient(circle, rgba(43, 161, 129, 0.4), transparent 70%);
             border-radius: 50%;
-            background: #34d399;
-            box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.3);
-            animation: ds-pulse-glow 2s infinite;
+            animation: logoPulse 3s ease-in-out infinite;
+        }
+
+        .hero-logo-icon img {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 12px rgba(43, 161, 129, 0.4));
+        }
+
+        .hero-logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+        }
+
+        .hero-logo-name {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .hero-logo-tag {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--green);
         }
 
         .lp-hero-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 800;
-            line-height: 1.05;
-            letter-spacing: -0.03em;
-            margin-bottom: 24px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.02;
+            letter-spacing: -0.04em;
+            margin-bottom: 28px;
+            color: var(--text-primary);
         }
 
-        .lp-hero-title span {
-            background: linear-gradient(135deg, #a7f3d0, #34d399, #ffffff);
-            background-size: 200% auto;
+        .lp-hero-title .gradient-text {
+            background: linear-gradient(135deg, var(--green-deep) 0%, var(--green) 40%, #34d399 70%, var(--green-deep) 100%);
+            background-size: 250% auto;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: ds-aurora 5s ease infinite;
+            animation: aurora 6s ease infinite;
+            display: inline-block;
+        }
+
+        @keyframes aurora {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .lp-hero-desc {
             font-size: 1.15rem;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 32px;
+            line-height: 1.65;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
             max-width: 560px;
+        }
+
+        @media (max-width: 992px) {
+            .lp-hero-desc { margin-left: auto; margin-right: auto; }
         }
 
         .lp-hero-actions {
             display: flex;
-            gap: 12px;
+            gap: 16px;
             flex-wrap: wrap;
         }
 
-        /* Card flutuante no hero */
+        @media (max-width: 992px) {
+            .lp-hero-actions { justify-content: center; }
+        }
+
+        /* Card 3D */
+        .lp-hero-card-wrapper {
+            perspective: 1200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .lp-hero-card {
-            background: rgba(255, 255, 255, 0.1);
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+            padding: 32px;
+            background: var(--bg-elevated);
             backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: var(--radius-2xl);
-            padding: 28px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-            animation: ds-float 6s ease-in-out infinite;
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            box-shadow: var(--shadow-xl);
+            transform-style: preserve-3d;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: cardFloat 6s ease-in-out infinite;
+        }
+
+        .lp-hero-card::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 30px;
+            padding: 2px;
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.6), transparent 40%, transparent 60%, rgba(6, 182, 212, 0.6));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            animation: borderGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.5; }
+            50%      { opacity: 1; }
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-15px); }
         }
 
         .lp-hero-card-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            gap: 14px;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            transform: translateZ(20px);
         }
 
         .lp-hero-card-avatar {
-            width: 48px;
-            height: 48px;
+            width: 52px; height: 52px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #a7f3d0, #34d399);
+            background: linear-gradient(135deg, #34d399, var(--green-deep));
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            color: #0a3d2e;
-            font-size: 1.1rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            color: white;
+            font-size: 1.15rem;
+            box-shadow: 0 8px 24px rgba(52, 211, 153, 0.3);
+            flex-shrink: 0;
         }
 
         .lp-hero-card-name {
-            font-weight: 600;
-            font-size: 1rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 1.02rem;
+            margin-bottom: 2px;
+            color: var(--text-primary);
         }
 
         .lp-hero-card-sub {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.78rem;
+            color: var(--text-tertiary);
         }
 
-        .lp-hero-stat-row {
+        .hero-stat-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: 12px 0;
+            transform: translateZ(15px);
         }
 
-        .lp-hero-stat-label {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.7);
+        .hero-stat-label {
+            font-size: 0.82rem;
+            color: var(--text-tertiary);
+            font-weight: 500;
         }
 
-        .lp-hero-stat-value {
+        .hero-stat-value {
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 700;
             font-size: 1rem;
+            color: var(--text-primary);
         }
 
-        .lp-hero-progress {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.15);
+        .hero-progress {
+            height: 8px;
+            background: var(--bg-tertiary);
             border-radius: 999px;
             overflow: hidden;
-            margin-top: 4px;
+            margin-top: 6px;
+            transform: translateZ(10px);
         }
 
-        .lp-hero-progress-bar {
+        .hero-progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #34d399, #a7f3d0);
+            background: linear-gradient(90deg, #34d399, var(--green));
             border-radius: 999px;
-            animation: ds-marquee-bar 2s ease-out forwards;
+            box-shadow: 0 0 12px rgba(52, 211, 153, 0.6);
+            animation: progressFill 2s ease-out forwards;
         }
 
-        @keyframes ds-marquee-bar {
+        @keyframes progressFill {
             from { width: 0; }
-            to   { width: var(--target, 82%); }
         }
 
-        /* ============================================
-           SEÇÃO DE ESTATÍSTICAS
-           ============================================ */
-        .lp-stats {
-            background: var(--bg-body);
-            padding: 0 0 80px;
-            position: relative;
-            z-index: 3;
-            margin-top: -60px;
+        /* Partículas */
+        .particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
         }
+
+        .particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: rgba(43, 161, 129, 0.5);
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(43, 161, 129, 0.6);
+            animation: particleRise 15s infinite linear;
+        }
+
+        @keyframes particleRise {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) translateX(50px); opacity: 0; }
+        }
+
+        /* ================================================================
+           MARQUEE
+           ================================================================ */
+        .rv-marquee {
+            position: relative;
+            padding: 28px 0;
+            overflow: hidden;
+            background: linear-gradient(90deg, var(--green-soft) 0%, rgba(6, 182, 212, 0.05) 50%, var(--green-soft) 100%);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 2;
+            mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+        }
+
+        .rv-marquee-track {
+            display: flex;
+            gap: 60px;
+            animation: marquee 45s linear infinite;
+            width: max-content;
+            align-items: center;
+        }
+
+        @keyframes marquee {
+            to { transform: translateX(-50%); }
+        }
+
+        .rv-marquee-item {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            white-space: nowrap;
+            letter-spacing: 0.02em;
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .rv-marquee-item::after {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 12px var(--green);
+            flex-shrink: 0;
+        }
+
+        /* ================================================================
+           STATS
+           ================================================================ */
+        .lp-stats { position: relative; padding: 80px 0 100px; z-index: 2; }
 
         .lp-stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 24px;
-            max-width: 1240px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 32px;
         }
 
-        @media (max-width: 900px) {
-            .lp-stats-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (max-width: 480px) {
-            .lp-stats-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 900px) { .lp-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 480px) { .lp-stats-grid { grid-template-columns: 1fr; } }
 
         .lp-stat-card {
-            background: white;
-            border-radius: var(--radius-xl);
-            padding: 28px 24px;
+            position: relative;
+            padding: 32px 24px;
             text-align: center;
-            box-shadow: var(--shadow-lg);
-            transition: all var(--ease-base);
-            border: 1px solid transparent;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
         }
 
         .lp-stat-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-2xl);
-            border-color: var(--primary-200);
-        }
-
-        [data-bs-theme="dark"] .lp-stat-card {
-            background: var(--neutral-900);
+            transform: translateY(-8px);
+            border-color: var(--green-soft-2);
+            box-shadow: var(--shadow-lg);
         }
 
         .lp-stat-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: var(--radius-lg);
-            background: var(--primary-100);
-            color: var(--primary-600);
+            width: 60px; height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--green-soft-2), rgba(6, 182, 212, 0.1));
+            border: 1px solid var(--green-soft-2);
+            color: var(--green);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            margin-bottom: 16px;
-        }
-
-        .lp-stat-number {
-            font-family: var(--font-display);
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--text-color);
-            letter-spacing: -0.02em;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .lp-stat-label {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        /* ============================================
-           SEÇÃO DE RECURSOS
-           ============================================ */
-        .lp-section-title {
-            text-align: center;
-            max-width: 720px;
-            margin: 0 auto 64px;
-        }
-
-        .lp-section-eyebrow {
-            display: inline-block;
-            padding: 6px 16px;
-            background: var(--primary-100);
-            color: var(--primary-700);
-            border-radius: var(--radius-full);
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
             margin-bottom: 20px;
         }
 
-        [data-bs-theme="dark"] .lp-section-eyebrow {
-            background: rgba(43, 161, 129, 0.15);
-            color: var(--primary-300);
+        .lp-stat-number {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 2.75rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--green), var(--green-deep));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 10px;
         }
 
-        .lp-section-heading {
-            font-size: clamp(1.8rem, 3vw, 2.5rem);
+        .lp-stat-label {
+            font-size: 0.88rem;
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+
+        /* ================================================================
+           SECTION TITLE
+           ================================================================ */
+        .section-title {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 72px;
+            padding: 0 32px;
+        }
+
+        .section-number {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            color: var(--green);
             margin-bottom: 16px;
+            display: block;
+            text-transform: uppercase;
         }
 
-        .lp-section-sub {
-            font-size: 1.1rem;
-            color: var(--text-muted);
+        .section-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: var(--green-soft);
+            border: 1px solid var(--green-soft-2);
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--green-deep);
+            margin-bottom: 20px;
         }
 
-        .lp-features-grid {
+        [data-theme="dark"] .section-eyebrow { color: var(--green-light); }
+
+        .section-heading {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .section-heading .gradient-text {
+            background: linear-gradient(135deg, var(--green-deep), var(--green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-sub {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ================================================================
+           FEATURES
+           ================================================================ */
+        .lp-features { position: relative; padding: 100px 0; z-index: 2; }
+
+        .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 24px;
-            max-width: 1240px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 32px;
         }
 
-        @media (max-width: 900px) {
-            .lp-features-grid { grid-template-columns: repeat(2, 1fr); }
-        }
+        @media (max-width: 992px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 640px) { .features-grid { grid-template-columns: 1fr; } }
 
-        @media (max-width: 600px) {
-            .lp-features-grid { grid-template-columns: 1fr; }
-        }
-
-        .lp-feature-card {
-            background: white;
-            border-radius: var(--radius-xl);
-            padding: 32px 28px;
-            transition: all var(--ease-base);
-            border: 1px solid var(--border-color);
+        .feature-card {
             position: relative;
+            padding: 36px 32px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
+            box-shadow: var(--shadow-sm);
         }
 
-        .lp-feature-card::before {
+        .feature-card::before {
             content: '';
             position: absolute;
             inset: 0;
             background: radial-gradient(
-                400px circle at var(--mouse-x, 0%) var(--mouse-y, 0%),
-                rgba(43, 161, 129, 0.08),
+                600px circle at var(--mouse-x, 0%) var(--mouse-y, 0%),
+                var(--green-soft),
                 transparent 40%
             );
             opacity: 0;
-            transition: opacity var(--ease-base);
+            transition: opacity 0.4s;
             pointer-events: none;
         }
 
-        .lp-feature-card:hover::before {
-            opacity: 1;
+        .feature-card:hover::before { opacity: 1; }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--green-soft-2);
+            box-shadow: var(--shadow-lg);
         }
 
-        .lp-feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-xl);
-            border-color: var(--primary-300);
-        }
-
-        [data-bs-theme="dark"] .lp-feature-card {
-            background: var(--neutral-900);
-        }
-
-        .lp-feature-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: var(--radius-lg);
-            background: var(--gradient-primary);
-            color: white;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow-md);
-        }
-
-        .lp-feature-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .lp-feature-desc {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        /* ============================================
-           SEÇÃO COMO FUNCIONA
-           ============================================ */
-        .lp-steps {
-            background: linear-gradient(180deg, var(--bg-body) 0%, rgba(43, 161, 129, 0.05) 100%);
-        }
-
-        .lp-steps-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-            max-width: 1240px;
-            margin: 0 auto;
-            padding: 0 24px;
-            position: relative;
-        }
-
-        @media (max-width: 768px) {
-            .lp-steps-grid { grid-template-columns: 1fr; }
-        }
-
-        .lp-step-card {
-            text-align: center;
-            padding: 24px;
-        }
-
-        .lp-step-number {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            background: white;
-            border: 3px solid var(--primary-500);
-            color: var(--primary-600);
-            font-family: var(--font-display);
-            font-size: 1.75rem;
+        .feature-number {
+            position: absolute;
+            top: 24px;
+            right: 28px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.7rem;
             font-weight: 800;
-            display: inline-flex;
+            letter-spacing: 0.2em;
+            color: var(--text-tertiary);
+        }
+
+        .feature-icon-wrapper {
+            position: relative;
+            width: 64px; height: 64px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--green-soft-2), rgba(6, 182, 212, 0.1));
+            border: 1px solid var(--green-soft-2);
+            display: flex;
             align-items: center;
             justify-content: center;
+            color: var(--green);
+            font-size: 1.6rem;
             margin-bottom: 24px;
-            box-shadow: var(--shadow-lg), 0 0 0 8px rgba(43, 161, 129, 0.1);
-            transition: all var(--ease-base);
+            transition: all 0.4s ease;
         }
 
-        .lp-step-card:hover .lp-step-number {
+        .feature-card:hover .feature-icon-wrapper {
             transform: scale(1.1) rotate(-5deg);
-            box-shadow: var(--shadow-xl), 0 0 0 12px rgba(43, 161, 129, 0.15);
+            box-shadow: 0 15px 40px rgba(43, 161, 129, 0.25);
         }
 
-        [data-bs-theme="dark"] .lp-step-number {
-            background: var(--neutral-900);
-        }
-
-        .lp-step-title {
+        .feature-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 1.25rem;
             font-weight: 700;
             margin-bottom: 12px;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
         }
 
-        .lp-step-desc {
-            color: var(--text-muted);
+        .feature-desc {
+            font-size: 0.94rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+
+        /* ================================================================
+           PLANOS
+           ================================================================ */
+        .lp-planos { position: relative; padding: 100px 0; z-index: 2; }
+
+        .planos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+            align-items: stretch;
+        }
+
+        @media (max-width: 992px) {
+            .planos-grid { grid-template-columns: 1fr; max-width: 480px; }
+        }
+
+        .plano-card {
+            position: relative;
+            padding: 44px 32px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .plano-card.destaque {
+            background: linear-gradient(180deg, var(--green-soft) 0%, var(--bg-elevated) 100%);
+            border-color: var(--green-soft-2);
+            transform: scale(1.04);
+            box-shadow: 0 30px 70px rgba(43, 161, 129, 0.2);
+        }
+
+        .plano-card.destaque::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 28px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.8), transparent 30%, transparent 70%, rgba(6, 182, 212, 0.8));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: borderGlow 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .plano-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--green-soft-2);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .plano-card.destaque:hover {
+            transform: translateY(-8px) scale(1.04);
+        }
+
+        .plano-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 18px;
+            background: linear-gradient(135deg, var(--green), var(--green-deep));
+            color: white;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            box-shadow: 0 8px 24px rgba(43, 161, 129, 0.5);
+            white-space: nowrap;
+        }
+
+        .plano-nome {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--green-deep);
+            margin-bottom: 16px;
+        }
+
+        [data-theme="dark"] .plano-nome { color: var(--green-light); }
+
+        .plano-preco {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--text-primary), var(--green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .plano-preco-periodo {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+
+        .plano-descricao {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 28px;
+            min-height: 60px;
+        }
+
+        .plano-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 32px 0;
+            flex-grow: 1;
+        }
+
+        .plano-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .plano-features li i {
+            color: var(--green);
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        .plano-features li i.fa-xmark {
+            color: var(--text-tertiary);
+        }
+
+        .plano-features li.disabled {
+            color: var(--text-tertiary);
+            text-decoration: line-through;
+        }
+
+        .plano-cta {
+            display: block;
+            width: 100%;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
             font-size: 0.95rem;
         }
 
-        /* ============================================
-           CTA FINAL
-           ============================================ */
-        .lp-cta {
-            padding: 80px 24px;
+        .plano-card.destaque .plano-cta {
+            background: linear-gradient(135deg, var(--green), var(--green-deep));
+            color: white;
+            box-shadow: 0 10px 30px rgba(43, 161, 129, 0.4);
         }
 
-        .lp-cta-inner {
+        .plano-card.destaque .plano-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(43, 161, 129, 0.55);
+            color: white;
+        }
+
+        .plano-card:not(.destaque) .plano-cta {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .plano-card:not(.destaque) .plano-cta:hover {
+            background: var(--green-soft);
+            border-color: var(--green);
+            color: var(--green);
+            transform: translateY(-3px);
+        }
+
+        /* ================================================================
+           TABELA COMPARATIVA (NOVO)
+           ================================================================ */
+        .rv-compare {
+            position: relative;
+            padding: 100px 0;
+            z-index: 2;
+        }
+
+        .compare-wrapper {
             max-width: 1100px;
             margin: 0 auto;
-            padding: 64px 48px;
-            border-radius: var(--radius-2xl);
-            background: var(--gradient-hero);
-            color: white;
-            text-align: center;
-            position: relative;
+            padding: 0 32px;
+            overflow-x: auto;
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
             overflow: hidden;
-            box-shadow: var(--shadow-2xl);
+            box-shadow: var(--shadow-md);
+            min-width: 640px;
         }
 
-        .lp-cta-inner::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--gradient-mesh);
-            opacity: 0.4;
-            animation: ds-aurora 8s ease infinite;
-        }
-
-        .lp-cta-inner > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .lp-cta-title {
-            font-size: clamp(1.8rem, 3.5vw, 2.75rem);
-            font-weight: 800;
-            margin-bottom: 16px;
-            letter-spacing: -0.02em;
-        }
-
-        .lp-cta-desc {
-            font-size: 1.15rem;
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 32px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* ============================================
-           FOOTER
-           ============================================ */
-        .lp-footer {
-            padding: 48px 24px 24px;
-            border-top: 1px solid var(--border-color);
-            margin-top: 40px;
-        }
-
-        .lp-footer-inner {
-            max-width: 1240px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 40px;
-        }
-
-        @media (max-width: 768px) {
-            .lp-footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
-        }
-
-        .lp-footer-brand p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-top: 12px;
-            max-width: 320px;
-        }
-
-        .lp-footer-heading {
-            font-size: 0.8rem;
+        .compare-table thead th {
+            padding: 24px 20px;
+            background: var(--bg-secondary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.85rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            color: var(--text-muted);
-            margin-bottom: 16px;
+            color: var(--text-tertiary);
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .lp-footer-links {
-            list-style: none;
+        .compare-table thead th:first-child {
+            text-align: left;
+            padding-left: 32px;
+        }
+
+        .compare-table thead th.destaque-col {
+            background: linear-gradient(180deg, var(--green-soft), transparent);
+            color: var(--green-deep);
+            position: relative;
+        }
+
+        [data-theme="dark"] .compare-table thead th.destaque-col { color: var(--green-light); }
+
+        .compare-table tbody td {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            vertical-align: middle;
+        }
+
+        .compare-table tbody td:first-child {
+            text-align: left;
+            padding-left: 32px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .compare-table tbody td.destaque-col {
+            background: var(--green-soft);
+        }
+
+        [data-theme="dark"] .compare-table tbody td.destaque-col {
+            background: rgba(43, 161, 129, 0.08);
+        }
+
+        .compare-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .compare-check {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(16, 185, 129, 0.15);
+            color: #059669;
+            font-size: 0.75rem;
+        }
+
+        .compare-x {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            color: var(--text-tertiary);
+            font-size: 0.75rem;
+        }
+
+        /* ================================================================
+           DEPOIMENTOS (NOVO — carrossel)
+           ================================================================ */
+        .rv-testimonials {
+            position: relative;
+            padding: 100px 0;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 2;
+        }
+
+        .testimonials-wrapper {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .testimonials-scroll {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            padding-bottom: 20px;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .testimonials-scroll::-webkit-scrollbar { display: none; }
+
+        .testimonial-card {
+            flex: 0 0 380px;
+            scroll-snap-align: start;
+            padding: 36px 32px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
+            gap: 24px;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--green-soft-2);
+        }
+
+        @media (max-width: 480px) {
+            .testimonial-card { flex: 0 0 300px; padding: 28px 24px; }
+        }
+
+        .testimonial-quote {
+            font-size: 2.5rem;
+            color: var(--green);
+            line-height: 1;
+            font-family: Georgia, serif;
+            opacity: 0.4;
+        }
+
+        .testimonial-text {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: var(--text-secondary);
+            flex-grow: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green), var(--green-deep));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .testimonial-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .testimonial-name {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .testimonial-role {
+            font-size: 0.78rem;
+            color: var(--text-tertiary);
+        }
+
+        .testimonial-rating {
+            display: flex;
+            gap: 3px;
+            color: #f59e0b;
+            font-size: 0.75rem;
+        }
+
+        .testimonial-nav {
+            display: flex;
             gap: 10px;
+            justify-content: center;
+            margin-top: 32px;
         }
 
-        .lp-footer-links a {
-            color: var(--text-color);
+        .testimonial-nav button {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.25s;
             font-size: 0.9rem;
-            opacity: 0.75;
-            transition: opacity var(--ease-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .lp-footer-links a:hover {
-            opacity: 1;
-            color: var(--primary-600);
+        .testimonial-nav button:hover {
+            background: var(--green);
+            color: white;
+            border-color: var(--green);
+            transform: translateY(-2px);
         }
 
-        .lp-footer-bottom {
-            max-width: 1240px;
-            margin: 40px auto 0;
-            padding-top: 24px;
+        /* ================================================================
+           FAQ (NOVO — accordion)
+           ================================================================ */
+        .rv-faq {
+            position: relative;
+            padding: 100px 0;
+            z-index: 2;
+        }
+
+        .faq-wrapper {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .faq-item {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--green-soft-2);
+        }
+
+        .faq-item.open {
+            border-color: var(--green);
+            box-shadow: 0 8px 24px rgba(43, 161, 129, 0.12);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 22px 28px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: left;
+            transition: color 0.2s;
+        }
+
+        .faq-question:hover { color: var(--green); }
+
+        .faq-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--green-soft);
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.85rem;
+        }
+
+        .faq-item.open .faq-icon {
+            background: var(--green);
+            color: white;
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding: 0 28px 24px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        /* ================================================================
+           STEPS
+           ================================================================ */
+        .lp-steps { position: relative; padding: 100px 0; z-index: 2; }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        @media (max-width: 768px) { .steps-grid { grid-template-columns: 1fr; } }
+
+        .step-card {
+            position: relative;
+            padding: 32px 24px;
+            text-align: center;
+        }
+
+        .step-number {
+            width: 80px; height: 80px;
+            margin: 0 auto 24px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--green-soft-2), rgba(6, 182, 212, 0.1));
+            border: 1px solid var(--green-soft-2);
+            color: var(--green);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 15px 40px rgba(43, 161, 129, 0.15);
+        }
+
+        .step-card:hover .step-number {
+            transform: scale(1.1) rotate(-5deg);
+            box-shadow: 0 20px 50px rgba(43, 161, 129, 0.3);
+        }
+
+        .step-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .step-desc {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+
+        /* ================================================================
+           CTA FINAL
+           ================================================================ */
+        .lp-cta { padding: 100px 32px; position: relative; z-index: 2; }
+
+        .cta-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 72px 48px;
+            border-radius: 32px;
+            background: linear-gradient(135deg, var(--green-soft-2), rgba(6, 182, 212, 0.15));
+            border: 1px solid var(--green-soft-2);
+            backdrop-filter: blur(20px);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .cta-inner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 20%, var(--green-soft-2), transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.15), transparent 50%);
+            animation: ctaGlow 8s ease infinite;
+            pointer-events: none;
+        }
+
+        @keyframes ctaGlow {
+            0%, 100% { opacity: 0.6; }
+            50%      { opacity: 1; }
+        }
+
+        .cta-inner > * { position: relative; z-index: 1; }
+
+        .cta-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(1.9rem, 4vw, 2.75rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .cta-desc {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            max-width: 620px;
+            margin: 0 auto 36px;
+            line-height: 1.65;
+        }
+
+        /* ================================================================
+           FOOTER
+           ================================================================ */
+        .lp-footer {
+            position: relative;
+            padding: 60px 32px 30px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            z-index: 2;
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
+        }
+
+        .footer-brand p {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+            line-height: 1.65;
+            margin-top: 16px;
+            max-width: 320px;
+        }
+
+        .footer-heading {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-tertiary);
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--green); }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 48px auto 0;
+            padding-top: 28px;
             border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
@@ -683,55 +1913,73 @@
             flex-wrap: wrap;
             gap: 16px;
             font-size: 0.85rem;
-            color: var(--text-muted);
+            color: var(--text-tertiary);
         }
 
-        /* ============================================
-           MARQUEE DE LOGOS (provas sociais)
-           ============================================ */
-        .lp-marquee {
-            overflow: hidden;
-            padding: 32px 0;
-            mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
-            -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+        /* ================================================================
+           SCROLL REVEAL
+           ================================================================ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .lp-marquee-track {
-            display: flex;
-            gap: 64px;
-            animation: ds-marquee 30s linear infinite;
-            width: max-content;
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .lp-marquee-item {
-            font-family: var(--font-display);
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            opacity: 0.5;
-            white-space: nowrap;
+        .reveal.delay-1 { transition-delay: 0.1s; }
+        .reveal.delay-2 { transition-delay: 0.2s; }
+        .reveal.delay-3 { transition-delay: 0.3s; }
+        .reveal.delay-4 { transition-delay: 0.4s; }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+            .reveal { opacity: 1; transform: none; }
         }
     </style>
 </head>
 <body>
 
+    <!-- FUNDO ANIMADO -->
+    <div class="bg-animated">
+        <div class="bg-blob blob-1"></div>
+        <div class="bg-blob blob-2"></div>
+        <div class="bg-blob blob-3"></div>
+    </div>
+
+    <!-- BOTÃO TOGGLE DARK MODE (flutuante) -->
+    <button class="theme-toggle" id="themeToggle" title="Alternar tema">
+        <i class="fas fa-moon"></i>
+    </button>
+
     <!-- NAVBAR -->
     <nav class="lp-nav" id="lpNav">
         <div class="lp-nav-inner">
             <a href="/" class="lp-logo">
-    <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="height: 40px; width: auto;">
-    REABITECH
-</a>
+                <div class="lp-logo-img-wrapper">
+                    <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'">
+                </div>
+                <span>REABITECH</span>
+            </a>
             <ul class="lp-nav-links">
                 <li><a href="#recursos">Recursos</a></li>
-                <li><a href="#como-funciona">Como Funciona</a></li>
-                <li><a href="#projetos">Projetos</a></li>
-                <li><a href="#contato">Contato</a></li>
+                <li><a href="#planos">Planos</a></li>
+                <li><a href="#depoimentos">Depoimentos</a></li>
+                <li><a href="#faq">FAQ</a></li>
             </ul>
             <div class="lp-nav-actions">
-                <a href="{% url 'login' %}" class="ds-btn ds-btn-ghost ds-btn-sm">Entrar</a>
-                <a href="{% url 'login' %}" class="ds-btn ds-btn-primary ds-btn-sm">
-                    Começar Agora <i class="fas fa-arrow-right"></i>
+                <a href="{% url 'login' %}" class="hero-btn hero-btn-outline" style="padding: 10px 22px; font-size: 0.9rem;">
+                    Entrar
+                </a>
+                <a href="{% url 'signup' %}" class="hero-btn hero-btn-primary" style="padding: 10px 22px; font-size: 0.9rem;">
+                    Começar <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
         </div>
@@ -739,72 +1987,93 @@
 
     <!-- HERO -->
     <section class="lp-hero">
-        <!-- Vídeo de fundo (opcional - se não existir, o gradiente fica visível) -->
-        <div class="lp-hero-fallback"></div>
-        <video class="lp-hero-video" autoplay muted loop playsinline
-               poster="{% static 'images/hero-poster.jpg' %}">
-            <!-- Substitua por um vídeo real: -->
-            <source src="{% static 'videos/hero.mp4' %}" type="video/mp4">
-        </video>
-        <div class="lp-hero-overlay"></div>
+
+        <!-- 🎬 VÍDEO DE FUNDO (com fallback automático) -->
+        <div class="hero-video-wrapper">
+            <div class="hero-video-fallback"></div>
+            <video
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="auto"
+                poster="{% static 'images/hero-poster.jpg' %}"
+                id="heroVideo"
+            >
+                <!-- Substitua por um vídeo real em static/videos/hero.mp4 -->
+                <source src="{% static 'videos/hero.mp4' %}" type="video/mp4">
+                <!-- Fallback: se não tiver vídeo, o gradiente aparece -->
+            </video>
+            <div class="hero-video-overlay"></div>
+        </div>
+
+        <div class="particles" id="particles"></div>
 
         <div class="lp-hero-content">
             <div class="lp-hero-grid">
                 <div>
-                    <div class="lp-hero-badge ds-animate-fade-up">
-                        <span class="pulse-dot"></span>
-                        Plataforma Integrada de Reabilitação
+
+                    <!-- ⭐ LOGO GRANDE DESTACADA -->
+                    <div class="hero-logo-display reveal visible">
+                        <div class="hero-logo-icon">
+                            <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'">
+                        </div>
+                        <div class="hero-logo-text">
+                            <span class="hero-logo-name">REABITECH</span>
+                            <span class="hero-logo-tag">Plataforma de Reabilitação</span>
+                        </div>
                     </div>
 
-                    <h1 class="lp-hero-title ds-animate-fade-up ds-delay-1">
-                        Recuperação inteligente para <span>atletas de alto rendimento</span>
+                    <h1 class="lp-hero-title reveal visible delay-1">
+                        Recuperar não é voltar.<br>
+                        É <span class="gradient-text">avançar com clareza.</span>
                     </h1>
 
-                    <p class="lp-hero-desc ds-animate-fade-up ds-delay-2">
-                        Une fisioterapia, psicologia esportiva e desempenho técnico em uma única plataforma.
-                        Acompanhe cada etapa da recuperação com dados em tempo real.
+                    <p class="lp-hero-desc reveal visible delay-2">
+                        Uma plataforma para clínicas, escolas, times e consultórios que tratam pessoas — não prontuários. Fisioterapia, psicologia e desempenho técnico num só ambiente.
                     </p>
 
-                    <div class="lp-hero-actions ds-animate-fade-up ds-delay-3">
-                        <a href="{% url 'login' %}" class="ds-btn ds-btn-primary ds-btn-lg">
-                            <i class="fas fa-rocket"></i> Acessar Plataforma
+                    <div class="lp-hero-actions reveal visible delay-3">
+                        <a href="{% url 'signup' %}" class="hero-btn hero-btn-primary">
+                            <i class="fas fa-rocket"></i>
+                            Criar minha conta
                         </a>
-                        <a href="#recursos" class="ds-btn ds-btn-outline ds-btn-lg" style="color: white; border-color: rgba(255,255,255,0.3);">
-                            <i class="fas fa-play-circle"></i> Ver Recursos
+                        <a href="#recursos" class="hero-btn hero-btn-outline">
+                            <i class="fas fa-play-circle"></i>
+                            Ver recursos
                         </a>
                     </div>
                 </div>
 
-                <!-- Card flutuante demo -->
-                <div class="ds-animate-fade-up ds-delay-4">
-                    <div class="lp-hero-card">
+                <div class="lp-hero-card-wrapper reveal visible delay-4">
+                    <div class="lp-hero-card" id="heroCard">
                         <div class="lp-hero-card-header">
                             <div class="lp-hero-card-avatar">JS</div>
                             <div>
                                 <div class="lp-hero-card-name">João Silva</div>
-                                <div class="lp-hero-card-sub">Futebol • Sub-17</div>
+                                <div class="lp-hero-card-sub">Paciente · Fisioterapia Ortopédica</div>
                             </div>
                         </div>
 
-                        <div class="lp-hero-stat-row">
-                            <span class="lp-hero-stat-label">Recuperação</span>
-                            <span class="lp-hero-stat-value">82%</span>
+                        <div class="hero-stat-row">
+                            <span class="hero-stat-label">Recuperação</span>
+                            <span class="hero-stat-value">82%</span>
                         </div>
-                        <div class="lp-hero-progress">
-                            <div class="lp-hero-progress-bar" style="--target: 82%;"></div>
-                        </div>
-
-                        <div class="lp-hero-stat-row" style="margin-top: 16px;">
-                            <span class="lp-hero-stat-label">Dor atual</span>
-                            <span class="lp-hero-stat-value" style="color: #34d399;">2/10</span>
-                        </div>
-                        <div class="lp-hero-progress">
-                            <div class="lp-hero-progress-bar" style="--target: 20%; background: linear-gradient(90deg, #34d399, #a7f3d0);"></div>
+                        <div class="hero-progress">
+                            <div class="hero-progress-bar" style="width: 82%;"></div>
                         </div>
 
-                        <div class="lp-hero-stat-row" style="margin-top: 16px;">
-                            <span class="lp-hero-stat-label">Próxima sessão</span>
-                            <span class="lp-hero-stat-value">Hoje, 14h</span>
+                        <div class="hero-stat-row" style="margin-top: 20px;">
+                            <span class="hero-stat-label">Nível de dor</span>
+                            <span class="hero-stat-value" style="color: var(--green);">2/10</span>
+                        </div>
+                        <div class="hero-progress">
+                            <div class="hero-progress-bar" style="width: 20%;"></div>
+                        </div>
+
+                        <div class="hero-stat-row" style="margin-top: 20px;">
+                            <span class="hero-stat-label">Próxima sessão</span>
+                            <span class="hero-stat-value">Hoje, 14h</span>
                         </div>
                     </div>
                 </div>
@@ -812,172 +2081,597 @@
         </div>
     </section>
 
+    <!-- MARQUEE -->
+    <div class="rv-marquee">
+        <div class="rv-marquee-track">
+            <div class="rv-marquee-item">Clínicas de fisioterapia</div>
+            <div class="rv-marquee-item">Times esportivos</div>
+            <div class="rv-marquee-item">Escolas &amp; instituições</div>
+            <div class="rv-marquee-item">Consultórios individuais</div>
+            <div class="rv-marquee-item">Academias</div>
+            <div class="rv-marquee-item">Projetos sociais</div>
+            <div class="rv-marquee-item">Clínicas de fisioterapia</div>
+            <div class="rv-marquee-item">Times esportivos</div>
+            <div class="rv-marquee-item">Escolas &amp; instituições</div>
+            <div class="rv-marquee-item">Consultórios individuais</div>
+            <div class="rv-marquee-item">Academias</div>
+            <div class="rv-marquee-item">Projetos sociais</div>
+        </div>
+    </div>
+
     <!-- ESTATÍSTICAS -->
     <section class="lp-stats">
         <div class="lp-stats-grid">
-            <div class="lp-stat-card ds-reveal">
+            <div class="lp-stat-card reveal">
                 <div class="lp-stat-icon"><i class="fas fa-user-group"></i></div>
                 <div class="lp-stat-number" data-counter="500" data-suffix="+">0</div>
-                <div class="lp-stat-label">Atletas acompanhados</div>
+                <div class="lp-stat-label">Pacientes acompanhados</div>
             </div>
-            <div class="lp-stat-card ds-reveal ds-delay-1">
+            <div class="lp-stat-card reveal delay-1">
                 <div class="lp-stat-icon"><i class="fas fa-heart-pulse"></i></div>
                 <div class="lp-stat-number" data-counter="98" data-suffix="%">0</div>
                 <div class="lp-stat-label">Taxa de recuperação</div>
             </div>
-            <div class="lp-stat-card ds-reveal ds-delay-2">
+            <div class="lp-stat-card reveal delay-2">
                 <div class="lp-stat-icon"><i class="fas fa-user-md"></i></div>
                 <div class="lp-stat-number" data-counter="45" data-suffix="+">0</div>
-                <div class="lp-stat-label">Profissionais especializados</div>
+                <div class="lp-stat-label">Profissionais ativos</div>
             </div>
-            <div class="lp-stat-card ds-reveal ds-delay-3">
-                <div class="lp-stat-icon"><i class="fas fa-trophy"></i></div>
-                <div class="lp-stat-number" data-counter="120" data-suffix="+">0</div>
-                <div class="lp-stat-label">Lesões tratadas</div>
+            <div class="lp-stat-card reveal delay-3">
+                <div class="lp-stat-icon"><i class="fas fa-notes-medical"></i></div>
+                <div class="lp-stat-number" data-counter="1200" data-suffix="+">0</div>
+                <div class="lp-stat-label">Tratamentos realizados</div>
             </div>
         </div>
     </section>
 
     <!-- RECURSOS -->
-    <section class="ds-section" id="recursos">
-        <div class="lp-section-title ds-reveal">
-            <span class="lp-section-eyebrow">Recursos</span>
-            <h2 class="lp-section-heading">Uma plataforma para cada etapa da recuperação</h2>
-            <p class="lp-section-sub">
-                Do diagnóstico inicial à reintegração completa ao esporte, tudo integrado em um só lugar.
+    <section class="lp-features" id="recursos">
+        <div class="section-title reveal">
+            <span class="section-number">— 01 / Recursos</span>
+            <div class="section-eyebrow">
+                <i class="fas fa-star"></i>
+                Módulos da plataforma
+            </div>
+            <h2 class="section-heading">
+                Três capítulos.<br>
+                <span class="gradient-text">Uma história por paciente.</span>
+            </h2>
+            <p class="section-sub">
+                Do diagnóstico inicial à alta completa, tudo integrado em um só ambiente.
             </p>
         </div>
 
-        <div class="lp-features-grid">
-            <div class="lp-feature-card ds-reveal">
-                <div class="lp-feature-icon"><i class="fas fa-user-injured"></i></div>
-                <h3 class="lp-feature-title">Fisioterapia Integrada</h3>
-                <p class="lp-feature-desc">
-                    Registro de lesões, prescrição de tratamentos e acompanhamento de evolução física com gráficos detalhados.
+        <div class="features-grid">
+            <div class="feature-card reveal">
+                <span class="feature-number">01</span>
+                <div class="feature-icon-wrapper"><i class="fas fa-user-injured"></i></div>
+                <h3 class="feature-title">Fisioterapia Integrada</h3>
+                <p class="feature-desc">
+                    Lesões, tratamentos, exercícios e evolução física. Cada paciente tem uma linha do tempo viva, com gráficos detalhados do progresso.
                 </p>
             </div>
 
-            <div class="lp-feature-card ds-reveal ds-delay-1">
-                <div class="lp-feature-icon"><i class="fas fa-brain"></i></div>
-                <h3 class="lp-feature-title">Saúde Mental</h3>
-                <p class="lp-feature-desc">
-                    Avaliações psicológicas, questionários periódicos e monitoramento do bem-estar emocional do atleta.
+            <div class="feature-card reveal delay-1">
+                <span class="feature-number">02</span>
+                <div class="feature-icon-wrapper"><i class="fas fa-brain"></i></div>
+                <h3 class="feature-title">Saúde Mental</h3>
+                <p class="feature-desc">
+                    Avaliações psicológicas, questionários periódicos e monitoramento contínuo do bem-estar. Recuperar o corpo sem cuidar da mente não é recuperar por inteiro.
                 </p>
             </div>
 
-            <div class="lp-feature-card ds-reveal ds-delay-2">
-                <div class="lp-feature-icon"><i class="fas fa-chart-line"></i></div>
-                <h3 class="lp-feature-title">Análise de Desempenho</h3>
-                <p class="lp-feature-desc">
-                    Dashboards com métricas em tempo real para técnicos acompanharem a evolução física e técnica.
+            <div class="feature-card reveal delay-2">
+                <span class="feature-number">03</span>
+                <div class="feature-icon-wrapper"><i class="fas fa-chart-line"></i></div>
+                <h3 class="feature-title">Análise de Progresso</h3>
+                <p class="feature-desc">
+                    Dashboards em tempo real, métricas comparativas e alertas automáticos. Tudo o que a equipe técnica precisa para decidir com clareza.
                 </p>
             </div>
 
-            <div class="lp-feature-card ds-reveal">
-                <div class="lp-feature-icon"><i class="fas fa-bell"></i></div>
-                <h3 class="lp-feature-title">Alertas Inteligentes</h3>
-                <p class="lp-feature-desc">
-                    Notificações automáticas para toda a equipe quando um atleta precisa de atenção especial.
+            <div class="feature-card reveal">
+                <span class="feature-number">04</span>
+                <div class="feature-icon-wrapper"><i class="fas fa-bell"></i></div>
+                <h3 class="feature-title">Gestão de Equipe</h3>
+                <p class="feature-desc">
+                    Notificações automáticas quando um paciente precisa de atenção multidisciplinar. Ninguém fica sem saber.
                 </p>
             </div>
 
-            <div class="lp-feature-card ds-reveal ds-delay-1">
-                <div class="lp-feature-icon"><i class="fas fa-mobile-screen"></i></div>
-                <h3 class="lp-feature-title">Acesso em Qualquer Lugar</h3>
-                <p class="lp-feature-desc">
-                    Interface responsiva que funciona perfeitamente em desktop, tablet e celular.
+            <div class="feature-card reveal delay-1">
+                <span class="feature-number">05</span>
+                <div class="feature-icon-wrapper"><i class="fas fa-mobile-screen"></i></div>
+                <h3 class="feature-title">Acesso em Qualquer Lugar</h3>
+                <p class="feature-desc">
+                    Funciona em desktop, tablet e celular. Sem instalar nada. Sem perder um registro.
                 </p>
             </div>
 
-            <div class="lp-feature-card ds-reveal ds-delay-2">
-                <div class="lp-feature-icon"><i class="fas fa-lock"></i></div>
-                <h3 class="lp-feature-title">Dados Seguros</h3>
-                <p class="lp-feature-desc">
-                    Cada usuário vê apenas o que precisa. Controle de acesso por perfil e proteção de dados médicos.
+            <div class="feature-card reveal delay-2">
+                <span class="feature-number">06</span>
+                <div class="feature-icon-wrapper"><i class="fas fa-lock"></i></div>
+                <h3 class="feature-title">Isolamento Multi-tenant</h3>
+                <p class="feature-desc">
+                    Cada clínica, escola ou time vê apenas os seus dados. Controle de acesso por perfil e proteção rigorosa de informações médicas.
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- COMO FUNCIONA -->
-    <section class="ds-section lp-steps" id="como-funciona">
-        <div class="lp-section-title ds-reveal">
-            <span class="lp-section-eyebrow">Como Funciona</span>
-            <h2 class="lp-section-heading">Em três passos simples</h2>
+    <!-- PLANOS -->
+    <section class="lp-planos" id="planos">
+        <div class="section-title reveal">
+            <span class="section-number">— 02 / Assinaturas</span>
+            <div class="section-eyebrow">
+                <i class="fas fa-crown"></i>
+                Planos
+            </div>
+            <h2 class="section-heading">
+                Um plano para cada<br>
+                <span class="gradient-text">tamanho de história.</span>
+            </h2>
+            <p class="section-sub">
+                Do consultório individual à grande instituição. Escolha o plano ideal e comece hoje.
+            </p>
         </div>
 
-        <div class="lp-steps-grid">
-            <div class="lp-step-card ds-reveal">
-                <div class="lp-step-number">1</div>
-                <h3 class="lp-step-title">Cadastro</h3>
-                <p class="lp-step-desc">
-                    Coordenador cria o projeto e convida a equipe (fisioterapeutas, psicólogos, técnicos) e os atletas.
+        <div class="planos-grid">
+            {% for plano in planos %}
+            <div class="plano-card reveal {% if plano.destaque %}destaque{% endif %}">
+                {% if plano.destaque %}
+                <div class="plano-badge">Recomendado</div>
+                {% endif %}
+
+                <div class="plano-nome">{{ plano.nome }}</div>
+
+                <div class="plano-preco">
+                    {% if plano.preco_mensal == 0 %}
+                        Grátis
+                    {% else %}
+                        R$ {{ plano.preco_mensal|floatformat:0 }}
+                    {% endif %}
+                </div>
+                <div class="plano-preco-periodo">
+                    {% if plano.preco_mensal == 0 %}
+                        Trial de 30 dias · sem cartão
+                    {% else %}
+                        por mês · cancele quando quiser
+                    {% endif %}
+                </div>
+
+                <p class="plano-descricao">{{ plano.descricao|default:"" }}</p>
+
+                <ul class="plano-features">
+                    <li>
+                        <i class="fas fa-check"></i>
+                        {% if plano.max_usuarios == 0 %}Usuários ilimitados{% else %}Até {{ plano.max_usuarios }} usuários{% endif %}
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        {% if plano.max_projetos == 0 %}Projetos ilimitados{% else %}Até {{ plano.max_projetos }} projeto(s){% endif %}
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Módulo de Fisioterapia
+                    </li>
+                    <li class="{% if 'psicologia' not in plano.modulos_inclusos %}disabled{% endif %}">
+                        <i class="fas {% if 'psicologia' in plano.modulos_inclusos %}fa-check{% else %}fa-xmark{% endif %}"></i>
+                        Módulo de Psicologia
+                    </li>
+                    <li class="{% if 'tecnico' not in plano.modulos_inclusos %}disabled{% endif %}">
+                        <i class="fas {% if 'tecnico' in plano.modulos_inclusos %}fa-check{% else %}fa-xmark{% endif %}"></i>
+                        Módulo de Análise Técnica
+                    </li>
+                </ul>
+
+                <a href="{% url 'signup' %}?plano={{ plano.id }}" class="plano-cta">
+                    {% if plano.destaque %}Começar agora{% else %}Assinar plano{% endif %}
+                </a>
+            </div>
+            {% empty %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-tertiary);">
+                <p>Nenhum plano disponível no momento.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- TABELA COMPARATIVA (NOVO) -->
+    <section class="rv-compare">
+        <div class="section-title reveal">
+            <span class="section-number">— 03 / Comparativo</span>
+            <div class="section-eyebrow">
+                <i class="fas fa-table-columns"></i>
+                Comparativo
+            </div>
+            <h2 class="section-heading">
+                Veja lado a lado<br>
+                <span class="gradient-text">o que cada plano oferece.</span>
+            </h2>
+        </div>
+
+        <div class="compare-wrapper">
+            <table class="compare-table reveal">
+                <thead>
+                    <tr>
+                        <th>Recurso</th>
+                        {% for plano in planos %}
+                        <th class="{% if plano.destaque %}destaque-col{% endif %}">{{ plano.nome }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Usuários</td>
+                        {% for plano in planos %}
+                        <td class="{% if plano.destaque %}destaque-col{% endif %}">
+                            {% if plano.max_usuarios == 0 %}Ilimitado{% else %}{{ plano.max_usuarios }}{% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Projetos</td>
+                        {% for plano in planos %}
+                        <td class="{% if plano.destaque %}destaque-col{% endif %}">
+                            {% if plano.max_projetos == 0 %}Ilimitado{% else %}{{ plano.max_projetos }}{% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Módulo Fisioterapia</td>
+                        {% for plano in planos %}
+                        <td class="{% if plano.destaque %}destaque-col{% endif %}">
+                            <span class="compare-check"><i class="fas fa-check"></i></span>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Módulo Psicologia</td>
+                        {% for plano in planos %}
+                        <td class="{% if plano.destaque %}destaque-col{% endif %}">
+                            {% if 'psicologia' in plano.modulos_inclusos %}
+                            <span class="compare-check"><i class="fas fa-check"></i></span>
+                            {% else %}
+                            <span class="compare-x"><i class="fas fa-minus"></i></span>
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Módulo Análise Técnica</td>
+                        {% for plano in planos %}
+                        <td class="{% if plano.destaque %}destaque-col{% endif %}">
+                            {% if 'tecnico' in plano.modulos_inclusos %}
+                            <span class="compare-check"><i class="fas fa-check"></i></span>
+                            {% else %}
+                            <span class="compare-x"><i class="fas fa-minus"></i></span>
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Suporte por e-mail</td>
+                        {% for plano in planos %}
+                        <td class="{% if plano.destaque %}destaque-col{% endif %}">
+                            <span class="compare-check"><i class="fas fa-check"></i></span>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>Suporte prioritário</td>
+                        {% for plano in planos %}
+                        <td class="{% if plano.destaque %}destaque-col{% endif %}">
+                            {% if plano.preco_mensal >= 300 %}
+                            <span class="compare-check"><i class="fas fa-check"></i></span>
+                            {% else %}
+                            <span class="compare-x"><i class="fas fa-minus"></i></span>
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- DEPOIMENTOS (NOVO) -->
+    <section class="rv-testimonials" id="depoimentos">
+        <div class="section-title reveal">
+            <span class="section-number">— 04 / Depoimentos</span>
+            <div class="section-eyebrow">
+                <i class="fas fa-quote-left"></i>
+                Quem usa
+            </div>
+            <h2 class="section-heading">
+                Histórias de quem já<br>
+                <span class="gradient-text">avançou com o REABITECH.</span>
+            </h2>
+        </div>
+
+        <div class="testimonials-wrapper">
+            <div class="testimonials-scroll" id="testimonialsScroll">
+
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">
+                        Antes eu perdia tempo organizando planilhas de evolução dos pacientes. Agora tudo está num só lugar, e a equipe toda vê o mesmo quadro. Mudou nossa rotina.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">DR</div>
+                        <div class="testimonial-info">
+                            <span class="testimonial-name">Dra. Renata Costa</span>
+                            <span class="testimonial-role">Fisioterapeuta · Clínica FisioVida</span>
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">
+                        A parte psicológica integrada fez toda diferença. Consigo ver como o emocional do paciente impacta a recuperação física. A equipe tomou decisões melhores.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">CA</div>
+                        <div class="testimonial-info">
+                            <span class="testimonial-name">Dr. Carlos Andrade</span>
+                            <span class="testimonial-role">Psicólogo Esportivo</span>
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">
+                        Gerenciar 47 alunos atletas era um caos. Hoje, em 5 minutos, sei quem está lesionado, quem precisa de atenção e quem está pronto para voltar.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">MS</div>
+                        <div class="testimonial-info">
+                            <span class="testimonial-name">Prof. Marcos Silva</span>
+                            <span class="testimonial-role">Coordenador · Etec Araras</span>
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">
+                        A plataforma é intuitiva. Treinamos a equipe em uma tarde e todos os profissionais já estavam usando no dia seguinte. Sem resistência.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">JP</div>
+                        <div class="testimonial-info">
+                            <span class="testimonial-name">Juliana Pereira</span>
+                            <span class="testimonial-role">Gestora · Projeto Reabilitar</span>
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">
+                        O suporte é rápido e o sistema evolui. Cada mês tem algo novo que resolve um problema real do nosso dia. Vale cada centavo.
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">RL</div>
+                        <div class="testimonial-info">
+                            <span class="testimonial-name">Rafael Lima</span>
+                            <span class="testimonial-role">Fisioterapeuta · Time Sub-20</span>
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="testimonial-nav">
+                <button id="testimonialPrev" aria-label="Anterior">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <button id="testimonialNext" aria-label="Próximo">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="lp-steps" id="como-funciona">
+        <div class="section-title reveal">
+            <span class="section-number">— 05 / Jornada</span>
+            <div class="section-eyebrow">
+                <i class="fas fa-route"></i>
+                Como funciona
+            </div>
+            <h2 class="section-heading">
+                Da primeira consulta<br>
+                <span class="gradient-text">à alta. Sem perder nada.</span>
+            </h2>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card reveal">
+                <div class="step-number">1</div>
+                <h3 class="step-title">Criar o ambiente</h3>
+                <p class="step-desc">
+                    Você cria a conta, escolhe o plano, configura o projeto da sua clínica ou escola. Em menos de 2 minutos.
                 </p>
             </div>
 
-            <div class="lp-step-card ds-reveal ds-delay-1">
-                <div class="lp-step-number">2</div>
-                <h3 class="lp-step-title">Acompanhamento</h3>
-                <p class="lp-step-desc">
-                    Cada especialista registra suas avaliações. Tudo fica centralizado no perfil do atleta.
+            <div class="step-card reveal delay-1">
+                <div class="step-number">2</div>
+                <h3 class="step-title">Convidar a equipe</h3>
+                <p class="step-desc">
+                    Fisioterapeutas, psicólogos e técnicos entram com permissões específicas. Cada um vê só o que precisa.
                 </p>
             </div>
 
-            <div class="lp-step-card ds-reveal ds-delay-2">
-                <div class="lp-step-number">3</div>
-                <h3 class="lp-step-title">Recuperação Total</h3>
-                <p class="lp-step-desc">
-                    Com dados integrados, a equipe toma decisões precisas e devolve o atleta ao esporte com segurança.
+            <div class="step-card reveal delay-2">
+                <div class="step-number">3</div>
+                <h3 class="step-title">Acompanhar a recuperação</h3>
+                <p class="step-desc">
+                    Cada especialista registra avaliações. Tudo fica no perfil do paciente. A equipe toda vê o mesmo quadro.
                 </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ (NOVO) -->
+    <section class="rv-faq" id="faq">
+        <div class="section-title reveal">
+            <span class="section-number">— 06 / Dúvidas</span>
+            <div class="section-eyebrow">
+                <i class="fas fa-circle-question"></i>
+                Perguntas frequentes
+            </div>
+            <h2 class="section-heading">
+                Ainda com dúvidas?<br>
+                <span class="gradient-text">A gente responde.</span>
+            </h2>
+        </div>
+
+        <div class="faq-wrapper">
+            <div class="faq-item reveal">
+                <button class="faq-question">
+                    <span>Preciso instalar algo para usar a plataforma?</span>
+                    <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Não. O REABITECH é 100% web. Você acessa pelo navegador, em qualquer dispositivo — desktop, tablet ou celular. Sem downloads, sem instalações.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item reveal">
+                <button class="faq-question">
+                    <span>O plano Trial realmente é grátis?</span>
+                    <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Sim. Você tem 30 dias completos para testar, sem cadastrar cartão de crédito. Se ao final do período você quiser continuar, escolhe um plano. Se não, sua conta é desativada automaticamente.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item reveal">
+                <button class="faq-question">
+                    <span>Meus dados ficam seguros?</span>
+                    <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Sim. Cada projeto tem isolamento total — ninguém vê dados de outro projeto. Além disso, seguimos boas práticas de segurança e estamos adequados à LGPD.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item reveal">
+                <button class="faq-question">
+                    <span>Posso usar em escolas, times e clínicas?</span>
+                    <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Sim. O REABITECH foi desenhado para múltiplos contextos: clínicas de fisioterapia, escolas, times esportivos, academias, consultórios individuais e projetos sociais. Você escolhe o tipo ao criar sua conta.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item reveal">
+                <button class="faq-question">
+                    <span>Como funciona o suporte?</span>
+                    <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Todos os planos têm suporte por e-mail. Nos planos Profissional e Empresarial, há suporte prioritário com resposta em até 4 horas úteis. Você também pode usar o chat no canto da tela.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item reveal">
+                <button class="faq-question">
+                    <span>Posso cancelar quando quiser?</span>
+                    <span class="faq-icon"><i class="fas fa-plus"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Sim. Não há contrato de fidelidade. Você cancela direto no painel, quando quiser, sem burocracia. Após cancelar, mantém acesso até o final do período já pago.
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- CTA FINAL -->
     <section class="lp-cta">
-        <div class="lp-cta-inner ds-reveal">
-            <h2 class="lp-cta-title">Pronto para transformar sua gestão esportiva?</h2>
-            <p class="lp-cta-desc">
-                Junte-se a centenas de profissionais que já utilizam o REABITECH para potencializar resultados.
+        <div class="cta-inner reveal">
+            <span class="section-number" style="color: var(--green);">— Comece agora</span>
+            <h2 class="cta-title">
+                Criar sua conta leva<br>
+                menos que um café.
+            </h2>
+            <p class="cta-desc">
+                Sem cartão de crédito no plano Trial. Sem contrato de fidelidade. Sem tempo perdido com configuração.
             </p>
-            <a href="{% url 'login' %}" class="ds-btn ds-btn-lg" style="background: white; color: #0a3d2e;">
-                <i class="fas fa-arrow-right"></i> Começar Agora
+            <a href="{% url 'signup' %}" class="hero-btn hero-btn-primary" style="font-size: 1.05rem;">
+                <i class="fas fa-rocket"></i>
+                Criar minha conta grátis
             </a>
         </div>
     </section>
 
     <!-- FOOTER -->
     <footer class="lp-footer" id="contato">
-        <div class="lp-footer-inner">
-            <div class="lp-footer-brand">
+        <div class="footer-inner">
+            <div class="footer-brand">
                 <a href="/" class="lp-logo">
-    <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="height: 40px; width: auto;">
-    REABITECH
-</a>
-                <p>Plataforma integrada de reabilitação esportiva para atletas, profissionais e gestores.</p>
+                    <div class="lp-logo-img-wrapper">
+                        <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'">
+                    </div>
+                    <span>REABITECH</span>
+                </a>
+                <p>Plataforma integrada de reabilitação para clínicas, escolas, times e consultórios que tratam pessoas — não casos.</p>
             </div>
 
             <div>
-                <div class="lp-footer-heading">Produto</div>
-                <ul class="lp-footer-links">
+                <div class="footer-heading">Produto</div>
+                <ul class="footer-links">
                     <li><a href="#recursos">Recursos</a></li>
-                    <li><a href="#como-funciona">Como Funciona</a></li>
-                    <li><a href="#projetos">Projetos</a></li>
+                    <li><a href="#planos">Planos</a></li>
+                    <li><a href="#faq">FAQ</a></li>
                 </ul>
             </div>
 
             <div>
-                <div class="lp-footer-heading">Empresa</div>
-                <ul class="lp-footer-links">
-                    <li><a href="#">Sobre</a></li>
+                <div class="footer-heading">Empresa</div>
+                <ul class="footer-links">
+                    <li><a href="#">Sobre nós</a></li>
                     <li><a href="#">Contato</a></li>
                     <li><a href="#">Blog</a></li>
                 </ul>
             </div>
 
             <div>
-                <div class="lp-footer-heading">Legal</div>
-                <ul class="lp-footer-links">
+                <div class="footer-heading">Legal</div>
+                <ul class="footer-links">
                     <li><a href="#">Termos</a></li>
                     <li><a href="#">Privacidade</a></li>
                     <li><a href="#">LGPD</a></li>
@@ -985,49 +2679,104 @@
             </div>
         </div>
 
-        <div class="lp-footer-bottom">
-            <div>&copy; 2026 REABITECH. Todos os direitos reservados.</div>
-            <div>Desenvolvido como TCC</div>
+        <div class="footer-bottom">
+            <div>&copy; {% now "Y" %} REABITECH — Todos os direitos reservados.</div>
+            <div>TCC · Etec Prefeito Alberto Feres · Araras/SP</div>
         </div>
     </footer>
 
-    <!-- SCRIPT DO SCROLL REVEAL + CONTADORES + PARALLAX -->
+    <!-- CHAT DE SUPORTE FLUTUANTE -->
+    <div class="chat-widget">
+        <div class="chat-panel" id="chatPanel">
+            <div class="chat-header">
+                <div class="chat-header-avatar">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <div>
+                    <div class="chat-header-name">Suporte REABITECH</div>
+                    <div class="chat-header-status">Online agora</div>
+                </div>
+            </div>
+            <div class="chat-body" id="chatBody">
+                <div class="chat-message">
+                    <div class="chat-message-avatar">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="chat-message-bubble">
+                        Olá! 👋 Sou do suporte REABITECH. Como posso ajudar você hoje?
+                    </div>
+                </div>
+            </div>
+            <div class="chat-footer">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Escreva sua mensagem...">
+                <button class="chat-send" id="chatSend">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        <button class="chat-button" id="chatButton" aria-label="Abrir chat">
+            <i class="fas fa-comment-dots"></i>
+        </button>
+    </div>
+
+    <!-- SCRIPTS -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
-            // --------------------------------------------
-            // 1. NAVBAR SCROLL EFFECT
-            // --------------------------------------------
-            const nav = document.getElementById('lpNav');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 40) {
-                    nav.classList.add('scrolled');
-                } else {
-                    nav.classList.remove('scrolled');
-                }
+            // ============================================================
+            // 1. TOGGLE DARK MODE (padrão: light)
+            // ============================================================
+            const themeToggle = document.getElementById('themeToggle');
+            const htmlEl = document.documentElement;
+            const savedTheme = localStorage.getItem('reabitech-theme') || 'light';
+
+            htmlEl.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+
+            themeToggle.addEventListener('click', () => {
+                const current = htmlEl.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                htmlEl.setAttribute('data-theme', next);
+                localStorage.setItem('reabitech-theme', next);
+                updateThemeIcon(next);
             });
 
-            // --------------------------------------------
-            // 2. SCROLL REVEAL
-            // --------------------------------------------
-            const revealElements = document.querySelectorAll('.ds-reveal');
+            function updateThemeIcon(theme) {
+                themeToggle.innerHTML = theme === 'dark'
+                    ? '<i class="fas fa-sun"></i>'
+                    : '<i class="fas fa-moon"></i>';
+            }
+
+            // ============================================================
+            // 2. NAVBAR SCROLL
+            // ============================================================
+            const nav = document.getElementById('lpNav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 40) nav.classList.add('scrolled');
+                else nav.classList.remove('scrolled');
+            });
+
+            // ============================================================
+            // 3. SCROLL REVEAL
+            // ============================================================
+            const revealElements = document.querySelectorAll('.reveal');
             if ('IntersectionObserver' in window) {
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            entry.target.classList.add('is-visible');
+                            entry.target.classList.add('visible');
                             observer.unobserve(entry.target);
                         }
                     });
-                }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+                }, { threshold: 0.15, rootMargin: '0px 0px -80px 0px' });
                 revealElements.forEach(el => observer.observe(el));
             } else {
-                revealElements.forEach(el => el.classList.add('is-visible'));
+                revealElements.forEach(el => el.classList.add('visible'));
             }
 
-            // --------------------------------------------
-            // 3. CONTADORES ANIMADOS
-            // --------------------------------------------
+            // ============================================================
+            // 4. CONTADORES
+            // ============================================================
             const counters = document.querySelectorAll('[data-counter]');
             const counterObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -1035,27 +2784,43 @@
                         const el = entry.target;
                         const target = parseInt(el.dataset.counter);
                         const suffix = el.dataset.suffix || '';
-                        const duration = 1800;
+                        const duration = 2000;
                         const start = performance.now();
 
                         function tick(now) {
                             const progress = Math.min((now - start) / duration, 1);
-                            const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
-                            el.textContent = Math.floor(eased * target) + suffix;
+                            const eased = 1 - Math.pow(1 - progress, 3);
+                            el.textContent = Math.floor(eased * target).toLocaleString('pt-BR') + suffix;
                             if (progress < 1) requestAnimationFrame(tick);
                         }
                         requestAnimationFrame(tick);
-
                         counterObserver.unobserve(el);
                     }
                 });
             }, { threshold: 0.5 });
             counters.forEach(c => counterObserver.observe(c));
 
-            // --------------------------------------------
-            // 4. EFEITO MOUSE TRACKING NOS FEATURE CARDS
-            // --------------------------------------------
-            document.querySelectorAll('.lp-feature-card').forEach(card => {
+            // ============================================================
+            // 5. CARD 3D
+            // ============================================================
+            const heroCard = document.getElementById('heroCard');
+            const heroWrapper = heroCard?.parentElement;
+            if (heroWrapper) {
+                heroWrapper.addEventListener('mousemove', (e) => {
+                    const rect = heroWrapper.getBoundingClientRect();
+                    const x = (e.clientX - rect.left) / rect.width - 0.5;
+                    const y = (e.clientY - rect.top) / rect.height - 0.5;
+                    heroCard.style.transform = `rotateY(${x * 20}deg) rotateX(${-y * 20}deg) translateY(-8px)`;
+                });
+                heroWrapper.addEventListener('mouseleave', () => {
+                    heroCard.style.transform = '';
+                });
+            }
+
+            // ============================================================
+            // 6. FEATURE CARDS — luz seguindo o mouse
+            // ============================================================
+            document.querySelectorAll('.feature-card').forEach(card => {
                 card.addEventListener('mousemove', (e) => {
                     const rect = card.getBoundingClientRect();
                     const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -1065,18 +2830,145 @@
                 });
             });
 
-            // --------------------------------------------
-            // 5. SCROLL SUAVE PARA ÂNCORAS
-            // --------------------------------------------
+            // ============================================================
+            // 7. PARTÍCULAS
+            // ============================================================
+            const particlesContainer = document.getElementById('particles');
+            if (particlesContainer) {
+                for (let i = 0; i < 25; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = (Math.random() * 15) + 's';
+                    particle.style.animationDuration = (12 + Math.random() * 10) + 's';
+                    const size = 2 + Math.random() * 4;
+                    particle.style.width = size + 'px';
+                    particle.style.height = size + 'px';
+                    particlesContainer.appendChild(particle);
+                }
+            }
+
+            // ============================================================
+            // 8. SMOOTH SCROLL
+            // ============================================================
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
-                    const target = document.querySelector(this.getAttribute('href'));
+                    const href = this.getAttribute('href');
+                    if (!href || href === '#') return;
+                    const target = document.querySelector(href);
                     if (target) {
                         e.preventDefault();
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        const offsetTop = target.getBoundingClientRect().top + window.scrollY - 80;
+                        window.scrollTo({ top: offsetTop, behavior: 'smooth' });
                     }
                 });
             });
+
+            // ============================================================
+            // 9. FAQ ACCORDION
+            // ============================================================
+            document.querySelectorAll('.faq-question').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const item = this.parentElement;
+                    const isOpen = item.classList.contains('open');
+
+                    // fecha os outros
+                    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+
+                    if (!isOpen) item.classList.add('open');
+                });
+            });
+
+            // ============================================================
+            // 10. CARROSSEL DE DEPOIMENTOS
+            // ============================================================
+            const testimonialsScroll = document.getElementById('testimonialsScroll');
+            const prevBtn = document.getElementById('testimonialPrev');
+            const nextBtn = document.getElementById('testimonialNext');
+
+            if (testimonialsScroll && prevBtn && nextBtn) {
+                const scrollAmount = 400;
+
+                prevBtn.addEventListener('click', () => {
+                    testimonialsScroll.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    testimonialsScroll.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                });
+            }
+
+            // ============================================================
+            // 11. CHAT DE SUPORTE
+            // ============================================================
+            const chatButton = document.getElementById('chatButton');
+            const chatPanel = document.getElementById('chatPanel');
+            const chatInput = document.getElementById('chatInput');
+            const chatSend = document.getElementById('chatSend');
+            const chatBody = document.getElementById('chatBody');
+
+            if (chatButton && chatPanel) {
+                chatButton.addEventListener('click', () => {
+                    chatPanel.classList.toggle('open');
+                });
+            }
+
+            function sendMessage() {
+                const msg = chatInput.value.trim();
+                if (!msg) return;
+
+                // adiciona mensagem do usuário
+                const userMsg = document.createElement('div');
+                userMsg.className = 'chat-message';
+                userMsg.style.justifyContent = 'flex-end';
+                userMsg.innerHTML = `
+                    <div class="chat-message-bubble" style="background: var(--green); color: white; border-radius: 14px 14px 4px 14px;">
+                        ${msg}
+                    </div>
+                `;
+                chatBody.appendChild(userMsg);
+                chatInput.value = '';
+                chatBody.scrollTop = chatBody.scrollHeight;
+
+                // resposta automática
+                setTimeout(() => {
+                    const botMsg = document.createElement('div');
+                    botMsg.className = 'chat-message';
+                    botMsg.innerHTML = `
+                        <div class="chat-message-avatar"><i class="fas fa-headset"></i></div>
+                        <div class="chat-message-bubble">
+                            Obrigado pela mensagem! Nossa equipe vai responder em instantes. Você também pode enviar um e-mail para <strong>suporte@reabitech.com</strong>.
+                        </div>
+                    `;
+                    chatBody.appendChild(botMsg);
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 800);
+            }
+
+            if (chatSend) chatSend.addEventListener('click', sendMessage);
+            if (chatInput) {
+                chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') sendMessage();
+                });
+            }
+
+            // ============================================================
+            // 12. VÍDEO — fallback se não existir
+            // ============================================================
+            const heroVideo = document.getElementById('heroVideo');
+            if (heroVideo) {
+                heroVideo.addEventListener('error', () => {
+                    heroVideo.style.display = 'none';
+                });
+                heroVideo.addEventListener('loadeddata', () => {
+                    heroVideo.style.opacity = '0.35';
+                });
+                // tenta dar play
+                heroVideo.play().catch(() => {
+                    // navegador bloqueou autoplay - ok, o fallback fica visível
+                });
+            }
+
         });
     </script>
 </body>

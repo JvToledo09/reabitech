@@ -813,7 +813,6 @@ def coordenador_relatorios(request):
     }
     return render(request, 'dashboard/coordenador/relatorios.html', context)
 
-
 @login_required
 @perfil_required('coordenador')
 def coordenador_membros(request):
@@ -822,9 +821,10 @@ def coordenador_membros(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
+    # 🔥 CORREÇÃO: remove 'modalidade' do select_related (é CharField, não FK)
     todos = MembroProjeto.objects.filter(
         projeto=projeto, ativo=True
-    ).select_related('usuario', 'modalidade').order_by(
+    ).select_related('usuario').order_by(
         'tipo', 'usuario__first_name', 'usuario__last_name'
     )
 
@@ -839,6 +839,34 @@ def coordenador_membros(request):
     filtro_tipo = request.GET.get('tipo', '')
     filtro_sexo = request.GET.get('sexo', '')
     filtro_modalidade = request.GET.get('modalidade', '')
+
+    if query:
+        membros_unicos = [m for m in membros_unicos if
+                          query.lower() in m.usuario.get_full_name().lower() or
+                          query.lower() in m.usuario.username.lower() or
+                          query.lower() in (m.usuario.email or '').lower()]
+    if filtro_tipo:
+        membros_unicos = [m for m in membros_unicos if m.tipo == filtro_tipo]
+    if filtro_sexo:
+        membros_unicos = [m for m in membros_unicos if m.sexo == filtro_sexo]
+    if filtro_modalidade:
+        membros_unicos = [m for m in membros_unicos if m.modalidade == filtro_modalidade]
+
+    modalidades = ModalidadeEsportiva.objects.all()
+    tipos = MembroProjeto.TIPO_MEMBRO
+    sexos = MembroProjeto.SEXO_CHOICES
+
+    return render(request, 'dashboard/coordenador/membros.html', {
+        'projeto': projeto,
+        'membros': membros_unicos,
+        'modalidades': modalidades,
+        'tipos': tipos,
+        'sexos': sexos,
+        'query': query,
+        'filtro_tipo': filtro_tipo,
+        'filtro_sexo': filtro_sexo,
+        'filtro_modalidade': filtro_modalidade,
+    })
 
     if query:
         membros_unicos = [m for m in membros_unicos if

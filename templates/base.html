@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br" data-bs-theme="light">
+<html lang="pt-br" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
@@ -7,40 +7,53 @@
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>">
 
-    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- Fontes: Inter + Plus Jakarta Sans (mesma da landing) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <!-- AOS (animações) -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     {% load static %}
-
-    <!-- Design System v2.0 (mesmos tokens da landing) -->
     <link rel="stylesheet" href="{% static 'css/design-system.css' %}">
-
-    <!-- CSS legado (compatibilidade) -->
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/internal-effects.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/animations.css' %}">
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 
     <style>
         /* ================================================================
-           REABITECH - LAYOUT PRINCIPAL (BASE.HTML)
-           Usa os tokens do design-system.css (Inter + Jakarta, verdes)
+           LAYOUT BASE — usa as variáveis do theme.css
            ================================================================ */
 
-        /* ---------- Sidebar ---------- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.4s ease;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Fundo animado de fundo (blobs) */
+        .bg-animated-internal {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            background: var(--bg-primary);
+            pointer-events: none;
+        }
+
+        /* ---------- Sidebar (glass + gradiente verde) ---------- */
         .sidebar {
             position: fixed;
             left: 0;
@@ -53,12 +66,9 @@
             z-index: 1000;
             box-shadow: 4px 0 30px rgba(10, 61, 46, 0.25);
             overflow-y: auto;
-            font-family: var(--font-sans);
         }
 
-        .sidebar.active {
-            left: -280px;
-        }
+        .sidebar.active { left: -280px; }
 
         .sidebar-logo {
             padding: 28px 20px;
@@ -76,7 +86,7 @@
         }
 
         .sidebar-logo h3 {
-            font-family: var(--font-display);
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 1.4rem;
             font-weight: 800;
             background: linear-gradient(135deg, #a7f3d0, #34d399);
@@ -94,9 +104,7 @@
             letter-spacing: 0.05em;
         }
 
-        .sidebar-menu {
-            padding: 0 12px;
-        }
+        .sidebar-menu { padding: 0 12px; }
 
         .sidebar-item {
             display: flex;
@@ -133,9 +141,7 @@
             transform: translateX(4px);
         }
 
-        .sidebar-item:hover::before {
-            transform: scaleY(1);
-        }
+        .sidebar-item:hover::before { transform: scaleY(1); }
 
         .sidebar-item.active {
             background: linear-gradient(135deg, rgba(43, 161, 129, 0.35), rgba(31, 135, 104, 0.25));
@@ -143,9 +149,7 @@
             box-shadow: 0 4px 15px rgba(43, 161, 129, 0.25);
         }
 
-        .sidebar-item.active::before {
-            transform: scaleY(1);
-        }
+        .sidebar-item.active::before { transform: scaleY(1); }
 
         .sidebar-item i {
             width: 22px;
@@ -173,16 +177,14 @@
             overflow: hidden;
         }
 
-        .sidebar-user .avatar i {
-            font-size: 24px;
-            color: white;
-        }
+        .sidebar-user .avatar i { font-size: 24px; color: white; }
 
         .sidebar-user h6 {
             margin: 0;
             font-size: 0.9rem;
             font-weight: 600;
-            font-family: var(--font-display);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: white;
         }
 
         .sidebar-user .badge {
@@ -194,6 +196,7 @@
             border-radius: 999px;
             font-weight: 600;
             letter-spacing: 0.03em;
+            color: white;
         }
 
         /* ---------- Main Content ---------- */
@@ -201,32 +204,21 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             padding: 24px;
             min-height: 100vh;
-            background: #f5f6f8;
-            font-family: var(--font-sans);
         }
 
-        [data-bs-theme="dark"] .main-content {
-            background: #0f172a;
-        }
+        .main-content.no-sidebar { margin-left: 0 !important; }
+        .main-content:not(.no-sidebar) { margin-left: 280px; }
 
-        .main-content.no-sidebar {
-            margin-left: 0 !important;
-        }
-
-        .main-content:not(.no-sidebar) {
-            margin-left: 280px;
-        }
-
-        /* ---------- Top Navbar (glassmorphism) ---------- */
+        /* ---------- Top Navbar (glass) ---------- */
         .top-navbar {
-            background: rgba(255, 255, 255, 0.85);
+            background: var(--bg-overlay);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border: 1px solid var(--border-color);
             border-radius: 18px;
             padding: 14px 24px;
             margin-bottom: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            box-shadow: var(--shadow-sm);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -234,12 +226,6 @@
             gap: 15px;
             position: relative;
             z-index: 1050;
-        }
-
-        [data-bs-theme="dark"] .top-navbar {
-            background: rgba(20, 30, 50, 0.85);
-            border-color: rgba(255, 255, 255, 0.05);
-            color: white;
         }
 
         .page-title {
@@ -270,77 +256,28 @@
         }
 
         .page-title h2 {
-            font-family: var(--font-display);
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 1.35rem;
             font-weight: 700;
             margin: 0;
             letter-spacing: -0.02em;
+            color: var(--text-primary);
         }
 
         .page-title p {
             margin: 2px 0 0 0;
             font-size: 0.78rem;
-            color: #64748b;
+            color: var(--text-tertiary);
         }
 
-        [data-bs-theme="dark"] .page-title p {
-            color: #94a3b8;
-        }
-
-        /* ---------- Dropdowns ---------- */
-        .dropdown-menu {
-            z-index: 1060 !important;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 15px 40px rgba(15, 23, 42, 0.12);
-            border-radius: 14px;
-            padding: 8px 0;
-            margin-top: 8px !important;
-            background-color: white;
-            font-family: var(--font-sans);
-        }
-
-        [data-bs-theme="dark"] .dropdown-menu {
-            background-color: #1e293b;
-            border-color: #334155;
-            color: #e2e8f0;
-        }
-
-        .dropdown-item {
-            font-size: 0.875rem;
-            padding: 9px 18px;
-            color: #334155;
-            transition: all 0.15s;
-            font-weight: 500;
-        }
-
-        [data-bs-theme="dark"] .dropdown-item {
-            color: #cbd5e1;
-        }
-
-        .dropdown-item:hover {
-            background: #f1f5f9;
-            color: #2BA181;
-        }
-
-        [data-bs-theme="dark"] .dropdown-item:hover {
-            background: #334155;
-            color: #34d399;
-        }
-
-        .dropdown-item i {
-            width: 20px;
-            text-align: center;
-            margin-right: 8px;
-        }
-
-        /* ---------- Botões Custom ---------- */
+        /* ---------- Botões ---------- */
         .btn-primary-custom {
             background: linear-gradient(135deg, #2BA181, #1f8768);
             border: none;
             padding: 11px 26px;
             border-radius: 12px;
             font-weight: 600;
-            font-family: var(--font-sans);
+            font-family: 'Inter', sans-serif;
             transition: all 0.25s ease;
             color: white;
             display: inline-flex;
@@ -358,137 +295,68 @@
         }
 
         .btn-outline-custom {
-            border: 1.5px solid #cbd5e1;
+            border: 1.5px solid var(--border-strong);
             background: transparent;
             padding: 9px 20px;
             border-radius: 10px;
             font-weight: 500;
-            color: #475569;
+            color: var(--text-secondary);
             transition: all 0.25s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
             text-decoration: none;
-            font-family: var(--font-sans);
+            font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
         }
 
-        [data-bs-theme="dark"] .btn-outline-custom {
-            border-color: #475569;
-            color: #cbd5e1;
-        }
-
         .btn-outline-custom:hover {
-            background: #2BA181;
-            border-color: #2BA181;
+            background: var(--green);
+            border-color: var(--green);
             color: white;
             transform: translateY(-1px);
         }
 
-        /* ---------- Dark Mode Toggle ---------- */
-        .dark-mode-toggle {
-            background: linear-gradient(135deg, #2BA181, #1f8768);
-            border: none;
-            border-radius: 50%;
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: white;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 12px rgba(43, 161, 129, 0.25);
-        }
-
-        .dark-mode-toggle:hover {
-            transform: translateY(-2px) rotate(15deg);
-        }
-
-        /* ---------- Loading ---------- */
-        .loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0a3d2e 0%, #11543f 100%);
-            z-index: 9998;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s ease;
-        }
-
-        .loading.hide {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .spinner {
-            width: 54px;
-            height: 54px;
-            border: 3px solid rgba(255, 255, 255, 0.15);
-            border-top-color: #34d399;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* ---------- Cards base (usados em várias telas) ---------- */
+        /* ---------- Cards ---------- */
         .card-modern {
-            background: white;
+            background: var(--bg-elevated);
             border-radius: 20px;
-            border: 1px solid transparent;
-            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
-        }
-
-        [data-bs-theme="dark"] .card-modern {
-            background: #1e293b;
-            color: white;
-            border-color: #334155;
+            color: var(--text-primary);
         }
 
         .card-modern:hover {
             transform: translateY(-4px);
-            box-shadow: 0 15px 40px rgba(15, 23, 42, 0.1);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--green-soft-2);
         }
 
         .stat-card {
-            background: white;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-color);
             border-radius: 20px;
             padding: 24px 20px;
             text-align: center;
             transition: all 0.3s ease;
-            cursor: pointer;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
-        }
-
-        [data-bs-theme="dark"] .stat-card {
-            background: #1e293b;
-            color: white;
+            box-shadow: var(--shadow-sm);
         }
 
         .stat-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
             background: linear-gradient(90deg, #34d399, #2BA181);
         }
 
         .stat-card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 15px 40px rgba(15, 23, 42, 0.12);
+            box-shadow: var(--shadow-lg);
         }
 
         .stat-icon {
@@ -510,7 +378,7 @@
         }
 
         .stat-number {
-            font-family: var(--font-display);
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 2.4rem;
             font-weight: 800;
             background: linear-gradient(135deg, #2BA181, #1f8768);
@@ -522,51 +390,36 @@
             line-height: 1.1;
         }
 
-        /* ---------- Container padrão ---------- */
-        .container-fluid {
-            font-family: var(--font-sans);
+        /* ---------- Loading ---------- */
+        .loading {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #0a3d2e 0%, #11543f 100%);
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
         }
 
-        /* ---------- títulos internos ---------- */
-        h4, h5, h6 {
-            font-family: var(--font-display);
-            letter-spacing: -0.015em;
+        .loading.hide { opacity: 0; pointer-events: none; }
+
+        .spinner {
+            width: 54px;
+            height: 54px;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            border-top-color: #34d399;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        .fw-bold {
-            font-weight: 700;
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ---------- Text muted ---------- */
-        .text-muted {
-            color: #64748b !important;
-        }
-
-        [data-bs-theme="dark"] .text-muted {
-            color: #94a3b8 !important;
-        }
-
-        /* ---------- Alertas ---------- */
-        .alert-success {
-            background: #ecfdf5;
-            border-color: #a7f3d0;
-            color: #065f46;
-        }
-
-        [data-bs-theme="dark"] .alert-success {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: rgba(16, 185, 129, 0.3);
-            color: #86efac;
-        }
-
-        /* ---------- RESPONSIVIDADE ---------- */
+        /* ---------- Overlay mobile ---------- */
         .sidebar-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
             opacity: 0;
@@ -578,15 +431,14 @@
             opacity: 1;
         }
 
+        /* ---------- Responsivo ---------- */
         @media (max-width: 992px) {
             .sidebar {
                 transform: translateX(-100%);
                 transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
-            .sidebar.active {
-                transform: translateX(0);
-            }
+            .sidebar.active { transform: translateX(0); }
 
             .main-content:not(.no-sidebar) {
                 margin-left: 0 !important;
@@ -598,68 +450,36 @@
                 border-radius: 14px;
             }
 
-            .page-title h2 {
-                font-size: 1.1rem !important;
-            }
-
-            .page-title p {
-                display: none;
-            }
-
-            .btn-primary-custom,
-            .btn-outline-custom {
-                padding: 8px 14px !important;
-                font-size: 0.8rem;
-            }
+            .page-title h2 { font-size: 1.1rem !important; }
+            .page-title p { display: none; }
         }
 
         @media (max-width: 576px) {
-            .page-title h2 {
-                font-size: 0.95rem !important;
-            }
-
-            .btn-outline-custom span {
-                display: none;
-            }
-
-            .card-modern {
-                border-radius: 14px !important;
-                padding: 16px !important;
-            }
-
-            .stat-card {
-                padding: 16px 12px;
-            }
-
-            .stat-number {
-                font-size: 1.75rem !important;
-            }
-
-            .stat-icon {
-                width: 46px;
-                height: 46px;
-                font-size: 1.1rem;
-            }
+            .page-title h2 { font-size: 0.95rem !important; }
+            .btn-outline-custom span { display: none; }
+            .card-modern { border-radius: 14px !important; padding: 16px !important; }
+            .stat-card { padding: 16px 12px; }
+            .stat-number { font-size: 1.75rem !important; }
+            .stat-icon { width: 46px; height: 46px; font-size: 1.1rem; }
         }
 
-        /* ---------- Print ---------- */
         @media print {
-            .sidebar,
-            .top-navbar,
-            .btn,
-            .no-print {
-                display: none !important;
-            }
-
-            .main-content {
-                margin-left: 0 !important;
-            }
+            .sidebar, .top-navbar, .btn, .no-print, .theme-toggle-global { display: none !important; }
+            .main-content { margin-left: 0 !important; }
         }
     </style>
 
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+
+    <!-- Fundo animado global -->
+    <div class="bg-animated-internal">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <!-- Loading -->
     <div class="loading" id="loading">
         <div class="spinner"></div>
     </div>
@@ -746,11 +566,10 @@
                 </div>
             </div>
             <div class="d-flex align-items-center gap-3">
-                <button class="dark-mode-toggle" id="darkModeToggle"><i class="fas fa-moon"></i></button>
 
-                <!-- Dropdown Notificações -->
+                <!-- Notificações -->
                 <div class="dropdown">
-                    <button class="btn btn-outline-custom position-relative dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-outline-custom position-relative dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         <i class="fas fa-bell"></i>
                         {% if total_notificacoes > 0 %}
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">
@@ -794,7 +613,7 @@
                     </ul>
                 </div>
 
-                <!-- Dropdown Perfil -->
+                <!-- Perfil -->
                 <div class="dropdown">
                     <button class="btn btn-outline-custom dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         <i class="fas fa-user-circle"></i>
@@ -823,9 +642,15 @@
         </div>
         {% endif %}
 
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </div>
+
+    <!-- Botão flutuante de tema (só quando logado, para não conflitar com a landing) -->
+    {% if user.is_authenticated %}
+    <button class="theme-toggle-global" id="themeToggleGlobal" title="Alternar tema claro/escuro">
+        <i class="fas fa-moon"></i>
+    </button>
+    {% endif %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -838,9 +663,10 @@
 
         window.addEventListener('load', function() {
             const loading = document.getElementById('loading');
-            if(loading) setTimeout(() => loading.classList.add('hide'), 400);
+            if (loading) setTimeout(() => loading.classList.add('hide'), 400);
         });
 
+        // Sidebar
         const sidebar = document.getElementById('sidebar');
         const mobileToggleBtn = document.getElementById('mobileToggleBtn');
         const desktopToggleBtn = document.getElementById('desktopToggleBtn');
@@ -856,9 +682,9 @@
             if (sidebarOverlay) sidebarOverlay.classList.remove('active');
         }
 
-        if(mobileToggleBtn) mobileToggleBtn.addEventListener('click', toggleSidebar);
-        if(desktopToggleBtn) desktopToggleBtn.addEventListener('click', toggleSidebar);
-        if(sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+        if (mobileToggleBtn) mobileToggleBtn.addEventListener('click', toggleSidebar);
+        if (desktopToggleBtn) desktopToggleBtn.addEventListener('click', toggleSidebar);
+        if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
 
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function() {
@@ -871,32 +697,45 @@
         });
 
         // ============================================
-        // DARK MODE
+        // THEME TOGGLE GLOBAL (light ↔ dark)
         // ============================================
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const htmlElement = document.documentElement;
-        const savedTheme = localStorage.getItem('theme');
+        const themeToggleGlobal = document.getElementById('themeToggleGlobal');
+        const htmlEl = document.documentElement;
+        const savedTheme = localStorage.getItem('reabitech-theme') || 'light';
 
-        if (savedTheme === 'dark') {
-            htmlElement.setAttribute('data-bs-theme', 'dark');
-            if(darkModeToggle) darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
+        htmlEl.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
 
-        if(darkModeToggle) {
-            darkModeToggle.addEventListener('click', () => {
-                const currentTheme = htmlElement.getAttribute('data-bs-theme');
-                if (currentTheme === 'dark') {
-                    htmlElement.setAttribute('data-bs-theme', 'light');
-                    localStorage.setItem('theme', 'light');
-                    darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-                } else {
-                    htmlElement.setAttribute('data-bs-theme', 'dark');
-                    localStorage.setItem('theme', 'dark');
-                    darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-                }
+        if (themeToggleGlobal) {
+            themeToggleGlobal.addEventListener('click', () => {
+                const current = htmlEl.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                htmlEl.setAttribute('data-theme', next);
+                localStorage.setItem('reabitech-theme', next);
+                updateThemeIcon(next);
             });
         }
+
+        function updateThemeIcon(theme) {
+            if (!themeToggleGlobal) return;
+            themeToggleGlobal.innerHTML = theme === 'dark'
+                ? '<i class="fas fa-sun"></i>'
+                : '<i class="fas fa-moon"></i>';
+        }
     </script>
+
+    <script>
+    // Efeito de luz nos cards premium (mesmo da landing)
+    document.querySelectorAll('.card-premium').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            card.style.setProperty('--mouse-x', x + '%');
+            card.style.setProperty('--mouse-y', y + '%');
+        });
+    });
+</script>
 
     {% block extra_js %}{% endblock %}
 </body>

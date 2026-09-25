@@ -4,121 +4,824 @@
 {% block title %}Membros do Projeto{% endblock %}
 {% block page_title %}Membros{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* ============================================
+       NOVO — PAGE HEADER PREMIUM
+       ============================================ */
+    .page-header {
+        margin-bottom: 36px;
+        position: relative;
+    }
+
+    .page-header-number {
+        font-family: var(--font-display);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+        color: #2BA181;
+        margin-bottom: 14px;
+        display: block;
+        text-transform: uppercase;
+    }
+
+    .page-header-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 16px;
+        background: rgba(43, 161, 129, 0.08);
+        border: 1px solid rgba(43, 161, 129, 0.15);
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #1f8768;
+        margin-bottom: 16px;
+    }
+
+    [data-bs-theme="dark"] .page-header-eyebrow {
+        background: rgba(43, 161, 129, 0.15);
+        color: #a7f3d0;
+    }
+
+    .page-header-title {
+        font-family: var(--font-display);
+        font-size: clamp(1.75rem, 3vw, 2.5rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.15;
+        margin-bottom: 12px;
+        color: #0f172a;
+    }
+
+    [data-bs-theme="dark"] .page-header-title {
+        color: #f1f5f9;
+    }
+
+    .page-header-title .gradient-text {
+        background: linear-gradient(135deg, #1f8768, #2BA181);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .page-header-subtitle {
+        font-size: 1rem;
+        color: #64748b;
+        line-height: 1.6;
+        max-width: 720px;
+        margin: 0;
+    }
+
+    [data-bs-theme="dark"] .page-header-subtitle {
+        color: #94a3b8;
+    }
+
+    /* ============================================
+       NOVO — STATS PREMIUM
+       ============================================ */
+    .stat-premium {
+        position: relative;
+        padding: 28px 24px;
+        background: white;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 24px;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        text-align: center;
+    }
+
+    [data-bs-theme="dark"] .stat-premium {
+        background: #1e293b;
+        border-color: #334155;
+    }
+
+    .stat-premium::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(43, 161, 129, 0.08), transparent);
+        transition: left 0.8s;
+        pointer-events: none;
+    }
+
+    .stat-premium:hover::before { left: 100%; }
+
+    .stat-premium:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+        border-color: rgba(43, 161, 129, 0.15);
+    }
+
+    [data-bs-theme="dark"] .stat-premium:hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .stat-premium-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(43, 161, 129, 0.15), rgba(6, 182, 212, 0.08));
+        border: 1px solid rgba(43, 161, 129, 0.15);
+        color: #2BA181;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        transition: all 0.4s ease;
+    }
+
+    .stat-premium:hover .stat-premium-icon {
+        transform: scale(1.1) rotate(-5deg);
+        box-shadow: 0 15px 40px rgba(43, 161, 129, 0.2);
+    }
+
+    .stat-premium-number {
+        font-family: var(--font-display);
+        font-size: 2.5rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #2BA181, #1f8768);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        margin-bottom: 10px;
+    }
+
+    .stat-premium-label {
+        font-size: 0.88rem;
+        color: #94a3b8;
+        font-weight: 500;
+    }
+
+    [data-bs-theme="dark"] .stat-premium-label {
+        color: #64748b;
+    }
+
+    /* ============================================
+       NOVO — PULSE DOT
+       ============================================ */
+    .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #2BA181;
+        box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.3);
+        animation: dotPulse 2s infinite;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+
+    @keyframes dotPulse {
+        0%, 100% { box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.3); }
+        50%      { box-shadow: 0 0 0 8px rgba(52, 211, 153, 0.1); }
+    }
+
+    /* ============================================
+       HEADER DA PÁGINA (membros-header antigo)
+       ============================================ */
+    .membros-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .membros-title {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin: 0;
+        color: #0f172a;
+    }
+
+    [data-bs-theme="dark"] .membros-title {
+        color: #f1f5f9;
+    }
+
+    .membros-sub {
+        font-size: 0.9rem;
+        color: #64748b;
+        margin: 4px 0 0 0;
+    }
+
+    [data-bs-theme="dark"] .membros-sub {
+        color: #94a3b8;
+    }
+
+    /* ============================================
+       BARRA DE FILTROS
+       ============================================ */
+    .filters-bar {
+        background: white;
+        border-radius: 18px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+        border: 1px solid transparent;
+    }
+
+    [data-bs-theme="dark"] .filters-bar {
+        background: #1e293b;
+        border-color: #334155;
+    }
+
+    .filters-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr auto;
+        gap: 12px;
+        align-items: end;
+    }
+
+    @media (max-width: 992px) {
+        .filters-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .filters-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .filter-input,
+    .filter-select {
+        width: 100%;
+        padding: 11px 14px;
+        font-family: var(--font-sans);
+        font-size: 0.9rem;
+        color: #1e293b;
+        background: #f8fafc;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 10px;
+        outline: none;
+        transition: all 0.2s ease;
+    }
+
+    [data-bs-theme="dark"] .filter-input,
+    [data-bs-theme="dark"] .filter-select {
+        background: #0f172a;
+        border-color: #334155;
+        color: #e2e8f0;
+    }
+
+    .filter-input:focus,
+    .filter-select:focus {
+        border-color: #2BA181;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(43, 161, 129, 0.1);
+    }
+
+    .filter-label {
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #64748b;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    /* ============================================
+       TABELA DE MEMBROS
+       ============================================ */
+    .membros-card {
+        background: white;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+        border: 1px solid transparent;
+    }
+
+    [data-bs-theme="dark"] .membros-card {
+        background: #1e293b;
+        border-color: #334155;
+    }
+
+    .membros-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: var(--font-sans);
+    }
+
+    .membros-table thead {
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    [data-bs-theme="dark"] .membros-table thead {
+        background: #0f172a;
+        border-color: #334155;
+    }
+
+    .membros-table thead th {
+        padding: 14px 18px;
+        text-align: left;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #64748b;
+        white-space: nowrap;
+    }
+
+    [data-bs-theme="dark"] .membros-table thead th {
+        color: #94a3b8;
+    }
+
+    .membros-table tbody tr {
+        border-bottom: 1px solid #f1f5f9;
+        transition: background 0.2s;
+    }
+
+    [data-bs-theme="dark"] .membros-table tbody tr {
+        border-color: #334155;
+    }
+
+    .membros-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    [data-bs-theme="dark"] .membros-table tbody tr:hover {
+        background: #0f172a;
+    }
+
+    .membros-table tbody td {
+        padding: 14px 18px;
+        vertical-align: middle;
+        font-size: 0.9rem;
+        color: #334155;
+    }
+
+    [data-bs-theme="dark"] .membros-table tbody td {
+        color: #cbd5e1;
+    }
+
+    /* ============================================
+       AVATAR DO MEMBRO
+       ============================================ */
+    .member-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-weight: 800;
+        font-size: 0.95rem;
+        color: white;
+        flex-shrink: 0;
+        letter-spacing: -0.02em;
+    }
+
+    .member-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .member-name {
+        font-weight: 600;
+        font-size: 0.92rem;
+        color: #0f172a;
+        margin: 0 0 2px 0;
+    }
+
+    [data-bs-theme="dark"] .member-name {
+        color: #f1f5f9;
+    }
+
+    .member-email {
+        font-size: 0.78rem;
+        color: #94a3b8;
+        margin: 0;
+    }
+
+    /* ============================================
+       BADGES DE FUNÇÃO
+       ============================================ */
+    .role-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+    }
+
+    .role-badge.coordenador {
+        background: rgba(111, 66, 193, 0.12);
+        color: #6f42c1;
+    }
+
+    .role-badge.fisioterapeuta {
+        background: rgba(43, 161, 129, 0.12);
+        color: #1f8768;
+    }
+
+    .role-badge.psicologo {
+        background: rgba(13, 202, 240, 0.12);
+        color: #0aa2c0;
+    }
+
+    .role-badge.tecnico {
+        background: rgba(13, 110, 253, 0.12);
+        color: #0d6efd;
+    }
+
+    .role-badge.atleta {
+        background: rgba(245, 158, 11, 0.12);
+        color: #d97706;
+    }
+
+    [data-bs-theme="dark"] .role-badge.coordenador { background: rgba(111, 66, 193, 0.2); color: #a78bfa; }
+    [data-bs-theme="dark"] .role-badge.fisioterapeuta { background: rgba(43, 161, 129, 0.2); color: #34d399; }
+    [data-bs-theme="dark"] .role-badge.psicologo { background: rgba(13, 202, 240, 0.2); color: #67e8f9; }
+    [data-bs-theme="dark"] .role-badge.tecnico { background: rgba(13, 110, 253, 0.2); color: #93c5fd; }
+    [data-bs-theme="dark"] .role-badge.atleta { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+
+    /* ============================================
+       BADGE DE STATUS
+       ============================================ */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 600;
+    }
+
+    .status-badge::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .status-badge.ativo {
+        background: rgba(16, 185, 129, 0.12);
+        color: #059669;
+    }
+
+    .status-badge.inativo {
+        background: rgba(239, 68, 68, 0.12);
+        color: #dc2626;
+    }
+
+    /* ============================================
+       BOTÕES DE AÇÃO
+       ============================================ */
+    .action-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        border: 1.5px solid #e2e8f0;
+        background: white;
+        color: #64748b;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+
+    [data-bs-theme="dark"] .action-btn {
+        background: #0f172a;
+        border-color: #334155;
+        color: #94a3b8;
+    }
+
+    .action-btn:hover {
+        background: #2BA181;
+        border-color: #2BA181;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .action-btn.danger:hover {
+        background: #ef4444;
+        border-color: #ef4444;
+    }
+
+    /* ============================================
+       ESTADO VAZIO
+       ============================================ */
+    .empty-state {
+        text-align: center;
+        padding: 70px 24px;
+    }
+
+    .empty-state-icon {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+        color: #2BA181;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem;
+        margin-bottom: 20px;
+    }
+
+    .empty-state-title {
+        font-family: var(--font-display);
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #0f172a;
+    }
+
+    [data-bs-theme="dark"] .empty-state-title {
+        color: #f1f5f9;
+    }
+
+    .empty-state-desc {
+        color: #64748b;
+        font-size: 0.95rem;
+        margin-bottom: 24px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* ============================================
+       RESPONSIVO — TABELA VIRA CARDS
+       ============================================ */
+    @media (max-width: 768px) {
+        .membros-table thead {
+            display: none;
+        }
+
+        .membros-table tbody tr {
+            display: block;
+            margin-bottom: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 16px;
+            background: white;
+        }
+
+        [data-bs-theme="dark"] .membros-table tbody tr {
+            background: #1e293b;
+            border-color: #334155;
+        }
+
+        .membros-table tbody td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0 !important;
+            border: none !important;
+            border-bottom: 1px solid #f1f5f9 !important;
+        }
+
+        .membros-table tbody td:last-child {
+            border-bottom: none !important;
+        }
+
+        .membros-table tbody td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: #64748b;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-right: 12px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid p-0">
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-        <div>
-            <p class="text-muted mb-0">Gerenciamento de membros do projeto <strong>{{ projeto.nome }}</strong></p>
+
+    <!-- ============================================
+         PAGE HEADER (NOVO)
+         ============================================ -->
+    <div class="page-header">
+        <span class="page-header-number">— 01 / Sua equipe</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-users"></i>
+            Gestão de membros
         </div>
-        <a href="{% url 'dashboard:coordenador_adicionar_membro' %}" class="btn btn-primary-custom shadow-sm">
-            <i class="fas fa-user-plus me-2"></i>Gerenciar Funções
+        <h1 class="page-header-title">
+            Quem faz o projeto <span class="gradient-text">acontecer.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            Gerencie membros do projeto <strong>{{ projeto.nome }}</strong>.
+            Convide profissionais, defina funções e mantenha sua equipe conectada.
+        </p>
+    </div>
+
+    <!-- ============================================
+         STATS PREMIUM (NOVO)
+         ============================================ -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-premium">
+                <div class="stat-premium-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-premium-number">{{ membros|length }}</div>
+                <div class="stat-premium-label">Total de membros</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-premium">
+                <div class="stat-premium-icon"><i class="fas fa-user-md"></i></div>
+                <div class="stat-premium-number">{{ projeto.total_profissionais|default:0 }}</div>
+                <div class="stat-premium-label">Profissionais ativos</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-premium">
+                <div class="stat-premium-icon"><i class="fas fa-user-injured"></i></div>
+                <div class="stat-premium-number">{{ projeto.total_atletas|default:0 }}</div>
+                <div class="stat-premium-label">Pacientes</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-premium">
+                <div class="stat-premium-icon"><i class="fas fa-calendar"></i></div>
+                <div class="stat-premium-number">{{ projeto.criado_em|date:"Y" }}</div>
+                <div class="stat-premium-label">Projeto desde</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         HEADER (com botão Gerenciar)
+         ============================================ -->
+    <div class="membros-header">
+        <div class="d-flex align-items-center gap-2">
+            <span class="pulse-dot"></span>
+            <small style="color: #64748b;">Sincronizado em tempo real</small>
+        </div>
+        <a href="{% url 'dashboard:coordenador_adicionar_membro' %}" class="btn-primary-custom">
+            <i class="fas fa-user-plus"></i> Gerenciar Funções
         </a>
     </div>
 
-    <!-- Barra de Pesquisa e Filtros -->
-    <div class="card-modern p-3 mb-4">
-        <form method="GET" class="row g-3 align-items-center">
-            <div class="col-md-4">
-                <input type="text" name="q" value="{{ query }}" class="form-control bg-light border-0 shadow-sm" placeholder="Pesquisar por nome, email...">
+    <!-- ============================================
+         FILTROS
+         ============================================ -->
+    <div class="filters-bar">
+        <form method="GET" class="filters-grid">
+            <div>
+                <label class="filter-label">Pesquisar</label>
+                <input type="text" name="q" value="{{ query|default:'' }}"
+                       class="filter-input" placeholder="Nome, e-mail ou usuário...">
             </div>
-            <div class="col-md-2">
-                <select name="tipo" class="form-select bg-light border-0 shadow-sm">
-                    <option value="">Todas Funções</option>
+
+            <div>
+                <label class="filter-label">Função</label>
+                <select name="tipo" class="filter-select">
+                    <option value="">Todas</option>
                     {% for value, label in tipos %}
-                        <option value="{{ value }}" {% if filtro_tipo == value %}selected{% endif %}>{{ label }}</option>
+                    <option value="{{ value }}" {% if filtro_tipo == value %}selected{% endif %}>{{ label }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-md-2">
-                <select name="sexo" class="form-select bg-light border-0 shadow-sm">
-                    <option value="">Todos Sexos</option>
+
+            <div>
+                <label class="filter-label">Sexo</label>
+                <select name="sexo" class="filter-select">
+                    <option value="">Todos</option>
                     {% for value, label in sexos %}
-                        <option value="{{ value }}" {% if filtro_sexo == value %}selected{% endif %}>{{ label }}</option>
+                    <option value="{{ value }}" {% if filtro_sexo == value %}selected{% endif %}>{{ label }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-md-2">
-                <select name="modalidade" class="form-select bg-light border-0 shadow-sm">
-                    <option value="">Todas Modalidades</option>
-                    {% for modalidade in modalidades %}
-                        <option value="{{ modalidade.id }}" {% if filtro_modalidade == modalidade.id|stringformat:"s" %}selected{% endif %}>{{ modalidade.nome }}</option>
+
+            <div>
+                <label class="filter-label">Modalidade</label>
+                <select name="modalidade" class="filter-select">
+                    <option value="">Todas</option>
+                    {% for m in modalidades %}
+                    <option value="{{ m.id }}" {% if filtro_modalidade == m.id|stringformat:"s" %}selected{% endif %}>{{ m.nome }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary-custom w-100"><i class="fas fa-search me-2"></i>Filtrar</button>
+
+            <div style="display:flex;gap:8px;">
+                <button type="submit" class="btn-primary-custom" style="white-space:nowrap;">
+                    <i class="fas fa-search"></i> Filtrar
+                </button>
+                <a href="{% url 'dashboard:coordenador_membros' %}" class="btn-outline-custom" style="white-space:nowrap;">
+                    <i class="fas fa-times"></i>
+                </a>
             </div>
         </form>
     </div>
 
-    <!-- Tabela com Agrupamento -->
-    <div class="card-modern p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="bg-light text-muted small fw-bold" style="border-bottom: 1px solid var(--border-color);">
+    <!-- ============================================
+         LISTA DE MEMBROS
+         ============================================ -->
+    <div class="membros-card">
+        {% if membros %}
+        <div style="overflow-x:auto;">
+            <table class="membros-table">
+                <thead>
                     <tr>
-                        <th scope="col" class="ps-4 py-3">Usuário</th>
-                        <th scope="col">Função / Modalidade</th>
-                        <th scope="col">Sexo</th>
-                        <th scope="col">Status</th>
-                        <th scope="col" class="text-end pe-4">Ações</th>
+                        <th>Usuário</th>
+                        <th>Função</th>
+                        <th>Modalidade</th>
+                        <th>Sexo</th>
+                        <th>Status</th>
+                        <th style="text-align:right;">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% regroup membros by tipo as membros_agrupados %}
-                    {% for grupo in membros_agrupados %}
-                        <tr class="bg-light">
-                            <td colspan="5" class="ps-4 py-2 text-muted fw-bold" data-label="Grupo">
-                                <i class="fas fa-users-cog me-2"></i> {{ grupo.grouper }} <span class="badge bg-light text-dark border ms-2">{{ grupo.list|length }}</span>
-                            </td>
-                        </tr>
-
-                        {% for membro in grupo.list %}
-                        <tr>
-                            <td data-label="Usuário" class="ps-4">
-                                <a href="{% url 'dashboard:coordenador_detalhes_membro' membro.id %}" class="text-decoration-none text-dark">
-                                    <div class="d-flex align-items-center">
-                                        <div class="bg-secondary bg-opacity-10 text-secondary rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                            <i class="fas fa-user fs-6"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="mb-0 fw-bold">{{ membro.usuario.get_full_name|default:membro.usuario.username }}</h6>
-                                            <small class="text-muted">{{ membro.usuario.email|default:"Sem email" }}</small>
-                                        </div>
-                                    </div>
-                                </a>
-                            </td>
-                            <td data-label="Função / Modalidade">
-                                <span class="badge bg-light text-dark rounded-pill px-3 py-2 border">
-                                    {{ membro.get_tipo_display }}
-                                    {% if membro.modalidade %} - {{ membro.modalidade.nome }}{% endif %}
-                                </span>
-                            </td>
-                            <td data-label="Sexo">{{ membro.get_sexo_display|default:"-" }}</td>
-                            <td data-label="Status">
-                                {% if membro.ativo %}
-                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">Ativo</span>
-                                {% else %}
-                                <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">Inativo</span>
-                                {% endif %}
-                            </td>
-                            <td data-label="Ações" class="text-end pe-4">
-                                <a href="{% url 'dashboard:coordenador_detalhes_membro' membro.id %}" class="btn btn-sm btn-outline-secondary rounded-circle" title="Ver detalhes"><i class="fas fa-eye"></i></a>
-                                <button class="btn btn-sm btn-outline-danger rounded-circle" title="Remover"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    {% empty %}
+                    {% for membro in membros %}
                     <tr>
-                        <td colspan="5" class="text-center py-5 text-muted">
-                            <i class="fas fa-users fs-1 d-block mb-3 opacity-25"></i>
-                            <p class="mb-0">Nenhum membro encontrado.</p>
+                        <td data-label="Usuário">
+                            <div class="member-info">
+                                <div class="member-avatar"
+                                     style="background: linear-gradient(135deg,
+                                        {% cycle '#2BA181,#1f8768' '#0d6efd,#084298' '#6f42c1,#4c2a85' '#0dcaf0,#0aa2c0' '#ffc107,#d97706' %}"
+                                     data-initial="{{ membro.usuario.get_full_name|default:membro.usuario.username|first|upper }}">
+                                    {{ membro.usuario.get_full_name|default:membro.usuario.username|first|upper }}
+                                </div>
+                                <div>
+                                    <div class="member-name">{{ membro.usuario.get_full_name|default:membro.usuario.username }}</div>
+                                    <div class="member-email">{{ membro.usuario.email|default:"Sem e-mail" }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td data-label="Função">
+                            <span class="role-badge {{ membro.tipo }}">
+                                <i class="fas fa-{% if membro.tipo == 'coordenador' %}user-tie{% elif membro.tipo == 'fisioterapeuta' %}user-md{% elif membro.tipo == 'psicologo' %}brain{% elif membro.tipo == 'tecnico' %}chalkboard-teacher{% else %}user{% endif %}"></i>
+                                {{ membro.get_tipo_display }}
+                            </span>
+                        </td>
+                        <td data-label="Modalidade">
+                            {% if membro.modalidade %}
+                                {{ membro.modalidade }}
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="Sexo">
+                            {% if membro.get_sexo_display %}
+                                {{ membro.get_sexo_display }}
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="Status">
+                            {% if membro.ativo %}
+                            <span class="status-badge ativo">Ativo</span>
+                            {% else %}
+                            <span class="status-badge inativo">Inativo</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="Ações" style="text-align:right;">
+                            <a href="{% url 'dashboard:coordenador_detalhes_membro' membro.id %}"
+                               class="action-btn" title="Ver detalhes">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{% url 'dashboard:coordenador_adicionar_membro' %}"
+                               class="action-btn" title="Editar função">
+                                <i class="fas fa-edit"></i>
+                            </a>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h3 class="empty-state-title">Nenhum membro cadastrado</h3>
+            <p class="empty-state-desc">
+                Adicione os profissionais da sua equipe (fisioterapeutas, psicólogos, técnicos) e pacientes para começar.
+            </p>
+            <a href="{% url 'dashboard:coordenador_adicionar_membro' %}" class="btn-primary-custom">
+                <i class="fas fa-user-plus"></i> Adicionar Primeiro Membro
+            </a>
+        </div>
+        {% endif %}
     </div>
+
 </div>
 {% endblock %}

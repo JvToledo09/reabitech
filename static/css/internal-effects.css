@@ -1,0 +1,478 @@
+/* ================================================================
+   REABITECH — EFEITOS VISUAIS INTERNOS
+   Mesmos padrões da landing page, adaptados para dashboards
+   ================================================================ */
+
+/* ================================================================
+   PAGE HEADER (número + eyebrow + título gradiente)
+   Uso:
+   <div class="page-header">
+       <span class="page-header-number">— 01 / Seus pacientes</span>
+       <div class="page-header-eyebrow"><i class="fas fa-users"></i> Gestão</div>
+       <h1 class="page-header-title">
+           Atletas em <span class="gradient-text">atendimento.</span>
+       </h1>
+       <p class="page-header-subtitle">Descrição opcional</p>
+   </div>
+   ================================================================ */
+.page-header {
+    margin-bottom: 36px;
+    position: relative;
+}
+
+.page-header-number {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    color: var(--green);
+    margin-bottom: 14px;
+    display: block;
+    text-transform: uppercase;
+}
+
+.page-header-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: var(--green-soft);
+    border: 1px solid var(--green-soft-2);
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--green-deep);
+    margin-bottom: 16px;
+}
+
+[data-theme="dark"] .page-header-eyebrow {
+    color: var(--green-light);
+}
+
+.page-header-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+}
+
+.page-header-title .gradient-text {
+    background: linear-gradient(135deg, var(--green-deep), var(--green));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.page-header-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 720px;
+}
+
+/* ================================================================
+   CARD PREMIUM (com luz seguindo o mouse)
+   Uso: <div class="card-premium">...</div>
+   ================================================================ */
+.card-premium {
+    position: relative;
+    padding: 32px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.card-premium::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        600px circle at var(--mouse-x, 0%) var(--mouse-y, 0%),
+        var(--green-soft),
+        transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+}
+
+.card-premium:hover::before { opacity: 1; }
+
+.card-premium:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--green-soft-2);
+}
+
+/* Número no canto do card */
+.card-number {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    color: var(--text-tertiary);
+    opacity: 0.5;
+}
+
+/* ================================================================
+   ICON WRAPPER (mesma cor dos cards da landing)
+   Uso: <div class="icon-wrapper"><i class="fas fa-users"></i></div>
+   ================================================================ */
+.icon-wrapper {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--green-soft-2), rgba(6, 182, 212, 0.1));
+    border: 1px solid var(--green-soft-2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green);
+    font-size: 1.35rem;
+    margin-bottom: 20px;
+    transition: all 0.4s ease;
+    flex-shrink: 0;
+}
+
+.card-premium:hover .icon-wrapper,
+.stat-premium:hover .icon-wrapper {
+    transform: scale(1.1) rotate(-5deg);
+    box-shadow: 0 15px 40px rgba(43, 161, 129, 0.25);
+}
+
+.icon-wrapper.icon-sm {
+    width: 44px;
+    height: 44px;
+    font-size: 1.05rem;
+    border-radius: 12px;
+}
+
+.icon-wrapper.icon-lg {
+    width: 72px;
+    height: 72px;
+    font-size: 1.75rem;
+    border-radius: 20px;
+}
+
+/* ================================================================
+   STAT PREMIUM (contador com efeito shine)
+   Uso: <div class="stat-premium">
+          <div class="stat-premium-icon"><i class="fas fa-users"></i></div>
+          <div class="stat-premium-number">500</div>
+          <div class="stat-premium-label">Pacientes</div>
+        </div>
+   ================================================================ */
+.stat-premium {
+    position: relative;
+    padding: 28px 24px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+}
+
+.stat-premium::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, var(--green-soft), transparent);
+    transition: left 0.8s;
+    pointer-events: none;
+}
+
+.stat-premium:hover::before { left: 100%; }
+
+.stat-premium:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--green-soft-2);
+}
+
+.stat-premium-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--green-soft-2), rgba(6, 182, 212, 0.1));
+    border: 1px solid var(--green-soft-2);
+    color: var(--green);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.stat-premium-number {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--green), var(--green-deep));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.stat-premium-label {
+    font-size: 0.88rem;
+    color: var(--text-tertiary);
+    font-weight: 500;
+}
+
+/* ================================================================
+   BADGES PREMIUM (com cores da landing)
+   ================================================================ */
+.badge-premium {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+}
+
+.badge-premium.green  { background: var(--green-soft-2); color: var(--green-deep); }
+.badge-premium.red    { background: rgba(239, 68, 68, 0.12);  color: #dc2626; }
+.badge-premium.amber  { background: rgba(245, 158, 11, 0.12); color: #d97706; }
+.badge-premium.blue   { background: rgba(13, 110, 253, 0.12); color: #0d6efd; }
+.badge-premium.purple { background: rgba(111, 66, 193, 0.12); color: #6f42c1; }
+.badge-premium.gray   { background: var(--bg-tertiary); color: var(--text-secondary); }
+
+[data-theme="dark"] .badge-premium.green  { color: var(--green-light); }
+[data-theme="dark"] .badge-premium.red    { color: #fca5a5; }
+[data-theme="dark"] .badge-premium.amber  { color: #fbbf24; }
+[data-theme="dark"] .badge-premium.blue   { color: #93c5fd; }
+[data-theme="dark"] .badge-premium.purple { color: #c4b5fd; }
+
+/* ================================================================
+   PULSE DOT (o pontinho que pulsa da landing)
+   Uso: <span class="pulse-dot"></span> Rótulo
+   ================================================================ */
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.3);
+    animation: dotPulse 2s infinite;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+@keyframes dotPulse {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.3); }
+    50%      { box-shadow: 0 0 0 8px rgba(52, 211, 153, 0.1); }
+}
+
+/* ================================================================
+   EMPTY STATE BONITO
+   Uso: <div class="empty-state">
+          <div class="empty-state-icon"><i class="fas fa-user-plus"></i></div>
+          <h3 class="empty-state-title">Nenhum membro ainda</h3>
+          <p class="empty-state-desc">Descrição</p>
+          <a class="btn-primary-custom" href="#">Ação</a>
+        </div>
+   ================================================================ */
+.empty-state {
+    text-align: center;
+    padding: 70px 24px;
+}
+
+.empty-state-icon {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--green-soft), var(--green-soft-2));
+    color: var(--green);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    margin-bottom: 24px;
+    animation: emptyPulse 3s ease-in-out infinite;
+}
+
+@keyframes emptyPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.05); }
+}
+
+.empty-state-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.empty-state-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+/* ================================================================
+   TABELA PREMIUM (com hover suave e header estilizado)
+   Uso: <table class="table-premium">
+   ================================================================ */
+.table-premium {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-elevated);
+}
+
+.table-premium thead {
+    background: var(--bg-secondary);
+}
+
+.table-premium thead th {
+    padding: 16px 18px;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-tertiary);
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+}
+
+.table-premium tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.2s;
+}
+
+.table-premium tbody tr:last-child {
+    border-bottom: none;
+}
+
+.table-premium tbody tr:hover {
+    background: var(--bg-secondary);
+}
+
+.table-premium tbody td {
+    padding: 18px;
+    vertical-align: middle;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* ================================================================
+   ACTION BUTTONS (ícones de ação em tabelas)
+   ================================================================ */
+.action-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border-color);
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.action-icon-btn:hover {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.action-icon-btn.danger:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+}
+
+/* ================================================================
+   AVATAR (com inicial + gradiente)
+   Uso: <div class="avatar-circle" style="--c1: #2BA181; --c2: #1f8768;">JS</div>
+   ================================================================ */
+.avatar-circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: white;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--c1, #2BA181), var(--c2, #1f8768));
+    box-shadow: 0 4px 12px rgba(43, 161, 129, 0.25);
+}
+
+/* ================================================================
+   SECTION TAG (usado antes de títulos de seção em formulários)
+   ================================================================ */
+.section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px;
+    background: var(--green-soft);
+    border: 1px solid var(--green-soft-2);
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--green-deep);
+    margin-bottom: 14px;
+}
+
+[data-theme="dark"] .section-tag { color: var(--green-light); }
+
+/* ================================================================
+   DIVIDER DECORATIVO
+   ================================================================ */
+.divider-gradient {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--green-soft-2), transparent);
+    margin: 32px 0;
+    border: none;
+}
+
+/* ================================================================
+   UTILITÁRIOS
+   ================================================================ */
+.text-gradient {
+    background: linear-gradient(135deg, var(--green), var(--green-deep));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.text-glow {
+    filter: drop-shadow(0 0 12px rgba(43, 161, 129, 0.3));
+}
