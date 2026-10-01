@@ -24,6 +24,8 @@ urlpatterns = [
     # App de projetos (namespace)
     path('projetos/', include('projetos.urls', namespace='projetos')),
 
+     path('prontuario/', include('prontuario.urls', namespace='prontuario')),  # 🔥 NOVO
+
     # Atalho direto para o signup na raiz
     path('signup/', projetos_views.signup_saas, name='signup'),
 

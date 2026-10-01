@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'psicologia',
     'dashboard',
     'projetos',
+     'prontuario',   
 ]
 
 MIDDLEWARE = [
