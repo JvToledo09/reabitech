@@ -425,46 +425,46 @@
         }
 
         .lp-logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            text-decoration: none;
-            color: var(--text-primary);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            transition: transform 0.3s ease;
-        }
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #0a3d2e;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
 
         .lp-logo:hover { transform: scale(1.03); }
 
         /* ⭐ NOVA LOGO — MAIS DESTACADA */
-        .lp-logo-img-wrapper {
-            position: relative;
-            width: 56px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .lp-logo-img-wrapper {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .lp-logo-img-wrapper::before {
-            content: '';
-            position: absolute;
-            inset: -8px;
-            background: radial-gradient(circle, rgba(43, 161, 129, 0.35), transparent 70%);
-            border-radius: 50%;
-            animation: logoPulse 3s ease-in-out infinite;
-        }
+.lp-logo-img-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    background: radial-gradient(circle, rgba(43, 161, 129, 0.4), transparent 70%);
+    border-radius: 100%;
+    animation: logoPulse 3s ease-in-out infinite;
+}
 
-        .lp-logo-img-wrapper img {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 14px rgba(43, 161, 129, 0.4));
-        }
+.lp-logo-img-wrapper img {
+    position: relative;
+    width: 150px;
+    height: 200px;
+    max-width: none;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 20px rgba(43, 161, 129, 0.5));
+    transform: translateY(-12px);
+}
 
         @keyframes logoPulse {
             0%, 100% { opacity: 0.4; transform: scale(1); }
@@ -661,75 +661,78 @@
         }
 
         /* ⭐ LOGO GRANDE DESTACADA NO HERO */
-        .hero-logo-display {
-            display: inline-flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 32px;
-            padding: 14px 24px 14px 18px;
-            background: var(--bg-elevated);
-            border: 1px solid var(--border-color);
-            border-radius: 100px;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-        }
 
-        .hero-logo-display:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--green-soft-2);
-        }
+.hero-logo-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding: 10px 26px 10px 14px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 100px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+}
 
-        .hero-logo-icon {
-            position: relative;
-            width: 52px;
-            height: 52px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
+.hero-logo-display:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--green-soft-2);
+}
 
-        .hero-logo-icon::before {
-            content: '';
-            position: absolute;
-            inset: -6px;
-            background: radial-gradient(circle, rgba(43, 161, 129, 0.4), transparent 70%);
-            border-radius: 50%;
-            animation: logoPulse 3s ease-in-out infinite;
-        }
+.hero-logo-icon {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
 
-        .hero-logo-icon img {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 12px rgba(43, 161, 129, 0.4));
-        }
+.hero-logo-icon::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    background: radial-gradient(circle, rgba(43, 161, 129, 0.4), transparent 70%);
+    border-radius: 50%;
+    animation: logoPulse 3s ease-in-out infinite;
+}
 
-        .hero-logo-text {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 2px;
-        }
+.hero-logo-icon img {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    max-width: none;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 20px rgba(43, 161, 129, 0.5));
+    transform: translate(2px, -12px);
+}
 
-        .hero-logo-name {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            color: var(--text-primary);
-            line-height: 1;
-        }
+.hero-logo-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
 
-        .hero-logo-tag {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--green);
-        }
+.hero-logo-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.hero-logo-tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--green);
+}
 
         .lp-hero-title {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -2124,6 +2127,120 @@
         </div>
     </div>
 </section>
+
+<!-- ============================================ -->
+<!-- PROJETOS PARCEIROS -->
+<!-- ============================================ -->
+<section class="lp-projetos" id="projetos" style="padding: 80px 32px; position: relative; z-index: 2;">
+    <div style="max-width: 1280px; margin: 0 auto;">
+
+        <!-- Título da seção -->
+        <div class="section-title reveal" style="text-align: center; margin-bottom: 60px;">
+            <span class="section-number">— Projetos parceiros</span>
+            <div class="section-eyebrow">
+                <i class="fas fa-handshake"></i>
+                Quem confia no REABITECH
+            </div>
+            <h2 class="section-heading">
+                Instituições que já <span class="gradient-text">usam a plataforma.</span>
+            </h2>
+            <p class="section-sub" style="max-width: 600px; margin: 16px auto 0;">
+                Clínicas, escolas, times e projetos sociais que acompanham seus pacientes com o REABITECH.
+            </p>
+        </div>
+
+        <!-- Grid de projetos -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;">
+            {% for projeto in projetos_parceiros %}
+            <a href="{% url 'login' %}"
+               class="projeto-card reveal"
+               style="background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 24px; padding: 32px 24px; text-align: center; text-decoration: none; color: inherit; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; align-items: center; gap: 16px;">
+
+                <!-- Logo ou fallback -->
+                {% if projeto.logo %}
+                <img src="{{ projeto.logo.url }}"
+                     alt="{{ projeto.nome }}"
+                     style="width: 100px; height: 100px; object-fit: contain; border-radius: 20px; background: var(--bg-secondary); padding: 12px; transition: transform 0.4s ease;"
+                     class="projeto-logo">
+                {% else %}
+                <div class="projeto-logo"
+                     style="width: 100px; height: 100px; border-radius: 20px; background: linear-gradient(135deg, #34d399, #2BA181); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 2.5rem; transition: transform 0.4s ease;">
+                    {{ projeto.nome|first|upper }}
+                </div>
+                {% endif %}
+
+                <!-- Nome e tipo -->
+                <div>
+                    <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.15rem; font-weight: 800; margin: 0 0 6px 0; color: var(--text-primary);">
+                        {{ projeto.nome }}
+                    </h3>
+                    <p style="font-size: 0.85rem; color: var(--text-tertiary); margin: 0;">
+                        {{ projeto.get_tipo_display }}
+                    </p>
+                </div>
+
+                <!-- Descrição -->
+                {% if projeto.descricao %}
+                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                    {{ projeto.descricao|truncatechars:100 }}
+                </p>
+                {% endif %}
+
+                <!-- Contadores -->
+                <div style="display: flex; gap: 24px; padding-top: 16px; border-top: 1px solid var(--border-color); width: 100%; justify-content: center; font-size: 0.8rem;">
+                    <div style="text-align: center;">
+                        <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--text-primary); font-size: 1.2rem;">
+                            {{ projeto.total_atletas }}
+                        </div>
+                        <div style="color: var(--text-tertiary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                            Pacientes
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--text-primary); font-size: 1.2rem;">
+                            {{ projeto.total_profissionais }}
+                        </div>
+                        <div style="color: var(--text-tertiary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                            Profissionais
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--green-soft-2); color: var(--green); border-radius: 999px; font-weight: 700; font-size: 0.82rem; margin-top: 4px;">
+                    <i class="fas fa-sign-in-alt"></i> Acessar
+                </div>
+            </a>
+            {% empty %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 60px 24px; color: var(--text-tertiary);">
+                <i class="fas fa-building" style="font-size: 3rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
+                <p>Nenhum projeto parceiro cadastrado ainda.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+
+<style>
+    /* Efeito hover dos cards de projeto */
+    .projeto-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(15, 23, 42, 0.12);
+        border-color: var(--green-soft-2) !important;
+    }
+
+    .projeto-card:hover .projeto-logo {
+        transform: scale(1.08) rotate(-3deg);
+    }
+
+    /* Ajuste mobile */
+    @media (max-width: 480px) {
+        .lp-projetos {
+            padding: 60px 20px !important;
+        }
+    }
+</style>
 
     <!-- RECURSOS -->
     <section class="lp-features" id="recursos">
