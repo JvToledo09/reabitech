@@ -1,0 +1,311 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Prontuários{% endblock %}
+{% block page_title %}Prontuários Clínicos{% endblock %}
+
+{% block extra_css %}
+<style>
+    .prontuarios-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 20px;
+    }
+
+    .prontuario-card {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 24px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .prontuario-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--green-soft-2);
+        color: inherit;
+    }
+
+    .prontuario-card-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 18px;
+    }
+
+    .prontuario-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--green), var(--green-deep));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 1.15rem;
+        color: white;
+        flex-shrink: 0;
+        box-shadow: 0 6px 16px rgba(43, 161, 129, 0.3);
+    }
+
+    .prontuario-nome {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: var(--text-primary);
+        margin: 0 0 3px 0;
+    }
+
+    .prontuario-numero {
+        font-size: 0.75rem;
+        color: var(--green);
+        font-weight: 600;
+        letter-spacing: 0.05em;
+    }
+
+    .prontuario-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 16px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .prontuario-info-item {
+        font-size: 0.8rem;
+    }
+
+    .prontuario-info-label {
+        color: var(--text-tertiary);
+        display: block;
+        margin-bottom: 2px;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    .prontuario-info-value {
+        color: var(--text-primary);
+        font-weight: 600;
+    }
+
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 12px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+    }
+
+    .status-pill.ativo { background: var(--green-soft-2); color: var(--green-deep); }
+    .status-pill.alta { background: rgba(13, 202, 240, 0.15); color: #0891b2; }
+    .status-pill.arquivado { background: var(--bg-tertiary); color: var(--text-tertiary); }
+    .status-pill.transferido { background: rgba(111, 66, 193, 0.15); color: #6f42c1; }
+    .status-pill.desistente { background: rgba(239, 68, 68, 0.12); color: #dc2626; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <span class="page-header-number">— 01 / Prontuários</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-folder-medical"></i>
+            Registros clínicos
+        </div>
+        <h1 class="page-header-title">
+            Todos os prontuários <span class="gradient-text">do projeto.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            Cada paciente possui um prontuário único, arquivado por 20 anos conforme normas do COFFITO e Lei 13.787/2018.
+        </p>
+    </div>
+
+    <!-- Stat total -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-premium">
+                <div class="stat-premium-icon"><i class="fas fa-folder"></i></div>
+                <div class="stat-premium-number">{{ total|default:0 }}</div>
+                <div class="stat-premium-label">Total de prontuários</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-premium">
+                <div class="stat-premium-icon"><i class="fas fa-user-check"></i></div>
+                <div class="stat-premium-number">
+                    {% with ativos=prontuarios|length %}
+                        {{ ativos }}
+                    {% endwith %}
+                </div>
+                <div class="stat-premium-label">Nesta página</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-premium">
+                <div class="stat-premium-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-premium-number">20</div>
+                <div class="stat-premium-label">Anos de arquivamento</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-premium">
+                <div class="stat-premium-icon"><i class="fas fa-shield-halved"></i></div>
+                <div class="stat-premium-number">100%</div>
+                <div class="stat-premium-label">Conformidade COFFITO</div>
+            </div>
+        </div>
+    </div>
+
+<!-- Botão de ação principal -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="pulse-dot"></span>
+        <small class="text-muted">{{ total }} prontuário{{ total|pluralize }} no projeto</small>
+    </div>
+    <a href="{% url 'prontuario:selecionar_atleta_prontuario' %}" class="btn-primary-custom">
+        <i class="fas fa-folder-plus"></i> Novo prontuário
+    </a>
+</div>
+
+    <!-- Filtros -->
+    <div class="card-premium mb-4" style="padding: 20px;">
+        <form method="GET" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label">Pesquisar</label>
+                <input type="text" name="q" value="{{ busca|default:'' }}"
+                       class="form-control" placeholder="Nome, RM ou número do prontuário...">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select">
+                    <option value="">Todos os status</option>
+                    {% for valor, label in status_choices %}
+                    <option value="{{ valor }}" {% if status_filtro == valor %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn-primary-custom flex-grow-1">
+                    <i class="fas fa-search"></i> Filtrar
+                </button>
+                <a href="{% url 'prontuario:lista_prontuarios' %}" class="btn-outline-custom">
+                    <i class="fas fa-times"></i>
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Lista -->
+    {% if prontuarios %}
+    <div class="prontuarios-grid">
+        {% for p in prontuarios %}
+        <a href="{% url 'prontuario:dashboard_prontuario' p.id %}" class="prontuario-card">
+            <div class="prontuario-card-header">
+                <div class="prontuario-avatar">
+                    {{ p.atleta.usuario.get_full_name|default:p.atleta.usuario.username|first|upper }}
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                    <h3 class="prontuario-nome text-truncate">
+                        {{ p.atleta.usuario.get_full_name|default:p.atleta.usuario.username }}
+                    </h3>
+                    <span class="prontuario-numero">{{ p.numero_prontuario }}</span>
+                </div>
+                <span class="status-pill {{ p.status }}">
+                    {% if p.status == 'ativo' %}<span class="pulse-dot" style="width:6px;height:6px;"></span>{% endif %}
+                    {{ p.get_status_display }}
+                </span>
+            </div>
+
+            <div class="prontuario-info">
+                <div class="prontuario-info-item">
+                    <span class="prontuario-info-label">RM</span>
+                    <span class="prontuario-info-value">{{ p.atleta.rm|default:"—" }}</span>
+                </div>
+                <div class="prontuario-info-item">
+                    <span class="prontuario-info-label">Modalidade</span>
+                    <span class="prontuario-info-value">{{ p.atleta.modalidade.nome|default:"—" }}</span>
+                </div>
+                <div class="prontuario-info-item">
+                    <span class="prontuario-info-label">Abertura</span>
+                    <span class="prontuario-info-value">{{ p.data_abertura|date:"d/m/Y" }}</span>
+                </div>
+                <div class="prontuario-info-item">
+                    <span class="prontuario-info-label">Fisioterapeuta</span>
+                    <span class="prontuario-info-value">
+                        {{ p.fisioterapeuta_responsavel.get_short_name|default:"—" }}
+                    </span>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-tertiary); padding-top: 12px; border-top: 1px solid var(--border-color);">
+                <span>
+                    <i class="fas fa-calendar me-1"></i>
+                    Arquivamento: {{ p.data_arquivamento_previsto|date:"d/m/Y"|default:"—" }}
+                </span>
+                <span style="color: var(--green); font-weight: 700;">
+                    Abrir <i class="fas fa-arrow-right ms-1"></i>
+                </span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Paginação -->
+    {% if prontuarios.has_other_pages %}
+    <div style="display: flex; justify-content: center; gap: 8px; margin-top: 32px;">
+        {% if prontuarios.has_previous %}
+        <a href="?page={{ prontuarios.previous_page_number }}{% if busca %}&q={{ busca }}{% endif %}{% if status_filtro %}&status={{ status_filtro }}{% endif %}"
+           class="btn-outline-custom">
+            <i class="fas fa-arrow-left"></i> Anterior
+        </a>
+        {% endif %}
+
+        <span style="padding: 10px 20px; background: var(--bg-secondary); border-radius: 10px; font-weight: 600; color: var(--text-secondary);">
+            Página {{ prontuarios.number }} de {{ prontuarios.paginator.num_pages }}
+        </span>
+
+        {% if prontuarios.has_next %}
+        <a href="?page={{ prontuarios.next_page_number }}{% if busca %}&q={{ busca }}{% endif %}{% if status_filtro %}&status={{ status_filtro }}{% endif %}"
+           class="btn-outline-custom">
+            Próxima <i class="fas fa-arrow-right"></i>
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <!-- Estado vazio -->
+    <div class="card-premium">
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <i class="fas fa-folder-open"></i>
+            </div>
+            <h3 class="empty-state-title">Nenhum prontuário cadastrado ainda</h3>
+            <p class="empty-state-desc">
+                Os prontuários são criados a partir da lista de pacientes. Vá em <strong>Pacientes</strong>, escolha um atleta e clique em <strong>Novo prontuário</strong>.
+            </p>
+            <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="btn-primary-custom">
+                <i class="fas fa-users"></i> Ver pacientes
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

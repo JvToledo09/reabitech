@@ -1,17 +1,18 @@
 # ==============================================================================
 # REABITECH — APP PRONTUÁRIO
-# Views (CRUD completo de todos os modelos)
+# Views (CRUD completo + geração de PDF)
 # ==============================================================================
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
-from django.db.models import Q, Count
+from django.db.models import Q
 from django.core.paginator import Paginator
-from datetime import date, timedelta
+from django.http import FileResponse
+from datetime import date
 
-from usuarios.models import Atleta, Perfil
+from usuarios.models import Atleta
 from usuarios.decorators import perfil_required
 from projetos.models import Projeto, MembroProjeto
 
@@ -27,6 +28,7 @@ from .forms import (
     EscalaRiscoForm, RelatorioDiarioForm, EncaminhamentoMedicoForm,
     ExameForm, EvolucaoFisioterapeuticaForm
 )
+from .pdf_utils import gerar_pdf_prontuario
 
 
 # ==============================================================================
@@ -71,17 +73,14 @@ def dashboard_prontuario(request, prontuario_id):
         messages.error(request, 'Prontuário não encontrado.')
         return redirect('dashboard:dashboard')
 
-    # Última movimentação
     prontuario.registrar_movimentacao()
 
-    # Coleta dados de cada seção
     ultima_triagem = prontuario.triagens.first()
     ultima_cif = prontuario.avaliacoes_cif.first()
     ultima_cardio = prontuario.avaliacoes_cardiorrespiratorias.first()
     ultimo_relatorio = prontuario.relatorios_diarios.first()
     ultima_evolucao = prontuario.evolucoes_fisioterapeuticas.first()
 
-    # Contadores
     total_triagens = prontuario.triagens.count()
     total_objetivos = prontuario.objetivos.count()
     objetivos_alcancados = prontuario.objetivos.filter(status='alcancado').count()
@@ -94,7 +93,6 @@ def dashboard_prontuario(request, prontuario_id):
     total_exames = prontuario.exames.count()
     total_evolucoes = prontuario.evolucoes_fisioterapeuticas.count()
 
-    # Alertas
     tem_alerta_risco_alto = prontuario.escalas_risco.filter(
         nivel_risco__in=['alto', 'critico']
     ).exists()
@@ -111,7 +109,6 @@ def dashboard_prontuario(request, prontuario_id):
         'ultima_cardio': ultima_cardio,
         'ultimo_relatorio': ultimo_relatorio,
         'ultima_evolucao': ultima_evolucao,
-        # Contadores
         'total_triagens': total_triagens,
         'total_objetivos': total_objetivos,
         'objetivos_alcancados': objetivos_alcancados,
@@ -123,10 +120,8 @@ def dashboard_prontuario(request, prontuario_id):
         'total_encaminhamentos': total_encaminhamentos,
         'total_exames': total_exames,
         'total_evolucoes': total_evolucoes,
-        # Alertas
         'tem_alerta_risco_alto': tem_alerta_risco_alto,
         'tem_alerta_cardio': tem_alerta_cardio,
-        # Objetivos em destaque
         'objetivos_recentes': prontuario.objetivos.all()[:5],
         'ultimos_relatorios': prontuario.relatorios_diarios.all()[:5],
     }
@@ -149,7 +144,6 @@ def lista_prontuarios(request):
         projeto=projeto
     ).select_related('atleta', 'atleta__usuario', 'fisioterapeuta_responsavel')
 
-    # Filtros
     status_filtro = request.GET.get('status', '')
     busca = request.GET.get('q', '')
 
@@ -166,7 +160,6 @@ def lista_prontuarios(request):
 
     prontuarios = prontuarios.order_by('-criado_em')
 
-    # Paginação
     paginator = Paginator(prontuarios, 20)
     page = request.GET.get('page', 1)
     prontuarios_paginados = paginator.get_page(page)
@@ -183,6 +176,43 @@ def lista_prontuarios(request):
 
 
 # ==============================================================================
+# SELECIONAR ATLETA PARA PRONTUÁRIO
+# ==============================================================================
+@login_required
+@perfil_required('fisioterapeuta', 'coordenador')
+def selecionar_atleta_prontuario(request):
+    """Lista atletas do projeto para selecionar qual abrir prontuário."""
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        messages.error(request, 'Nenhum projeto ativo.')
+        return redirect('dashboard:dashboard')
+
+    membros_usuario_ids = MembroProjeto.objects.filter(
+        projeto=projeto, ativo=True, tipo='atleta'
+    ).values_list('usuario', flat=True)
+
+    atletas = Atleta.objects.filter(
+        usuario__in=membros_usuario_ids
+    ).select_related('usuario', 'modalidade').distinct()
+
+    atletas_sem_prontuario = []
+    atletas_com_prontuario = []
+
+    for atleta in atletas:
+        if hasattr(atleta, 'prontuario'):
+            atletas_com_prontuario.append(atleta)
+        else:
+            atletas_sem_prontuario.append(atleta)
+
+    context = {
+        'projeto': projeto,
+        'atletas_sem_prontuario': atletas_sem_prontuario,
+        'atletas_com_prontuario': atletas_com_prontuario,
+    }
+    return render(request, 'prontuario/selecionar_atleta.html', context)
+
+
+# ==============================================================================
 # CRIAR PRONTUÁRIO
 # ==============================================================================
 @login_required
@@ -196,7 +226,6 @@ def criar_prontuario(request, atleta_id):
 
     atleta = get_object_or_404(Atleta, id=atleta_id)
 
-    # Verifica se já existe prontuário
     if hasattr(atleta, 'prontuario'):
         messages.info(request, 'Este atleta já possui prontuário. Redirecionando...')
         return redirect('prontuario:dashboard_prontuario', prontuario_id=atleta.prontuario.id)
@@ -205,6 +234,7 @@ def criar_prontuario(request, atleta_id):
         form = ProntuarioForm(request.POST)
         if form.is_valid():
             prontuario = form.save(commit=False)
+            prontuario.atleta = atleta
             prontuario.projeto = projeto
             prontuario.save()
             form.save_m2m()
@@ -218,11 +248,8 @@ def criar_prontuario(request, atleta_id):
             messages.error(request, 'Erro ao criar prontuário. Verifique os campos.')
     else:
         form = ProntuarioForm(initial={
-            'atleta': atleta,
-            'projeto': projeto,
+            'fisioterapeuta_responsavel': request.user,
         })
-        form.fields['atleta'].widget = forms.HiddenInput()
-        form.fields['projeto'].widget = forms.HiddenInput()
 
     context = {
         'form': form,
@@ -233,12 +260,11 @@ def criar_prontuario(request, atleta_id):
 
 
 # ==============================================================================
-# TRIAGEM — Criar/Editar
+# TRIAGEM
 # ==============================================================================
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
 def criar_triagem(request, prontuario_id):
-    """Cria uma nova triagem."""
     prontuario = get_prontuario_ativo(request, prontuario_id)
     if not prontuario:
         messages.error(request, 'Prontuário não encontrado.')
@@ -256,18 +282,16 @@ def criar_triagem(request, prontuario_id):
     else:
         form = TriagemForm()
 
-    context = {
+    return render(request, 'prontuario/triagem/form.html', {
         'form': form,
         'prontuario': prontuario,
         'titulo': 'Nova Triagem',
-    }
-    return render(request, 'prontuario/triagem_form.html', context)
+    })
 
 
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
 def editar_triagem(request, triagem_id):
-    """Edita uma triagem existente."""
     triagem = get_object_or_404(Triagem, id=triagem_id)
     prontuario = triagem.prontuario
 
@@ -281,38 +305,35 @@ def editar_triagem(request, triagem_id):
     else:
         form = TriagemForm(instance=triagem)
 
-    context = {
+    return render(request, 'prontuario/triagem/form.html', {
         'form': form,
         'prontuario': prontuario,
         'triagem': triagem,
         'titulo': 'Editar Triagem',
-    }
-    return render(request, 'prontuario/triagem_form.html', context)
+    })
 
 
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
 def lista_triagens(request, prontuario_id):
-    """Lista todas as triagens de um prontuário."""
     prontuario = get_prontuario_ativo(request, prontuario_id)
     if not prontuario:
         return redirect('dashboard:dashboard')
 
     triagens = prontuario.triagens.all().order_by('-data_triagem')
 
-    return render(request, 'prontuario/triagens_lista.html', {
+    return render(request, 'prontuario/triagem/lista.html', {
         'prontuario': prontuario,
         'triagens': triagens,
     })
 
 
 # ==============================================================================
-# OBJETIVOS — CRUD
+# OBJETIVOS
 # ==============================================================================
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
 def criar_objetivo(request, prontuario_id):
-    """Cria um novo objetivo."""
     prontuario = get_prontuario_ativo(request, prontuario_id)
     if not prontuario:
         return redirect('dashboard:dashboard')
@@ -330,7 +351,7 @@ def criar_objetivo(request, prontuario_id):
     else:
         form = ObjetivoForm()
 
-    return render(request, 'prontuario/objetivo_form.html', {
+    return render(request, 'prontuario/objetivo/form.html', {
         'form': form,
         'prontuario': prontuario,
         'titulo': 'Novo Objetivo',
@@ -340,7 +361,6 @@ def criar_objetivo(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
 def editar_objetivo(request, objetivo_id):
-    """Edita um objetivo existente."""
     objetivo = get_object_or_404(Objetivo, id=objetivo_id)
     prontuario = objetivo.prontuario
 
@@ -354,7 +374,7 @@ def editar_objetivo(request, objetivo_id):
     else:
         form = ObjetivoForm(instance=objetivo)
 
-    return render(request, 'prontuario/objetivo_form.html', {
+    return render(request, 'prontuario/objetivo/form.html', {
         'form': form,
         'prontuario': prontuario,
         'objetivo': objetivo,
@@ -365,7 +385,6 @@ def editar_objetivo(request, objetivo_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
 def lista_objetivos(request, prontuario_id):
-    """Lista todos os objetivos do prontuário."""
     prontuario = get_prontuario_ativo(request, prontuario_id)
     if not prontuario:
         return redirect('dashboard:dashboard')
@@ -374,7 +393,7 @@ def lista_objetivos(request, prontuario_id):
     objetivos_medio = prontuario.objetivos.filter(prazo='medio')
     objetivos_longo = prontuario.objetivos.filter(prazo='longo')
 
-    return render(request, 'prontuario/objetivos_lista.html', {
+    return render(request, 'prontuario/objetivo/lista.html', {
         'prontuario': prontuario,
         'objetivos_curto': objetivos_curto,
         'objetivos_medio': objetivos_medio,
@@ -385,7 +404,6 @@ def lista_objetivos(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
 def deletar_objetivo(request, objetivo_id):
-    """Remove um objetivo."""
     objetivo = get_object_or_404(Objetivo, id=objetivo_id)
     prontuario = objetivo.prontuario
 
@@ -403,7 +421,7 @@ def deletar_objetivo(request, objetivo_id):
 
 
 # ==============================================================================
-# MEDICAMENTOS — CRUD
+# MEDICAMENTOS
 # ==============================================================================
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
@@ -425,7 +443,7 @@ def criar_medicamento(request, prontuario_id):
     else:
         form = MedicamentoForm()
 
-    return render(request, 'prontuario/medicamento_form.html', {
+    return render(request, 'prontuario/medicamento/form.html', {
         'form': form,
         'prontuario': prontuario,
         'titulo': 'Novo Medicamento',
@@ -448,7 +466,7 @@ def editar_medicamento(request, medicamento_id):
     else:
         form = MedicamentoForm(instance=med)
 
-    return render(request, 'prontuario/medicamento_form.html', {
+    return render(request, 'prontuario/medicamento/form.html', {
         'form': form,
         'prontuario': prontuario,
         'medicamento': med,
@@ -466,7 +484,7 @@ def lista_medicamentos(request, prontuario_id):
     medicamentos_ativos = prontuario.medicamentos.filter(status='ativo')
     medicamentos_encerrados = prontuario.medicamentos.exclude(status='ativo')
 
-    return render(request, 'prontuario/medicamentos_lista.html', {
+    return render(request, 'prontuario/medicamento/lista.html', {
         'prontuario': prontuario,
         'medicamentos_ativos': medicamentos_ativos,
         'medicamentos_encerrados': medicamentos_encerrados,
@@ -492,7 +510,7 @@ def deletar_medicamento(request, medicamento_id):
 
 
 # ==============================================================================
-# CIF — CRUD
+# CIF
 # ==============================================================================
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
@@ -514,7 +532,7 @@ def criar_cif(request, prontuario_id):
     else:
         form = AvaliacaoCIFForm()
 
-    return render(request, 'prontuario/cif_form.html', {
+    return render(request, 'prontuario/cif/form.html', {
         'form': form,
         'prontuario': prontuario,
         'titulo': 'Nova Avaliação CIF',
@@ -537,7 +555,7 @@ def editar_cif(request, cif_id):
     else:
         form = AvaliacaoCIFForm(instance=cif)
 
-    return render(request, 'prontuario/cif_form.html', {
+    return render(request, 'prontuario/cif/form.html', {
         'form': form,
         'prontuario': prontuario,
         'cif': cif,
@@ -554,7 +572,7 @@ def lista_cif(request, prontuario_id):
 
     avaliacoes = prontuario.avaliacoes_cif.all().order_by('-data_avaliacao')
 
-    return render(request, 'prontuario/cif_lista.html', {
+    return render(request, 'prontuario/cif/lista.html', {
         'prontuario': prontuario,
         'avaliacoes': avaliacoes,
     })
@@ -566,14 +584,14 @@ def detalhes_cif(request, cif_id):
     cif = get_object_or_404(AvaliacaoCIF, id=cif_id)
     prontuario = cif.prontuario
 
-    return render(request, 'prontuario/cif_detalhes.html', {
+    return render(request, 'prontuario/cif/detalhes.html', {
         'cif': cif,
         'prontuario': prontuario,
     })
 
 
 # ==============================================================================
-# CARDIORRESPIRATÓRIO — CRUD
+# CARDIORRESPIRATÓRIO
 # ==============================================================================
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
@@ -595,7 +613,7 @@ def criar_cardio(request, prontuario_id):
     else:
         form = AvaliacaoCardiorrespiratoriaForm()
 
-    return render(request, 'prontuario/cardio_form.html', {
+    return render(request, 'prontuario/cardio/form.html', {
         'form': form,
         'prontuario': prontuario,
         'titulo': 'Nova Avaliação Cardiorrespiratória',
@@ -618,7 +636,7 @@ def editar_cardio(request, cardio_id):
     else:
         form = AvaliacaoCardiorrespiratoriaForm(instance=cardio)
 
-    return render(request, 'prontuario/cardio_form.html', {
+    return render(request, 'prontuario/cardio/form.html', {
         'form': form,
         'prontuario': prontuario,
         'cardio': cardio,
@@ -635,7 +653,7 @@ def lista_cardio(request, prontuario_id):
 
     avaliacoes = prontuario.avaliacoes_cardiorrespiratorias.all().order_by('-data_avaliacao')
 
-    return render(request, 'prontuario/cardio_lista.html', {
+    return render(request, 'prontuario/cardio/lista.html', {
         'prontuario': prontuario,
         'avaliacoes': avaliacoes,
     })
@@ -645,14 +663,14 @@ def lista_cardio(request, prontuario_id):
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
 def detalhes_cardio(request, cardio_id):
     cardio = get_object_or_404(AvaliacaoCardiorrespiratoria, id=cardio_id)
-    return render(request, 'prontuario/cardio_detalhes.html', {
+    return render(request, 'prontuario/cardio/detalhes.html', {
         'cardio': cardio,
         'prontuario': cardio.prontuario,
     })
 
 
 # ==============================================================================
-# ESCALAS DE RISCO — CRUD
+# ESCALAS DE RISCO
 # ==============================================================================
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
@@ -674,7 +692,7 @@ def criar_escala(request, prontuario_id):
     else:
         form = EscalaRiscoForm()
 
-    return render(request, 'prontuario/escala_form.html', {
+    return render(request, 'prontuario/escala/form.html', {
         'form': form,
         'prontuario': prontuario,
         'titulo': 'Nova Escala de Risco',
@@ -690,14 +708,14 @@ def lista_escalas(request, prontuario_id):
 
     escalas = prontuario.escalas_risco.all().order_by('-data_aplicacao')
 
-    return render(request, 'prontuario/escalas_lista.html', {
+    return render(request, 'prontuario/escala/lista.html', {
         'prontuario': prontuario,
         'escalas': escalas,
     })
 
 
 # ==============================================================================
-# RELATÓRIO DIÁRIO — CRUD
+# RELATÓRIO DIÁRIO
 # ==============================================================================
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
@@ -721,7 +739,7 @@ def criar_relatorio(request, prontuario_id):
             'fisioterapeuta': request.user,
         })
 
-    return render(request, 'prontuario/relatorio_form.html', {
+    return render(request, 'prontuario/relatorio/form.html', {
         'form': form,
         'prontuario': prontuario,
         'titulo': 'Novo Relatório Diário',
@@ -744,7 +762,7 @@ def editar_relatorio(request, relatorio_id):
     else:
         form = RelatorioDiarioForm(instance=relatorio)
 
-    return render(request, 'prontuario/relatorio_form.html', {
+    return render(request, 'prontuario/relatorio/form.html', {
         'form': form,
         'prontuario': prontuario,
         'relatorio': relatorio,
@@ -761,7 +779,7 @@ def lista_relatorios(request, prontuario_id):
 
     relatorios = prontuario.relatorios_diarios.all().order_by('-data_sessao')
 
-    return render(request, 'prontuario/relatorios_lista.html', {
+    return render(request, 'prontuario/relatorio/lista.html', {
         'prontuario': prontuario,
         'relatorios': relatorios,
     })
@@ -771,14 +789,14 @@ def lista_relatorios(request, prontuario_id):
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
 def detalhes_relatorio(request, relatorio_id):
     relatorio = get_object_or_404(RelatorioDiario, id=relatorio_id)
-    return render(request, 'prontuario/relatorio_detalhes.html', {
+    return render(request, 'prontuario/relatorio/detalhes.html', {
         'relatorio': relatorio,
         'prontuario': relatorio.prontuario,
     })
 
 
 # ==============================================================================
-# ENCAMINHAMENTO — CRUD
+# ENCAMINHAMENTO
 # ==============================================================================
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
@@ -800,7 +818,7 @@ def criar_encaminhamento(request, prontuario_id):
     else:
         form = EncaminhamentoMedicoForm()
 
-    return render(request, 'prontuario/encaminhamento_form.html', {
+    return render(request, 'prontuario/encaminhamento/form.html', {
         'form': form,
         'prontuario': prontuario,
         'titulo': 'Novo Encaminhamento Médico',
@@ -816,7 +834,7 @@ def lista_encaminhamentos(request, prontuario_id):
 
     encaminhamentos = prontuario.encaminhamentos.all().order_by('-data_encaminhamento')
 
-    return render(request, 'prontuario/encaminhamentos_lista.html', {
+    return render(request, 'prontuario/encaminhamento/lista.html', {
         'prontuario': prontuario,
         'encaminhamentos': encaminhamentos,
     })
@@ -837,7 +855,7 @@ def editar_encaminhamento(request, encaminhamento_id):
     else:
         form = EncaminhamentoMedicoForm(instance=enc)
 
-    return render(request, 'prontuario/encaminhamento_form.html', {
+    return render(request, 'prontuario/encaminhamento/form.html', {
         'form': form,
         'prontuario': prontuario,
         'encaminhamento': enc,
@@ -846,7 +864,7 @@ def editar_encaminhamento(request, encaminhamento_id):
 
 
 # ==============================================================================
-# EXAMES — CRUD
+# EXAMES
 # ==============================================================================
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
@@ -868,7 +886,7 @@ def criar_exame(request, prontuario_id):
     else:
         form = ExameForm()
 
-    return render(request, 'prontuario/exame_form.html', {
+    return render(request, 'prontuario/exame/form.html', {
         'form': form,
         'prontuario': prontuario,
         'titulo': 'Novo Exame',
@@ -884,7 +902,7 @@ def lista_exames(request, prontuario_id):
 
     exames = prontuario.exames.all().order_by('-data_solicitacao')
 
-    return render(request, 'prontuario/exames_lista.html', {
+    return render(request, 'prontuario/exame/lista.html', {
         'prontuario': prontuario,
         'exames': exames,
     })
@@ -905,7 +923,7 @@ def editar_exame(request, exame_id):
     else:
         form = ExameForm(instance=exame)
 
-    return render(request, 'prontuario/exame_form.html', {
+    return render(request, 'prontuario/exame/form.html', {
         'form': form,
         'prontuario': prontuario,
         'exame': exame,
@@ -914,7 +932,7 @@ def editar_exame(request, exame_id):
 
 
 # ==============================================================================
-# EVOLUÇÃO FISIOTERAPÊUTICA — CRUD
+# EVOLUÇÃO FISIOTERAPÊUTICA
 # ==============================================================================
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
@@ -937,7 +955,7 @@ def criar_evolucao(request, prontuario_id):
             'fisioterapeuta': request.user,
         })
 
-    return render(request, 'prontuario/evolucao_form.html', {
+    return render(request, 'prontuario/evolucao/form.html', {
         'form': form,
         'prontuario': prontuario,
         'titulo': 'Nova Evolução Fisioterapêutica',
@@ -959,7 +977,7 @@ def editar_evolucao(request, evolucao_id):
     else:
         form = EvolucaoFisioterapeuticaForm(instance=ev)
 
-    return render(request, 'prontuario/evolucao_form.html', {
+    return render(request, 'prontuario/evolucao/form.html', {
         'form': form,
         'prontuario': prontuario,
         'evolucao': ev,
@@ -976,7 +994,7 @@ def lista_evolucoes(request, prontuario_id):
 
     evolucoes = prontuario.evolucoes_fisioterapeuticas.all().order_by('-data')
 
-    return render(request, 'prontuario/evolucoes_lista.html', {
+    return render(request, 'prontuario/evolucao/lista.html', {
         'prontuario': prontuario,
         'evolucoes': evolucoes,
     })
@@ -986,19 +1004,19 @@ def lista_evolucoes(request, prontuario_id):
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
 def detalhes_evolucao(request, evolucao_id):
     ev = get_object_or_404(EvolucaoFisioterapeutica, id=evolucao_id)
-    return render(request, 'prontuario/evolucao_detalhes.html', {
+    return render(request, 'prontuario/evolucao/detalhes.html', {
         'evolucao': ev,
         'prontuario': ev.prontuario,
     })
 
 
 # ==============================================================================
-# RELATÓRIO COMPLETO EM PDF (esqueleto)
+# IMPRESSÃO (visualização em HTML)
 # ==============================================================================
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
 def imprimir_prontuario(request, prontuario_id):
-    """Página de impressão do prontuário completo."""
+    """Página de impressão do prontuário completo (visualização em HTML)."""
     prontuario = get_prontuario_ativo(request, prontuario_id)
     if not prontuario:
         return redirect('dashboard:dashboard')
@@ -1018,3 +1036,34 @@ def imprimir_prontuario(request, prontuario_id):
         'evolucoes': prontuario.evolucoes_fisioterapeuticas.all()[:20],
     }
     return render(request, 'prontuario/imprimir.html', context)
+
+
+# ==============================================================================
+# EXPORTAR PRONTUÁRIO EM PDF (download real com reportlab)
+# ==============================================================================
+@login_required
+@perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
+def exportar_pdf_prontuario(request, prontuario_id):
+    """Gera e faz download do PDF do prontuário completo."""
+    prontuario = get_prontuario_ativo(request, prontuario_id)
+    if not prontuario:
+        messages.error(request, 'Prontuário não encontrado.')
+        return redirect('dashboard:dashboard')
+
+    try:
+        buffer = gerar_pdf_prontuario(prontuario)
+
+        nome_arquivo = (
+            f'prontuario-{prontuario.numero_prontuario}-'
+            f'{prontuario.atleta.usuario.username}.pdf'
+        )
+
+        return FileResponse(
+            buffer,
+            as_attachment=True,
+            filename=nome_arquivo,
+            content_type='application/pdf',
+        )
+    except Exception as e:
+        messages.error(request, f'Erro ao gerar PDF: {e}')
+        return redirect('prontuario:dashboard_prontuario', prontuario_id=prontuario.id)

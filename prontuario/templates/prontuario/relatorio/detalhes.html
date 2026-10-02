@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Relatório {{ relatorio.data_sessao|date:"d/m/Y" }}{% endblock %}
+{% block page_title %}Relatório de Sessão{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— Prontuário · {{ prontuario.numero_prontuario }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-clipboard-check"></i>
+            Sessão
+        </div>
+        <h1 class="page-header-title">
+            Sessão de <span class="gradient-text">{{ relatorio.data_sessao|date:"d/m/Y" }}.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            {{ relatorio.horario_inicio|time:"H:i" }} - {{ relatorio.horario_fim|time:"H:i" }}
+            {% if relatorio.duracao_minutos %} · {{ relatorio.duracao_minutos }} minutos{% endif %}
+            · Fisioterapeuta: <strong>{{ relatorio.fisioterapeuta.get_full_name }}</strong>
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin-bottom: 24px; justify-content: space-between; flex-wrap: wrap;">
+        <a href="{% url 'prontuario:lista_relatorios' prontuario.id %}" class="btn-outline-custom">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        <a href="{% url 'prontuario:editar_relatorio' relatorio.id %}" class="btn-primary-custom">
+            <i class="fas fa-edit"></i> Editar
+        </a>
+    </div>
+
+    <!-- Evolução da dor -->
+    <div class="card-premium mb-4">
+        <div class="section-tag"><i class="fas fa-chart-line"></i> Evolução da Dor</div>
+        <div style="display: flex; align-items: center; gap: 24px; padding: 20px 0;">
+            <div style="text-align: center;">
+                <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Início</div>
+                <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.5rem; font-weight: 800; color: #dc2626; line-height: 1;">{{ relatorio.dor_inicio }}</div>
+                <div style="font-size: 0.75rem; color: var(--text-tertiary);">de 10</div>
+            </div>
+            <div style="flex: 1; text-align: center; font-size: 2rem; color: var(--text-tertiary);">
+                {% if relatorio.dor_fim < relatorio.dor_inicio %}
+                <i class="fas fa-arrow-right"></i>
+                {% elif relatorio.dor_fim > relatorio.dor_inicio %}
+                <i class="fas fa-arrow-right"></i>
+                {% else %}
+                <i class="fas fa-equals"></i>
+                {% endif %}
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Fim</div>
+                <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.5rem; font-weight: 800; color: {% if relatorio.dor_fim < relatorio.dor_inicio %}#10b981{% elif relatorio.dor_fim > relatorio.dor_inicio %}#dc2626{% else %}#64748b{% endif %}; line-height: 1;">{{ relatorio.dor_fim }}</div>
+                <div style="font-size: 0.75rem; color: var(--text-tertiary);">de 10</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Procedimentos -->
+        <div class="col-lg-8">
+            <div class="card-premium mb-4">
+                <div class="section-tag"><i class="fas fa-notes-medical"></i> Procedimentos Realizados</div>
+                <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap; margin: 16px 0 0 0;">{{ relatorio.procedimentos }}</p>
+            </div>
+
+            {% if relatorio.tecnicas_utilizadas %}
+            <div class="card-premium mb-4">
+                <div class="section-tag"><i class="fas fa-hand-holding-medical"></i> Técnicas Utilizadas</div>
+                <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap; margin: 16px 0 0 0;">{{ relatorio.tecnicas_utilizadas }}</p>
+            </div>
+            {% endif %}
+
+            {% if relatorio.estado_geral %}
+            <div class="card-premium mb-4">
+                <div class="section-tag"><i class="fas fa-user-check"></i> Estado Geral do Paciente</div>
+                <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap; margin: 16px 0 0 0;">{{ relatorio.estado_geral }}</p>
+            </div>
+            {% endif %}
+
+            {% if relatorio.reacao_paciente %}
+            <div class="card-premium mb-4">
+                <div class="section-tag"><i class="fas fa-smile"></i> Reação ao Tratamento</div>
+                <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap; margin: 16px 0 0 0;">{{ relatorio.reacao_paciente }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sinais vitais -->
+        <div class="col-lg-4">
+            <div class="card-premium mb-4">
+                <div class="section-tag"><i class="fas fa-heart-pulse"></i> Sinais Vitais</div>
+                <ul style="list-style: none; padding: 0; margin: 16px 0 0 0;">
+                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">PA inicial</span>
+                        <strong>{{ relatorio.pa_inicial|default:"—" }}</strong>
+                    </li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">PA final</span>
+                        <strong>{{ relatorio.pa_final|default:"—" }}</strong>
+                    </li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">FC inicial</span>
+                        <strong>{{ relatorio.fc_inicial|default:"—" }}{% if relatorio.fc_inicial %} bpm{% endif %}</strong>
+                    </li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">FC final</span>
+                        <strong>{{ relatorio.fc_final|default:"—" }}{% if relatorio.fc_final %} bpm{% endif %}</strong>
+                    </li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">SpO₂ inicial</span>
+                        <strong>{{ relatorio.spo2_inicial|default:"—" }}{% if relatorio.spo2_inicial %}%{% endif %}</strong>
+                    </li>
+                    <li style="padding: 8px 0; display: flex; justify-content: space-between;">
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">SpO₂ final</span>
+                        <strong>{{ relatorio.spo2_final|default:"—" }}{% if relatorio.spo2_final %}%{% endif %}</strong>
+                    </li>
+                </ul>
+            </div>
+
+            {% if relatorio.plano_proxima_sessao or relatorio.orientacoes_paciente %}
+            <div class="card-premium">
+                {% if relatorio.plano_proxima_sessao %}
+                <div class="section-tag"><i class="fas fa-forward"></i> Próxima Sessão</div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap;">{{ relatorio.plano_proxima_sessao }}</p>
+                {% endif %}
+                {% if relatorio.orientacoes_paciente %}
+                <div class="section-tag" style="margin-top: 16px;"><i class="fas fa-home"></i> Orientações</div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap;">{{ relatorio.orientacoes_paciente }}</p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

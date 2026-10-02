@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Confirmar remoção{% endblock %}
+{% block page_title %}Confirmar{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+
+            <div class="card-premium text-center">
+                <div class="empty-state-icon" style="background: rgba(239, 68, 68, 0.12); color: #dc2626;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.35rem; margin: 16px 0 10px 0;">
+                    Confirmar remoção
+                </h3>
+                <p style="color: var(--text-secondary); margin-bottom: 8px;">
+                    Você tem certeza que deseja remover este item do prontuário?
+                </p>
+                <div style="padding: 16px; background: var(--bg-secondary); border-radius: 12px; margin: 20px 0;">
+                    <strong style="color: var(--text-primary);">{{ objeto }}</strong>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-tertiary); margin-bottom: 24px;">
+                    <i class="fas fa-info-circle"></i>
+                    Esta ação não pode ser desfeita.
+                </p>
+
+                <form method="POST" style="display: inline-flex; gap: 12px;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-primary-custom" style="background: linear-gradient(135deg, #dc2626, #991b1b);">
+                        <i class="fas fa-trash-alt"></i> Sim, remover
+                    </button>
+                    <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" class="btn-outline-custom">
+                        Cancelar
+                    </a>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

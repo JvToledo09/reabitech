@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo }}{% endblock %}
+{% block page_title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— Prontuário · {{ prontuario.numero_prontuario }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-chart-line"></i>
+            Evolução Fisioterapêutica
+        </div>
+        <h1 class="page-header-title">
+            {{ titulo }} <span class="gradient-text">fisioterapêutica.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            Paciente: <strong>{{ prontuario.atleta.usuario.get_full_name }}</strong> · Método SOAP
+        </p>
+    </div>
+
+    <div class="card-premium">
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="section-tag"><i class="fas fa-info-circle"></i> Tipo e Responsável</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6"><label class="form-label fw-bold">Tipo de evolução *</label>{{ form.tipo }}</div>
+                <div class="col-md-6"><label class="form-label fw-bold">Fisioterapeuta</label>{{ form.fisioterapeuta }}</div>
+            </div>
+
+            <div class="section-tag"><i class="fas fa-comment-medical"></i> SOAP</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">S — Subjetivo</label>
+                    {{ form.subjetivo }}
+                    <small class="text-muted">Queixas do paciente, relato</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">O — Objetivo</label>
+                    {{ form.objetivo }}
+                    <small class="text-muted">Exame físico, testes, medidas</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">A — Avaliação</label>
+                    {{ form.avaliacao }}
+                    <small class="text-muted">Análise do fisioterapeuta</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">P — Plano</label>
+                    {{ form.plano }}
+                    <small class="text-muted">Conduta e planejamento</small>
+                </div>
+            </div>
+
+            <div class="section-tag"><i class="fas fa-chart-bar"></i> Avaliações Específicas</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-3"><label class="form-label fw-bold">Dor (EVA 0-10)</label>{{ form.escala_dor }}</div>
+                <div class="col-md-3"><label class="form-label fw-bold">Força Muscular (MRC 0-5)</label>{{ form.forca_muscular }}</div>
+                <div class="col-md-6"><label class="form-label fw-bold">Amplitude de Movimento</label>{{ form.amplitude_movimento }}</div>
+                <div class="col-12"><label class="form-label fw-bold">Testes Especiais Realizados</label>{{ form.testes_especiais }}</div>
+            </div>
+
+            <div class="section-tag"><i class="fas fa-clipboard-check"></i> Conduta e Situação</div>
+            <div class="row g-3 mb-4">
+                <div class="col-12"><label class="form-label fw-bold">Conduta fisioterapêutica</label>{{ form.conduta }}</div>
+                <div class="col-12"><label class="form-label fw-bold">Resposta ao tratamento</label>{{ form.resposta_ao_tratamento }}</div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold d-block">Paciente estável</label>
+                    <div class="form-check form-switch">{{ form.paciente_estavel }}</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold d-block">Necessita encaminhamento</label>
+                    <div class="form-check form-switch">{{ form.necessita_encaminhamento }}</div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 pt-4 border-top">
+                <button type="submit" class="btn-primary-custom"><i class="fas fa-save"></i> Salvar evolução</button>
+                <a href="{% url 'prontuario:lista_evolucoes' prontuario.id %}" class="btn-outline-custom">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

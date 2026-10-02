@@ -6,9 +6,11 @@ app_name = 'prontuario'
 urlpatterns = [
     # ----- Geral -----
     path('', views.lista_prontuarios, name='lista_prontuarios'),
+    path('novo/', views.selecionar_atleta_prontuario, name='selecionar_atleta_prontuario'),
     path('novo/<int:atleta_id>/', views.criar_prontuario, name='criar_prontuario'),
     path('<int:prontuario_id>/', views.dashboard_prontuario, name='dashboard_prontuario'),
     path('<int:prontuario_id>/imprimir/', views.imprimir_prontuario, name='imprimir_prontuario'),
+    path('<int:prontuario_id>/pdf/', views.exportar_pdf_prontuario, name='exportar_pdf_prontuario'),
 
     # ----- Triagens -----
     path('<int:prontuario_id>/triagem/nova/', views.criar_triagem, name='criar_triagem'),

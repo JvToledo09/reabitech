@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Selecionar Atleta{% endblock %}
+{% block page_title %}Novo Prontuário{% endblock %}
+
+{% block extra_css %}
+<style>
+    .atletas-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 16px;
+    }
+
+    .atleta-card {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        border-radius: 18px;
+        padding: 20px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .atleta-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--green-soft-2);
+        color: inherit;
+    }
+
+    .atleta-card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .atleta-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--green), var(--green-deep));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .atleta-card.ja-tem .atleta-avatar {
+        background: linear-gradient(135deg, #6f42c1, #4c2a85);
+    }
+
+    .atleta-nome {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--text-primary);
+        margin: 0 0 3px 0;
+    }
+
+    .atleta-info {
+        font-size: 0.78rem;
+        color: var(--text-tertiary);
+    }
+
+    .atleta-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 12px;
+        border-top: 1px solid var(--border-color);
+        font-size: 0.8rem;
+    }
+
+    .section-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin: 32px 0 16px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-primary);
+    }
+
+    .section-title:first-of-type { margin-top: 0; }
+
+    .section-title i { color: var(--green); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— Prontuários · Selecionar atleta</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-folder-plus"></i>
+            Novo prontuário
+        </div>
+        <h1 class="page-header-title">
+            Escolha um paciente para <span class="gradient-text">abrir o prontuário.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            Atletas sem prontuário aparecem em destaque. Atletas que já possuem prontuário estão no final da lista.
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin-bottom: 24px; justify-content: space-between; flex-wrap: wrap;">
+        <a href="{% url 'prontuario:lista_prontuarios' %}" class="btn-outline-custom">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="btn-outline-custom">
+            <i class="fas fa-users"></i> Ver todos os pacientes
+        </a>
+    </div>
+
+    {% if atletas_sem_prontuario %}
+    <h3 class="section-title">
+        <i class="fas fa-folder-plus"></i> Sem prontuário
+        <span class="badge-premium green">{{ atletas_sem_prontuario|length }}</span>
+    </h3>
+    <div class="atletas-grid mb-5">
+        {% for atleta in atletas_sem_prontuario %}
+        <a href="{% url 'prontuario:criar_prontuario' atleta.id %}" class="atleta-card">
+            <div class="atleta-card-header">
+                <div class="atleta-avatar">
+                    {{ atleta.usuario.get_full_name|default:atleta.usuario.username|first|upper }}
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                    <h3 class="atleta-nome text-truncate">
+                        {{ atleta.usuario.get_full_name|default:atleta.usuario.username }}
+                    </h3>
+                    <div class="atleta-info">
+                        RM {{ atleta.rm|default:"—" }}
+                        {% if atleta.modalidade %} · {{ atleta.modalidade.nome }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="atleta-card-footer">
+                <span style="color: var(--text-tertiary);">Sem prontuário</span>
+                <span style="color: var(--green); font-weight: 700;">
+                    Criar <i class="fas fa-arrow-right ms-1"></i>
+                </span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card-premium mb-5">
+        <div class="empty-state">
+            <div class="empty-state-icon"><i class="fas fa-check-circle"></i></div>
+            <h3 class="empty-state-title">Todos os atletas já têm prontuário</h3>
+            <p class="empty-state-desc">
+                Todos os pacientes do projeto já possuem prontuário aberto.
+            </p>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if atletas_com_prontuario %}
+    <h3 class="section-title">
+        <i class="fas fa-folder"></i> Já têm prontuário
+        <span class="badge-premium gray">{{ atletas_com_prontuario|length }}</span>
+    </h3>
+    <div class="atletas-grid">
+        {% for atleta in atletas_com_prontuario %}
+        <a href="{% url 'prontuario:dashboard_prontuario' atleta.prontuario.id %}" class="atleta-card ja-tem">
+            <div class="atleta-card-header">
+                <div class="atleta-avatar">
+                    {{ atleta.usuario.get_full_name|default:atleta.usuario.username|first|upper }}
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                    <h3 class="atleta-nome text-truncate">
+                        {{ atleta.usuario.get_full_name|default:atleta.usuario.username }}
+                    </h3>
+                    <div class="atleta-info">
+                        {{ atleta.prontuario.numero_prontuario }}
+                    </div>
+                </div>
+            </div>
+            <div class="atleta-card-footer">
+                <span style="color: var(--text-tertiary);">{{ atleta.prontuario.get_status_display }}</span>
+                <span style="color: #6f42c1; font-weight: 700;">
+                    Abrir <i class="fas fa-arrow-right ms-1"></i>
+                </span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

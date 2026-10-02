@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo }}{% endblock %}
+{% block page_title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— Prontuário · {{ prontuario.numero_prontuario }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-clipboard-check"></i>
+            Relatório de sessão
+        </div>
+        <h1 class="page-header-title">
+            {{ titulo }} <span class="gradient-text">de sessão.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            Paciente: <strong>{{ prontuario.atleta.usuario.get_full_name }}</strong>
+        </p>
+    </div>
+
+    <div class="card-premium">
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="section-tag"><i class="fas fa-calendar"></i> Dados da Sessão</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-3"><label class="form-label fw-bold">Data *</label>{{ form.data_sessao }}</div>
+                <div class="col-md-2"><label class="form-label fw-bold">Início *</label>{{ form.horario_inicio }}</div>
+                <div class="col-md-2"><label class="form-label fw-bold">Término *</label>{{ form.horario_fim }}</div>
+                <div class="col-md-5"><label class="form-label fw-bold">Fisioterapeuta</label>{{ form.fisioterapeuta }}</div>
+            </div>
+
+            <div class="section-tag"><i class="fas fa-notes-medical"></i> Procedimentos</div>
+            <div class="row g-3 mb-4">
+                <div class="col-12">
+                    <label class="form-label fw-bold">Procedimentos realizados *</label>
+                    {{ form.procedimentos }}
+                    <small class="text-muted">Ex: TENS, cinesioterapia, mobilização articular</small>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Técnicas utilizadas</label>
+                    {{ form.tecnicas_utilizadas }}
+                </div>
+            </div>
+
+            <div class="section-tag"><i class="fas fa-chart-line"></i> Avaliação do Dia</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-3"><label class="form-label fw-bold">Dor no início (0-10)</label>{{ form.dor_inicio }}</div>
+                <div class="col-md-3"><label class="form-label fw-bold">Dor no fim (0-10)</label>{{ form.dor_fim }}</div>
+                <div class="col-6"><label class="form-label fw-bold">Estado geral do paciente</label>{{ form.estado_geral }}</div>
+                <div class="col-12"><label class="form-label fw-bold">Reação ao tratamento</label>{{ form.reacao_paciente }}</div>
+            </div>
+
+            <div class="section-tag"><i class="fas fa-heart-pulse"></i> Sinais Vitais</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-2"><label class="form-label fw-bold">PA inicial</label>{{ form.pa_inicial }}</div>
+                <div class="col-md-2"><label class="form-label fw-bold">PA final</label>{{ form.pa_final }}</div>
+                <div class="col-md-2"><label class="form-label fw-bold">FC inicial</label>{{ form.fc_inicial }}</div>
+                <div class="col-md-2"><label class="form-label fw-bold">FC final</label>{{ form.fc_final }}</div>
+                <div class="col-md-2"><label class="form-label fw-bold">SpO₂ inicial</label>{{ form.spo2_inicial }}</div>
+                <div class="col-md-2"><label class="form-label fw-bold">SpO₂ final</label>{{ form.spo2_final }}</div>
+            </div>
+
+            <div class="section-tag"><i class="fas fa-clipboard-list"></i> Plano</div>
+            <div class="row g-3 mb-4">
+                <div class="col-12"><label class="form-label fw-bold">Plano para a próxima sessão</label>{{ form.plano_proxima_sessao }}</div>
+                <div class="col-12"><label class="form-label fw-bold">Orientações ao paciente</label>{{ form.orientacoes_paciente }}</div>
+                <div class="col-12"><label class="form-label fw-bold">Observações gerais</label>{{ form.observacoes }}</div>
+            </div>
+
+            <div class="d-flex gap-2 pt-4 border-top">
+                <button type="submit" class="btn-primary-custom"><i class="fas fa-save"></i> Salvar relatório</button>
+                <a href="{% url 'prontuario:lista_relatorios' prontuario.id %}" class="btn-outline-custom">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

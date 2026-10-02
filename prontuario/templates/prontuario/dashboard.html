@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Prontuário {{ prontuario.numero_prontuario }}{% endblock %}
+{% block page_title %}Prontuário Clínico{% endblock %}
+
+{% block extra_css %}
+<style>
+    .section-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 16px;
+    }
+
+    .section-card {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        border-radius: 18px;
+        padding: 24px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 160px;
+    }
+
+    .section-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--green-soft-2);
+        color: inherit;
+    }
+
+    .section-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+    }
+
+    .section-card-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--green-soft-2), rgba(6, 182, 212, 0.1));
+        border: 1px solid var(--green-soft-2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--green);
+        font-size: 1.15rem;
+    }
+
+    .section-card-count {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.65rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        line-height: 1;
+    }
+
+    .section-card-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--text-primary);
+        margin: 0 0 4px 0;
+    }
+
+    .section-card-desc {
+        font-size: 0.78rem;
+        color: var(--text-tertiary);
+        margin: 0;
+    }
+
+    .alert-banner {
+        padding: 14px 20px;
+        border-radius: 14px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .alert-banner.danger {
+        background: rgba(239, 68, 68, 0.12);
+        color: #dc2626;
+        border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .alert-banner.warning {
+        background: rgba(245, 158, 11, 0.12);
+        color: #d97706;
+        border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .header-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px;
+    }
+
+    .header-info-item {
+        text-align: center;
+    }
+
+    .header-info-value {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 1.5rem;
+        color: var(--text-primary);
+        line-height: 1;
+        margin-bottom: 6px;
+    }
+
+    .header-info-label {
+        font-size: 0.75rem;
+        color: var(--text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <!-- Header do prontuário -->
+    <div class="card-premium mb-4" style="background: linear-gradient(135deg, #0a3d2e 0%, #0f2937 60%, #0a1929 100%); color: white; border: none;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px;">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <div style="width: 80px; height: 80px; border-radius: 20px; background: linear-gradient(135deg, #34d399, #2BA181); display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.8rem; box-shadow: 0 12px 30px rgba(52, 211, 153, 0.35);">
+                    {{ atleta.usuario.get_full_name|default:atleta.usuario.username|first|upper }}
+                </div>
+                <div>
+                    <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.75rem; font-weight: 800; margin: 0 0 6px 0; letter-spacing: -0.02em;">
+                        {{ atleta.usuario.get_full_name|default:atleta.usuario.username }}
+                    </h2>
+                    <p style="opacity: 0.75; margin: 0; font-size: 0.9rem;">
+                        <strong style="color: #34d399;">{{ prontuario.numero_prontuario }}</strong>
+                        &nbsp;·&nbsp; RM {{ atleta.rm|default:"—" }}
+                        {% if atleta.modalidade %}&nbsp;·&nbsp; {{ atleta.modalidade.nome }}{% endif %}
+                    </p>
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <span style="display: inline-block; padding: 8px 18px; background: rgba(52, 211, 153, 0.2); border: 1px solid rgba(52, 211, 153, 0.4); border-radius: 999px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; color: #a7f3d0;">
+                    {{ prontuario.get_status_display|upper }}
+                </span>
+                <p style="opacity: 0.6; font-size: 0.75rem; margin: 12px 0 0 0;">
+                    Aberto em {{ prontuario.data_abertura|date:"d/m/Y" }}
+                </p>
+            </div>
+        </div>
+
+        <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.1);" class="header-info-grid">
+            <div class="header-info-item">
+                <div class="header-info-value" style="color: white;">{{ total_relatorios|default:0 }}</div>
+                <div class="header-info-label" style="color: rgba(255,255,255,0.5);">Sessões registradas</div>
+            </div>
+            <div class="header-info-item">
+                <div class="header-info-value" style="color: white;">{{ objetivos_alcancados|default:0 }}/{{ total_objetivos|default:0 }}</div>
+                <div class="header-info-label" style="color: rgba(255,255,255,0.5);">Objetivos alcançados</div>
+            </div>
+            <div class="header-info-item">
+                <div class="header-info-value" style="color: white;">{{ prontuario.dias_ate_arquivamento|default:"—" }}</div>
+                <div class="header-info-label" style="color: rgba(255,255,255,0.5);">Dias p/ arquivar</div>
+            </div>
+            <div class="header-info-item">
+                <div class="header-info-value" style="color: white;">{{ total_evolucoes|default:0 }}</div>
+                <div class="header-info-label" style="color: rgba(255,255,255,0.5);">Evoluções</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alertas -->
+    {% if tem_alerta_risco_alto %}
+    <div class="alert-banner danger">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span><strong>Atenção:</strong> Este paciente possui escala de risco alta registrada. Verifique as últimas avaliações.</span>
+        <a href="{% url 'prontuario:lista_escalas' prontuario.id %}" style="margin-left: auto; color: inherit; text-decoration: underline;">Ver escalas</a>
+    </div>
+    {% endif %}
+
+    {% if tem_alerta_cardio %}
+    <div class="alert-banner warning">
+        <i class="fas fa-heart-pulse"></i>
+        <span><strong>Cardiorrespiratório:</strong> Dispneia de grau elevado detectada na última avaliação.</span>
+        <a href="{% url 'prontuario:lista_cardio' prontuario.id %}" style="margin-left: auto; color: inherit; text-decoration: underline;">Ver avaliação</a>
+    </div>
+    {% endif %}
+
+    <!-- Botões de ação principais -->
+    <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+        <a href="{% url 'prontuario:criar_triagem' prontuario.id %}" class="btn-primary-custom">
+            <i class="fas fa-notes-medical"></i> Nova triagem
+        </a>
+        <a href="{% url 'prontuario:criar_relatorio' prontuario.id %}" class="btn-primary-custom" style="background: linear-gradient(135deg, #0dcaf0, #0891b2);">
+            <i class="fas fa-clipboard-check"></i> Nova sessão
+        </a>
+        <a href="{% url 'prontuario:criar_evolucao' prontuario.id %}" class="btn-outline-custom">
+            <i class="fas fa-chart-line"></i> Nova evolução
+        </a>
+        <a href="{% url 'prontuario:imprimir_prontuario' prontuario.id %}" class="btn-outline-custom" target="_blank">
+    <i class="fas fa-print"></i> Visualizar
+</a>
+<a href="{% url 'prontuario:exportar_pdf_prontuario' prontuario.id %}"
+   class="btn-primary-custom"
+   style="background: linear-gradient(135deg, #dc2626, #991b1b);">
+    <i class="fas fa-file-pdf"></i> Baixar PDF
+</a>
+    </div>
+
+    <!-- Grid de seções -->
+    <div class="section-tag" style="margin-bottom: 16px;">
+        <i class="fas fa-folder-tree"></i>
+        Seções do prontuário
+    </div>
+
+    <div class="section-grid">
+
+        <a href="{% url 'prontuario:lista_triagens' prontuario.id %}" class="section-card">
+            <div class="section-card-header">
+                <div class="section-card-icon"><i class="fas fa-notes-medical"></i></div>
+                <span class="section-card-count">{{ total_triagens|default:0 }}</span>
+            </div>
+            <h3 class="section-card-title">Triagens</h3>
+            <p class="section-card-desc">Histórico de queixas, sinais vitais e exames físicos iniciais.</p>
+        </a>
+
+        <a href="{% url 'prontuario:lista_objetivos' prontuario.id %}" class="section-card">
+            <div class="section-card-header">
+                <div class="section-card-icon"><i class="fas fa-bullseye"></i></div>
+                <span class="section-card-count">{{ total_objetivos|default:0 }}</span>
+            </div>
+            <h3 class="section-card-title">Objetivos</h3>
+            <p class="section-card-desc">Metas de curto, médio e longo prazo (SMART).</p>
+        </a>
+
+        <a href="{% url 'prontuario:lista_medicamentos' prontuario.id %}" class="section-card">
+            <div class="section-card-header">
+                <div class="section-card-icon"><i class="fas fa-pills"></i></div>
+                <span class="section-card-count">{{ total_medicamentos|default:0 }}</span>
+            </div>
+            <h3 class="section-card-title">Medicamentos</h3>
+            <p class="section-card-desc">Uso atual, dose, frequência e prescritor.</p>
+        </a>
+
+        <a href="{% url 'prontuario:lista_cif' prontuario.id %}" class="section-card">
+            <div class="section-card-header">
+                <div class="section-card-icon"><i class="fas fa-clipboard-list"></i></div>
+                <span class="section-card-count">{{ total_avaliacoes_cif|default:0 }}</span>
+            </div>
+            <h3 class="section-card-title">CIF</h3>
+            <p class="section-card-desc">Avaliação completa de funcionalidade (OMS).</p>
+        </a>
+
+        <a href="{% url 'prontuario:lista_cardio' prontuario.id %}" class="section-card">
+            <div class="section-card-header">
+                <div class="section-card-icon"><i class="fas fa-heart-pulse"></i></div>
+                <span class="section-card-count">{{ total_cardio|default:0 }}</span>
+            </div>
+            <h3 class="section-card-title">Cardiorrespiratório</h3>
+            <p class="section-card-desc">Asma, bronquite, pós-cirúrgico, dispneia.</p>
+        </a>
+
+        <a href="{% url 'prontuario:lista_escalas' prontuario.id %}" class="section-card">
+            <div class="section-card-header">
+                <div class="section-card-icon"><i class="fas fa-gauge-high"></i></div>
+                <span class="section-card-count">{{ total_escalas|default:0 }}</span>
+            </div>
+            <h3 class="section-card-title">Escalas de risco</h3>
+            <p class="section-card-desc">Berg, Morse, EVA, Glasgow, Barthel, ASHES.</p>
+        </a>
+
+        <a href="{% url 'prontuario:lista_relatorios' prontuario.id %}" class="section-card">
+            <div class="section-card-header">
+                <div class="section-card-icon"><i class="fas fa-clipboard-check"></i></div>
+                <span class="section-card-count">{{ total_relatorios|default:0 }}</span>
+            </div>
+            <h3 class="section-card-title">Relatórios diários</h3>
+            <p class="section-card-desc">Registro de cada sessão de fisioterapia.</p>
+        </a>
+
+        <a href="{% url 'prontuario:lista_evolucoes' prontuario.id %}" class="section-card">
+            <div class="section-card-header">
+                <div class="section-card-icon"><i class="fas fa-chart-line"></i></div>
+                <span class="section-card-count">{{ total_evolucoes|default:0 }}</span>
+            </div>
+            <h3 class="section-card-title">Evoluções</h3>
+            <p class="section-card-desc">Evolução fisioterapêutica detalhada (SOAP).</p>
+        </a>
+
+        <a href="{% url 'prontuario:lista_encaminhamentos' prontuario.id %}" class="section-card">
+            <div class="section-card-header">
+                <div class="section-card-icon"><i class="fas fa-share"></i></div>
+                <span class="section-card-count">{{ total_encaminhamentos|default:0 }}</span>
+            </div>
+            <h3 class="section-card-title">Encaminhamentos</h3>
+            <p class="section-card-desc">Encaminhamentos a especialistas médicos.</p>
+        </a>
+
+        <a href="{% url 'prontuario:lista_exames' prontuario.id %}" class="section-card">
+            <div class="section-card-header">
+                <div class="section-card-icon"><i class="fas fa-microscope"></i></div>
+                <span class="section-card-count">{{ total_exames|default:0 }}</span>
+            </div>
+            <h3 class="section-card-title">Exames</h3>
+            <p class="section-card-desc">Laboratoriais, imagem, ECG, laudos.</p>
+        </a>
+
+    </div>
+
+</div>
+{% endblock %}

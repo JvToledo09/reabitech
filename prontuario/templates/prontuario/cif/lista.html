@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Avaliações CIF{% endblock %}
+{% block page_title %}Avaliações CIF{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— Prontuário · {{ prontuario.numero_prontuario }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-clipboard-list"></i>
+            Histórico CIF
+        </div>
+        <h1 class="page-header-title">
+            Histórico de <span class="gradient-text">avaliações CIF.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            Todas as avaliações de funcionalidade realizadas para este paciente.
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin-bottom: 24px; justify-content: space-between; flex-wrap: wrap;">
+        <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" class="btn-outline-custom">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        <a href="{% url 'prontuario:criar_cif' prontuario.id %}" class="btn-primary-custom">
+            <i class="fas fa-plus"></i> Nova avaliação CIF
+        </a>
+    </div>
+
+    {% if avaliacoes %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
+        {% for cif in avaliacoes %}
+        <a href="{% url 'prontuario:detalhes_cif' cif.id %}" class="card-premium" style="text-decoration: none; color: inherit; padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+                <div>
+                    <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px;">
+                        {{ cif.data_avaliacao|date:"d/m/Y" }}
+                    </div>
+                    <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--text-primary);">
+                        {{ cif.pontuacao_global }} pontos
+                    </div>
+                </div>
+                <span class="badge-premium {% if 'Sem' in cif.classificacao_global %}green{% elif 'leve' in cif.classificacao_global %}green{% elif 'moderada' in cif.classificacao_global %}amber{% else %}red{% endif %}">
+                    {{ cif.classificacao_global }}
+                </span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem; padding-top: 12px; border-top: 1px solid var(--border-color);">
+                <div>
+                    <div style="color: var(--text-tertiary); font-size: 0.72rem;">Funções</div>
+                    <strong style="color: var(--text-primary);">{{ cif.pontuacao_funcoes_corpo }}</strong>
+                </div>
+                <div>
+                    <div style="color: var(--text-tertiary); font-size: 0.72rem;">Atividades</div>
+                    <strong style="color: var(--text-primary);">{{ cif.pontuacao_atividades }}</strong>
+                </div>
+                <div>
+                    <div style="color: var(--text-tertiary); font-size: 0.72rem;">Ambientais</div>
+                    <strong style="color: var(--text-primary);">{{ cif.pontuacao_fatores_ambientais }}</strong>
+                </div>
+                <div>
+                    <div style="color: var(--text-tertiary); font-size: 0.72rem;">Avaliador</div>
+                    <strong style="color: var(--text-primary);">{{ cif.avaliador.get_short_name|default:"—" }}</strong>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card-premium">
+        <div class="empty-state">
+            <div class="empty-state-icon"><i class="fas fa-clipboard-list"></i></div>
+            <h3 class="empty-state-title">Nenhuma avaliação CIF registrada</h3>
+            <p class="empty-state-desc">
+                A CIF (Classificação Internacional de Funcionalidade) é obrigatória em prontuários fisioterapêuticos.
+            </p>
+            <a href="{% url 'prontuario:criar_cif' prontuario.id %}" class="btn-primary-custom">
+                <i class="fas fa-plus"></i> Realizar primeira avaliação
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

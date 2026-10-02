@@ -111,14 +111,53 @@
                 {% endwith %}
 
                 <!-- Ações -->
-                <div class="d-flex gap-2">
-                    <a href="{% url 'dashboard:fisioterapeuta_registrar_evolucao' atleta.id %}" class="btn btn-sm btn-primary-custom flex-grow-1">
-                        <i class="fas fa-chart-line me-1"></i> Evolução
-                    </a>
-                    <a href="{% url 'dashboard:fisioterapeuta_criar_lesao' atleta.id %}" class="btn btn-sm btn-outline-danger">
-                        <i class="fas fa-plus"></i>
-                    </a>
-                </div>
+         <div class="d-flex flex-column gap-2">
+    {% if atleta.prontuario %}
+    <a href="{% url 'prontuario:dashboard_prontuario' atleta.prontuario.id %}"
+       class="btn btn-sm btn-primary-custom"
+       style="background: linear-gradient(135deg, #2BA181, #1f8768);">
+        <i class="fas fa-folder-medical me-1"></i> Abrir Prontuário
+        <span class="badge bg-white bg-opacity-25 ms-1" style="font-size: 0.65rem;">
+            {{ atleta.prontuario.numero_prontuario }}
+        </span>
+    </a>
+    {% else %}
+    <a href="{% url 'prontuario:criar_prontuario' atleta.id %}"
+       class="btn btn-sm btn-primary-custom"
+       style="background: linear-gradient(135deg, #6f42c1, #4c2a85);">
+        <i class="fas fa-folder-plus me-1"></i> Criar Prontuário
+    </a>
+    {% endif %}
+
+<!-- Ações -->
+<div class="d-flex flex-column gap-2">
+    {% if atleta.prontuario %}
+    <a href="{% url 'prontuario:dashboard_prontuario' atleta.prontuario.id %}"
+       class="btn btn-sm w-100"
+       style="background: linear-gradient(135deg, #2BA181, #1f8768); color: white; border: none; font-weight: 600;">
+        <i class="fas fa-folder-medical me-1"></i> Abrir Prontuário
+        <span class="ms-1" style="opacity: 0.75; font-size: 0.7rem;">
+            {{ atleta.prontuario.numero_prontuario }}
+        </span>
+    </a>
+    {% else %}
+    <a href="{% url 'prontuario:criar_prontuario' atleta.id %}"
+       class="btn btn-sm w-100"
+       style="background: linear-gradient(135deg, #6f42c1, #4c2a85); color: white; border: none; font-weight: 600;">
+        <i class="fas fa-folder-plus me-1"></i> Criar Prontuário
+    </a>
+    {% endif %}
+
+    <div class="d-flex gap-2">
+        <a href="{% url 'dashboard:fisioterapeuta_registrar_evolucao' atleta.id %}" class="btn btn-sm btn-outline-custom flex-grow-1">
+            <i class="fas fa-chart-line me-1"></i> Evolução
+        </a>
+        <a href="{% url 'dashboard:fisioterapeuta_criar_lesao' atleta.id %}" class="btn btn-sm btn-outline-danger">
+            <i class="fas fa-plus"></i>
+        </a>
+    </div>
+</div>
+</div>
 
             </div>
         </div>

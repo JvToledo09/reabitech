@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Escalas de Risco{% endblock %}
+{% block page_title %}Escalas de Risco{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— Prontuário · {{ prontuario.numero_prontuario }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-gauge-high"></i>
+            Escalas
+        </div>
+        <h1 class="page-header-title">
+            Escalas de <span class="gradient-text">avaliação de risco.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            Histórico de escalas validadas aplicadas ao paciente.
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin-bottom: 24px; justify-content: space-between; flex-wrap: wrap;">
+        <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" class="btn-outline-custom">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        <a href="{% url 'prontuario:criar_escala' prontuario.id %}" class="btn-primary-custom">
+            <i class="fas fa-plus"></i> Nova escala
+        </a>
+    </div>
+
+    {% if escalas %}
+    <div class="card-premium" style="padding: 0; overflow: hidden;">
+        <div style="overflow-x: auto;">
+            <table class="table-premium">
+                <thead>
+                    <tr>
+                        <th>Escala</th>
+                        <th>Data</th>
+                        <th>Pontuação</th>
+                        <th>Nível</th>
+                        <th>Interpretação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for e in escalas %}
+                    <tr>
+                        <td><strong>{{ e.get_tipo_display }}</strong></td>
+                        <td>{{ e.data_aplicacao|date:"d/m/Y" }}</td>
+                        <td>
+                            <strong style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.05rem;">{{ e.pontuacao }}</strong>
+                            <span style="color: var(--text-tertiary); font-size: 0.8rem;">/ {{ e.pontuacao_maxima }}</span>
+                        </td>
+                        <td>
+                            <span class="badge-premium
+                                {% if e.nivel_risco == 'baixo' %}green
+                                {% elif e.nivel_risco == 'moderado' %}amber
+                                {% elif e.nivel_risco == 'alto' %}red
+                                {% else %}red{% endif %}">
+                                {{ e.get_nivel_risco_display }}
+                            </span>
+                        </td>
+                        <td style="font-size: 0.85rem; color: var(--text-secondary);">
+                            {{ e.interpretacao|truncatechars:60|default:"—" }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="card-premium">
+        <div class="empty-state">
+            <div class="empty-state-icon"><i class="fas fa-gauge-high"></i></div>
+            <h3 class="empty-state-title">Nenhuma escala registrada</h3>
+            <p class="empty-state-desc">
+                Registre escalas validadas como Berg (equilíbrio), Morse (queda), EVA (dor) e outras.
+            </p>
+            <a href="{% url 'prontuario:criar_escala' prontuario.id %}" class="btn-primary-custom">
+                <i class="fas fa-plus"></i> Aplicar primeira escala
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

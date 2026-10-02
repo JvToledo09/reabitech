@@ -1,0 +1,436 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Prontuário {{ prontuario.numero_prontuario }} — {{ atleta.usuario.get_full_name }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: white;
+            color: #0f172a;
+            padding: 40px;
+            font-size: 11pt;
+            line-height: 1.5;
+        }
+
+        @media print {
+            body { padding: 20px; }
+            .no-print { display: none !important; }
+            .page-break { page-break-after: always; }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2BA181;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 24pt;
+            font-weight: 800;
+            color: #2BA181;
+        }
+
+        .logo small {
+            display: block;
+            font-size: 9pt;
+            color: #64748b;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .prontuario-info {
+            text-align: right;
+            font-size: 9pt;
+            color: #64748b;
+        }
+
+        .prontuario-info strong {
+            color: #0f172a;
+            font-size: 11pt;
+        }
+
+        .patient-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .patient-card .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .patient-card .label {
+            font-size: 8pt;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .patient-card .value {
+            font-weight: 700;
+            font-size: 11pt;
+            color: #0f172a;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 13pt;
+            font-weight: 700;
+            color: #1f8768;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10pt;
+        }
+
+        table th {
+            text-align: left;
+            padding: 8px 12px;
+            background: #f1f5f9;
+            font-size: 9pt;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #64748b;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: top;
+        }
+
+        .empty {
+            color: #94a3b8;
+            font-style: italic;
+            padding: 12px 0;
+            font-size: 10pt;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 8pt;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        .print-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #2BA181, #1f8768);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 13pt;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(43, 161, 129, 0.4);
+        }
+
+        .print-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(43, 161, 129, 0.55);
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn no-print" onclick="window.print()">
+        🖨️ Imprimir / Salvar PDF
+    </button>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            REABITECH
+            <small>Plataforma de Reabilitação</small>
+        </div>
+        <div class="prontuario-info">
+            Prontuário Nº <strong>{{ prontuario.numero_prontuario }}</strong><br>
+            Emitido em {% now "d/m/Y H:i" %}<br>
+            Projeto: {{ prontuario.projeto.nome }}
+        </div>
+    </div>
+
+    <!-- Dados do paciente -->
+    <div class="patient-card">
+        <div class="field">
+            <span class="label">Paciente</span>
+            <span class="value">{{ atleta.usuario.get_full_name }}</span>
+        </div>
+        <div class="field">
+            <span class="label">RM / Registro</span>
+            <span class="value">{{ atleta.rm|default:"—" }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Modalidade</span>
+            <span class="value">{{ atleta.modalidade.nome|default:"—" }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Status</span>
+            <span class="value">{{ prontuario.get_status_display }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Data de Abertura</span>
+            <span class="value">{{ prontuario.data_abertura|date:"d/m/Y" }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Fisioterapeuta</span>
+            <span class="value">{{ prontuario.fisioterapeuta_responsavel.get_full_name|default:"—" }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Nascimento</span>
+            <span class="value">{{ atleta.usuario.perfil.data_nascimento|date:"d/m/Y"|default:"—" }}</span>
+        </div>
+        <div class="field">
+            <span class="label">Arquivamento Previsto</span>
+            <span class="value">{{ prontuario.data_arquivamento_previsto|date:"d/m/Y"|default:"—" }}</span>
+        </div>
+    </div>
+
+    <!-- Triagens -->
+    <div class="section">
+        <h2 class="section-title">Triagens ({{ triagens|length }})</h2>
+        {% if triagens %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Queixa</th>
+                    <th>Descrição</th>
+                    <th>PA</th>
+                    <th>SpO₂</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in triagens %}
+                <tr>
+                    <td>{{ t.data_triagem|date:"d/m/Y" }}</td>
+                    <td>{{ t.get_queixa_principal_display }}</td>
+                    <td>{{ t.descricao_queixa|truncatechars:80 }}</td>
+                    <td>{{ t.pressao_arterial|default:"—" }}</td>
+                    <td>{{ t.saturacao_o2|default:"—" }}{% if t.saturacao_o2 %}%{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p class="empty">Nenhuma triagem registrada.</p>{% endif %}
+    </div>
+
+    <!-- Objetivos -->
+    <div class="section">
+        <h2 class="section-title">Objetivos Terapêuticos ({{ objetivos|length }})</h2>
+        {% if objetivos %}
+        <table>
+            <thead><tr><th>Prazo</th><th>Objetivo</th><th>Status</th><th>Progresso</th></tr></thead>
+            <tbody>
+                {% for o in objetivos %}
+                <tr>
+                    <td>{{ o.get_prazo_display }}</td>
+                    <td>{{ o.titulo }}</td>
+                    <td>{{ o.get_status_display }}</td>
+                    <td>{{ o.percentual_alcancado }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p class="empty">Nenhum objetivo cadastrado.</p>{% endif %}
+    </div>
+
+    <!-- Medicamentos -->
+    <div class="section">
+        <h2 class="section-title">Medicamentos em Uso ({{ medicamentos|length }})</h2>
+        {% if medicamentos %}
+        <table>
+            <thead><tr><th>Medicamento</th><th>Dose</th><th>Via</th><th>Frequência</th><th>Prescritor</th></tr></thead>
+            <tbody>
+                {% for m in medicamentos %}
+                <tr>
+                    <td><strong>{{ m.nome }}</strong></td>
+                    <td>{{ m.dosagem }} ({{ m.quantidade }})</td>
+                    <td>{{ m.get_via_display }}</td>
+                    <td>{{ m.get_frequencia_display }}</td>
+                    <td>{{ m.prescritor|default:"—" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p class="empty">Nenhum medicamento registrado.</p>{% endif %}
+    </div>
+
+    <!-- CIF -->
+    <div class="section page-break">
+        <h2 class="section-title">Avaliações CIF ({{ avaliacoes_cif|length }})</h2>
+        {% if avaliacoes_cif %}
+        {% for cif in avaliacoes_cif %}
+        <div style="margin-bottom: 20px; padding: 16px; background: #f8fafc; border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <strong>{{ cif.data_avaliacao|date:"d/m/Y" }}</strong>
+                <span style="color: #1f8768; font-weight: 700;">{{ cif.pontuacao_global }} pts · {{ cif.classificacao_global }}</span>
+            </div>
+            <div style="font-size: 9pt; color: #64748b;">
+                Funções: {{ cif.pontuacao_funcoes_corpo }} ·
+                Atividades: {{ cif.pontuacao_atividades }} ·
+                Ambientais: {{ cif.pontuacao_fatores_ambientais }}
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}<p class="empty">Nenhuma avaliação CIF registrada.</p>{% endif %}
+    </div>
+
+    <!-- Cardio -->
+    {% if avaliacoes_cardio %}
+    <div class="section">
+        <h2 class="section-title">Avaliações Cardiorrespiratórias ({{ avaliacoes_cardio|length }})</h2>
+        <table>
+            <thead><tr><th>Data</th><th>Condição</th><th>Dispneia</th><th>SpO₂</th></tr></thead>
+            <tbody>
+                {% for c in avaliacoes_cardio %}
+                <tr>
+                    <td>{{ c.data_avaliacao|date:"d/m/Y" }}</td>
+                    <td>{{ c.get_condicao_principal_display }}</td>
+                    <td>{{ c.frequencia_dispneia }}/4</td>
+                    <td>{{ c.spo2_reouso|default:"—" }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Escalas -->
+    {% if escalas %}
+    <div class="section">
+        <h2 class="section-title">Escalas de Risco ({{ escalas|length }})</h2>
+        <table>
+            <thead><tr><th>Escala</th><th>Data</th><th>Pontuação</th><th>Nível</th></tr></thead>
+            <tbody>
+                {% for e in escalas %}
+                <tr>
+                    <td>{{ e.get_tipo_display }}</td>
+                    <td>{{ e.data_aplicacao|date:"d/m/Y" }}</td>
+                    <td>{{ e.pontuacao }}/{{ e.pontuacao_maxima }}</td>
+                    <td>{{ e.get_nivel_risco_display }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Relatórios diários -->
+    <div class="section page-break">
+        <h2 class="section-title">Relatórios de Sessão (últimos 20)</h2>
+        {% if relatorios %}
+        <table>
+            <thead><tr><th>Data</th><th>Procedimentos</th><th>Dor (início → fim)</th><th>Fisioterapeuta</th></tr></thead>
+            <tbody>
+                {% for r in relatorios %}
+                <tr>
+                    <td>{{ r.data_sessao|date:"d/m/Y" }}</td>
+                    <td style="font-size: 9pt;">{{ r.procedimentos|truncatechars:100 }}</td>
+                    <td>{{ r.dor_inicio }} → {{ r.dor_fim }}</td>
+                    <td>{{ r.fisioterapeuta.get_short_name|default:"—" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}<p class="empty">Nenhum relatório registrado.</p>{% endif %}
+    </div>
+
+    <!-- Evoluções -->
+    {% if evolucoes %}
+    <div class="section">
+        <h2 class="section-title">Evoluções Fisioterapêuticas (últimas 20)</h2>
+        <table>
+            <thead><tr><th>Data</th><th>Tipo</th><th>Avaliação</th><th>Dor</th></tr></thead>
+            <tbody>
+                {% for e in evolucoes %}
+                <tr>
+                    <td>{{ e.data|date:"d/m/Y" }}</td>
+                    <td>{{ e.get_tipo_display }}</td>
+                    <td style="font-size: 9pt;">{{ e.avaliacao|truncatechars:100 }}</td>
+                    <td>{{ e.escala_dor|default:"—" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Encaminhamentos -->
+    {% if encaminhamentos %}
+    <div class="section">
+        <h2 class="section-title">Encaminhamentos Médicos ({{ encaminhamentos|length }})</h2>
+        <table>
+            <thead><tr><th>Data</th><th>Especialidade</th><th>Motivo</th><th>Status</th></tr></thead>
+            <tbody>
+                {% for e in encaminhamentos %}
+                <tr>
+                    <td>{{ e.data_encaminhamento|date:"d/m/Y" }}</td>
+                    <td>{{ e.get_especialidade_display }}</td>
+                    <td style="font-size: 9pt;">{{ e.motivo|truncatechars:80 }}</td>
+                    <td>{{ e.get_status_display }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Exames -->
+    {% if exames %}
+    <div class="section">
+        <h2 class="section-title">Exames ({{ exames|length }})</h2>
+        <table>
+            <thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Status</th></tr></thead>
+            <tbody>
+                {% for e in exames %}
+                <tr>
+                    <td>{{ e.data_solicitacao|date:"d/m/Y" }}</td>
+                    <td>{{ e.get_tipo_display }}</td>
+                    <td style="font-size: 9pt;">{{ e.descricao|truncatechars:80 }}</td>
+                    <td>{{ e.get_status_display }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Footer -->
+    <div class="footer">
+        Documento gerado eletronicamente pelo REABITECH — Plataforma de Reabilitação<br>
+        {% now "d/m/Y à\s H:i" %} · Prontuário arquivado por 20 anos conforme COFFITO e Lei 13.787/2018
+    </div>
+
+</body>
+</html>

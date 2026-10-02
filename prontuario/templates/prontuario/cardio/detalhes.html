@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cardio — {{ cardio.data_avaliacao|date:"d/m/Y" }}{% endblock %}
+{% block page_title %}Avaliação Cardiorrespiratória{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— Prontuário · {{ prontuario.numero_prontuario }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-heart-pulse"></i>
+            {{ cardio.get_condicao_principal_display }}
+        </div>
+        <h1 class="page-header-title">
+            Avaliação de <span class="gradient-text">{{ cardio.data_avaliacao|date:"d/m/Y" }}.</span>
+        </h1>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin-bottom: 24px; justify-content: space-between; flex-wrap: wrap;">
+        <a href="{% url 'prontuario:lista_cardio' prontuario.id %}" class="btn-outline-custom">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        <a href="{% url 'prontuario:editar_cardio' cardio.id %}" class="btn-primary-custom">
+            <i class="fas fa-edit"></i> Editar
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <!-- Condição e histórico -->
+        <div class="col-lg-6">
+            <div class="card-premium h-100">
+                <div class="section-tag"><i class="fas fa-stethoscope"></i> Condição</div>
+                <h5 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; margin-bottom: 12px;">
+                    {{ cardio.get_condicao_principal_display }}
+                </h5>
+                {% if cardio.outras_condicoes %}
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 16px;">{{ cardio.outras_condicoes }}</p>
+                {% endif %}
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+                    <div>
+                        <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase;">Tempo de diagnóstico</div>
+                        <strong>{{ cardio.tempo_diagnostico|default:"—" }}</strong>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase;">Tabagismo</div>
+                        <strong>{{ cardio.get_tabagismo_display }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sinais vitais -->
+        <div class="col-lg-6">
+            <div class="card-premium h-100">
+                <div class="section-tag"><i class="fas fa-heartbeat"></i> Sinais</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div>
+                        <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase;">Dispneia</div>
+                        <strong>{{ cardio.frequencia_dispneia }}/4</strong>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase;">SpO₂ repouso</div>
+                        <strong>{{ cardio.spo2_reouso|default:"—" }}%</strong>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase;">SpO₂ esforço</div>
+                        <strong>{{ cardio.spo2_esforco|default:"—" }}%</strong>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase;">Borg</div>
+                        <strong>{{ cardio.escala_borg|default:"—" }}/10</strong>
+                    </div>
+                </div>
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border-color); display: flex; gap: 8px; flex-wrap: wrap;">
+                    {% if cardio.tosse %}<span class="badge-premium amber">Tosse</span>{% endif %}
+                    {% if cardio.tosse_produtiva %}<span class="badge-premium amber">Tosse produtiva</span>{% endif %}
+                    {% if cardio.sibilos %}<span class="badge-premium amber">Sibilos</span>{% endif %}
+                    {% if cardio.cianose %}<span class="badge-premium red">Cianose</span>{% endif %}
+                    {% if cardio.uso_musculos_acessorios %}<span class="badge-premium red">Musc. acessórios</span>{% endif %}
+                    {% if cardio.limitacao_atividade %}<span class="badge-premium blue">Limit. AVD</span>{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Exames -->
+        {% if cardio.espirometria or cardio.ecg or cardio.ecocardiograma or cardio.raio_x_torax %}
+        <div class="col-12">
+            <div class="card-premium">
+                <div class="section-tag"><i class="fas fa-microscope"></i> Exames Complementares</div>
+                <div class="row g-3">
+                    {% if cardio.espirometria %}
+                    <div class="col-md-6">
+                        <strong style="font-size: 0.85rem; color: var(--text-primary); display: block; margin-bottom: 6px;">Espirometria</strong>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); white-space: pre-wrap;">{{ cardio.espirometria }}</p>
+                    </div>
+                    {% endif %}
+                    {% if cardio.ecg %}
+                    <div class="col-md-6">
+                        <strong style="font-size: 0.85rem; color: var(--text-primary); display: block; margin-bottom: 6px;">ECG</strong>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); white-space: pre-wrap;">{{ cardio.ecg }}</p>
+                    </div>
+                    {% endif %}
+                    {% if cardio.ecocardiograma %}
+                    <div class="col-md-6">
+                        <strong style="font-size: 0.85rem; color: var(--text-primary); display: block; margin-bottom: 6px;">Ecocardiograma</strong>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); white-space: pre-wrap;">{{ cardio.ecocardiograma }}</p>
+                    </div>
+                    {% endif %}
+                    {% if cardio.raio_x_torax %}
+                    <div class="col-md-6">
+                        <strong style="font-size: 0.85rem; color: var(--text-primary); display: block; margin-bottom: 6px;">Raio-X</strong>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary); white-space: pre-wrap;">{{ cardio.raio_x_torax }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Plano -->
+        {% if cardio.plano_cardiorrespiratorio %}
+        <div class="col-12">
+            <div class="card-premium">
+                <div class="section-tag"><i class="fas fa-clipboard-check"></i> Plano Terapêutico</div>
+                <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap; margin: 0;">{{ cardio.plano_cardiorrespiratorio }}</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

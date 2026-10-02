@@ -505,12 +505,16 @@
             <a href="{% url 'dashboard:coordenador_psicologia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_psicologia' %}active{% endif %}"><i class="fas fa-brain"></i><span>Psicologia</span></a>
             <a href="{% url 'dashboard:coordenador_relatorios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_relatorios' %}active{% endif %}"><i class="fas fa-chart-line"></i><span>Relatórios</span></a>
             <a href="{% url 'dashboard:coordenador_membros' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_membros' %}active{% endif %}"><i class="fas fa-user-plus"></i><span>Membros</span></a>
+            <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path %}active{% endif %}"><i class="fas fa-folder-medical"></i><span>Prontuários</span></a>
+   
 
+            
             {% elif user.perfil.tipo == 'tecnico' %}
             <a href="{% url 'dashboard:dashboard_tecnico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_tecnico' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
             <a href="{% url 'dashboard:tecnico_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_atletas' %}active{% endif %}"><i class="fas fa-futbol"></i><span>Meus Atletas</span></a>
             <a href="{% url 'dashboard:tecnico_desempenho' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_desempenho' %}active{% endif %}"><i class="fas fa-chart-simple"></i><span>Desempenho</span></a>
             <a href="{% url 'dashboard:tecnico_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_recuperacao' %}active{% endif %}"><i class="fas fa-heartbeat"></i><span>Recuperação</span></a>
+            <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path %}active{% endif %}"><i class="fas fa-folder-medical"></i><span>Prontuários</span></a>
 
             {% elif user.perfil.tipo == 'atleta' %}
             <a href="{% url 'dashboard:dashboard_atleta' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_atleta' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
@@ -523,6 +527,8 @@
             <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_atletas' %}active{% endif %}"><i class="fas fa-user-injured"></i><span>Pacientes</span></a>
             <a href="{% url 'dashboard:fisioterapeuta_tratamentos' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_tratamentos' %}active{% endif %}"><i class="fas fa-notes-medical"></i><span>Tratamentos</span></a>
             <a href="{% url 'dashboard:fisioterapeuta_evolucoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_evolucoes' %}active{% endif %}"><i class="fas fa-chart-line"></i><span>Evoluções</span></a>
+            <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path %}active{% endif %}"><i class="fas fa-folder-medical"></i><span>Prontuários</span></a>
+
 
             {% elif user.perfil.tipo == 'psicologo' %}
             <a href="{% url 'dashboard:dashboard_psicologo' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_psicologo' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>

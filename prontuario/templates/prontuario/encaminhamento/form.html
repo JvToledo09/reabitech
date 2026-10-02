@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo }}{% endblock %}
+{% block page_title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— Prontuário · {{ prontuario.numero_prontuario }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-share"></i>
+            Encaminhamento Médico
+        </div>
+        <h1 class="page-header-title">
+            {{ titulo }} <span class="gradient-text">para especialista.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            Paciente: <strong>{{ prontuario.atleta.usuario.get_full_name }}</strong>
+        </p>
+    </div>
+
+    <div class="card-premium">
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="section-tag"><i class="fas fa-user-doctor"></i> Especialidade</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-4"><label class="form-label fw-bold">Especialidade *</label>{{ form.especialidade }}</div>
+                <div class="col-md-4"><label class="form-label fw-bold">Médico</label>{{ form.medico_encaminhado }}</div>
+                <div class="col-md-4"><label class="form-label fw-bold">Urgência</label>{{ form.urgencia }}</div>
+            </div>
+
+            <div class="section-tag"><i class="fas fa-file-medical"></i> Conteúdo</div>
+            <div class="row g-3 mb-4">
+                <div class="col-12"><label class="form-label fw-bold">Motivo do encaminhamento *</label>{{ form.motivo }}</div>
+                <div class="col-12"><label class="form-label fw-bold">Resumo clínico</label>{{ form.resumo_clinico }}</div>
+                <div class="col-md-6"><label class="form-label fw-bold">Exames realizados</label>{{ form.exames_realizados }}</div>
+                <div class="col-md-6"><label class="form-label fw-bold">Hipótese diagnóstica</label>{{ form.hipotese_diagnostica }}</div>
+                <div class="col-12"><label class="form-label fw-bold">Questionamentos ao médico</label>{{ form.questionamentos }}</div>
+            </div>
+
+            <div class="section-tag"><i class="fas fa-return"></i> Retorno</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-4"><label class="form-label fw-bold">Status</label>{{ form.status }}</div>
+                <div class="col-md-4"><label class="form-label fw-bold">Data de retorno</label>{{ form.data_retorno }}</div>
+                <div class="col-12"><label class="form-label fw-bold">Parecer médico</label>{{ form.parecer_medico }}</div>
+                <div class="col-12"><label class="form-label fw-bold">Conduta sugerida</label>{{ form.conduta_sugerida }}</div>
+            </div>
+
+            <div class="d-flex gap-2 pt-4 border-top">
+                <button type="submit" class="btn-primary-custom"><i class="fas fa-save"></i> Salvar</button>
+                <a href="{% url 'prontuario:lista_encaminhamentos' prontuario.id %}" class="btn-outline-custom">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

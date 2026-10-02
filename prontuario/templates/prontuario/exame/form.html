@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo }}{% endblock %}
+{% block page_title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— Prontuário · {{ prontuario.numero_prontuario }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-microscope"></i>
+            Exame
+        </div>
+        <h1 class="page-header-title">
+            {{ titulo }} <span class="gradient-text">complementar.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            Paciente: <strong>{{ prontuario.atleta.usuario.get_full_name }}</strong>
+        </p>
+    </div>
+
+    <div class="card-premium">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="section-tag"><i class="fas fa-info-circle"></i> Identificação</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-4"><label class="form-label fw-bold">Tipo *</label>{{ form.tipo }}</div>
+                <div class="col-md-8"><label class="form-label fw-bold">Descrição *</label>{{ form.descricao }}</div>
+            </div>
+
+            <div class="section-tag"><i class="fas fa-calendar"></i> Datas e Local</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-4"><label class="form-label fw-bold">Data de realização</label>{{ form.data_realizacao }}</div>
+                <div class="col-md-4"><label class="form-label fw-bold">Local</label>{{ form.local_realizacao }}</div>
+                <div class="col-md-4"><label class="form-label fw-bold">Status</label>{{ form.status }}</div>
+            </div>
+
+            <div class="section-tag"><i class="fas fa-file-medical-alt"></i> Resultado</div>
+            <div class="row g-3 mb-4">
+                <div class="col-12"><label class="form-label fw-bold">Laudo / Resultado</label>{{ form.laudo }}</div>
+                <div class="col-12"><label class="form-label fw-bold">Conclusão</label>{{ form.conclusao }}</div>
+                <div class="col-12"><label class="form-label fw-bold">Arquivo do exame</label>{{ form.arquivo }}</div>
+            </div>
+
+            <div class="d-flex gap-2 pt-4 border-top">
+                <button type="submit" class="btn-primary-custom"><i class="fas fa-save"></i> Salvar</button>
+                <a href="{% url 'prontuario:lista_exames' prontuario.id %}" class="btn-outline-custom">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

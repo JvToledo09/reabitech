@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo }}{% endblock %}
+{% block page_title %}{{ titulo }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cif-section {
+        padding: 24px;
+        background: var(--bg-secondary);
+        border-radius: 16px;
+        margin-bottom: 20px;
+    }
+
+    .cif-section-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--text-primary);
+        margin: 0 0 6px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .cif-section-title i { color: var(--green); }
+
+    .cif-section-desc {
+        font-size: 0.82rem;
+        color: var(--text-tertiary);
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .cif-field {
+        margin-bottom: 16px;
+    }
+
+    .cif-field label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .cif-field select {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1.5px solid var(--border-input);
+        border-radius: 10px;
+        background: var(--bg-elevated);
+        color: var(--text-primary);
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— Prontuário · {{ prontuario.numero_prontuario }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-clipboard-list"></i>
+            Classificação Internacional de Funcionalidade
+        </div>
+        <h1 class="page-header-title">
+            {{ titulo }} <span class="gradient-text">(CIF/OMS).</span>
+        </h1>
+        <p class="page-header-subtitle">
+            Avaliação padronizada pela OMS. Escala: 0 = sem problema, 1 = leve, 2 = moderado, 3 = grave, 4 = completo.
+        </p>
+    </div>
+
+    <div class="card-premium">
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- Componente 1 -->
+            <div class="cif-section">
+                <h3 class="cif-section-title"><i class="fas fa-body"></i> 1. Funções e Estruturas do Corpo</h3>
+                <p class="cif-section-desc">Avalia funções fisiológicas e psicológicas do corpo humano.</p>
+                <div class="row g-3">
+                    <div class="col-md-6 cif-field">
+                        <label>b1 — Funções Mentais (atenção, memória, emoções)</label>
+                        {{ form.b1_funcoes_mentais }}
+                    </div>
+                    <div class="col-md-6 cif-field">
+                        <label>b2 — Funções Sensoriais e Dor</label>
+                        {{ form.b2_funcoes_sensoriais }}
+                    </div>
+                    <div class="col-md-6 cif-field">
+                        <label>b4 — Funções Cardiovasculares e Respiratórias</label>
+                        {{ form.b4_cardiorrespiratorias }}
+                    </div>
+                    <div class="col-md-6 cif-field">
+                        <label>b7 — Funções Neuromusculoesqueléticas (movimento)</label>
+                        {{ form.b7_neuromusculoesqueleticas }}
+                    </div>
+                    <div class="col-md-6 cif-field">
+                        <label>b8 — Funções da Pele</label>
+                        {{ form.b8_pele }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Componente 2 -->
+            <div class="cif-section">
+                <h3 class="cif-section-title"><i class="fas fa-person-running"></i> 2. Atividades e Participação</h3>
+                <p class="cif-section-desc">Avalia a capacidade do paciente de realizar tarefas no dia a dia.</p>
+                <div class="row g-3">
+                    <div class="col-md-6 cif-field"><label>d1 — Aprendizagem e Conhecimento</label>{{ form.d1_aprendizagem }}</div>
+                    <div class="col-md-6 cif-field"><label>d2 — Tarefas e Demandas Gerais</label>{{ form.d2_tarefas_gerais }}</div>
+                    <div class="col-md-6 cif-field"><label>d3 — Comunicação</label>{{ form.d3_comunicacao }}</div>
+                    <div class="col-md-6 cif-field"><label>d4 — Mobilidade (andar, correr, subir escadas)</label>{{ form.d4_mobilidade }}</div>
+                    <div class="col-md-6 cif-field"><label>d5 — Cuidado Pessoal</label>{{ form.d5_cuidado_pessoal }}</div>
+                    <div class="col-md-6 cif-field"><label>d6 — Vida Doméstica</label>{{ form.d6_vida_domestica }}</div>
+                    <div class="col-md-6 cif-field"><label>d7 — Relações Interpessoais</label>{{ form.d7_relacoes }}</div>
+                    <div class="col-md-6 cif-field"><label>d8/d9 — Esporte, Lazer, Educação</label>{{ form.d8_areas_principais }}</div>
+                </div>
+            </div>
+
+            <!-- Componente 3 -->
+            <div class="cif-section">
+                <h3 class="cif-section-title"><i class="fas fa-house"></i> 3. Fatores Ambientais</h3>
+                <p class="cif-section-desc">Avalia barreiras e facilitadores do ambiente em que o paciente vive.</p>
+                <div class="row g-3">
+                    <div class="col-md-6 cif-field"><label>e1 — Produtos e Tecnologia (muletas, órteses)</label>{{ form.e1_produtos_tecnologia }}</div>
+                    <div class="col-md-6 cif-field"><label>e2 — Ambiente Natural (clima, terreno)</label>{{ form.e2_ambiente_natural }}</div>
+                    <div class="col-md-6 cif-field"><label>e3 — Apoio e Relacionamentos (família, técnicos)</label>{{ form.e3_apoio_relacionamentos }}</div>
+                    <div class="col-md-6 cif-field"><label>e4 — Atitudes (individuais e sociais)</label>{{ form.e4_atitudes }}</div>
+                    <div class="col-md-6 cif-field"><label>e5 — Serviços, Sistemas e Políticas</label>{{ form.e5_servicos_sistemas }}</div>
+                </div>
+            </div>
+
+            <!-- Perfil -->
+            <div class="cif-section">
+                <h3 class="cif-section-title"><i class="fas fa-comment-medical"></i> Perfil Funcional</h3>
+                <p class="cif-section-desc">Descreva o quadro geral do paciente.</p>
+                <div class="cif-field">
+                    <label>Perfil de Funcionalidade</label>
+                    {{ form.perfil_funcionalidade }}
+                </div>
+                <div class="cif-field">
+                    <label>Objetivos baseados na CIF</label>
+                    {{ form.objetivos_cif }}
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 pt-4 border-top mt-4">
+                <button type="submit" class="btn-primary-custom">
+                    <i class="fas fa-save"></i> Salvar avaliação CIF
+                </button>
+                <a href="{% url 'prontuario:lista_cif' prontuario.id %}" class="btn-outline-custom">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

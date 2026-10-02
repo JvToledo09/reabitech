@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo }}{% endblock %}
+{% block page_title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— Prontuário · {{ prontuario.numero_prontuario }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-gauge-high"></i>
+            Escala de risco
+        </div>
+        <h1 class="page-header-title">
+            {{ titulo }} <span class="gradient-text">de risco.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            Berg, Morse, EVA, Glasgow, Barthel, ASHES, Borg e outras escalas validadas.
+        </p>
+    </div>
+
+    <div class="card-premium">
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Tipo de escala *</label>
+                    {{ form.tipo }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Nível de risco *</label>
+                    {{ form.nivel_risco }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Pontuação obtida *</label>
+                    {{ form.pontuacao }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Pontuação máxima *</label>
+                    {{ form.pontuacao_maxima }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Interpretação</label>
+                    {{ form.interpretacao }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Conduta recomendada</label>
+                    {{ form.conduta_recomendada }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Observações</label>
+                    {{ form.observacoes }}
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 pt-4 border-top mt-4">
+                <button type="submit" class="btn-primary-custom">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+                <a href="{% url 'prontuario:lista_escalas' prontuario.id %}" class="btn-outline-custom">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

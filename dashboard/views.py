@@ -21,6 +21,7 @@ from usuarios.models import Perfil, Atleta, ModalidadeEsportiva, Notificacao, Al
 from fisioterapia.models import Lesao, EvolucaoFisica, TratamentoFisioterapico, ExercicioRecuperacao
 from psicologia.models import AvaliacaoPsicologica, QuestionarioPeriodico
 from projetos.models import Projeto, MembroProjeto
+from prontuario.models import Prontuario
 from usuarios.decorators import perfil_required
 
 
@@ -577,6 +578,7 @@ def dashboard_coordenador(request):
         'chart_psi_labels': chart_psi_labels, 'chart_psi_data': chart_psi_data,
         'chart_perf_labels': chart_perf_labels, 'chart_perf_data': chart_perf_data,
         'alertas_recentes': alertas_recentes,
+        'total_prontuarios': Prontuario.objects.filter(projeto=projeto).count() if projeto else 0,
         'onboarding': onboarding,
         'onboarding_completo': onboarding_completo,
         'onboarding_progresso': onboarding_progresso,

@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo|default:"Formulário" }}{% endblock %}
+{% block page_title %}{{ titulo|default:"Formulário" }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— Prontuário · {{ prontuario.numero_prontuario }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-notes-medical"></i>
+            Triagem
+        </div>
+        <h1 class="page-header-title">
+            {{ titulo|default:"Nova triagem" }} <span class="gradient-text">— {{ prontuario.atleta.usuario.get_first_name }}.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            Preencha os dados da triagem inicial do paciente.
+        </p>
+    </div>
+
+    <div class="card-premium">
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- Grupo 1: Queixa principal -->
+            <div class="section-tag"><i class="fas fa-circle-exclamation"></i> Queixa Principal</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Queixa principal *</label>
+                    {{ form.queixa_principal }}
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label fw-bold">Descrição da queixa *</label>
+                    {{ form.descricao_queixa }}
+                </div>
+            </div>
+
+            <!-- Grupo 2: Histórico -->
+            <div class="section-tag"><i class="fas fa-book-medical"></i> Histórico Clínico</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">História da doença atual (HDA)</label>
+                    {{ form.historia_doenca_atual }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">História patológica pregressa (HPP)</label>
+                    {{ form.historia_pregressa }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Histórico familiar</label>
+                    {{ form.historico_familiar }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Cirurgias anteriores</label>
+                    {{ form.cirurgias_anteriores }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Medicamentos em uso</label>
+                    {{ form.medicamentos_uso }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Alergias</label>
+                    {{ form.alergias }}
+                </div>
+            </div>
+
+            <!-- Grupo 3: Sinais vitais -->
+            <div class="section-tag"><i class="fas fa-heart-pulse"></i> Sinais Vitais</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Pressão arterial</label>
+                    {{ form.pressao_arterial }}
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-bold">FC (bpm)</label>
+                    {{ form.frequencia_cardiaca }}
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-bold">FR (irpm)</label>
+                    {{ form.frequencia_respiratoria }}
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label fw-bold">Temp (°C)</label>
+                    {{ form.temperatura }}
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">SpO₂ (%)</label>
+                    {{ form.saturacao_o2 }}
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Peso (kg)</label>
+                    {{ form.peso }}
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Altura (cm)</label>
+                    {{ form.altura }}
+                </div>
+            </div>
+
+            <!-- Grupo 4: Exame físico -->
+            <div class="section-tag"><i class="fas fa-stethoscope"></i> Exame Físico</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Inspeção</label>
+                    {{ form.inspecao }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Palpação</label>
+                    {{ form.palpacao }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Ausculta</label>
+                    {{ form.ausculta }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-bold">Observações gerais</label>
+                    {{ form.observacoes }}
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="d-flex gap-2 pt-4 border-top">
+                <button type="submit" class="btn-primary-custom">
+                    <i class="fas fa-save"></i>
+                    {{ titulo|default:"Salvar" }}
+                </button>
+                <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" class="btn-outline-custom">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

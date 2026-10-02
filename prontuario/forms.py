@@ -40,8 +40,10 @@ class ProntuarioForm(forms.ModelForm):
     class Meta:
         model = Prontuario
         fields = [
-            'atleta', 'projeto', 'fisioterapeuta_responsavel',
-            'estagiarios', 'status', 'data_alta'
+            'fisioterapeuta_responsavel',
+            'estagiarios',
+            'status',
+            'data_alta',
         ]
         widgets = {
             'data_alta': forms.DateInput(attrs={'type': 'date'}),
