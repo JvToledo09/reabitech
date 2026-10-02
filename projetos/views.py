@@ -24,79 +24,81 @@ from usuarios.decorators import perfil_required
 # LANDING PAGE PÚBLICA
 # ==============================================================================
 def landing_page(request):
-    """
-    Página inicial pública do SaaS REABITECH.
-    Exibe:
-    - Vitrine de projetos parceiros (públicos)
-    - Seção de planos de assinatura
-    - CTAs para login e cadastro
-    """
-    # Se já estiver logado, redireciona para o dashboard
+    """Página inicial pública com números reais do sistema."""
     if request.user.is_authenticated:
         return redirect('dashboard:dashboard')
 
-    # Projetos parceiros (públicos e ativos)
+    from usuarios.models import Atleta
+    from fisioterapia.models import EvolucaoFisica, Lesao
+
     projetos_parceiros = Projeto.objects.filter(
-        ativo=True,
-        publico=True
+        ativo=True, publico=True
     ).order_by('-criado_em')[:6]
 
-    # Garante que existam planos cadastrados (cria automaticamente se vazio)
+    # 🔥 NOVO: Números reais
+    total_projetos = Projeto.objects.filter(ativo=True).count()
+
+    # Todos os atletas de todos os projetos ativos
+    from projetos.models import MembroProjeto
+    membros_ids = MembroProjeto.objects.filter(
+        ativo=True, projeto__ativo=True, tipo='atleta'
+    ).values_list('usuario_id', flat=True).distinct()
+    total_pacientes = len(set(membros_ids))
+
+    # Todos os profissionais
+    profissionais_ids = MembroProjeto.objects.filter(
+        ativo=True, projeto__ativo=True
+    ).exclude(tipo='atleta').values_list('usuario_id', flat=True).distinct()
+    total_profissionais = len(set(profissionais_ids))
+
+    # Total de evoluções físicas registradas
+    total_evolucoes = EvolucaoFisica.objects.count()
+
+    # Média de recuperação (se houver evoluções)
+    evolucoes = EvolucaoFisica.objects.all()
+    if evolucoes.exists():
+        media_recuperacao = sum(e.percentual_recuperacao for e in evolucoes) / evolucoes.count()
+        media_recuperacao = round(media_recuperacao, 1)
+    else:
+        media_recuperacao = 0
+
+    # Cria planos padrão se não existirem
     if not Plano.objects.exists():
         Plano.objects.create(
-            tipo='trial',
-            nome='Trial Grátis',
-            descricao='Ideal para começar e testar a plataforma por 30 dias.',
-            preco_mensal=0,
-            max_usuarios=5,
-            max_projetos=1,
-            modulos_inclusos=['fisioterapia'],
-            destaque=False,
-            ordem=1,
-            ativo=True,
+            tipo='trial', nome='Trial Grátis',
+            descricao='Ideal para testar a plataforma por 30 dias.',
+            preco_mensal=0, max_usuarios=5, max_projetos=1,
+            modulos_inclusos=['fisioterapia'], destaque=False, ordem=1, ativo=True,
         )
         Plano.objects.create(
-            tipo='profissional',
-            nome='Profissional',
-            descricao='Para clínicas, times e projetos que precisam de múltiplos módulos.',
-            preco_mensal=149.90,
-            max_usuarios=100,
-            max_projetos=3,
+            tipo='profissional', nome='Profissional',
+            descricao='Para clínicas, times e projetos com múltiplos módulos.',
+            preco_mensal=149.90, max_usuarios=100, max_projetos=3,
             modulos_inclusos=['fisioterapia', 'psicologia', 'tecnico'],
-            destaque=True,
-            ordem=2,
-            ativo=True,
+            destaque=True, ordem=2, ativo=True,
         )
         Plano.objects.create(
-            tipo='empresarial',
-            nome='Empresarial',
-            descricao='Sem limites. Todos os módulos, usuários e suporte prioritário.',
-            preco_mensal=399.90,
-            max_usuarios=10000,
-            max_projetos=999,
+            tipo='empresarial', nome='Empresarial',
+            descricao='Sem limites. Todos os módulos e suporte prioritário.',
+            preco_mensal=399.90, max_usuarios=10000, max_projetos=999,
             modulos_inclusos=['fisioterapia', 'psicologia', 'tecnico'],
-            destaque=False,
-            ordem=3,
-            ativo=True,
+            destaque=False, ordem=3, ativo=True,
         )
 
     planos = Plano.objects.filter(ativo=True).order_by('ordem', 'preco_mensal')
 
     context = {
         'projetos_parceiros': projetos_parceiros,
-        'projetos': projetos_parceiros,  # alias para compatibilidade
+        'projetos': projetos_parceiros,
         'planos': planos,
+        # 🔥 Números reais
+        'total_projetos': total_projetos,
+        'total_pacientes': total_pacientes,
+        'total_profissionais': total_profissionais,
+        'total_evolucoes': total_evolucoes,
+        'media_recuperacao': media_recuperacao,
     }
     return render(request, 'projetos/landing.html', context)
-
-
-# Alias para compatibilidade com código antigo
-def lista_projetos_publicos(request):
-    """
-    Alias de `landing_page` para compatibilidade.
-    Alguns templates/urls antigos chamam por este nome.
-    """
-    return landing_page(request)
 
 
 # ==============================================================================

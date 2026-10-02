@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.lista_prontuarios, name='lista_prontuarios'),
     path('novo/', views.selecionar_atleta_prontuario, name='selecionar_atleta_prontuario'),
     path('novo/<int:atleta_id>/', views.criar_prontuario, name='criar_prontuario'),
+    path('relatorio-consolidado/pdf/', views.relatorio_consolidado_pdf, name='relatorio_consolidado_pdf'),
     path('<int:prontuario_id>/', views.dashboard_prontuario, name='dashboard_prontuario'),
     path('<int:prontuario_id>/imprimir/', views.imprimir_prontuario, name='imprimir_prontuario'),
     path('<int:prontuario_id>/pdf/', views.exportar_pdf_prontuario, name='exportar_pdf_prontuario'),

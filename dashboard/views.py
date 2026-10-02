@@ -300,6 +300,45 @@ def dashboard_atleta(request):
         })
     timeline.sort(key=lambda x: x['data'], reverse=True)
 
+        # ==============================================
+    # 🔥 NOVO: Resumo do prontuário
+    # ==============================================
+    from prontuario.models import Prontuario, Objetivo, RelatorioDiario, EvolucaoFisioterapeutica
+
+    prontuario = None
+    if hasattr(atleta, 'prontuario'):
+        prontuario = atleta.prontuario
+
+    # Objetivos do atleta (progresso)
+    objetivos_atleta = []
+    if prontuario:
+        objetivos_atleta = prontuario.objetivos.order_by('prazo', 'data_definicao')[:5]
+
+    # Últimas sessões
+    ultimas_sessoes = []
+    if prontuario:
+        ultimas_sessoes = prontuario.relatorios_diarios.order_by('-data_sessao')[:5]
+
+    # Últimas evoluções
+    ultimas_evolucoes_atleta = []
+    if prontuario:
+        ultimas_evolucoes_atleta = prontuario.evolucoes_fisioterapeuticas.order_by('-data')[:5]
+
+    # Progresso dos objetivos
+    total_objetivos = 0
+    objetivos_alcancados = 0
+    if prontuario:
+        total_objetivos = prontuario.objetivos.count()
+        objetivos_alcancados = prontuario.objetivos.filter(status='alcancado').count()
+
+    # Média de dor das últimas sessões
+    dor_media = 0
+    if prontuario:
+        ultimas_5 = prontuario.relatorios_diarios.order_by('-data_sessao')[:5]
+        if ultimas_5.exists():
+            total_dor = sum(r.dor_fim for r in ultimas_5)
+            dor_media = round(total_dor / ultimas_5.count(), 1)
+
     context = {
         'atleta': atleta, 'projeto': projeto,
         'evolucoes': ultimas_evolucoes,
@@ -328,6 +367,14 @@ def dashboard_atleta(request):
         'chart_flexibilidade': chart_flexibilidade,
         'chart_percentual': chart_percentual,
         'timeline': timeline[:10],
+        'prontuario': prontuario,
+        'objetivos_atleta': objetivos_atleta,
+        'ultimas_sessoes': ultimas_sessoes,
+        'ultimas_evolucoes_atleta': ultimas_evolucoes_atleta,
+        'total_objetivos': total_objetivos,
+        'objetivos_alcancados': objetivos_alcancados,
+        'dor_media': dor_media,
+        
     }
     return render(request, 'dashboard/atleta/dashboard.html', context)
 
@@ -619,12 +666,21 @@ def dashboard_fisioterapeuta(request):
         resolvido=False, atleta__in=atletas
     ).count()
 
+    # últimos prontuários atualizados
+    from prontuario.models import Prontuario
+    ultimos_prontuarios = Prontuario.objects.filter(
+        projeto=projeto
+    ).select_related(
+        'atleta', 'atleta__usuario', 'fisioterapeuta_responsavel'
+    ).order_by('-ultima_movimentacao', '-criado_em')[:5]
+
     context = {
         'projeto': projeto,
         'atletas_em_atendimento': atletas,
         'total_tratamentos_ativos': tratamentos_ativos,
         'evolucoes_hoje': evolucoes_hoje,
         'alertas_ativos': alertas_ativos,
+        'ultimos_prontuarios': ultimos_prontuarios,
     }
     return render(request, 'dashboard/fisioterapeuta/dashboard.html', context)
 

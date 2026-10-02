@@ -28,7 +28,7 @@ from .forms import (
     EscalaRiscoForm, RelatorioDiarioForm, EncaminhamentoMedicoForm,
     ExameForm, EvolucaoFisioterapeuticaForm
 )
-from .pdf_utils import gerar_pdf_prontuario
+from .pdf_utils import gerar_pdf_prontuario, gerar_pdf_relatorio_consolidado
 
 
 # ==============================================================================
@@ -134,7 +134,10 @@ def dashboard_prontuario(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
 def lista_prontuarios(request):
-    """Lista todos os prontuários do projeto."""
+    """Lista todos os prontuários do projeto com filtros avançados."""
+    from datetime import timedelta
+    from django.utils import timezone
+
     projeto = get_projeto_ativo(request)
     if not projeto:
         messages.error(request, 'Nenhum projeto ativo.')
@@ -144,8 +147,12 @@ def lista_prontuarios(request):
         projeto=projeto
     ).select_related('atleta', 'atleta__usuario', 'fisioterapeuta_responsavel')
 
+    # Filtros
     status_filtro = request.GET.get('status', '')
     busca = request.GET.get('q', '')
+    periodo = request.GET.get('periodo', '')
+    data_ini = request.GET.get('data_ini', '')
+    data_fim = request.GET.get('data_fim', '')
 
     if status_filtro:
         prontuarios = prontuarios.filter(status=status_filtro)
@@ -158,6 +165,19 @@ def lista_prontuarios(request):
             Q(atleta__rm__icontains=busca)
         )
 
+    # Filtro por período
+    hoje = timezone.now()
+    if periodo == '7d':
+        prontuarios = prontuarios.filter(criado_em__gte=hoje - timedelta(days=7))
+    elif periodo == '30d':
+        prontuarios = prontuarios.filter(criado_em__gte=hoje - timedelta(days=30))
+    elif periodo == '90d':
+        prontuarios = prontuarios.filter(criado_em__gte=hoje - timedelta(days=90))
+    elif periodo == 'ano':
+        prontuarios = prontuarios.filter(criado_em__year=hoje.year)
+    elif data_ini and data_fim:
+        prontuarios = prontuarios.filter(criado_em__date__range=[data_ini, data_fim])
+
     prontuarios = prontuarios.order_by('-criado_em')
 
     paginator = Paginator(prontuarios, 20)
@@ -169,6 +189,9 @@ def lista_prontuarios(request):
         'prontuarios': prontuarios_paginados,
         'status_filtro': status_filtro,
         'busca': busca,
+        'periodo': periodo,
+        'data_ini': data_ini,
+        'data_fim': data_fim,
         'status_choices': Prontuario.STATUS_CHOICES,
         'total': paginator.count,
     }
@@ -1067,3 +1090,49 @@ def exportar_pdf_prontuario(request, prontuario_id):
     except Exception as e:
         messages.error(request, f'Erro ao gerar PDF: {e}')
         return redirect('prontuario:dashboard_prontuario', prontuario_id=prontuario.id)
+
+    # ==============================================================================
+# RELATÓRIO CONSOLIDADO — PDF COM TODOS OS PACIENTES
+# ==============================================================================
+from .pdf_utils import gerar_pdf_relatorio_consolidado
+
+
+@login_required
+@perfil_required('fisioterapeuta', 'coordenador')
+def relatorio_consolidado_pdf(request):
+    """Gera um PDF consolidado com todos os prontuários do projeto."""
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        messages.error(request, 'Nenhum projeto ativo.')
+        return redirect('dashboard:dashboard')
+
+    # Pega todos os prontuários (ou filtra por status, se passado)
+    status = request.GET.get('status', '')
+
+    prontuarios = Prontuario.objects.filter(
+        projeto=projeto
+    ).select_related(
+        'atleta', 'atleta__usuario', 'atleta__modalidade', 'fisioterapeuta_responsavel'
+    ).order_by('atleta__usuario__first_name')
+
+    if status:
+        prontuarios = prontuarios.filter(status=status)
+
+    if not prontuarios.exists():
+        messages.warning(request, 'Nenhum prontuário encontrado para gerar o relatório.')
+        return redirect('prontuario:lista_prontuarios')
+
+    try:
+        buffer = gerar_pdf_relatorio_consolidado(projeto, prontuarios)
+
+        nome_arquivo = f'relatorio-consolidado-{projeto.slug}-{date.today().strftime("%Y%m%d")}.pdf'
+
+        return FileResponse(
+            buffer,
+            as_attachment=True,
+            filename=nome_arquivo,
+            content_type='application/pdf',
+        )
+    except Exception as e:
+        messages.error(request, f'Erro ao gerar relatório: {e}')
+        return redirect('prontuario:lista_prontuarios')

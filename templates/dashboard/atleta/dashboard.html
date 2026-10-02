@@ -246,6 +246,135 @@
     </div>
     {% endif %}
 
+<!-- Progresso dos Objetivos -->
+{% if prontuario and objetivos_atleta %}
+<div class="card-modern p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold mb-0">
+            <i class="fas fa-bullseye me-2 text-success"></i>Meus Objetivos
+        </h5>
+        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">
+            {{ objetivos_alcancados }}/{{ total_objetivos }} alcançados
+        </span>
+    </div>
+
+    <div class="row g-3">
+        {% for obj in objetivos_atleta %}
+        <div class="col-md-6">
+            <div class="card p-3 border-0 shadow-sm rounded-4 h-100">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <span class="badge 
+                        {% if obj.prazo == 'curto' %}bg-success
+                        {% elif obj.prazo == 'medio' %}bg-warning
+                        {% else %}bg-info{% endif %} bg-opacity-10 
+                        {% if obj.prazo == 'curto' %}text-success
+                        {% elif obj.prazo == 'medio' %}text-warning
+                        {% else %}text-info{% endif %} rounded-pill">
+                        {{ obj.get_prazo_display }}
+                    </span>
+                    <span class="badge 
+                        {% if obj.status == 'alcancado' %}bg-success
+                        {% elif obj.status == 'em_andamento' %}bg-warning
+                        {% else %}bg-secondary{% endif %} bg-opacity-10 
+                        {% if obj.status == 'alcancado' %}text-success
+                        {% elif obj.status == 'em_andamento' %}text-warning
+                        {% else %}text-secondary{% endif %} rounded-pill">
+                        {{ obj.get_status_display }}
+                    </span>
+                </div>
+                <h6 class="fw-bold mb-2">{{ obj.titulo }}</h6>
+                {% if obj.descricao %}
+                <p class="small text-muted mb-3">{{ obj.descricao|truncatechars:100 }}</p>
+                {% endif %}
+                <div class="d-flex justify-content-between small mb-1">
+                    <span class="text-muted">Progresso</span>
+                    <strong class="text-success">{{ obj.percentual_alcancado }}%</strong>
+                </div>
+                <div class="progress" style="height: 8px; border-radius: 10px;">
+                    <div class="progress-bar bg-success" style="width: {{ obj.percentual_alcancado }}%"></div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Últimas Sessões -->
+{% if prontuario and ultimas_sessoes %}
+<div class="card-modern p-4 mb-4">
+    <h5 class="fw-bold mb-4">
+        <i class="fas fa-clipboard-check me-2 text-primary"></i>Minhas Últimas Sessões
+    </h5>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="bg-light text-muted small fw-bold">
+                <tr>
+                    <th>Data</th>
+                    <th>Duração</th>
+                    <th>Procedimentos</th>
+                    <th>Dor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in ultimas_sessoes %}
+                <tr>
+                    <td data-label="Data"><strong>{{ s.data_sessao|date:"d/m/Y" }}</strong></td>
+                    <td data-label="Duração">
+                        {{ s.horario_inicio|time:"H:i" }} - {{ s.horario_fim|time:"H:i" }}
+                    </td>
+                    <td data-label="Procedimentos">
+                        <span class="small">{{ s.procedimentos|truncatechars:80 }}</span>
+                    </td>
+                    <td data-label="Dor">
+                        <span class="badge 
+                            {% if s.dor_fim <= 3 %}bg-success bg-opacity-10 text-success
+                            {% elif s.dor_fim <= 6 %}bg-warning bg-opacity-10 text-warning
+                            {% else %}bg-danger bg-opacity-10 text-danger{% endif %} rounded-pill">
+                            {{ s.dor_inicio }} → {{ s.dor_fim }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if dor_media > 0 %}
+    <div class="alert alert-info mt-3 mb-0 rounded-4 d-flex align-items-center gap-2">
+        <i class="fas fa-chart-line"></i>
+        <span>
+            Sua média de dor nas últimas {{ ultimas_sessoes|length }} sessões é 
+            <strong>{{ dor_media }}/10</strong>. 
+            {% if dor_media <= 3 %} Continue assim! 🎉{% endif %}
+        </span>
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Prontuário -->
+{% if prontuario %}
+<div class="card-modern p-4 mb-4" style="background: linear-gradient(135deg, #2BA181 0%, #5A6461 100%); color: white;">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div class="d-flex align-items-center gap-3">
+            <div class="bg-white bg-opacity-25 rounded-circle p-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-folder-medical fa-xl"></i>
+            </div>
+            <div>
+                <h5 class="fw-bold mb-0">Meu Prontuário Clínico</h5>
+                <small class="opacity-75">Nº {{ prontuario.numero_prontuario }}</small>
+            </div>
+        </div>
+        <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" 
+           class="btn btn-light fw-bold">
+            Ver detalhes <i class="fas fa-arrow-right ms-1"></i>
+        </a>
+    </div>
+</div>
+{% endif %}
+
 </div>
 
 <!-- Dados para JavaScript -->

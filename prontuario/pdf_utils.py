@@ -574,3 +574,192 @@ def gerar_pdf_prontuario(prontuario):
 
     buffer.seek(0)
     return buffer
+
+# ==============================================================================
+# RELATÓRIO CONSOLIDADO — TODOS OS PACIENTES DO PROJETO
+# ==============================================================================
+def gerar_pdf_relatorio_consolidado(projeto, prontuarios):
+    """
+    Gera um PDF consolidado com resumo de todos os prontuários do projeto.
+    Ideal para apresentação mensal ou relatório de gestão.
+    """
+    buffer = BytesIO()
+
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=A4,
+        leftMargin=2 * cm,
+        rightMargin=2 * cm,
+        topMargin=2 * cm,
+        bottomMargin=1.8 * cm,
+        title=f'Relatório Consolidado — {projeto.nome}',
+        author='REABITECH',
+    )
+
+    estilos = get_estilos()
+    story = []
+
+    # ==========================================================
+    # CAPA
+    # ==========================================================
+    story.append(Spacer(1, 3 * cm))
+    story.append(Paragraph('REABITECH', estilos['capa_titulo']))
+    story.append(Paragraph('Plataforma de Reabilitação', estilos['capa_subtitulo']))
+
+    story.append(Spacer(1, 1.5 * cm))
+
+    story.append(Paragraph('<b>RELATÓRIO CONSOLIDADO</b>', ParagraphStyle(
+        'CapaDoc', parent=estilos['capa_titulo'],
+        fontSize=20, textColor=COR_TEXTO
+    )))
+
+    story.append(Spacer(1, 0.5 * cm))
+    story.append(Paragraph(projeto.nome, estilos['capa_subtitulo']))
+
+    story.append(Spacer(1, 1.5 * cm))
+
+    # Info do projeto
+    info_projeto = [
+        ['Projeto:', projeto.nome],
+        ['Tipo:', projeto.get_tipo_display()],
+        ['Coordenador:', projeto.coordenador.get_full_name() or projeto.coordenador.username],
+        ['Total de prontuários:', str(prontuarios.count())],
+        ['Data de emissão:', datetime.now().strftime('%d/%m/%Y às %H:%M')],
+    ]
+    tabela_capa = Table(info_projeto, colWidths=[6 * cm, 10 * cm])
+    tabela_capa.setStyle(TableStyle([
+        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+        ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),
+        ('TEXTCOLOR', (0, 0), (0, -1), COR_CINZA),
+        ('TEXTCOLOR', (1, 0), (1, -1), COR_TEXTO),
+        ('LEFTPADDING', (0, 0), (-1, -1), 0),
+        ('TOPPADDING', (0, 0), (-1, -1), 6),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+        ('LINEBELOW', (0, 0), (-1, -2), 0.3, COR_BORDA),
+    ]))
+    story.append(tabela_capa)
+
+    story.append(PageBreak())
+
+    # ==========================================================
+    # SUMÁRIO GERAL
+    # ==========================================================
+    story.append(Paragraph('Sumário Geral', estilos['section_title']))
+
+    total = prontuarios.count()
+    ativos = prontuarios.filter(status='ativo').count()
+    alta = prontuarios.filter(status='alta').count()
+    arquivados = prontuarios.filter(status='arquivado').count()
+
+    # Conta profissionais
+    profissionais_set = set()
+    for p in prontuarios:
+        if p.fisioterapeuta_responsavel:
+            profissionais_set.add(p.fisioterapeuta_responsavel.id)
+
+    # Conta pacientes por modalidade
+    modalidades = {}
+    for p in prontuarios:
+        if p.atleta.modalidade:
+            nome = p.atleta.modalidade.nome
+            modalidades[nome] = modalidades.get(nome, 0) + 1
+
+    sumario_data = [
+        ['Métrica', 'Valor'],
+        ['Total de prontuários', str(total)],
+        ['Pacientes ativos', str(ativos)],
+        ['Pacientes com alta', str(alta)],
+        ['Prontuários arquivados', str(arquivados)],
+        ['Profissionais envolvidos', str(len(profissionais_set))],
+    ]
+    tabela = Table(sumario_data, colWidths=[10 * cm, 5 * cm])
+    tabela.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), COR_VERDE_CLARO),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('TEXTCOLOR', (0, 0), (-1, 0), COR_VERDE_ESCURO),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),
+        ('GRID', (0, 0), (-1, -1), 0.5, COR_BORDA),
+        ('LEFTPADDING', (0, 0), (-1, -1), 10),
+        ('TOPPADDING', (0, 0), (-1, -1), 8),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+    ]))
+    story.append(tabela)
+
+    story.append(Spacer(1, 20))
+
+    # Distribuição por modalidade
+    if modalidades:
+        story.append(Paragraph('Distribuição por Modalidade', estilos['section_title']))
+        mod_data = [['Modalidade', 'Pacientes']]
+        for nome, qtd in sorted(modalidades.items(), key=lambda x: -x[1]):
+            mod_data.append([nome, str(qtd)])
+
+        tabela = Table(mod_data, colWidths=[10 * cm, 5 * cm])
+        tabela.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), COR_VERDE_CLARO),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('TEXTCOLOR', (0, 0), (-1, 0), COR_VERDE_ESCURO),
+            ('FONTSIZE', (0, 0), (-1, -1), 10),
+            ('GRID', (0, 0), (-1, -1), 0.5, COR_BORDA),
+            ('LEFTPADDING', (0, 0), (-1, -1), 10),
+            ('TOPPADDING', (0, 0), (-1, -1), 8),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+        ]))
+        story.append(tabela)
+
+    story.append(PageBreak())
+
+    # ==========================================================
+    # LISTA DETALHADA DE PACIENTES
+    # ==========================================================
+    story.append(Paragraph('Lista de Pacientes', estilos['section_title']))
+
+    for p in prontuarios:
+        atleta = p.atleta
+
+        # Bloco do paciente
+        bloco = []
+
+        # Cabeçalho do paciente
+        bloco.append(Paragraph(
+            f'<b>{atleta.usuario.get_full_name() or atleta.usuario.username}</b> — '
+            f'{p.numero_prontuario}',
+            estilos['body']
+        ))
+
+        # Info básica
+        info_paciente = [
+            f'<b>RM:</b> {atleta.rm or "—"}',
+            f'<b>Modalidade:</b> {atleta.modalidade.nome if atleta.modalidade else "—"}',
+            f'<b>Status:</b> {p.get_status_display()}',
+            f'<b>Fisioterapeuta:</b> {p.fisioterapeuta_responsavel.get_full_name() if p.fisioterapeuta_responsavel else "—"}',
+        ]
+        bloco.append(Spacer(1, 4))
+        bloco.append(Paragraph(' | '.join(info_paciente), estilos['small']))
+
+        # Contadores
+        contadores = [
+            f'Triagens: {p.triagens.count()}',
+            f'Objetivos: {p.objetivos.count()}',
+            f'Medicamentos: {p.medicamentos.filter(status="ativo").count()}',
+            f'CIF: {p.avaliacoes_cif.count()}',
+            f'Cardio: {p.avaliacoes_cardiorrespiratorias.count()}',
+            f'Escalas: {p.escalas_risco.count()}',
+            f'Sessões: {p.relatorios_diarios.count()}',
+            f'Evoluções: {p.evolucoes_fisioterapeuticas.count()}',
+            f'Exames: {p.exames.count()}',
+        ]
+        bloco.append(Spacer(1, 4))
+        bloco.append(Paragraph(' · '.join(contadores), estilos['small']))
+
+        bloco.append(Spacer(1, 14))
+        story.append(KeepTogether(bloco))
+
+    # ==========================================================
+    # GERAR PDF
+    # ==========================================================
+    doc.build(story, onFirstPage=desenhar_cabecalho_rodape, onLaterPages=desenhar_cabecalho_rodape)
+
+    buffer.seek(0)
+    return buffer

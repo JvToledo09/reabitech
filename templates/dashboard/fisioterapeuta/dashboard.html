@@ -152,6 +152,64 @@
         </div>
     </div>
 
+<!-- Prontuários recentes -->
+{% if ultimos_prontuarios %}
+<div class="card-modern p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold mb-0">
+            <i class="fas fa-folder-medical me-2 text-primary"></i>Prontuários Recentes
+        </h5>
+        <a href="{% url 'prontuario:lista_prontuarios' %}" class="btn btn-sm btn-outline-custom">
+            Ver todos <i class="fas fa-arrow-right ms-1"></i>
+        </a>
+    </div>
+
+    <div class="row g-3">
+        {% for p in ultimos_prontuarios %}
+        <div class="col-md-6 col-lg-4">
+            <a href="{% url 'prontuario:dashboard_prontuario' p.id %}"
+               class="text-decoration-none text-dark">
+                <div class="card p-3 border-0 shadow-sm rounded-4 h-100" style="transition: all 0.3s ease;"
+                     onmouseover="this.style.transform='translateY(-4px)'"
+                     onmouseout="this.style.transform='translateY(0)'">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3"
+                             style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+                            <span style="font-weight: 800; color: var(--primary);">
+                                {{ p.atleta.usuario.get_full_name|default:p.atleta.usuario.username|first|upper }}
+                            </span>
+                        </div>
+                        <div class="flex-grow-1" style="min-width: 0;">
+                            <h6 class="fw-bold mb-0 text-truncate">
+                                {{ p.atleta.usuario.get_full_name|default:p.atleta.usuario.username }}
+                            </h6>
+                            <small class="text-muted">{{ p.numero_prontuario }}</small>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center small">
+                        <span class="text-muted">
+                            {% if p.ultima_movimentacao %}
+                                <i class="far fa-clock me-1"></i>
+                                {{ p.ultima_movimentacao|date:"d/m/Y" }}
+                            {% else %}
+                                <i class="far fa-calendar me-1"></i>
+                                {{ p.data_abertura|date:"d/m/Y" }}
+                            {% endif %}
+                        </span>
+                        <span class="badge {% if p.status == 'ativo' %}bg-success{% else %}bg-secondary{% endif %} bg-opacity-10 
+                            {% if p.status == 'ativo' %}text-success{% else %}text-secondary{% endif %} rounded-pill">
+                            {{ p.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
     <!-- Atletas em Recuperação -->
     <div class="card-modern p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">

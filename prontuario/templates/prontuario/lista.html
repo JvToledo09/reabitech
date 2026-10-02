@@ -178,38 +178,64 @@
         <span class="pulse-dot"></span>
         <small class="text-muted">{{ total }} prontuário{{ total|pluralize }} no projeto</small>
     </div>
-    <a href="{% url 'prontuario:selecionar_atleta_prontuario' %}" class="btn-primary-custom">
-        <i class="fas fa-folder-plus"></i> Novo prontuário
-    </a>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <a href="{% url 'prontuario:relatorio_consolidado_pdf' %}" 
+           class="btn-outline-custom" 
+           target="_blank"
+           title="Baixar relatório com todos os prontuários em PDF">
+            <i class="fas fa-file-pdf"></i> Relatório Consolidado
+        </a>
+        <a href="{% url 'prontuario:selecionar_atleta_prontuario' %}" class="btn-primary-custom">
+            <i class="fas fa-folder-plus"></i> Novo prontuário
+        </a>
+    </div>
 </div>
 
     <!-- Filtros -->
-    <div class="card-premium mb-4" style="padding: 20px;">
-        <form method="GET" class="row g-3 align-items-end">
-            <div class="col-md-6">
-                <label class="form-label">Pesquisar</label>
-                <input type="text" name="q" value="{{ busca|default:'' }}"
-                       class="form-control" placeholder="Nome, RM ou número do prontuário...">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Status</label>
-                <select name="status" class="form-select">
-                    <option value="">Todos os status</option>
-                    {% for valor, label in status_choices %}
-                    <option value="{{ valor }}" {% if status_filtro == valor %}selected{% endif %}>{{ label }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-2 d-flex gap-2">
-                <button type="submit" class="btn-primary-custom flex-grow-1">
-                    <i class="fas fa-search"></i> Filtrar
-                </button>
-                <a href="{% url 'prontuario:lista_prontuarios' %}" class="btn-outline-custom">
-                    <i class="fas fa-times"></i>
-                </a>
-            </div>
-        </form>
-    </div>
+<div class="card-premium mb-4" style="padding: 20px;">
+    <form method="GET" class="row g-3 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label">Pesquisar</label>
+            <input type="text" name="q" value="{{ busca|default:'' }}"
+                   class="form-control" placeholder="Nome, RM ou número...">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-select">
+                <option value="">Todos</option>
+                {% for valor, label in status_choices %}
+                <option value="{{ valor }}" {% if status_filtro == valor %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Período</label>
+            <select name="periodo" class="form-select">
+                <option value="">Todo período</option>
+                <option value="7d" {% if periodo == '7d' %}selected{% endif %}>Últimos 7 dias</option>
+                <option value="30d" {% if periodo == '30d' %}selected{% endif %}>Últimos 30 dias</option>
+                <option value="90d" {% if periodo == '90d' %}selected{% endif %}>Últimos 90 dias</option>
+                <option value="ano" {% if periodo == 'ano' %}selected{% endif %}>Este ano</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Data inicial</label>
+            <input type="date" name="data_ini" value="{{ data_ini|default:'' }}" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Data final</label>
+            <input type="date" name="data_fim" value="{{ data_fim|default:'' }}" class="form-control">
+        </div>
+        <div class="col-12 d-flex gap-2">
+            <button type="submit" class="btn-primary-custom">
+                <i class="fas fa-filter"></i> Filtrar
+            </button>
+            <a href="{% url 'prontuario:lista_prontuarios' %}" class="btn-outline-custom">
+                <i class="fas fa-times"></i> Limpar
+            </a>
+        </div>
+    </form>
+</div>
 
     <!-- Lista -->
     {% if prontuarios %}

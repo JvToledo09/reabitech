@@ -2100,30 +2100,30 @@
     </div>
 
     <!-- ESTATÍSTICAS -->
-    <section class="lp-stats">
-        <div class="lp-stats-grid">
-            <div class="lp-stat-card reveal">
-                <div class="lp-stat-icon"><i class="fas fa-user-group"></i></div>
-                <div class="lp-stat-number" data-counter="500" data-suffix="+">0</div>
-                <div class="lp-stat-label">Pacientes acompanhados</div>
-            </div>
-            <div class="lp-stat-card reveal delay-1">
-                <div class="lp-stat-icon"><i class="fas fa-heart-pulse"></i></div>
-                <div class="lp-stat-number" data-counter="98" data-suffix="%">0</div>
-                <div class="lp-stat-label">Taxa de recuperação</div>
-            </div>
-            <div class="lp-stat-card reveal delay-2">
-                <div class="lp-stat-icon"><i class="fas fa-user-md"></i></div>
-                <div class="lp-stat-number" data-counter="45" data-suffix="+">0</div>
-                <div class="lp-stat-label">Profissionais ativos</div>
-            </div>
-            <div class="lp-stat-card reveal delay-3">
-                <div class="lp-stat-icon"><i class="fas fa-notes-medical"></i></div>
-                <div class="lp-stat-number" data-counter="1200" data-suffix="+">0</div>
-                <div class="lp-stat-label">Tratamentos realizados</div>
-            </div>
+   <section class="lp-stats">
+    <div class="lp-stats-grid">
+        <div class="lp-stat-card ds-reveal">
+            <div class="lp-stat-icon"><i class="fas fa-user-group"></i></div>
+            <div class="lp-stat-number" data-counter="{{ total_pacientes }}" data-suffix="+">0</div>
+            <div class="lp-stat-label">Pacientes acompanhados</div>
         </div>
-    </section>
+        <div class="lp-stat-card ds-reveal ds-delay-1">
+            <div class="lp-stat-icon"><i class="fas fa-heart-pulse"></i></div>
+            <div class="lp-stat-number" data-counter="{{ media_recuperacao }}" data-suffix="%" data-decimal="1">0</div>
+            <div class="lp-stat-label">Recuperação média</div>
+        </div>
+        <div class="lp-stat-card ds-reveal ds-delay-2">
+            <div class="lp-stat-icon"><i class="fas fa-user-md"></i></div>
+            <div class="lp-stat-number" data-counter="{{ total_profissionais }}" data-suffix="+">0</div>
+            <div class="lp-stat-label">Profissionais ativos</div>
+        </div>
+        <div class="lp-stat-card ds-reveal ds-delay-3">
+            <div class="lp-stat-icon"><i class="fas fa-notes-medical"></i></div>
+            <div class="lp-stat-number" data-counter="{{ total_evolucoes }}" data-suffix="+">0</div>
+            <div class="lp-stat-label">Avaliações registradas</div>
+        </div>
+    </div>
+</section>
 
     <!-- RECURSOS -->
     <section class="lp-features" id="recursos">
@@ -2776,29 +2776,38 @@
 
             // ============================================================
             // 4. CONTADORES
+            // CONTADORES ANIMADOS (com suporte a decimais)
             // ============================================================
-            const counters = document.querySelectorAll('[data-counter]');
-            const counterObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const el = entry.target;
-                        const target = parseInt(el.dataset.counter);
-                        const suffix = el.dataset.suffix || '';
-                        const duration = 2000;
-                        const start = performance.now();
+const counters = document.querySelectorAll('[data-counter]');
+const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const el = entry.target;
+            const target = parseFloat(el.dataset.counter);
+            const suffix = el.dataset.suffix || '';
+            const decimal = el.dataset.decimal === '1';
+            const duration = 2000;
+            const start = performance.now();
 
-                        function tick(now) {
-                            const progress = Math.min((now - start) / duration, 1);
-                            const eased = 1 - Math.pow(1 - progress, 3);
-                            el.textContent = Math.floor(eased * target).toLocaleString('pt-BR') + suffix;
-                            if (progress < 1) requestAnimationFrame(tick);
-                        }
-                        requestAnimationFrame(tick);
-                        counterObserver.unobserve(el);
-                    }
-                });
-            }, { threshold: 0.5 });
-            counters.forEach(c => counterObserver.observe(c));
+            function tick(now) {
+                const progress = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const valor = eased * target;
+
+                if (decimal) {
+                    el.textContent = valor.toFixed(1).replace('.', ',') + suffix;
+                } else {
+                    el.textContent = Math.floor(valor).toLocaleString('pt-BR') + suffix;
+                }
+
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+            counterObserver.unobserve(el);
+        }
+    });
+}, { threshold: 0.5 });
+counters.forEach(c => counterObserver.observe(c));
 
             // ============================================================
             // 5. CARD 3D
