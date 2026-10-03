@@ -40,3 +40,9 @@ atletas_completo.txt
 mapa_arquitetura_reabitech.txt
 lista_atletas.py
 prepara_codigo_deepseek.py
+
+# Pasta duplicada do projeto (não versionar)
+reabitech/
+# Pasta antiga duplicada do projeto
+reabitech/
+reabitech_old_backup/
