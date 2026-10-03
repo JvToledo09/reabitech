@@ -1,6 +1,42 @@
+# ==============================================================================
+# REABITECH — .gitignore
+# ==============================================================================
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
+*.pyd
+.Python
+*.so
+*.egg-info/
+build/
+dist/
+
+# Django
+*.sqlite3
 db.sqlite3
+db_backup_*.sqlite3
+*.log
 .env
-venv/
+.env.*
+
+# Media e Static gerados
+media/
+staticfiles/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Arquivos temporários do TCC
+codigo_deepseek_parte_*.txt
+auditoria.txt
+arquivos_*.txt
+atletas_completo.txt
+mapa_arquitetura_reabitech.txt
+lista_atletas.py
+prepara_codigo_deepseek.py

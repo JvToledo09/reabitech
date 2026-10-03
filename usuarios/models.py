@@ -89,13 +89,126 @@ class Notificacao(models.Model):
         
 
 class Auditoria(models.Model):
-    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    acao = models.CharField(max_length=200)
-    descricao = models.TextField()
-    data = models.DateTimeField(auto_now_add=True)
-    
+    """
+    Registro de todas as ações importantes do sistema.
+    Usado para compliance, auditoria e rastreamento de alterações.
+    """
+    ACAO_CHOICES = [
+        ('criar', 'Criação'),
+        ('editar', 'Edição'),
+        ('deletar', 'Exclusão'),
+        ('visualizar', 'Visualização'),
+        ('login', 'Login'),
+        ('logout', 'Logout'),
+        ('exportar', 'Exportação'),
+        ('importar', 'Importação'),
+    ]
+
+    # Quem fez
+    usuario = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='auditorias',
+        verbose_name='Usuário'
+    )
+
+    # O que fez
+    acao = models.CharField(
+        max_length=20,
+        choices=ACAO_CHOICES,
+        verbose_name='Ação'
+    )
+    modelo = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name='Modelo Afetado',
+        help_text='Ex: Prontuario, Lesao, Atleta'
+    )
+    objeto_id = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name='ID do Objeto'
+    )
+    objeto_repr = models.CharField(
+        max_length=300,
+        blank=True,
+        verbose_name='Representação do Objeto',
+        help_text='String do objeto no momento da ação'
+    )
+    descricao = models.TextField(
+        blank=True,
+        verbose_name='Descrição Detalhada'
+    )
+
+    # De onde fez
+    ip = models.GenericIPAddressField(
+        null=True,
+        blank=True,
+        verbose_name='Endereço IP'
+    )
+    user_agent = models.CharField(
+        max_length=300,
+        blank=True,
+        verbose_name='User Agent'
+    )
+
+    # Projeto (multi-tenant)
+    projeto = models.ForeignKey(
+        'projetos.Projeto',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='auditorias',
+        verbose_name='Projeto'
+    )
+
+    # Quando
+    criado_em = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Data/Hora'
+    )
+
+    class Meta:
+        ordering = ['-criado_em']
+        verbose_name = 'Auditoria'
+        verbose_name_plural = 'Auditorias'
+        indexes = [
+            models.Index(fields=['usuario', '-criado_em']),
+            models.Index(fields=['modelo', 'objeto_id']),
+            models.Index(fields=['-criado_em']),
+        ]
+
     def __str__(self):
-        return f"{self.usuario} - {self.acao} - {self.data}"
+        return f"{self.usuario} - {self.get_acao_display()} {self.modelo} #{self.objeto_id}"
+
+    @property
+    def cor(self):
+        """Cor para exibir na interface."""
+        return {
+            'criar': 'success',
+            'editar': 'warning',
+            'deletar': 'danger',
+            'visualizar': 'info',
+            'login': 'primary',
+            'logout': 'secondary',
+            'exportar': 'info',
+            'importar': 'warning',
+        }.get(self.acao, 'secondary')
+
+    @property
+    def icone(self):
+        """Ícone FontAwesome para exibir."""
+        return {
+            'criar': 'fa-plus-circle',
+            'editar': 'fa-edit',
+            'deletar': 'fa-trash-alt',
+            'visualizar': 'fa-eye',
+            'login': 'fa-sign-in-alt',
+            'logout': 'fa-sign-out-alt',
+            'exportar': 'fa-file-export',
+            'importar': 'fa-file-import',
+        }.get(self.acao, 'fa-info-circle')
 
 class Alerta(models.Model):
     # Alertas de recuperação (Ex: Dor subiu para 8, falta exercício)

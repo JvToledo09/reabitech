@@ -59,6 +59,48 @@ def criar_notificacao(usuario, titulo, mensagem, link=None):
 
 
 # ==============================================================================
+# HELPER — Restrição de atletas por modalidade do técnico
+# ==============================================================================
+def _get_modalidade_do_tecnico(request, projeto):
+    """Retorna a ModalidadeEsportiva do técnico no projeto, ou None."""
+    membro = MembroProjeto.objects.filter(
+        projeto=projeto, usuario=request.user, ativo=True, tipo='tecnico'
+    ).select_related('modalidade').first()
+    return membro.modalidade if membro and membro.modalidade else None
+
+
+def _atletas_do_tecnico(request, projeto):
+    """
+    Retorna o queryset de atletas que o técnico PODE ver:
+      1. Tenta por 'tecnico_responsavel' direto
+      2. Se vazio, filtra por modalidade do técnico
+      3. Se ainda vazio, mostra todos do projeto (fallback)
+    """
+    membros_ids = MembroProjeto.objects.filter(
+        projeto=projeto, ativo=True, tipo='atleta'
+    ).values_list('usuario', flat=True)
+
+    base = Atleta.objects.filter(
+        usuario__in=membros_ids
+    ).select_related('usuario', 'modalidade').distinct()
+
+    # 1) Por técnico responsável
+    por_responsavel = base.filter(tecnico_responsavel=request.user)
+    if por_responsavel.exists():
+        return por_responsavel
+
+    # 2) Por modalidade
+    modalidade = _get_modalidade_do_tecnico(request, projeto)
+    if modalidade:
+        por_modalidade = base.filter(modalidade=modalidade)
+        if por_modalidade.exists():
+            return por_modalidade
+
+    # 3) Fallback
+    return base
+
+
+# ==============================================================================
 # 1. LOGIN (aceita username, email, RM)
 # ==============================================================================
 def login_view(request):
@@ -300,38 +342,31 @@ def dashboard_atleta(request):
         })
     timeline.sort(key=lambda x: x['data'], reverse=True)
 
-        # ==============================================
-    # 🔥 NOVO: Resumo do prontuário
-    # ==============================================
+    # Resumo do prontuário
     from prontuario.models import Prontuario, Objetivo, RelatorioDiario, EvolucaoFisioterapeutica
 
     prontuario = None
     if hasattr(atleta, 'prontuario'):
         prontuario = atleta.prontuario
 
-    # Objetivos do atleta (progresso)
     objetivos_atleta = []
     if prontuario:
         objetivos_atleta = prontuario.objetivos.order_by('prazo', 'data_definicao')[:5]
 
-    # Últimas sessões
     ultimas_sessoes = []
     if prontuario:
         ultimas_sessoes = prontuario.relatorios_diarios.order_by('-data_sessao')[:5]
 
-    # Últimas evoluções
     ultimas_evolucoes_atleta = []
     if prontuario:
         ultimas_evolucoes_atleta = prontuario.evolucoes_fisioterapeuticas.order_by('-data')[:5]
 
-    # Progresso dos objetivos
     total_objetivos = 0
     objetivos_alcancados = 0
     if prontuario:
         total_objetivos = prontuario.objetivos.count()
         objetivos_alcancados = prontuario.objetivos.filter(status='alcancado').count()
 
-    # Média de dor das últimas sessões
     dor_media = 0
     if prontuario:
         ultimas_5 = prontuario.relatorios_diarios.order_by('-data_sessao')[:5]
@@ -374,7 +409,6 @@ def dashboard_atleta(request):
         'total_objetivos': total_objetivos,
         'objetivos_alcancados': objetivos_alcancados,
         'dor_media': dor_media,
-        
     }
     return render(request, 'dashboard/atleta/dashboard.html', context)
 
@@ -390,17 +424,7 @@ def dashboard_tecnico(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    membros_usuario_ids = MembroProjeto.objects.filter(
-        projeto=projeto, ativo=True, tipo='atleta'
-    ).values_list('usuario', flat=True)
-
-    meus_atletas = Atleta.objects.filter(
-        tecnico_responsavel=request.user,
-        usuario__in=membros_usuario_ids
-    ).distinct()
-
-    if not meus_atletas.exists():
-        meus_atletas = Atleta.objects.filter(usuario__in=membros_usuario_ids).distinct()
+    meus_atletas = _atletas_do_tecnico(request, projeto)
 
     total_atletas = meus_atletas.count()
     lesionados = meus_atletas.filter(lesoes__tratamentos__ativo=True).distinct().count()
@@ -411,7 +435,10 @@ def dashboard_tecnico(request):
     ).aggregate(Avg('desempenho'))['desempenho__avg'] or 0
 
     evolucoes = EvolucaoFisica.objects.filter(atleta__in=meus_atletas, projeto=projeto)
-    recuperacao_media = sum(e.percentual_recuperacao for e in evolucoes) / evolucoes.count() if evolucoes.exists() else 0
+    recuperacao_media = (
+        sum(e.percentual_recuperacao for e in evolucoes) / evolucoes.count()
+        if evolucoes.exists() else 0
+    )
 
     atletas_detalhados = []
     for atleta in meus_atletas:
@@ -435,7 +462,10 @@ def dashboard_tecnico(request):
     top_atletas = atletas_detalhados[:3]
     atletas_atencao = [a for a in atletas_detalhados if a['status'] == 'lesionado'][:3]
 
-    chart_atletas_labels = [a['atleta'].usuario.get_full_name() or a['atleta'].usuario.username for a in atletas_detalhados[:8]]
+    chart_atletas_labels = [
+        a['atleta'].usuario.get_full_name() or a['atleta'].usuario.username
+        for a in atletas_detalhados[:8]
+    ]
     chart_atletas_data = [a['desempenho'] for a in atletas_detalhados[:8]]
     chart_status_data = [lesionados, liberados]
 
@@ -449,7 +479,7 @@ def dashboard_tecnico(request):
         agrupado[e.data_registro.strftime('%d/%m')].append(e.desempenho)
 
     chart_evo_labels = list(agrupado.keys())[::-1]
-    chart_evo_data = [round(sum(v)/len(v), 1) for v in list(agrupado.values())[::-1]]
+    chart_evo_data = [round(sum(v) / len(v), 1) for v in list(agrupado.values())[::-1]]
 
     timeline = []
     for a in atletas_detalhados[:5]:
@@ -570,9 +600,7 @@ def dashboard_coordenador(request):
 
         alertas_recentes = Alerta.objects.filter(resolvido=False).order_by('-criado_em')[:5]
 
-        # ==============================================
-        # 🔥 ONBOARDING — Passos iniciais do coordenador
-        # ==============================================
+        # ONBOARDING — Passos iniciais do coordenador
         total_membros = MembroProjeto.objects.filter(projeto=projeto, ativo=True).count()
         total_pacientes = MembroProjeto.objects.filter(
             projeto=projeto, ativo=True, tipo='atleta'
@@ -657,7 +685,6 @@ def dashboard_fisioterapeuta(request):
         ativo=True, lesao__projeto=projeto
     ).count()
 
-    from datetime import date
     evolucoes_hoje = EvolucaoFisica.objects.filter(
         projeto=projeto, data_registro=date.today()
     ).count()
@@ -666,8 +693,6 @@ def dashboard_fisioterapeuta(request):
         resolvido=False, atleta__in=atletas
     ).count()
 
-    # últimos prontuários atualizados
-    from prontuario.models import Prontuario
     ultimos_prontuarios = Prontuario.objects.filter(
         projeto=projeto
     ).select_related(
@@ -871,6 +896,7 @@ def coordenador_relatorios(request):
     }
     return render(request, 'dashboard/coordenador/relatorios.html', context)
 
+
 @login_required
 @perfil_required('coordenador')
 def coordenador_membros(request):
@@ -879,10 +905,9 @@ def coordenador_membros(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    # 🔥 CORREÇÃO: remove 'modalidade' do select_related (é CharField, não FK)
     todos = MembroProjeto.objects.filter(
         projeto=projeto, ativo=True
-    ).select_related('usuario').order_by(
+    ).select_related('usuario', 'modalidade').order_by(
         'tipo', 'usuario__first_name', 'usuario__last_name'
     )
 
@@ -897,34 +922,6 @@ def coordenador_membros(request):
     filtro_tipo = request.GET.get('tipo', '')
     filtro_sexo = request.GET.get('sexo', '')
     filtro_modalidade = request.GET.get('modalidade', '')
-
-    if query:
-        membros_unicos = [m for m in membros_unicos if
-                          query.lower() in m.usuario.get_full_name().lower() or
-                          query.lower() in m.usuario.username.lower() or
-                          query.lower() in (m.usuario.email or '').lower()]
-    if filtro_tipo:
-        membros_unicos = [m for m in membros_unicos if m.tipo == filtro_tipo]
-    if filtro_sexo:
-        membros_unicos = [m for m in membros_unicos if m.sexo == filtro_sexo]
-    if filtro_modalidade:
-        membros_unicos = [m for m in membros_unicos if m.modalidade == filtro_modalidade]
-
-    modalidades = ModalidadeEsportiva.objects.all()
-    tipos = MembroProjeto.TIPO_MEMBRO
-    sexos = MembroProjeto.SEXO_CHOICES
-
-    return render(request, 'dashboard/coordenador/membros.html', {
-        'projeto': projeto,
-        'membros': membros_unicos,
-        'modalidades': modalidades,
-        'tipos': tipos,
-        'sexos': sexos,
-        'query': query,
-        'filtro_tipo': filtro_tipo,
-        'filtro_sexo': filtro_sexo,
-        'filtro_modalidade': filtro_modalidade,
-    })
 
     if query:
         membros_unicos = [m for m in membros_unicos if
@@ -1017,7 +1014,8 @@ def coordenador_adicionar_membro(request):
                     projeto=projeto, usuario=novo_user,
                     defaults={
                         'tipo': nova_funcao, 'sexo': novo_sexo,
-                        'modalidade_id': nova_modalidade, 'ativo': True
+                        'modalidade_id': nova_modalidade if nova_modalidade else None,
+                        'ativo': True
                     }
                 )
 
@@ -1082,17 +1080,54 @@ def tecnico_atletas(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    membros_usuario_ids = MembroProjeto.objects.filter(
-        projeto=projeto, ativo=True
-    ).values_list('usuario', flat=True)
-    atletas = Atleta.objects.filter(
-        tecnico_responsavel=request.user,
-        usuario__in=membros_usuario_ids
-    ).distinct()
+    atletas_qs = _atletas_do_tecnico(request, projeto)
+
+    query = request.GET.get('q', '').strip()
+    filtro_status = request.GET.get('status', '')
+
+    if query:
+        atletas_qs = atletas_qs.filter(
+            Q(usuario__first_name__icontains=query) |
+            Q(usuario__last_name__icontains=query) |
+            Q(usuario__username__icontains=query) |
+            Q(rm__icontains=query)
+        )
+
+    atletas_detalhados = []
+    for atleta in atletas_qs:
+        ultima = EvolucaoFisica.objects.filter(
+            atleta=atleta, projeto=projeto
+        ).order_by('-data_registro').first()
+        lesoes_ativas = atleta.lesoes.filter(
+            tratamentos__ativo=True, projeto=projeto
+        ).distinct()
+        status = 'lesionado' if lesoes_ativas.exists() else 'liberado'
+
+        if filtro_status and status != filtro_status:
+            continue
+
+        atletas_detalhados.append({
+            'atleta': atleta,
+            'ultima_evolucao': ultima,
+            'progresso': ultima.percentual_recuperacao if ultima else 0,
+            'desempenho': ultima.desempenho if ultima else 0,
+            'dor': ultima.dor if ultima else 0,
+            'total_lesoes_ativas': lesoes_ativas.count(),
+            'status': status,
+            'ultima_data': ultima.data_registro if ultima else None,
+        })
+
+    total = len(atletas_detalhados)
+    lesionados = sum(1 for a in atletas_detalhados if a['status'] == 'lesionado')
 
     return render(request, 'dashboard/tecnico/atletas.html', {
-        'atletas': atletas,
-        'projeto': projeto
+        'projeto': projeto,
+        'atletas_detalhados': atletas_detalhados,
+        'total': total,
+        'lesionados': lesionados,
+        'liberados': total - lesionados,
+        'query': query,
+        'filtro_status': filtro_status,
     })
 
 
@@ -1104,15 +1139,71 @@ def tecnico_desempenho(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto).values_list('usuario', flat=True)
-    atletas = Atleta.objects.filter(
-        tecnico_responsavel=request.user,
-        usuario__in=membros_usuario_ids
-    ).distinct()
+    atletas = _atletas_do_tecnico(request, projeto)
+
+    ranking = []
+    for atleta in atletas:
+        media = EvolucaoFisica.objects.filter(
+            atleta=atleta, projeto=projeto
+        ).aggregate(Avg('desempenho'))['desempenho__avg'] or 0
+
+        ultimas = list(EvolucaoFisica.objects.filter(
+            atleta=atleta, projeto=projeto
+        ).order_by('-data_registro')[:6])
+
+        tendencia = 0
+        if len(ultimas) >= 4:
+            recentes = sum(e.desempenho for e in ultimas[:3]) / 3
+            antigas = sum(e.desempenho for e in ultimas[3:6]) / len(ultimas[3:6])
+            tendencia = round(recentes - antigas, 1)
+
+        ranking.append({
+            'atleta': atleta,
+            'media': round(media, 1),
+            'ultimo': ultimas[0].desempenho if ultimas else 0,
+            'tendencia': tendencia,
+            'evolucoes': EvolucaoFisica.objects.filter(atleta=atleta, projeto=projeto).count(),
+            'ultima_data': ultimas[0].data_registro if ultimas else None,
+        })
+
+    ranking.sort(key=lambda x: x['media'], reverse=True)
+
+    top8 = ranking[:8]
+    chart_labels = [(r['atleta'].usuario.get_full_name() or r['atleta'].usuario.username) for r in top8]
+    chart_media = [r['media'] for r in top8]
+    chart_ultimo = [r['ultimo'] for r in top8]
+
+    from collections import defaultdict
+    evolucoes = EvolucaoFisica.objects.filter(
+        atleta__in=atletas, projeto=projeto
+    ).order_by('data_registro')
+    agrupado = defaultdict(list)
+    for e in evolucoes:
+        agrupado[e.data_registro.strftime('%d/%m')].append(e.desempenho)
+    chart_evo_labels = list(agrupado.keys())
+    chart_evo_data = [round(sum(v) / len(v), 1) for v in agrupado.values()]
+
+    faixas = {'Excelente (8-10)': 0, 'Bom (6-8)': 0, 'Regular (4-6)': 0, 'Baixo (0-4)': 0}
+    for r in ranking:
+        m = r['media']
+        if m >= 8: faixas['Excelente (8-10)'] += 1
+        elif m >= 6: faixas['Bom (6-8)'] += 1
+        elif m >= 4: faixas['Regular (4-6)'] += 1
+        else: faixas['Baixo (0-4)'] += 1
 
     return render(request, 'dashboard/tecnico/desempenho.html', {
-        'atletas': atletas,
-        'projeto': projeto
+        'projeto': projeto,
+        'ranking': ranking,
+        'total_atletas': len(ranking),
+        'media_geral': round(sum(r['media'] for r in ranking) / len(ranking), 1) if ranking else 0,
+        'melhor_atleta': ranking[0] if ranking else None,
+        'chart_labels': chart_labels,
+        'chart_media': chart_media,
+        'chart_ultimo': chart_ultimo,
+        'chart_evo_labels': chart_evo_labels,
+        'chart_evo_data': chart_evo_data,
+        'faixas_labels': list(faixas.keys()),
+        'faixas_data': list(faixas.values()),
     })
 
 
@@ -1124,16 +1215,61 @@ def tecnico_recuperacao(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    membros_usuario_ids = MembroProjeto.objects.filter(projeto=projeto).values_list('usuario', flat=True)
-    atletas = Atleta.objects.filter(
-        tecnico_responsavel=request.user,
-        usuario__in=membros_usuario_ids,
+    atletas = _atletas_do_tecnico(request, projeto).filter(
         lesoes__tratamentos__ativo=True
     ).distinct()
 
+    recuperacoes = []
+    for atleta in atletas:
+        lesoes_ativas = atleta.lesoes.filter(
+            tratamentos__ativo=True, projeto=projeto
+        ).prefetch_related('tratamentos')
+        tratamentos = TratamentoFisioterapico.objects.filter(
+            lesao__atleta=atleta, ativo=True
+        ).select_related('lesao')
+
+        ultima = EvolucaoFisica.objects.filter(
+            atleta=atleta, projeto=projeto
+        ).order_by('-data_registro').first()
+
+        exercicios = ExercicioRecuperacao.objects.filter(tratamento__in=tratamentos)
+        total_ex = exercicios.count()
+        feitos = exercicios.filter(check_realizado=True).count()
+        adesao = round((feitos / total_ex) * 100, 1) if total_ex else 0
+
+        proximo = tratamentos.exclude(
+            data_previsao_termino__isnull=True
+        ).order_by('data_previsao_termino').first()
+        dias_restantes = None
+        if proximo and proximo.data_previsao_termino:
+            dias_restantes = (proximo.data_previsao_termino - date.today()).days
+
+        recuperacoes.append({
+            'atleta': atleta,
+            'lesoes_ativas': lesoes_ativas,
+            'total_lesoes': lesoes_ativas.count(),
+            'tratamentos_ativos': tratamentos,
+            'total_tratamentos': tratamentos.count(),
+            'progresso': ultima.percentual_recuperacao if ultima else 0,
+            'dor_atual': ultima.dor if ultima else None,
+            'adesao_exercicios': adesao,
+            'dias_restantes': dias_restantes,
+            'ultima_evolucao': ultima,
+        })
+
+    recuperacoes.sort(key=lambda x: x['progresso'])
+    total = len(recuperacoes)
+    progresso_medio = round(sum(r['progresso'] for r in recuperacoes) / total, 1) if total else 0
+
     return render(request, 'dashboard/tecnico/recuperacao.html', {
-        'atletas': atletas,
-        'projeto': projeto
+        'projeto': projeto,
+        'recuperacoes': recuperacoes,
+        'total': total,
+        'progresso_medio': progresso_medio,
+        'total_em_risco': sum(1 for r in recuperacoes if r['progresso'] < 40),
+        'total_quase_prontos': sum(1 for r in recuperacoes if r['progresso'] >= 80),
+        'chart_labels': [(r['atleta'].usuario.get_full_name() or r['atleta'].usuario.username) for r in recuperacoes[:10]],
+        'chart_progresso': [r['progresso'] for r in recuperacoes[:10]],
     })
 
 
@@ -1145,7 +1281,9 @@ def tecnico_detalhes_atleta(request, atleta_id):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    atleta = get_object_or_404(Atleta, id=atleta_id)
+    # 🔥 Só atletas que o técnico pode ver (por modalidade ou técnico responsável)
+    atletas_permitidos = _atletas_do_tecnico(request, projeto)
+    atleta = get_object_or_404(atletas_permitidos, id=atleta_id)
 
     evolucoes = EvolucaoFisica.objects.filter(
         atleta=atleta, projeto=projeto
@@ -1311,7 +1449,7 @@ def fisioterapeuta_atletas(request):
         return redirect('landing')
 
     membros_usuario_ids = MembroProjeto.objects.filter(
-        projeto=projeto, ativo=True
+        projeto=projeto, ativo=True, tipo='atleta'
     ).values_list('usuario', flat=True)
 
     atletas = Atleta.objects.filter(
@@ -1385,7 +1523,7 @@ def fisioterapeuta_criar_lesao(request, atleta_id):
     if not projeto:
         return redirect('landing')
 
-    atleta = get_object_or_404(Atleta, id=atleta_id)
+    atleta = get_object_or_404(Atleta, id=atleta_id, usuario__membros_projeto__projeto=projeto)
 
     if request.method == 'POST':
         lesao = Lesao.objects.create(
@@ -1513,7 +1651,7 @@ def fisioterapeuta_registrar_evolucao(request, atleta_id):
     if not projeto:
         return redirect('landing')
 
-    atleta = get_object_or_404(Atleta, id=atleta_id)
+    atleta = get_object_or_404(Atleta, id=atleta_id, usuario__membros_projeto__projeto=projeto)
 
     if request.method == 'POST':
         evolucao = EvolucaoFisica.objects.create(
@@ -1616,7 +1754,7 @@ def psicologo_nova_avaliacao(request, atleta_id):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    atleta = get_object_or_404(Atleta, id=atleta_id)
+    atleta = get_object_or_404(Atleta, id=atleta_id, usuario__membros_projeto__projeto=projeto)
 
     if request.method == 'POST':
         try:
@@ -1689,7 +1827,7 @@ def psicologo_novo_questionario(request, atleta_id):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    atleta = get_object_or_404(Atleta, id=atleta_id)
+    atleta = get_object_or_404(Atleta, id=atleta_id, usuario__membros_projeto__projeto=projeto)
 
     if request.method == 'POST':
         QuestionarioPeriodico.objects.create(
@@ -1741,8 +1879,10 @@ def alterar_senha(request):
 # ==============================================================================
 @login_required
 def resolver_alerta(request, alerta_id):
-    """Marca um alerta como resolvido."""
-    alerta = get_object_or_404(Alerta, id=alerta_id)
+    projeto = get_projeto_ativo(request)
+    alerta = get_object_or_404(
+        Alerta, id=alerta_id, atleta__membros_projeto__projeto=projeto
+    )
 
     if request.user.perfil.tipo not in ['coordenador', 'tecnico', 'fisioterapeuta']:
         messages.error(request, 'Você não tem permissão para resolver este alerta.')
@@ -1789,3 +1929,17 @@ def perfil_usuario(request):
         'perfil': perfil,
     }
     return render(request, 'dashboard/perfil.html', context)
+
+# ==============================================================================
+# HANDLERS DE ERRO
+# ==============================================================================
+def erro_404(request, exception):
+    return render(request, '404.html', status=404)
+
+
+def erro_500(request):
+    return render(request, '500.html', status=500)
+
+
+def erro_403(request, exception):
+    return render(request, '403.html', status=403)

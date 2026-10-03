@@ -207,13 +207,24 @@
             <i class="fas fa-chart-line"></i> Nova evolução
         </a>
         <a href="{% url 'prontuario:imprimir_prontuario' prontuario.id %}" class="btn-outline-custom" target="_blank">
-    <i class="fas fa-print"></i> Visualizar
-</a>
-<a href="{% url 'prontuario:exportar_pdf_prontuario' prontuario.id %}"
-   class="btn-primary-custom"
-   style="background: linear-gradient(135deg, #dc2626, #991b1b);">
-    <i class="fas fa-file-pdf"></i> Baixar PDF
-</a>
+            <i class="fas fa-print"></i> Visualizar
+        </a>
+        <a href="{% url 'prontuario:exportar_pdf_prontuario' prontuario.id %}"
+           class="btn-primary-custom"
+           style="background: linear-gradient(135deg, #dc2626, #991b1b);">
+            <i class="fas fa-file-pdf"></i> Baixar PDF
+        </a>
+
+        <!-- 🔥 NOVOS BOTÕES — Colaboração com o Técnico -->
+        <a href="{% url 'prontuario:fisio_gerenciar_compartilhamento' prontuario.id %}"
+           class="btn-primary-custom"
+           style="background: linear-gradient(135deg, #6f42c1, #4c2a85);">
+            <i class="fas fa-share-nodes"></i> Compartilhar com Técnico
+        </a>
+        <a href="{% url 'prontuario:fisio_ver_observacoes_tecnico' prontuario.id %}"
+           class="btn-outline-custom">
+            <i class="fas fa-comments"></i> Observações de Treino
+        </a>
     </div>
 
     <!-- Grid de seções -->

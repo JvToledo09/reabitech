@@ -117,6 +117,7 @@ coord_perfil, _ = Perfil.objects.get_or_create(
 )
 coord_perfil.tipo = 'coordenador'
 coord_perfil.senha_temporaria = False
+coord_perfil.sexo = 'masculino'          # 🔥 CORRIGIDO
 coord_perfil.save()
 print(f"  ✓ coordenador / senha123 — Carlos Alberto")
 
@@ -127,13 +128,13 @@ print(f"  ✓ coordenador / senha123 — Carlos Alberto")
 titulo("4. CRIANDO PROFISSIONAIS")
 
 profissionais_dados = [
-    ('ana.fisio', 'Ana', 'Ferreira', 'fisioterapeuta'),
-    ('carla.psico', 'Carla', 'Mendes', 'psicologo'),
-    ('andre.tecnico', 'André', 'Rocha', 'tecnico'),
+    ('ana.fisio', 'Ana', 'Ferreira', 'fisioterapeuta', 'feminino'),
+    ('carla.psico', 'Carla', 'Mendes', 'psicologo', 'feminino'),
+    ('andre.tecnico', 'André', 'Rocha', 'tecnico', 'masculino'),
 ]
 
 profissionais = {}
-for username, nome, sobrenome, tipo in profissionais_dados:
+for username, nome, sobrenome, tipo, sexo in profissionais_dados:
     u, criado = User.objects.get_or_create(
         username=username,
         defaults={
@@ -151,6 +152,7 @@ for username, nome, sobrenome, tipo in profissionais_dados:
     )
     p.tipo = tipo
     p.senha_temporaria = False
+    p.sexo = sexo                          # 🔥 CORRIGIDO
     p.save()
 
     profissionais[username] = u
@@ -201,20 +203,28 @@ print(f"     Plano: {projeto.plano.nome}")
 titulo("6. VINCULANDO MEMBROS AO PROJETO")
 
 # Coordenador
-MembroProjeto.objects.get_or_create(
+MembroProjeto.objects.update_or_create(
     projeto=projeto,
     usuario=coord_user,
-    defaults={'tipo': 'coordenador', 'ativo': True}
+    defaults={
+        'tipo': 'coordenador',
+        'ativo': True,
+        'sexo': 'masculino',               # 🔥 CORRIGIDO
+    }
 )
 print(f"  ✓ {coord_user.username} → coordenador")
 
 # Profissionais
-for username, _, _, tipo in profissionais_dados:
+for username, _, _, tipo, sexo in profissionais_dados:
     u = profissionais[username]
-    MembroProjeto.objects.get_or_create(
+    MembroProjeto.objects.update_or_create(
         projeto=projeto,
         usuario=u,
-        defaults={'tipo': tipo, 'ativo': True}
+        defaults={
+            'tipo': tipo,
+            'ativo': True,
+            'sexo': sexo,                  # 🔥 CORRIGIDO
+        }
     )
     print(f"  ✓ {username} → {tipo}")
 
@@ -225,13 +235,13 @@ for username, _, _, tipo in profissionais_dados:
 titulo("7. CRIANDO ATLETAS DE TESTE")
 
 atletas_dados = [
-    ('joao.atleta', 'João', 'Silva', 'RM001', 'Futebol', 'M'),
-    ('maria.atleta', 'Maria', 'Santos', 'RM002', 'Vôlei', 'F'),
-    ('pedro.atleta', 'Pedro', 'Oliveira', 'RM003', 'Basquete', 'M'),
-    ('lucas.atleta', 'Lucas', 'Costa', 'RM004', 'Natação', 'M'),
-    ('julia.atleta', 'Júlia', 'Ferreira', 'RM005', 'Atletismo', 'F'),
-    ('gabriel.atleta', 'Gabriel', 'Souza', 'RM006', 'Handebol', 'M'),
-    ('beatriz.atleta', 'Beatriz', 'Lima', 'RM007', 'Judô', 'F'),
+    ('joao.atleta', 'João', 'Silva', 'RM001', 'Futebol', 'masculino'),
+    ('maria.atleta', 'Maria', 'Santos', 'RM002', 'Vôlei', 'feminino'),
+    ('pedro.atleta', 'Pedro', 'Oliveira', 'RM003', 'Basquete', 'masculino'),
+    ('lucas.atleta', 'Lucas', 'Costa', 'RM004', 'Natação', 'masculino'),
+    ('julia.atleta', 'Júlia', 'Ferreira', 'RM005', 'Atletismo', 'feminino'),
+    ('gabriel.atleta', 'Gabriel', 'Souza', 'RM006', 'Handebol', 'masculino'),
+    ('beatriz.atleta', 'Beatriz', 'Lima', 'RM007', 'Judô', 'feminino'),
 ]
 
 atletas = {}
@@ -254,7 +264,8 @@ for username, nome, sobrenome, rm, modalidade_nome, sexo in atletas_dados:
         defaults={'tipo': 'atleta', 'senha_temporaria': False}
     )
     p.tipo = 'atleta'
-    p.sexo = sexo
+    p.senha_temporaria = False
+    p.sexo = sexo                          # 🔥 CORRIGIDO (agora 'masculino'/'feminino')
     p.save()
 
     # Atleta
@@ -275,14 +286,14 @@ for username, nome, sobrenome, rm, modalidade_nome, sexo in atletas_dados:
 
     atletas[username] = atleta
 
-    # Vincular ao projeto
-    MembroProjeto.objects.get_or_create(
+    # Vincular ao projeto — 🔥 CORRIGIDO: usa objeto FK 'modalidade'
+    MembroProjeto.objects.update_or_create(
         projeto=projeto,
         usuario=u,
         defaults={
             'tipo': 'atleta',
             'sexo': sexo,
-            'modalidade': modalidade_nome,
+            'modalidade': modalidade,      # ✅ objeto, não string
             'ativo': True,
         }
     )

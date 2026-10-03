@@ -322,10 +322,11 @@ class MembroProjeto(models.Model):
         ('atleta', 'Paciente / Aluno / Atleta'),
     ]
 
+    # 🔥 CORRIGIDO: unificado com usuarios.Perfil.SEXO_CHOICES
     SEXO_CHOICES = [
-        ('M', 'Masculino'),
-        ('F', 'Feminino'),
-        ('O', 'Outro'),
+        ('masculino', 'Masculino'),
+        ('feminino', 'Feminino'),
+        ('outro', 'Outro'),
     ]
 
     # ----- Relacionamentos -----
@@ -351,18 +352,22 @@ class MembroProjeto(models.Model):
     )
 
     # ----- Dados específicos -----
+    # 🔥 CORRIGIDO: max_length aumentado para 20 (compatível com 'masculino')
     sexo = models.CharField(
-        max_length=1,
+        max_length=20,
         choices=SEXO_CHOICES,
         blank=True,
         default='',
         verbose_name='Sexo'
     )
-    modalidade = models.CharField(
-        max_length=100,
+
+    # 🔥 CORRIGIDO: agora é ForeignKey para usuarios.ModalidadeEsportiva
+    modalidade = models.ForeignKey(
+        'usuarios.ModalidadeEsportiva',
+        on_delete=models.SET_NULL,
+        null=True,
         blank=True,
-        default='',
-        help_text='Ex: Futebol, Reabilitação, Pós-operatório, etc.',
+        related_name='membros_projeto',
         verbose_name='Modalidade'
     )
 

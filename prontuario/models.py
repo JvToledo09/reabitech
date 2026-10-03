@@ -1474,3 +1474,175 @@ class EvolucaoFisioterapeutica(models.Model):
 
     def __str__(self):
         return f"{self.get_tipo_display()} — {self.prontuario.atleta.usuario.get_full_name()} ({self.data.strftime('%d/%m/%Y')})"
+
+
+# ==============================================================================
+# 12. 🔥 NOVO — COMPARTILHAMENTO DE PRONTUÁRIO COM O TÉCNICO
+# ==============================================================================
+class CompartilhamentoProntuario(models.Model):
+    """
+    Permite que o fisioterapeuta compartilhe o prontuário com um técnico.
+    O técnico visualiza em modo leitura e (opcionalmente) adiciona
+    observações de treino que enriquecem o tratamento clínico.
+    """
+    prontuario = models.ForeignKey(
+        Prontuario,
+        on_delete=models.CASCADE,
+        related_name='compartilhamentos',
+        verbose_name='Prontuário'
+    )
+    tecnico = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='prontuarios_compartilhados',
+        verbose_name='Técnico'
+    )
+    liberado_por = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='prontuarios_liberados',
+        verbose_name='Liberado por'
+    )
+    liberado_em = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Liberado em'
+    )
+    pode_comentar = models.BooleanField(
+        default=True,
+        help_text='Se marcado, o técnico pode adicionar observações de treino',
+        verbose_name='Pode comentar'
+    )
+    observacao_liberacao = models.TextField(
+        blank=True,
+        help_text='Mensagem opcional do fisio para o técnico (ex: foco em fortalecer quadríceps)',
+        verbose_name='Observação da Liberação'
+    )
+    ativo = models.BooleanField(
+        default=True,
+        verbose_name='Ativo'
+    )
+
+    class Meta:
+        unique_together = ['prontuario', 'tecnico']
+        ordering = ['-liberado_em']
+        verbose_name = 'Compartilhamento de Prontuário'
+        verbose_name_plural = 'Compartilhamentos de Prontuário'
+
+    def __str__(self):
+        return f"{self.prontuario.numero_prontuario} → {self.tecnico.get_full_name() or self.tecnico.username}"
+
+
+# ==============================================================================
+# 13. 🔥 NOVO — OBSERVAÇÃO DE TREINO DO TÉCNICO
+# ==============================================================================
+class ObservacaoTecnico(models.Model):
+    """
+    Registro do técnico sobre como o atleta se saiu no treino/atividade.
+    Integra dados de desempenho esportivo com o prontuário clínico,
+    criando um ciclo fechado de reabilitação.
+    """
+    TIPO_OBSERVACAO = [
+        ('treino', 'Treino Regular'),
+        ('recuperacao', 'Sessão de Recuperação'),
+        ('ocorrencia', 'Ocorrência / Incidente'),
+        ('desempenho', 'Avaliação de Desempenho'),
+        ('comportamento', 'Comportamento / Atitude'),
+        ('outro', 'Outro'),
+    ]
+
+    NIVEL_IMPACTO = [
+        ('positivo', 'Impacto Positivo'),
+        ('neutro', 'Neutro'),
+        ('atencao', 'Requer Atenção'),
+        ('critico', 'Crítico'),
+    ]
+
+    compartilhamento = models.ForeignKey(
+        CompartilhamentoProntuario,
+        on_delete=models.CASCADE,
+        related_name='observacoes',
+        verbose_name='Compartilhamento'
+    )
+    prontuario = models.ForeignKey(
+        Prontuario,
+        on_delete=models.CASCADE,
+        related_name='observacoes_tecnico',
+        verbose_name='Prontuário'
+    )
+    tecnico = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='observacoes_registradas',
+        verbose_name='Técnico'
+    )
+    tipo = models.CharField(
+        max_length=20,
+        choices=TIPO_OBSERVACAO,
+        default='treino',
+        verbose_name='Tipo de Observação'
+    )
+    nivel_impacto = models.CharField(
+        max_length=20,
+        choices=NIVEL_IMPACTO,
+        default='neutro',
+        verbose_name='Nível de Impacto'
+    )
+    titulo = models.CharField(
+        max_length=200,
+        verbose_name='Título'
+    )
+    descricao = models.TextField(
+        verbose_name='Descrição'
+    )
+
+    # Métricas quantitativas (0-10)
+    desempenho_treino = models.IntegerField(
+        null=True,
+        blank=True,
+        help_text='Como o atleta se saiu no treino (0-10)',
+        verbose_name='Desempenho no Treino'
+    )
+    dor_relatada = models.IntegerField(
+        null=True,
+        blank=True,
+        help_text='Dor relatada pelo atleta durante o treino (0-10)',
+        verbose_name='Dor Relatada'
+    )
+    aderencia = models.IntegerField(
+        null=True,
+        blank=True,
+        help_text='Adesão ao programa proposto (0-10)',
+        verbose_name='Adesão ao Programa'
+    )
+
+    criado_em = models.DateTimeField(auto_now_add=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-criado_em']
+        verbose_name = 'Observação do Técnico'
+        verbose_name_plural = 'Observações dos Técnicos'
+
+    def __str__(self):
+        return f"{self.get_tipo_display()} — {self.titulo}"
+
+    @property
+    def cor_impacto(self):
+        return {
+            'positivo': 'success',
+            'neutro': 'secondary',
+            'atencao': 'warning',
+            'critico': 'danger',
+        }.get(self.nivel_impacto, 'secondary')
+
+    @property
+    def icone_tipo(self):
+        return {
+            'treino': 'fa-running',
+            'recuperacao': 'fa-heartbeat',
+            'ocorrencia': 'fa-exclamation-triangle',
+            'desempenho': 'fa-chart-line',
+            'comportamento': 'fa-smile',
+            'outro': 'fa-info-circle',
+        }.get(self.tipo, 'fa-info-circle')

@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Lesao, EvolucaoFisica
 from usuarios.models import Atleta
 
+
 @login_required
 def lista_lesoes(request):
     lesoes = Lesao.objects.all()
-    return render(request, 'fisioterapia/lesoes.html', {'lesoes': lesoes})
+    return render(request, 'fisioterapia/lista.html', {'lesoes': lesoes})

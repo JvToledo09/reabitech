@@ -24,7 +24,11 @@ urlpatterns = [
     # App de projetos (namespace)
     path('projetos/', include('projetos.urls', namespace='projetos')),
 
-     path('prontuario/', include('prontuario.urls', namespace='prontuario')),  # 🔥 NOVO
+    # Prontuário (namespace)
+    path('prontuario/', include('prontuario.urls', namespace='prontuario')),
+
+    # Usuários (namespace)
+    path('usuarios/', include('usuarios.urls', namespace='usuarios')),
 
     # Atalho direto para o signup na raiz
     path('signup/', projetos_views.signup_saas, name='signup'),
@@ -37,3 +41,11 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+# ==============================================================================
+# HANDLERS DE ERRO (opcionais, mas recomendados para TCC)
+# ==============================================================================
+handler404 = 'dashboard.views.erro_404'
+handler500 = 'dashboard.views.erro_500'
+handler403 = 'dashboard.views.erro_403'

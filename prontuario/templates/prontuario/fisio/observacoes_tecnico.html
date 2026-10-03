@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Observações de Treino{% endblock %}
+{% block page_title %}Observações de Treino{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="card-modern p-4 mb-4" style="background: linear-gradient(135deg, #0dcaf0 0%, #0aa2c0 100%); color: white; border: none;">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h3 class="fw-bold mb-2">
+                    <i class="fas fa-comments me-2"></i>Observações de Treino
+                </h3>
+                <p class="mb-0 opacity-75">
+                    Prontuário <strong>{{ prontuario.numero_prontuario }}</strong> —
+                    {{ prontuario.atleta.usuario.get_full_name|default:prontuario.atleta.usuario.username }}
+                </p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'prontuario:fisio_gerenciar_compartilhamento' prontuario.id %}" class="btn btn-light">
+                    <i class="fas fa-share-nodes me-1"></i>Compartilhamento
+                </a>
+                <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" class="btn btn-outline-light">
+                    <i class="fas fa-arrow-left me-1"></i>Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card-modern p-3 d-flex align-items-center">
+                <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                    <i class="fas fa-clipboard-list fa-lg text-primary"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">{{ total }}</h4>
+                    <p class="text-muted small mb-0">Total de Observações</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern p-3 d-flex align-items-center">
+                <div class="bg-success bg-opacity-10 rounded-circle p-3 me-3">
+                    <i class="fas fa-thumbs-up fa-lg text-success"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">{{ positivas }}</h4>
+                    <p class="text-muted small mb-0">Positivas</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-modern p-3 d-flex align-items-center">
+                <div class="bg-warning bg-opacity-10 rounded-circle p-3 me-3">
+                    <i class="fas fa-exclamation-triangle fa-lg text-warning"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold mb-0">{{ atencao }}</h4>
+                    <p class="text-muted small mb-0">Requer Atenção</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for obs in observacoes %}
+    <div class="card-modern p-4 mb-3">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex align-items-start">
+                <div class="bg-{{ obs.cor_impacto }} bg-opacity-10 rounded-circle me-3 d-flex align-items-center justify-content-center"
+                     style="width: 50px; height: 50px; flex-shrink: 0;">
+                    <i class="fas {{ obs.icone_tipo }} text-{{ obs.cor_impacto }}"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-1">{{ obs.titulo }}</h5>
+                    <small class="text-muted">
+                        <i class="fas fa-user-tie me-1"></i>
+                        {{ obs.tecnico.get_full_name|default:obs.tecnico.username }}
+                        &nbsp;·&nbsp;
+                        <i class="fas fa-clock me-1"></i>
+                        {{ obs.criado_em|date:"d/m/Y H:i" }}
+                    </small>
+                </div>
+            </div>
+            <div class="text-end">
+                <span class="badge bg-{{ obs.cor_impacto }} mb-2">
+                    {{ obs.get_nivel_impacto_display }}
+                </span>
+                <br>
+                <span class="badge bg-secondary bg-opacity-10 text-secondary">
+                    {{ obs.get_tipo_display }}
+                </span>
+            </div>
+        </div>
+
+        <p class="mb-3">{{ obs.descricao }}</p>
+
+        {% if obs.desempenho_treino or obs.dor_relatada or obs.aderencia %}
+        <div class="row g-2">
+            {% if obs.desempenho_treino is not None %}
+            <div class="col-md-4">
+                <div class="p-2 rounded-3 bg-light text-center">
+                    <small class="text-muted d-block">Desempenho</small>
+                    <strong class="fs-5">{{ obs.desempenho_treino }}/10</strong>
+                </div>
+            </div>
+            {% endif %}
+            {% if obs.dor_relatada is not None %}
+            <div class="col-md-4">
+                <div class="p-2 rounded-3 bg-light text-center">
+                    <small class="text-muted d-block">Dor Relatada</small>
+                    <strong class="fs-5">{{ obs.dor_relatada }}/10</strong>
+                </div>
+            </div>
+            {% endif %}
+            {% if obs.aderencia is not None %}
+            <div class="col-md-4">
+                <div class="p-2 rounded-3 bg-light text-center">
+                    <small class="text-muted d-block">Adesão</small>
+                    <strong class="fs-5">{{ obs.aderencia }}/10</strong>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    {% empty %}
+    <div class="card-modern p-5 text-center">
+        <i class="fas fa-comment-slash" style="font-size: 3.5rem; color: #cbd5e1;"></i>
+        <h4 class="fw-bold mt-3">Nenhuma observação registrada</h4>
+        <p class="text-muted mb-0">
+            Quando os técnicos registrarem observações de treino, elas aparecerão aqui.
+        </p>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

@@ -1,18 +1,179 @@
 {% extends 'base.html' %}
-{% block title %}Desempenho{% endblock %}
+{% load static %}
+{% block title %}Desempenho — Técnico{% endblock %}
+{% block page_title %}Análise de Desempenho{% endblock %}
+
 {% block content %}
-<div class="animate-fadeInUp">
-    <h2><i class="fas fa-chart-line me-2" style="color: var(--cor-secundaria);"></i> Desempenho dos Atletas</h2>
-    <p class="text-muted">Acompanhamento de desempenho esportivo</p>
-    
-    <div class="card-modern mt-4">
-        <div class="card-header-custom">
-            <i class="fas fa-chart-simple me-2"></i> Gráficos de Desempenho
+<div class="container-fluid p-0">
+
+  <div class="row g-3 mb-4">
+    <div class="col-xl-3 col-md-6">
+      <div class="stat-card card-tilt p-3">
+        <div class="stat-icon" style="width:50px;height:50px;margin:0;background:linear-gradient(135deg,#0d6efd,#084298);">
+          <i class="fas fa-users" style="font-size:22px;"></i>
         </div>
-        <div class="card-body text-center p-5">
-            <i class="fas fa-chart-line fa-4x" style="color: var(--cor-secundaria);"></i>
-            <p class="mt-3">Módulo em desenvolvimento</p>
-        </div>
+        <h2 class="fw-bold mt-3 mb-1">{{ total_atletas }}</h2>
+        <p class="text-muted small mb-0">Atletas Avaliados</p>
+      </div>
     </div>
+    <div class="col-xl-3 col-md-6">
+      <div class="stat-card card-tilt p-3">
+        <div class="stat-icon" style="width:50px;height:50px;margin:0;background:linear-gradient(135deg,#2BA181,#1e7e5c);">
+          <i class="fas fa-chart-line" style="font-size:22px;"></i>
+        </div>
+        <h2 class="fw-bold mt-3 mb-1">{{ media_geral }}/10</h2>
+        <p class="text-muted small mb-0">Média Geral</p>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+      <div class="stat-card card-tilt p-3">
+        <div class="stat-icon" style="width:50px;height:50px;margin:0;background:linear-gradient(135deg,#ffc107,#ffca2c);">
+          <i class="fas fa-trophy" style="font-size:22px;"></i>
+        </div>
+        <h2 class="fw-bold mt-3 mb-1">{% if melhor_atleta %}{{ melhor_atleta.media }}/10{% else %}—{% endif %}</h2>
+        <p class="text-muted small mb-0">
+          Melhor: {{ melhor_atleta.atleta.usuario.get_full_name|default:melhor_atleta.atleta.usuario.username|default:"—" }}
+        </p>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+      <div class="stat-card card-tilt p-3">
+        <div class="stat-icon" style="width:50px;height:50px;margin:0;background:linear-gradient(135deg,#6f42c1,#4a2a8a);">
+          <i class="fas fa-ranking-star" style="font-size:22px;"></i>
+        </div>
+        <h2 class="fw-bold mt-3 mb-1">{{ ranking|length|default:0 }}</h2>
+        <p class="text-muted small mb-0">No Ranking</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-4">
+    <div class="col-lg-7">
+      <div class="card-modern p-4 card-tilt">
+        <h5 class="fw-bold mb-3"><i class="fas fa-chart-bar me-2 text-primary"></i>Média vs. Último Desempenho</h5>
+        <div style="height: 320px;"><canvas id="desempenhoChart"></canvas></div>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="card-modern p-4 card-tilt">
+        <h5 class="fw-bold mb-3"><i class="fas fa-chart-pie me-2 text-info"></i>Distribuição por Faixa</h5>
+        <div style="height: 320px;"><canvas id="faixasChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-modern p-4 mb-4 card-tilt">
+    <h5 class="fw-bold mb-3"><i class="fas fa-chart-line me-2 text-success"></i>Evolução Média do Grupo</h5>
+    <div style="height: 280px;"><canvas id="evolucaoChart"></canvas></div>
+  </div>
+
+  <div class="card-modern p-4">
+    <h5 class="fw-bold mb-3"><i class="fas fa-ranking-star me-2 text-warning"></i>Ranking Completo</h5>
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr class="text-muted small text-uppercase">
+            <th>#</th><th>Atleta</th><th>Modalidade</th>
+            <th class="text-center">Média</th><th class="text-center">Último</th>
+            <th class="text-center">Tendência</th><th class="text-center">Evoluções</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in ranking %}
+          <tr>
+            <td><strong>{{ forloop.counter }}º</strong></td>
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="bg-primary bg-opacity-10 rounded-circle me-2" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;">
+                  <i class="fas fa-user text-primary"></i>
+                </div>
+                <div>
+                  <strong>{{ r.atleta.usuario.get_full_name|default:r.atleta.usuario.username }}</strong><br>
+                  <small class="text-muted">RM: {{ r.atleta.rm }}</small>
+                </div>
+              </div>
+            </td>
+            <td><small>{{ r.atleta.modalidade.nome|default:"—" }}</small></td>
+            <td class="text-center"><strong>{{ r.media }}/10</strong></td>
+            <td class="text-center">{{ r.ultimo }}/10</td>
+            <td class="text-center">
+              {% if r.tendencia > 0 %}
+                <span class="badge bg-success bg-opacity-10 text-success"><i class="fas fa-arrow-up"></i> +{{ r.tendencia }}</span>
+              {% elif r.tendencia < 0 %}
+                <span class="badge bg-danger bg-opacity-10 text-danger"><i class="fas fa-arrow-down"></i> {{ r.tendencia }}</span>
+              {% else %}
+                <span class="badge bg-secondary bg-opacity-10 text-secondary"><i class="fas fa-minus"></i> 0</span>
+              {% endif %}
+            </td>
+            <td class="text-center"><small class="text-muted">{{ r.evolucoes }}</small></td>
+            <td class="text-end">
+              <a href="{% url 'dashboard:tecnico_detalhes_atleta' r.atleta.id %}" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-eye"></i>
+              </a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="8" class="text-center text-muted py-4">Nenhum dado de desempenho registrado.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
+
+{{ chart_labels|json_script:"c_labels" }}
+{{ chart_media|json_script:"c_media" }}
+{{ chart_ultimo|json_script:"c_ultimo" }}
+{{ faixas_labels|json_script:"c_faixas_l" }}
+{{ faixas_data|json_script:"c_faixas_d" }}
+{{ chart_evo_labels|json_script:"c_evo_l" }}
+{{ chart_evo_data|json_script:"c_evo_d" }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const J = id => JSON.parse(document.getElementById(id).textContent);
+
+  new Chart(document.getElementById('desempenhoChart'), {
+    type: 'bar',
+    data: {
+      labels: J('c_labels'),
+      datasets: [
+        { label: 'Média', data: J('c_media'), backgroundColor: '#0d6efd', borderRadius: 6 },
+        { label: 'Último', data: J('c_ultimo'), backgroundColor: '#2BA181', borderRadius: 6 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top' } },
+      scales: { y: { beginAtZero: true, max: 10 } }
+    }
+  });
+
+  new Chart(document.getElementById('faixasChart'), {
+    type: 'doughnut',
+    data: {
+      labels: J('c_faixas_l'),
+      datasets: [{ data: J('c_faixas_d'), backgroundColor: ['#28a745','#0dcaf0','#ffc107','#dc3545'], borderWidth: 0 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'bottom' } } }
+  });
+
+  new Chart(document.getElementById('evolucaoChart'), {
+    type: 'line',
+    data: {
+      labels: J('c_evo_l'),
+      datasets: [{
+        label: 'Desempenho Médio',
+        data: J('c_evo_d'),
+        borderColor: '#2BA181',
+        backgroundColor: 'rgba(43,161,129,0.12)',
+        fill: true, tension: 0.4,
+        pointBackgroundColor: '#2BA181', pointRadius: 4
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, max: 10 }, x: { grid: { display: false } } } }
+  });
+});
+</script>
 {% endblock %}

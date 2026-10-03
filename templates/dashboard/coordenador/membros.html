@@ -7,7 +7,7 @@
 {% block extra_css %}
 <style>
     /* ============================================
-       NOVO — PAGE HEADER PREMIUM
+       PAGE HEADER PREMIUM
        ============================================ */
     .page-header {
         margin-bottom: 36px;
@@ -80,7 +80,7 @@
     }
 
     /* ============================================
-       NOVO — STATS PREMIUM
+       STATS PREMIUM
        ============================================ */
     .stat-premium {
         position: relative;
@@ -165,7 +165,7 @@
     }
 
     /* ============================================
-       NOVO — PULSE DOT
+       PULSE DOT
        ============================================ */
     .pulse-dot {
         width: 8px;
@@ -184,7 +184,7 @@
     }
 
     /* ============================================
-       HEADER DA PÁGINA (membros-header antigo)
+       HEADER DA PÁGINA
        ============================================ */
     .membros-header {
         display: flex;
@@ -615,7 +615,7 @@
 <div class="container-fluid p-0">
 
     <!-- ============================================
-         PAGE HEADER (NOVO)
+         PAGE HEADER
          ============================================ -->
     <div class="page-header">
         <span class="page-header-number">— 01 / Sua equipe</span>
@@ -633,7 +633,7 @@
     </div>
 
     <!-- ============================================
-         STATS PREMIUM (NOVO)
+         STATS PREMIUM
          ============================================ -->
     <div class="row g-4 mb-4">
         <div class="col-lg-3 col-md-6">
@@ -755,7 +755,7 @@
                             <div class="member-info">
                                 <div class="member-avatar"
                                      style="background: linear-gradient(135deg,
-                                        {% cycle '#2BA181,#1f8768' '#0d6efd,#084298' '#6f42c1,#4c2a85' '#0dcaf0,#0aa2c0' '#ffc107,#d97706' %}"
+                                        {% cycle '#2BA181,#1f8768' '#0d6efd,#084298' '#6f42c1,#4c2a85' '#0dcaf0,#0aa2c0' '#ffc107,#d97706' %})"
                                      data-initial="{{ membro.usuario.get_full_name|default:membro.usuario.username|first|upper }}">
                                     {{ membro.usuario.get_full_name|default:membro.usuario.username|first|upper }}
                                 </div>
@@ -773,7 +773,7 @@
                         </td>
                         <td data-label="Modalidade">
                             {% if membro.modalidade %}
-                                {{ membro.modalidade }}
+                                {{ membro.modalidade.nome }}
                             {% else %}
                                 <span class="text-muted">—</span>
                             {% endif %}
@@ -807,7 +807,25 @@
                 </tbody>
             </table>
         </div>
+
+        {% elif query or filtro_tipo or filtro_sexo or filtro_modalidade %}
+        {# 🔥 NOVO ESTADO: filtros aplicados mas nenhum resultado #}
+        <div class="empty-state">
+            <div class="empty-state-icon" style="background: linear-gradient(135deg, #fef3c7, #fde68a); color: #d97706;">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3 class="empty-state-title">Nenhum resultado encontrado</h3>
+            <p class="empty-state-desc">
+                Nenhum membro corresponde aos filtros aplicados.
+                Tente ajustar a busca ou limpar os filtros.
+            </p>
+            <a href="{% url 'dashboard:coordenador_membros' %}" class="btn-outline-custom">
+                <i class="fas fa-times"></i> Limpar filtros
+            </a>
+        </div>
+
         {% else %}
+        {# Projeto realmente vazio #}
         <div class="empty-state">
             <div class="empty-state-icon">
                 <i class="fas fa-user-plus"></i>

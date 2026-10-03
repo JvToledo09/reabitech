@@ -1,18 +1,148 @@
 {% extends 'base.html' %}
-{% block title %}Recuperação{% endblock %}
+{% load static %}
+{% block title %}Recuperação — Técnico{% endblock %}
+{% block page_title %}Acompanhamento de Recuperação{% endblock %}
+
 {% block content %}
-<div class="animate-fadeInUp">
-    <h2><i class="fas fa-heartbeat me-2" style="color: var(--cor-secundaria);"></i> Acompanhamento de Recuperação</h2>
-    <p class="text-muted">Evolução da recuperação dos atletas</p>
-    
-    <div class="card-modern mt-4">
-        <div class="card-header-custom">
-            <i class="fas fa-chart-line me-2"></i> Evolução
+<div class="container-fluid p-0">
+
+  <div class="row g-3 mb-4">
+    <div class="col-xl-3 col-md-6">
+      <div class="stat-card card-tilt p-3">
+        <div class="stat-icon" style="width:50px;height:50px;margin:0;background:linear-gradient(135deg,#0d6efd,#084298);">
+          <i class="fas fa-user-injured" style="font-size:22px;"></i>
         </div>
-        <div class="card-body text-center p-5">
-            <i class="fas fa-chart-line fa-4x" style="color: var(--cor-secundaria);"></i>
-            <p class="mt-3">Módulo em desenvolvimento</p>
-        </div>
+        <h2 class="fw-bold mt-3 mb-1">{{ total }}</h2>
+        <p class="text-muted small mb-0">Em Recuperação</p>
+      </div>
     </div>
+    <div class="col-xl-3 col-md-6">
+      <div class="stat-card card-tilt p-3">
+        <div class="stat-icon" style="width:50px;height:50px;margin:0;background:linear-gradient(135deg,#2BA181,#1e7e5c);">
+          <i class="fas fa-heartbeat" style="font-size:22px;"></i>
+        </div>
+        <h2 class="fw-bold mt-3 mb-1">{{ progresso_medio }}%</h2>
+        <p class="text-muted small mb-0">Progresso Médio</p>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+      <div class="stat-card card-tilt p-3">
+        <div class="stat-icon" style="width:50px;height:50px;margin:0;background:linear-gradient(135deg,#dc3545,#bb2d3b);">
+          <i class="fas fa-exclamation-triangle" style="font-size:22px;"></i>
+        </div>
+        <h2 class="fw-bold mt-3 mb-1">{{ total_em_risco }}</h2>
+        <p class="text-muted small mb-0">Em Risco (&lt;40%)</p>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+      <div class="stat-card card-tilt p-3">
+        <div class="stat-icon" style="width:50px;height:50px;margin:0;background:linear-gradient(135deg,#28a745,#1e7e34);">
+          <i class="fas fa-check-circle" style="font-size:22px;"></i>
+        </div>
+        <h2 class="fw-bold mt-3 mb-1">{{ total_quase_prontos }}</h2>
+        <p class="text-muted small mb-0">Quase Prontos (≥80%)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-modern p-4 mb-4 card-tilt">
+    <h5 class="fw-bold mb-3"><i class="fas fa-chart-bar me-2 text-success"></i>Progresso por Atleta</h5>
+    <div style="height: 300px;"><canvas id="progressoChart"></canvas></div>
+  </div>
+
+  <div class="row g-3">
+    {% for r in recuperacoes %}
+    <div class="col-xl-4 col-md-6">
+      <div class="card-modern p-4 h-100">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div class="d-flex align-items-center">
+            <div class="rounded-circle me-3 d-flex align-items-center justify-content-center"
+                 style="width:48px;height:48px;background:{% if r.progresso >= 70 %}#d4edda{% elif r.progresso >= 40 %}#fff3cd{% else %}#f8d7da{% endif %};">
+              <i class="fas fa-user {% if r.progresso >= 70 %}text-success{% elif r.progresso >= 40 %}text-warning{% else %}text-danger{% endif %}"></i>
+            </div>
+            <div>
+              <h6 class="fw-bold mb-0">{{ r.atleta.usuario.get_full_name|default:r.atleta.usuario.username }}</h6>
+              <small class="text-muted">{{ r.atleta.modalidade.nome|default:"—" }}</small>
+            </div>
+          </div>
+          <span class="badge {% if r.progresso >= 70 %}bg-success{% elif r.progresso >= 40 %}bg-warning{% else %}bg-danger{% endif %} bg-opacity-10 text-{% if r.progresso >= 70 %}success{% elif r.progresso >= 40 %}warning{% else %}danger{% endif %}">
+            {{ r.progresso }}%
+          </span>
+        </div>
+
+        <div class="progress mb-3" style="height: 8px; border-radius: 8px;">
+          <div class="progress-bar {% if r.progresso >= 70 %}bg-success{% elif r.progresso >= 40 %}bg-warning{% else %}bg-danger{% endif %}"
+               style="width: {{ r.progresso }}%"></div>
+        </div>
+
+        <div class="row g-2 small mb-3">
+          <div class="col-6">
+            <span class="text-muted">Lesões ativas:</span>
+            <strong class="float-end">{{ r.total_lesoes }}</strong>
+          </div>
+          <div class="col-6">
+            <span class="text-muted">Tratamentos:</span>
+            <strong class="float-end">{{ r.total_tratamentos }}</strong>
+          </div>
+          <div class="col-6">
+            <span class="text-muted">Dor atual:</span>
+            <strong class="float-end">{{ r.dor_atual|default:"—" }}/10</strong>
+          </div>
+          <div class="col-6">
+            <span class="text-muted">Adesão:</span>
+            <strong class="float-end">{{ r.adesao_exercicios }}%</strong>
+          </div>
+          {% if r.dias_restantes != None %}
+          <div class="col-12">
+            <span class="text-muted">Prazo:</span>
+            <strong class="float-end {% if r.dias_restantes < 0 %}text-danger{% elif r.dias_restantes < 7 %}text-warning{% endif %}">
+              {% if r.dias_restantes < 0 %}Atrasado {{ r.dias_restantes|cut:"-" }}d{% else %}{{ r.dias_restantes }} dias{% endif %}
+            </strong>
+          </div>
+          {% endif %}
+        </div>
+
+        <a href="{% url 'dashboard:tecnico_detalhes_atleta' r.atleta.id %}" class="btn btn-sm btn-outline-primary w-100">
+          <i class="fas fa-eye me-1"></i> Ver Detalhes
+        </a>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="card-modern p-5 text-center">
+        <i class="fas fa-check-circle text-success mb-3" style="font-size:3rem;"></i>
+        <h5 class="fw-bold">Nenhum atleta em recuperação</h5>
+        <p class="text-muted mb-0">Todos os seus atletas estão liberados. 🎉</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 </div>
+
+{{ chart_labels|json_script:"rec_labels" }}
+{{ chart_progresso|json_script:"rec_data" }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const labels = JSON.parse(document.getElementById('rec_labels').textContent);
+  const data = JSON.parse(document.getElementById('rec_data').textContent);
+  new Chart(document.getElementById('progressoChart'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Progresso (%)',
+        data: data,
+        backgroundColor: data.map(v => v >= 70 ? '#28a745' : v >= 40 ? '#ffc107' : '#dc3545'),
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, max: 100 }, x: { grid: { display: false } } }
+    }
+  });
+});
+</script>
 {% endblock %}

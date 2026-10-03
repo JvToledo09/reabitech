@@ -3,7 +3,8 @@ from .models import (
     Prontuario, Triagem, Objetivo, Medicamento,
     AvaliacaoCIF, AvaliacaoCardiorrespiratoria,
     EscalaRisco, RelatorioDiario, EncaminhamentoMedico,
-    Exame, EvolucaoFisioterapeutica
+    Exame, EvolucaoFisioterapeutica,
+    CompartilhamentoProntuario, ObservacaoTecnico,
 )
 
 
@@ -82,3 +83,32 @@ class EvolucaoFisioterapeuticaAdmin(admin.ModelAdmin):
     list_display = ('prontuario', 'tipo', 'data', 'fisioterapeuta', 'escala_dor')
     list_filter = ('tipo', 'paciente_estavel', 'necessita_encaminhamento')
     date_hierarchy = 'data'
+
+
+# ==============================================================================
+# 🔥 NOVOS ADMINS — COMPARTILHAMENTO COM TÉCNICO
+# ==============================================================================
+@admin.register(CompartilhamentoProntuario)
+class CompartilhamentoProntuarioAdmin(admin.ModelAdmin):
+    list_display = ('prontuario', 'tecnico', 'liberado_por', 'liberado_em', 'pode_comentar', 'ativo')
+    list_filter = ('ativo', 'pode_comentar', 'liberado_em')
+    search_fields = (
+        'prontuario__numero_prontuario',
+        'prontuario__atleta__usuario__first_name',
+        'tecnico__username', 'tecnico__first_name', 'tecnico__last_name',
+    )
+    readonly_fields = ('liberado_em',)
+    date_hierarchy = 'liberado_em'
+
+
+@admin.register(ObservacaoTecnico)
+class ObservacaoTecnicoAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'tipo', 'nivel_impacto', 'tecnico', 'prontuario', 'criado_em')
+    list_filter = ('tipo', 'nivel_impacto', 'criado_em')
+    search_fields = (
+        'titulo', 'descricao',
+        'tecnico__username', 'tecnico__first_name',
+        'prontuario__numero_prontuario',
+    )
+    readonly_fields = ('criado_em', 'atualizado_em')
+    date_hierarchy = 'criado_em'

@@ -1,6 +1,6 @@
 # ==============================================================================
 # REABITECH — APP PRONTUÁRIO
-# Views (CRUD completo + geração de PDF)
+# Views (CRUD completo + geração de PDF + compartilhamento com técnico)
 # ==============================================================================
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -9,10 +9,11 @@ from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q
 from django.core.paginator import Paginator
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponseForbidden
 from datetime import date
+from functools import wraps
 
-from usuarios.models import Atleta
+from usuarios.models import Atleta, Notificacao, Alerta
 from usuarios.decorators import perfil_required
 from projetos.models import Projeto, MembroProjeto
 
@@ -20,7 +21,8 @@ from .models import (
     Prontuario, Triagem, Objetivo, Medicamento,
     AvaliacaoCIF, AvaliacaoCardiorrespiratoria,
     EscalaRisco, RelatorioDiario, EncaminhamentoMedico,
-    Exame, EvolucaoFisioterapeutica
+    Exame, EvolucaoFisioterapeutica,
+    CompartilhamentoProntuario, ObservacaoTecnico,
 )
 from .forms import (
     ProntuarioForm, TriagemForm, ObjetivoForm, MedicamentoForm,
@@ -29,8 +31,6 @@ from .forms import (
     ExameForm, EvolucaoFisioterapeuticaForm
 )
 from .pdf_utils import gerar_pdf_prontuario, gerar_pdf_relatorio_consolidado
-
-
 # ==============================================================================
 # FUNÇÕES AUXILIARES
 # ==============================================================================
@@ -74,6 +74,19 @@ def dashboard_prontuario(request, prontuario_id):
         return redirect('dashboard:dashboard')
 
     prontuario.registrar_movimentacao()
+
+    # 🔥 Bloqueio: técnico só acessa se houver compartilhamento ativo
+    if request.user.perfil.tipo == 'tecnico':
+        tem_acesso = CompartilhamentoProntuario.objects.filter(
+            prontuario=prontuario, tecnico=request.user, ativo=True
+        ).exists()
+        if not tem_acesso:
+            return HttpResponseForbidden(
+                '<div style="font-family: sans-serif; padding: 60px; text-align: center;">'
+                '<h1>🔒 Acesso Restrito</h1>'
+                '<p>Este prontuário não foi compartilhado com você.</p>'
+                '<a href="/dashboard/tecnico/" style="color: #2BA181;">← Voltar</a></div>'
+            )
 
     ultima_triagem = prontuario.triagens.first()
     ultima_cif = prontuario.avaliacoes_cif.first()
@@ -146,6 +159,13 @@ def lista_prontuarios(request):
     prontuarios = Prontuario.objects.filter(
         projeto=projeto
     ).select_related('atleta', 'atleta__usuario', 'fisioterapeuta_responsavel')
+
+        # 🔥 Técnico vê somente prontuários compartilhados com ele
+    if request.user.perfil.tipo == 'tecnico':
+        prontuarios_ids = CompartilhamentoProntuario.objects.filter(
+            tecnico=request.user, ativo=True
+        ).values_list('prontuario_id', flat=True)
+        prontuarios = prontuarios.filter(id__in=prontuarios_ids)
 
     # Filtros
     status_filtro = request.GET.get('status', '')
@@ -1136,3 +1156,215 @@ def relatorio_consolidado_pdf(request):
     except Exception as e:
         messages.error(request, f'Erro ao gerar relatório: {e}')
         return redirect('prontuario:lista_prontuarios')
+
+    # ==============================================================================
+# 🔥 COMPARTILHAMENTO DE PRONTUÁRIO COM O TÉCNICO
+# ==============================================================================
+def pode_acessar_prontuario(view_func):
+    """
+    Decorator que controla o acesso ao prontuário:
+    - Fisio/Coordenador/Psicólogo: total
+    - Técnico: somente com compartilhamento ativo
+    - Outros: 403
+    """
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+
+        tipo = getattr(request.user.perfil, 'tipo', None) if hasattr(request.user, 'perfil') else None
+
+        if tipo in ('fisioterapeuta', 'coordenador', 'psicologo'):
+            return view_func(request, *args, **kwargs)
+
+        if tipo == 'tecnico':
+            prontuario_id = kwargs.get('prontuario_id')
+            if prontuario_id:
+                tem = CompartilhamentoProntuario.objects.filter(
+                    prontuario_id=prontuario_id, tecnico=request.user, ativo=True
+                ).exists()
+                if tem:
+                    return view_func(request, *args, **kwargs)
+            return HttpResponseForbidden(
+                '<div style="font-family: sans-serif; padding: 60px; text-align: center;">'
+                '<h1>🔒 Acesso Restrito</h1>'
+                '<p>Este prontuário não foi compartilhado com você.</p>'
+                '<a href="/dashboard/tecnico/" style="color: #2BA181;">← Voltar</a></div>'
+            )
+
+        return HttpResponseForbidden('Acesso negado.')
+
+    return wrapper
+
+
+@login_required
+def tecnico_prontuarios_compartilhados(request):
+    """Lista os prontuários compartilhados com o técnico logado."""
+    if not hasattr(request.user, 'perfil') or request.user.perfil.tipo != 'tecnico':
+        messages.error(request, 'Acesso restrito a técnicos.')
+        return redirect('dashboard:dashboard')
+
+    compartilhamentos = CompartilhamentoProntuario.objects.filter(
+        tecnico=request.user, ativo=True
+    ).select_related(
+        'prontuario', 'prontuario__atleta', 'prontuario__atleta__usuario',
+        'prontuario__atleta__modalidade', 'liberado_por'
+    ).order_by('-liberado_em')
+
+    return render(request, 'prontuario/tecnico/lista_compartilhados.html', {
+        'compartilhamentos': compartilhamentos,
+        'total': compartilhamentos.count(),
+    })
+
+
+@login_required
+def tecnico_ver_prontuario(request, prontuario_id):
+    """Técnico visualiza prontuário compartilhado (leitura + comentar)."""
+    prontuario = get_object_or_404(Prontuario, id=prontuario_id)
+    compartilhamento = get_object_or_404(
+        CompartilhamentoProntuario,
+        prontuario=prontuario, tecnico=request.user, ativo=True
+    )
+
+    return render(request, 'prontuario/tecnico/ver_prontuario.html', {
+        'prontuario': prontuario,
+        'compartilhamento': compartilhamento,
+        'triagens': prontuario.triagens.all()[:5],
+        'objetivos': prontuario.objetivos.all(),
+        'medicamentos': prontuario.medicamentos.filter(status='ativo'),
+        'relatorios': prontuario.relatorios_diarios.all()[:10],
+        'evolucoes': prontuario.evolucoes_fisioterapeuticas.all()[:10],
+        'observacoes': prontuario.observacoes_tecnico.select_related('tecnico').order_by('-criado_em'),
+        'pode_comentar': compartilhamento.pode_comentar,
+    })
+
+
+@login_required
+def tecnico_adicionar_observacao(request, prontuario_id):
+    """Técnico registra observação de treino no prontuário compartilhado."""
+    prontuario = get_object_or_404(Prontuario, id=prontuario_id)
+    compartilhamento = get_object_or_404(
+        CompartilhamentoProntuario,
+        prontuario=prontuario, tecnico=request.user, ativo=True
+    )
+
+    if not compartilhamento.pode_comentar:
+        messages.error(request, 'Você não tem permissão para adicionar observações neste prontuário.')
+        return redirect('prontuario:tecnico_ver_prontuario', prontuario_id=prontuario.id)
+
+    if request.method == 'POST':
+        try:
+            observacao = ObservacaoTecnico.objects.create(
+                compartilhamento=compartilhamento,
+                prontuario=prontuario,
+                tecnico=request.user,
+                tipo=request.POST.get('tipo', 'treino'),
+                nivel_impacto=request.POST.get('nivel_impacto', 'neutro'),
+                titulo=request.POST.get('titulo'),
+                descricao=request.POST.get('descricao'),
+                desempenho_treino=request.POST.get('desempenho_treino') or None,
+                dor_relatada=request.POST.get('dor_relatada') or None,
+                aderencia=request.POST.get('aderencia') or None,
+            )
+
+            if prontuario.fisioterapeuta_responsavel:
+                Notificacao.objects.create(
+                    usuario=prontuario.fisioterapeuta_responsavel,
+                    titulo=f'Nova observação — {prontuario.atleta.usuario.get_full_name()}',
+                    mensagem=f'{request.user.get_full_name()} registrou: {observacao.titulo}',
+                    link=f'/prontuario/{prontuario.id}/observacoes-tecnico/'
+                )
+
+            if observacao.nivel_impacto in ('atencao', 'critico'):
+                Alerta.objects.create(
+                    atleta=prontuario.atleta,
+                    tipo='avaliacao_pendente',
+                    mensagem=f'Técnico reportou: {observacao.titulo} ({observacao.get_nivel_impacto_display()})',
+                )
+
+            prontuario.registrar_movimentacao()
+            messages.success(request, 'Observação registrada! O fisioterapeuta foi notificado.')
+            return redirect('prontuario:tecnico_ver_prontuario', prontuario_id=prontuario.id)
+        except Exception as e:
+            messages.error(request, f'Erro ao registrar observação: {e}')
+
+    return render(request, 'prontuario/tecnico/adicionar_observacao.html', {
+        'prontuario': prontuario, 'compartilhamento': compartilhamento,
+    })
+
+
+@login_required
+@perfil_required('fisioterapeuta', 'coordenador')
+def fisio_gerenciar_compartilhamento(request, prontuario_id):
+    """Fisio libera/revoga acesso do técnico ao prontuário."""
+    from django.contrib.auth.models import User as UserModel
+
+    prontuario = get_object_or_404(Prontuario, id=prontuario_id)
+    projeto = prontuario.projeto
+
+    tecnicos = UserModel.objects.filter(
+        membros_projeto__projeto=projeto,
+        membros_projeto__tipo='tecnico',
+        membros_projeto__ativo=True,
+        perfil__tipo='tecnico'
+    ).distinct()
+
+    if request.method == 'POST':
+        acao = request.POST.get('acao')
+        tecnico_id = request.POST.get('tecnico_id')
+
+        if acao == 'liberar' and tecnico_id:
+            tecnico = get_object_or_404(UserModel, id=tecnico_id)
+            CompartilhamentoProntuario.objects.update_or_create(
+                prontuario=prontuario, tecnico=tecnico,
+                defaults={
+                    'liberado_por': request.user,
+                    'pode_comentar': request.POST.get('pode_comentar') == 'on',
+                    'observacao_liberacao': request.POST.get('observacao_liberacao', ''),
+                    'ativo': True,
+                }
+            )
+            Notificacao.objects.create(
+                usuario=tecnico,
+                titulo=f'Prontuário compartilhado — {prontuario.atleta.usuario.get_full_name()}',
+                mensagem=f'{request.user.get_full_name()} compartilhou um prontuário com você.',
+                link=f'/prontuario/tecnico/{prontuario.id}/'
+            )
+            messages.success(request, f'Prontuário liberado para {tecnico.get_full_name()}.')
+
+        elif acao == 'revogar' and tecnico_id:
+            CompartilhamentoProntuario.objects.filter(
+                prontuario=prontuario, tecnico_id=tecnico_id
+            ).update(ativo=False)
+            messages.success(request, 'Acesso revogado.')
+
+        return redirect('prontuario:fisio_gerenciar_compartilhamento', prontuario_id=prontuario.id)
+
+    compartilhamentos = prontuario.compartilhamentos.select_related(
+        'tecnico', 'liberado_por'
+    ).filter(ativo=True)
+
+    return render(request, 'prontuario/fisio/gerenciar_compartilhamento.html', {
+        'prontuario': prontuario,
+        'tecnicos': tecnicos,
+        'compartilhamentos': compartilhamentos,
+        'tecnicos_com_acesso': [c.tecnico_id for c in compartilhamentos],
+    })
+
+
+@login_required
+@perfil_required('fisioterapeuta', 'coordenador', 'psicologo')
+def fisio_ver_observacoes_tecnico(request, prontuario_id):
+    """Fisio vê todas as observações de treino registradas pelos técnicos."""
+    prontuario = get_object_or_404(Prontuario, id=prontuario_id)
+    observacoes = prontuario.observacoes_tecnico.select_related(
+        'tecnico', 'compartilhamento'
+    ).order_by('-criado_em')
+
+    return render(request, 'prontuario/fisio/observacoes_tecnico.html', {
+        'prontuario': prontuario,
+        'observacoes': observacoes,
+        'total': observacoes.count(),
+        'positivas': observacoes.filter(nivel_impacto='positivo').count(),
+        'atencao': observacoes.filter(nivel_impacto__in=['atencao', 'critico']).count(),
+    })

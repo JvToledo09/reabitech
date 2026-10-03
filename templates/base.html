@@ -536,11 +536,21 @@
         <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path %}active{% endif %}"><i class="fas fa-folder-medical"></i><span>Prontuários</span></a>
 
         {% elif user.perfil.tipo == 'tecnico' %}
-        <a href="{% url 'dashboard:dashboard_tecnico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_tecnico' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-        <a href="{% url 'dashboard:tecnico_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_atletas' %}active{% endif %}"><i class="fas fa-futbol"></i><span>Meus Atletas</span></a>
-        <a href="{% url 'dashboard:tecnico_desempenho' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_desempenho' %}active{% endif %}"><i class="fas fa-chart-simple"></i><span>Desempenho</span></a>
-        <a href="{% url 'dashboard:tecnico_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_recuperacao' %}active{% endif %}"><i class="fas fa-heartbeat"></i><span>Recuperação</span></a>
-        <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path %}active{% endif %}"><i class="fas fa-folder-medical"></i><span>Prontuários</span></a>
+<a href="{% url 'dashboard:dashboard_tecnico' %}" class="sidebar-item ...">
+    <i class="fas fa-tachometer-alt"></i><span>Dashboard</span>
+</a>
+<a href="{% url 'dashboard:tecnico_atletas' %}" class="sidebar-item ...">
+    <i class="fas fa-futbol"></i><span>Meus Atletas</span>
+</a>
+<a href="{% url 'dashboard:tecnico_desempenho' %}" class="sidebar-item ...">
+    <i class="fas fa-chart-simple"></i><span>Desempenho</span>
+</a>
+<a href="{% url 'dashboard:tecnico_recuperacao' %}" class="sidebar-item ...">
+    <i class="fas fa-heartbeat"></i><span>Recuperação</span>
+</a>
+<a href="{% url 'prontuario:tecnico_prontuarios_compartilhados' %}" class="sidebar-item ...">
+    <i class="fas fa-share-nodes"></i><span>Compartilhados</span>
+</a>
 
         {% elif user.perfil.tipo == 'atleta' %}
         <a href="{% url 'dashboard:dashboard_atleta' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_atleta' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>

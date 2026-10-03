@@ -21,16 +21,23 @@
             </ul>
 
             <div class="tab-content">
-                <!-- Aba 1: Alterar Função -->
+                <!-- ============================================
+                     Aba 1: Alterar Função
+                     ============================================ -->
                 <div class="tab-pane fade show active" id="existing">
                     <form method="POST">
                         {% csrf_token %}
                         <div class="mb-3">
                             <label class="form-label fw-bold">Membro</label>
-                            <select name="membro_id" class="form-select bg-light border-0 shadow-sm" required>
+                            <select name="membro_id" id="edit_membro" class="form-select bg-light border-0 shadow-sm" required>
                                 <option value="">-- Escolha um membro --</option>
                                 {% for membro in membros_ativos %}
-                                    <option value="{{ membro.id }}">{{ membro.usuario.get_full_name|default:membro.usuario.username }} (Atual: {{ membro.get_tipo_display }})</option>
+                                    <option value="{{ membro.id }}"
+                                            data-tipo="{{ membro.tipo }}"
+                                            data-sexo="{{ membro.sexo|default:'' }}"
+                                            data-modalidade="{{ membro.modalidade_id|default:'' }}">
+                                        {{ membro.usuario.get_full_name|default:membro.usuario.username }} (Atual: {{ membro.get_tipo_display }})
+                                    </option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -46,7 +53,7 @@
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label class="form-label fw-bold">Sexo</label>
-                                <select name="novo_sexo" class="form-select bg-light border-0 shadow-sm">
+                                <select name="novo_sexo" id="edit_sexo" class="form-select bg-light border-0 shadow-sm">
                                     <option value="">--</option>
                                     {% for value, label in sexos %}
                                         <option value="{{ value }}">{{ label }}</option>
@@ -55,7 +62,7 @@
                             </div>
                             <div class="col-md-3 mb-3" id="edit_modalidade_wrap" style="display:none;">
                                 <label class="form-label fw-bold">Modalidade</label>
-                                <select name="nova_modalidade" class="form-select bg-light border-0 shadow-sm">
+                                <select name="nova_modalidade" id="edit_modalidade" class="form-select bg-light border-0 shadow-sm">
                                     <option value="">--</option>
                                     {% for modalidade in modalidades %}
                                         <option value="{{ modalidade.id }}">{{ modalidade.nome }}</option>
@@ -67,7 +74,9 @@
                     </form>
                 </div>
 
-                <!-- Aba 2: Cadastrar Novo -->
+                <!-- ============================================
+                     Aba 2: Cadastrar Novo
+                     ============================================ -->
                 <div class="tab-pane fade" id="new">
                     <form method="POST">
                         {% csrf_token %}
@@ -92,7 +101,7 @@
                                 <label class="form-label fw-bold">Senha</label>
                                 <input type="password" name="novo_senha" required class="form-control bg-light border-0 shadow-sm">
                             </div>
-                            
+
                             <div class="col-md-4 mb-3">
                                 <label class="form-label fw-bold">Função</label>
                                 <select name="nova_funcao" id="new_funcao" required class="form-select bg-light border-0 shadow-sm">
@@ -136,22 +145,55 @@
 </div>
 
 <script>
+    // ============================================
+    // Toggle de visibilidade do campo Modalidade
+    // ============================================
     function toggleModalidade(funcaoSelect, wrapId) {
         var val = funcaoSelect.value;
         var wrap = document.getElementById(wrapId);
-        if(val === 'atleta' || val === 'tecnico') {
+        if (val === 'atleta' || val === 'tecnico') {
             wrap.style.display = 'block';
         } else {
             wrap.style.display = 'none';
         }
     }
 
-    // Edit section
+    // Aba "Alterar Função"
     var editFuncao = document.getElementById('edit_funcao');
-    if(editFuncao) editFuncao.addEventListener('change', function() { toggleModalidade(this, 'edit_modalidade_wrap'); });
+    if (editFuncao) {
+        editFuncao.addEventListener('change', function() {
+            toggleModalidade(this, 'edit_modalidade_wrap');
+        });
+    }
 
-    // New section
+    // Aba "Cadastrar Novo"
     var newFuncao = document.getElementById('new_funcao');
-    if(newFuncao) newFuncao.addEventListener('change', function() { toggleModalidade(this, 'new_modalidade_wrap'); });
+    if (newFuncao) {
+        newFuncao.addEventListener('change', function() {
+            toggleModalidade(this, 'new_modalidade_wrap');
+        });
+    }
+
+    // ============================================
+    // 🔥 NOVO — Pré-popular campos ao selecionar membro
+    // ============================================
+    var editMembro = document.getElementById('edit_membro');
+    if (editMembro) {
+        editMembro.addEventListener('change', function() {
+            var opt = this.options[this.selectedIndex];
+
+            var funcao = document.getElementById('edit_funcao');
+            var sexo = document.getElementById('edit_sexo');
+            var modalidade = document.getElementById('edit_modalidade');
+
+            // Preenche os selects com os dados do membro selecionado
+            funcao.value = opt.dataset.tipo || '';
+            sexo.value = opt.dataset.sexo || '';
+            modalidade.value = opt.dataset.modalidade || '';
+
+            // Atualiza a visibilidade do campo Modalidade
+            toggleModalidade(funcao, 'edit_modalidade_wrap');
+        });
+    }
 </script>
 {% endblock %}

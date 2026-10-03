@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Adicionar Observação{% endblock %}
+{% block page_title %}Nova Observação de Treino{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+        <div class="card-modern p-4">
+
+            <div class="d-flex align-items-center mb-4">
+                <div class="bg-primary bg-opacity-10 rounded-circle me-3 d-flex align-items-center justify-content-center"
+                     style="width: 56px; height: 56px;">
+                    <i class="fas fa-user text-primary"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-0">
+                        {{ prontuario.atleta.usuario.get_full_name|default:prontuario.atleta.usuario.username }}
+                    </h5>
+                    <small class="text-muted">{{ prontuario.numero_prontuario }}</small>
+                </div>
+            </div>
+
+            <div class="alert alert-info border-0 mb-4">
+                <i class="fas fa-info-circle me-2"></i>
+                Registre como o atleta se saiu no treino. O fisioterapeuta responsável será
+                <strong>notificado automaticamente</strong> e poderá ajustar o tratamento.
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Tipo de Observação</label>
+                        <select name="tipo" class="form-select" required>
+                            <option value="treino">Treino Regular</option>
+                            <option value="recuperacao">Sessão de Recuperação</option>
+                            <option value="ocorrencia">Ocorrência / Incidente</option>
+                            <option value="desempenho">Avaliação de Desempenho</option>
+                            <option value="comportamento">Comportamento / Atitude</option>
+                            <option value="outro">Outro</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Nível de Impacto</label>
+                        <select name="nivel_impacto" class="form-select" required>
+                            <option value="positivo">✅ Impacto Positivo</option>
+                            <option value="neutro" selected>➖ Neutro</option>
+                            <option value="atencao">⚠️ Requer Atenção</option>
+                            <option value="critico">🚨 Crítico</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-bold">Título</label>
+                        <input type="text" name="titulo" class="form-control"
+                               placeholder="Ex: Atleta completou treino sem queixas de dor"
+                               required maxlength="200">
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-bold">Descrição Detalhada</label>
+                        <textarea name="descricao" class="form-control" rows="5"
+                                  placeholder="Descreva o que observou durante o treino, como o atleta reagiu, se houve queixas, se seguiu as orientações..."
+                                  required></textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Desempenho no Treino</label>
+                        <input type="number" name="desempenho_treino" class="form-control"
+                               min="0" max="10" placeholder="0-10">
+                        <small class="text-muted">Como o atleta performou</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Dor Relatada</label>
+                        <input type="number" name="dor_relatada" class="form-control"
+                               min="0" max="10" placeholder="0-10">
+                        <small class="text-muted">Queixa durante o treino</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Adesão ao Programa</label>
+                        <input type="number" name="aderencia" class="form-control"
+                               min="0" max="10" placeholder="0-10">
+                        <small class="text-muted">Seguiu as orientações?</small>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a href="{% url 'prontuario:tecnico_ver_prontuario' prontuario.id %}" class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-primary-custom">
+                        <i class="fas fa-paper-plane me-2"></i>Registrar Observação
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

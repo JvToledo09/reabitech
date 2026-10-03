@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gerenciar Compartilhamento{% endblock %}
+{% block page_title %}Gerenciar Compartilhamento{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="card-modern p-4 mb-4" style="background: linear-gradient(135deg, #6f42c1 0%, #4c2a85 100%); color: white; border: none;">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h3 class="fw-bold mb-2">
+                    <i class="fas fa-share-nodes me-2"></i>Compartilhar Prontuário
+                </h3>
+                <p class="mb-0 opacity-75">
+                    Prontuário <strong>{{ prontuario.numero_prontuario }}</strong> —
+                    {{ prontuario.atleta.usuario.get_full_name|default:prontuario.atleta.usuario.username }}
+                </p>
+            </div>
+            <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" class="btn btn-light">
+                <i class="fas fa-arrow-left me-2"></i>Voltar ao Prontuário
+            </a>
+        </div>
+    </div>
+
+    <div class="alert alert-info border-0 shadow-sm mb-4" style="border-left: 4px solid #0dcaf0 !important;">
+        <i class="fas fa-info-circle me-2"></i>
+        Compartilhe o prontuário com técnicos para que eles possam <strong>acompanhar o tratamento</strong> e
+        <strong>registrar observações de treino</strong>.
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card-modern p-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-user-plus me-2 text-success"></i>Liberar Acesso
+                </h5>
+
+                {% if tecnicos %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="acao" value="liberar">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Técnico</label>
+                        <select name="tecnico_id" class="form-select" required>
+                            <option value="">— Selecione um técnico —</option>
+                            {% for t in tecnicos %}
+                                {% if t.id not in tecnicos_com_acesso %}
+                                <option value="{{ t.id }}">
+                                    {{ t.get_full_name|default:t.username }}
+                                </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <small class="text-muted">Só técnicos do projeto <strong>{{ prontuario.projeto.nome }}</strong> aparecem aqui.</small>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" name="pode_comentar" id="pode_comentar" checked>
+                        <label class="form-check-label" for="pode_comentar">
+                            <strong>Permitir que o técnico adicione observações</strong>
+                            <br>
+                            <small class="text-muted">Se desmarcado, o técnico só poderá visualizar.</small>
+                        </label>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Mensagem para o Técnico (opcional)</label>
+                        <textarea name="observacao_liberacao" class="form-control" rows="3"
+                                  placeholder="Ex: Foco em fortalecer quadríceps"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100">
+                        <i class="fas fa-share me-2"></i>Compartilhar Prontuário
+                    </button>
+                </form>
+                {% else %}
+                <div class="alert alert-warning mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Nenhum técnico cadastrado neste projeto.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card-modern p-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-users me-2 text-primary"></i>Quem tem acesso ({{ compartilhamentos|length }})
+                </h5>
+
+                {% for c in compartilhamentos %}
+                <div class="p-3 mb-3 rounded-3 bg-light">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-primary bg-opacity-10 rounded-circle me-3 d-flex align-items-center justify-content-center"
+                                 style="width: 44px; height: 44px;">
+                                <i class="fas fa-user-tie text-primary"></i>
+                            </div>
+                            <div>
+                                <strong class="d-block">
+                                    {{ c.tecnico.get_full_name|default:c.tecnico.username }}
+                                </strong>
+                                <small class="text-muted">
+                                    Liberado em {{ c.liberado_em|date:"d/m/Y H:i" }}
+                                </small>
+                            </div>
+                        </div>
+                        {% if c.pode_comentar %}
+                        <span class="badge bg-success bg-opacity-10 text-success">
+                            <i class="fas fa-pen"></i> Pode comentar
+                        </span>
+                        {% else %}
+                        <span class="badge bg-secondary bg-opacity-10 text-secondary">
+                            <i class="fas fa-eye"></i> Só visualiza
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    {% if c.observacao_liberacao %}
+                    <div class="mt-2 ps-5">
+                        <small class="text-muted"><i class="fas fa-quote-left me-1"></i>{{ c.observacao_liberacao }}</small>
+                    </div>
+                    {% endif %}
+
+                    <div class="mt-3 d-flex justify-content-end">
+                        <form method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="acao" value="revogar">
+                            <input type="hidden" name="tecnico_id" value="{{ c.tecnico.id }}">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                    onclick="return confirm('Revogar acesso?');">
+                                <i class="fas fa-ban me-1"></i>Revogar Acesso
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-5">
+                    <i class="fas fa-user-lock" style="font-size: 3rem; color: #cbd5e1;"></i>
+                    <p class="text-muted mt-3 mb-0">
+                        Nenhum técnico tem acesso a este prontuário ainda.
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

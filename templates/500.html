@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Erro interno{% endblock %}
+{% block page_title %}500{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0 d-flex align-items-center justify-content-center" style="min-height: 70vh;">
+    <div class="card-modern p-5 text-center" style="max-width: 500px;">
+        <div style="font-size: 5rem; margin-bottom: 16px;">⚠️</div>
+        <h2 class="fw-bold mb-3">Algo deu errado</h2>
+        <p class="text-muted mb-4">
+            Ocorreu um erro interno. A equipe técnica já foi notificada.
+            Tente novamente em alguns instantes.
+        </p>
+        <a href="/" class="btn btn-primary-custom">
+            <i class="fas fa-home me-2"></i>Voltar para o início
+        </a>
+    </div>
+</div>
+{% endblock %}

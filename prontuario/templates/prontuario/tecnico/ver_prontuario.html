@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ prontuario.numero_prontuario }} — {{ prontuario.atleta.usuario.get_full_name }}{% endblock %}
+{% block page_title %}Prontuário Compartilhado{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <!-- HEADER -->
+    <div class="card-modern p-4 mb-4" style="background: linear-gradient(135deg, #2BA181 0%, #1f8768 100%); color: white; border: none;">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h3 class="fw-bold mb-2">
+                    {{ prontuario.atleta.usuario.get_full_name|default:prontuario.atleta.usuario.username }}
+                </h3>
+                <p class="mb-0 opacity-75">
+                    <i class="fas fa-folder-medical me-1"></i> {{ prontuario.numero_prontuario }}
+                    &nbsp;·&nbsp;
+                    <i class="fas fa-user-md me-1"></i>
+                    {{ prontuario.fisioterapeuta_responsavel.get_full_name|default:"—" }}
+                    {% if prontuario.atleta.modalidade %}
+                    &nbsp;·&nbsp;
+                    <i class="fas fa-futbol me-1"></i> {{ prontuario.atleta.modalidade.nome }}
+                    {% endif %}
+                </p>
+            </div>
+            <div class="d-flex gap-2">
+                {% if pode_comentar %}
+                <a href="{% url 'prontuario:tecnico_adicionar_observacao' prontuario.id %}" class="btn btn-light">
+                    <i class="fas fa-plus me-1"></i> Adicionar Observação
+                </a>
+                {% endif %}
+                <a href="{% url 'prontuario:tecnico_prontuarios_compartilhados' %}" class="btn btn-outline-light">
+                    <i class="fas fa-arrow-left me-1"></i> Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- AVISO MODO LEITURA -->
+    <div class="alert alert-info border-0 shadow-sm mb-4" style="border-left: 4px solid #0dcaf0 !important;">
+        <i class="fas fa-lock me-2"></i>
+        <strong>Modo somente leitura</strong> — você pode ver o prontuário para alinhar
+        seu trabalho de treino com o tratamento clínico.
+        {% if pode_comentar %} Sua contribuição com observações é bem-vinda!{% endif %}
+    </div>
+
+    <div class="row g-4">
+        <!-- COLUNA ESQUERDA — Conteúdo clínico -->
+        <div class="col-lg-8">
+
+            <!-- OBJETIVOS DO TRATAMENTO -->
+            <div class="card-modern p-4 mb-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-bullseye me-2 text-success"></i>Objetivos do Tratamento
+                </h5>
+                {% for obj in objetivos %}
+                <div class="d-flex align-items-center p-3 mb-2 rounded-3 bg-light">
+                    <div class="me-3">
+                        <i class="fas fa-{% if obj.status == 'alcancado' %}check-circle text-success{% elif obj.status == 'em_andamento' %}hourglass-half text-warning{% else %}circle text-muted{% endif %}"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <strong class="d-block">{{ obj.titulo }}</strong>
+                        {% if obj.descricao %}
+                        <small class="text-muted d-block">{{ obj.descricao|truncatechars:120 }}</small>
+                        {% endif %}
+                        {% if obj.data_prevista %}
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>
+                            Prazo: {{ obj.data_prevista|date:"d/m/Y" }}
+                        </small>
+                        {% endif %}
+                    </div>
+                    <span class="badge bg-{% if obj.status == 'alcancado' %}success{% elif obj.status == 'em_andamento' %}warning{% else %}secondary{% endif %} bg-opacity-10 text-{% if obj.status == 'alcancado' %}success{% elif obj.status == 'em_andamento' %}warning{% else %}secondary{% endif %}">
+                        {{ obj.get_status_display }}
+                    </span>
+                </div>
+                {% empty %}
+                <p class="text-muted text-center py-3">Nenhum objetivo cadastrado.</p>
+                {% endfor %}
+            </div>
+
+            <!-- EVOLUÇÕES FISIOTERAPÊUTICAS -->
+            <div class="card-modern p-4 mb-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-notes-medical me-2 text-primary"></i>Evoluções Fisioterapêuticas
+                </h5>
+                {% for ev in evolucoes %}
+                <div class="border-start border-3 border-primary ps-3 py-2 mb-3">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <strong>{{ ev.data|date:"d/m/Y" }}</strong>
+                        <span class="badge bg-primary bg-opacity-10 text-primary">
+                            {{ ev.get_tipo_display }}
+                        </span>
+                    </div>
+                    {% if ev.subjetivo %}
+                    <p class="mb-1 mt-2 small">
+                        <strong>S:</strong> {{ ev.subjetivo|truncatechars:180 }}
+                    </p>
+                    {% endif %}
+                    {% if ev.conduta %}
+                    <small class="text-muted d-block">
+                        <strong>Conduta:</strong> {{ ev.conduta|truncatechars:150 }}
+                    </small>
+                    {% endif %}
+                    {% if ev.escala_dor is not None %}
+                    <small class="text-muted">
+                        <i class="fas fa-band-aid me-1"></i>Dor: {{ ev.escala_dor }}/10
+                    </small>
+                    {% endif %}
+                </div>
+                {% empty %}
+                <p class="text-muted text-center py-3">Sem evoluções registradas.</p>
+                {% endfor %}
+            </div>
+
+            <!-- OBSERVAÇÕES DE TREINO -->
+            <div class="card-modern p-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-comments me-2 text-info"></i>
+                    Observações de Treino ({{ observacoes.count }})
+                </h5>
+                {% for obs in observacoes %}
+                <div class="p-3 mb-3 rounded-3 bg-{{ obs.cor_impacto }} bg-opacity-10">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <strong>
+                                <i class="fas {{ obs.icone_tipo }} me-2"></i>{{ obs.titulo }}
+                            </strong>
+                            <br>
+                            <small class="text-muted">
+                                {{ obs.tecnico.get_full_name|default:obs.tecnico.username }}
+                                · {{ obs.criado_em|date:"d/m/Y H:i" }}
+                                · {{ obs.get_tipo_display }}
+                            </small>
+                        </div>
+                        <span class="badge bg-{{ obs.cor_impacto }}">
+                            {{ obs.get_nivel_impacto_display }}
+                        </span>
+                    </div>
+                    <p class="mb-2 small">{{ obs.descricao }}</p>
+                    <div class="d-flex gap-3 small flex-wrap">
+                        {% if obs.desempenho_treino is not None %}
+                        <span>
+                            <i class="fas fa-chart-line me-1"></i>
+                            Desempenho: <strong>{{ obs.desempenho_treino }}/10</strong>
+                        </span>
+                        {% endif %}
+                        {% if obs.dor_relatada is not None %}
+                        <span>
+                            <i class="fas fa-band-aid me-1"></i>
+                            Dor: <strong>{{ obs.dor_relatada }}/10</strong>
+                        </span>
+                        {% endif %}
+                        {% if obs.aderencia is not None %}
+                        <span>
+                            <i class="fas fa-check-double me-1"></i>
+                            Adesão: <strong>{{ obs.aderencia }}/10</strong>
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted text-center py-3">
+                    {% if pode_comentar %}
+                    Nenhuma observação ainda. Seja o primeiro a contribuir!
+                    {% else %}
+                    Sem observações registradas.
+                    {% endif %}
+                </p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- COLUNA DIREITA — Resumos -->
+        <div class="col-lg-4">
+
+            <!-- MENSAGEM DE LIBERAÇÃO -->
+            {% if compartilhamento.observacao_liberacao %}
+            <div class="card-modern p-4 mb-4" style="background: linear-gradient(135deg, #fef3c7, #fde68a); border: 1px solid #fbbf24;">
+                <h6 class="fw-bold mb-2" style="color: #92400e;">
+                    <i class="fas fa-comment-medical me-2"></i>Recado do Fisioterapeuta
+                </h6>
+                <p class="mb-0 small" style="color: #78350f;">
+                    {{ compartilhamento.observacao_liberacao }}
+                </p>
+            </div>
+            {% endif %}
+
+            <!-- MEDICAMENTOS ATIVOS -->
+            <div class="card-modern p-4 mb-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-pills me-2 text-warning"></i>Medicamentos Ativos
+                </h5>
+                {% for med in medicamentos %}
+                <div class="mb-3 pb-2 border-bottom">
+                    <strong class="small d-block">{{ med.nome }}</strong>
+                    <small class="text-muted">
+                        {{ med.dosagem }} · {{ med.get_frequencia_display }}
+                    </small>
+                </div>
+                {% empty %}
+                <p class="text-muted small text-center py-3">Nenhum medicamento ativo.</p>
+                {% endfor %}
+            </div>
+
+            <!-- SESSÕES RECENTES -->
+            <div class="card-modern p-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-clipboard-list me-2 text-info"></i>Sessões Recentes
+                </h5>
+                {% for rel in relatorios %}
+                <div class="mb-3 pb-3 border-bottom">
+                    <strong class="small">{{ rel.data_sessao|date:"d/m/Y" }}</strong>
+                    <br>
+                    <small class="text-muted">
+                        Dor: {{ rel.dor_inicio }}/10 → {{ rel.dor_fim }}/10
+                    </small>
+                </div>
+                {% empty %}
+                <p class="text-muted small text-center py-3">Sem sessões registradas.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
