@@ -551,7 +551,6 @@
         <a href="{% url 'dashboard:atleta_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_recuperacao' %}active{% endif %}"><i class="fas fa-heartbeat"></i><span>Minha Recuperação</span></a>
         <a href="{% url 'dashboard:atleta_psicologico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_psicologico' %}active{% endif %}"><i class="fas fa-brain"></i><span>Saúde Mental</span></a>
         <a href="{% url 'dashboard:atleta_exercicios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_exercicios' %}active{% endif %}"><i class="fas fa-running"></i><span>Exercícios</span></a>
-        <a href="{% url 'dashboard:atleta_minha_timeline' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_minha_timeline' %}active{% endif %}"><i class="fas fa-stream"></i><span>Minha Timeline</span></a>
         <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Minha Agenda</span></a>
 
         {% elif user.perfil.tipo == 'fisioterapeuta' %}

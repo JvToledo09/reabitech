@@ -1,0 +1,345 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Minha Timeline{% endblock %}
+{% block page_title %}Minha Jornada{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tl-hero {
+        background: linear-gradient(135deg, #0a3d2e 0%, #0f2937 60%, #0a1929 100%);
+        color: white;
+        border-radius: 22px;
+        padding: 32px;
+        margin-bottom: 26px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tl-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%; right: -20%;
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(52, 211, 153, 0.15) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .tl-hero-info {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        position: relative;
+        z-index: 1;
+        flex-wrap: wrap;
+    }
+
+    .tl-hero-avatar {
+        width: 84px; height: 84px;
+        border-radius: 22px;
+        background: linear-gradient(135deg, #34d399, #2BA181);
+        display: flex; align-items: center; justify-content: center;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800; font-size: 2rem;
+        box-shadow: 0 14px 34px rgba(52, 211, 153, 0.4);
+        flex-shrink: 0;
+    }
+
+    .tl-hero h1 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.85rem; font-weight: 800;
+        margin: 0 0 8px 0; letter-spacing: -0.02em;
+    }
+
+    .tl-hero p {
+        opacity: 0.78; margin: 0; font-size: 0.95rem;
+    }
+
+    .tl-hero-stats {
+        display: flex; gap: 26px;
+        margin-top: 26px;
+        padding-top: 22px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative; z-index: 1;
+        flex-wrap: wrap;
+    }
+
+    .tl-hero-stat .num {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.9rem; font-weight: 800;
+        color: #34d399; line-height: 1;
+    }
+
+    .tl-hero-stat .lbl {
+        font-size: 0.72rem; text-transform: uppercase;
+        letter-spacing: 0.06em; opacity: 0.6; margin-top: 6px;
+    }
+
+    /* Próxima consulta */
+    .proxima-consulta {
+        background: linear-gradient(135deg, rgba(52, 211, 153, 0.12), rgba(13, 202, 240, 0.08));
+        border: 1px solid rgba(52, 211, 153, 0.3);
+        border-radius: 16px;
+        padding: 20px 24px;
+        margin-bottom: 26px;
+        display: flex; align-items: center; gap: 18px;
+        flex-wrap: wrap;
+    }
+
+    .proxima-consulta .icon-box {
+        width: 54px; height: 54px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #34d399, #2BA181);
+        display: flex; align-items: center; justify-content: center;
+        color: white; font-size: 1.3rem;
+        flex-shrink: 0;
+    }
+
+    .proxima-consulta .info { flex: 1; min-width: 200px; }
+    .proxima-consulta h4 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.05rem; font-weight: 700;
+        margin: 0 0 4px 0;
+        color: var(--text-primary);
+    }
+    .proxima-consulta p {
+        margin: 0; font-size: 0.85rem;
+        color: var(--text-tertiary);
+    }
+
+    /* Timeline */
+    .tl-mes {
+        margin-bottom: 34px;
+    }
+
+    .tl-mes-titulo {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.15rem; font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: 18px;
+        display: flex; align-items: center; gap: 12px;
+    }
+
+    .tl-mes-titulo::before {
+        content: '';
+        width: 4px; height: 22px;
+        background: linear-gradient(180deg, #34d399, #2BA181);
+        border-radius: 4px;
+    }
+
+    .tl-eventos {
+        display: flex; flex-direction: column; gap: 12px;
+    }
+
+    .tl-card {
+        display: flex;
+        gap: 16px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 18px 20px;
+        transition: all 0.25s;
+    }
+
+    .tl-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--green-soft-2);
+    }
+
+    .tl-card-icon {
+        width: 46px; height: 46px;
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.05rem;
+        flex-shrink: 0;
+    }
+
+    .tl-card-icon.cor-info { background: rgba(13, 202, 240, 0.15); color: #0891b2; }
+    .tl-card-icon.cor-success { background: rgba(16, 185, 129, 0.15); color: #059669; }
+    .tl-card-icon.cor-danger { background: rgba(239, 68, 68, 0.15); color: #dc2626; }
+    .tl-card-icon.cor-warning { background: rgba(245, 158, 11, 0.15); color: #d97706; }
+    .tl-card-icon.cor-primary { background: rgba(124, 58, 237, 0.15); color: #7c3aed; }
+    .tl-card-icon.cor-secondary { background: rgba(107, 114, 128, 0.15); color: #6b7280; }
+
+    .tl-card-body { flex: 1; min-width: 0; }
+
+    .tl-card-titulo {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700; font-size: 1rem;
+        color: var(--text-primary);
+        margin: 0 0 3px 0;
+    }
+
+    .tl-card-sub {
+        font-size: 0.78rem;
+        color: var(--text-tertiary);
+        margin: 0;
+    }
+
+    .tl-card-desc {
+        font-size: 0.87rem;
+        color: var(--text-secondary);
+        margin: 10px 0 0 0;
+        line-height: 1.55;
+    }
+
+    .tl-card-badges {
+        margin-top: 10px;
+        display: flex; gap: 6px; flex-wrap: wrap;
+    }
+
+    .tl-badge-mini {
+        display: inline-flex; align-items: center; gap: 5px;
+        font-size: 0.72rem; font-weight: 600;
+        padding: 3px 10px; border-radius: 999px;
+        background: var(--bg-secondary);
+        color: var(--text-tertiary);
+    }
+
+    .tl-badge-mini i { font-size: 0.68rem; }
+
+    .tl-card-data {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800; font-size: 0.8rem;
+        color: var(--text-tertiary);
+        background: var(--bg-secondary);
+        padding: 6px 12px; border-radius: 9px;
+        white-space: nowrap;
+        align-self: flex-start;
+    }
+
+    .tl-vazio {
+        text-align: center;
+        padding: 70px 20px;
+        color: var(--text-tertiary);
+    }
+
+    .tl-vazio i {
+        font-size: 3.5rem; opacity: 0.3;
+        display: block; margin-bottom: 18px;
+        color: var(--green);
+    }
+
+    .tl-vazio h3 {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <!-- Hero -->
+    <div class="tl-hero">
+        <div class="tl-hero-info">
+            <div class="tl-hero-avatar">
+                {{ atleta.usuario.get_full_name|default:atleta.usuario.username|first|upper }}
+            </div>
+            <div>
+                <h1>Olá, {{ atleta.usuario.get_full_name|default:atleta.usuario.username }}!</h1>
+                <p>
+                    {% if atleta.modalidade %}Modalidade: <strong>{{ atleta.modalidade.nome }}</strong>{% endif %}
+                    {% if atleta.rm %}&nbsp;·&nbsp; RM {{ atleta.rm }}{% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="tl-hero-stats">
+            <div class="tl-hero-stat">
+                <div class="num">{{ stats.total }}</div>
+                <div class="lbl">Eventos</div>
+            </div>
+            <div class="tl-hero-stat">
+                <div class="num">{{ stats.consultas }}</div>
+                <div class="lbl">Consultas</div>
+            </div>
+            <div class="tl-hero-stat">
+                <div class="num">{{ stats.evolucoes }}</div>
+                <div class="lbl">Evoluções</div>
+            </div>
+            <div class="tl-hero-stat">
+                <div class="num">{{ stats.observacoes }}</div>
+                <div class="lbl">Observações do Técnico</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Próxima consulta -->
+    {% if proxima_consulta %}
+    <div class="proxima-consulta">
+        <div class="icon-box">
+            <i class="fas fa-calendar-check"></i>
+        </div>
+        <div class="info">
+            <h4>Próxima consulta</h4>
+            <p>
+                <strong>{{ proxima_consulta.get_tipo_display }}</strong>
+                · {{ proxima_consulta.data|date:"l, d \d\e F" }}
+                às {{ proxima_consulta.hora_inicio|time:"H:i" }}
+                {% if proxima_consulta.profissional %}
+                · {{ proxima_consulta.profissional.get_full_name }}
+                {% endif %}
+            </p>
+        </div>
+        <a href="{% url 'consultas:detalhes_consulta' proxima_consulta.id %}" class="btn-outline-custom">
+            Ver detalhes <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Timeline -->
+    {% if grupos %}
+        {% for grupo in grupos %}
+        <div class="tl-mes">
+            <h3 class="tl-mes-titulo">{{ grupo.mes_ano }}</h3>
+
+            <div class="tl-eventos">
+                {% for ev in grupo.eventos %}
+                <div class="tl-card">
+                    <div class="tl-card-icon cor-{{ ev.cor }}">
+                        <i class="fas {{ ev.icone }}"></i>
+                    </div>
+                    <div class="tl-card-body">
+                        <h4 class="tl-card-titulo">{{ ev.titulo }}</h4>
+                        <p class="tl-card-sub">
+                            {{ ev.label_tipo }}
+                            {% if ev.extra.profissional %}&nbsp;·&nbsp; {{ ev.extra.profissional }}{% endif %}
+                            {% if ev.extra.tecnico %}&nbsp;·&nbsp; {{ ev.extra.tecnico }}{% endif %}
+                        </p>
+
+                        {% if ev.descricao %}
+                        <p class="tl-card-desc">{{ ev.descricao|truncatechars:200 }}</p>
+                        {% endif %}
+
+                        <div class="tl-card-badges">
+                            {% if ev.extra.hora %}<span class="tl-badge-mini"><i class="fas fa-clock"></i> {{ ev.extra.hora }}</span>{% endif %}
+                            {% if ev.extra.dor %}<span class="tl-badge-mini"><i class="fas fa-heart"></i> Dor {{ ev.extra.dor }}/10</span>{% endif %}
+                            {% if ev.extra.dor_antes %}<span class="tl-badge-mini"><i class="fas fa-heart"></i> Dor {{ ev.extra.dor_antes }} → {{ ev.extra.dor_depois }}</span>{% endif %}
+                            {% if ev.extra.status %}<span class="tl-badge-mini">{{ ev.extra.status }}</span>{% endif %}
+                            {% if ev.extra.dosagem %}<span class="tl-badge-mini"><i class="fas fa-pills"></i> {{ ev.extra.dosagem }}</span>{% endif %}
+                            {% if ev.extra.percentual %}<span class="tl-badge-mini">{{ ev.extra.percentual }}% concluído</span>{% endif %}
+                        </div>
+                    </div>
+                    <div class="tl-card-data">
+                        {{ ev.data_date|date:"d/m/Y" }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="card-premium">
+            <div class="tl-vazio">
+                <i class="fas fa-heart-pulse"></i>
+                <h3>Sua jornada começa aqui</h3>
+                <p>Assim que houver registros clínicos (consultas, evoluções, observações), eles aparecerão nesta linha do tempo.</p>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

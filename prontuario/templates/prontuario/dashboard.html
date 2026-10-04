@@ -206,6 +206,9 @@
         <a href="{% url 'prontuario:criar_evolucao' prontuario.id %}" class="btn-outline-custom">
             <i class="fas fa-chart-line"></i> Nova evolução
         </a>
+<a href="{% url 'prontuario:timeline_atleta' atleta.id %}" class="btn-primary-custom" style="background: linear-gradient(135deg, #7c3aed, #5b21b6);">
+    <i class="fas fa-stream"></i> Ver Timeline
+</a>
         <a href="{% url 'prontuario:imprimir_prontuario' prontuario.id %}" class="btn-outline-custom" target="_blank">
             <i class="fas fa-print"></i> Visualizar
         </a>

@@ -11,6 +11,9 @@ urlpatterns = [
     path('alterar-senha/', views.alterar_senha, name='alterar_senha'),
     path('perfil/', views.perfil_usuario, name='perfil_usuario'),
 
+        # API notificações (polling)
+    path('api/notificacoes/', views.api_notificacoes_count, name='api_notificacoes_count'),
+
     # ============================================
     # Dashboards por Perfil
     # ============================================
@@ -45,6 +48,7 @@ urlpatterns = [
     path('atleta/recuperacao/', views.atleta_recuperacao, name='atleta_recuperacao'),
     path('atleta/psicologico/', views.atleta_psicologico, name='atleta_psicologico'),
     path('atleta/exercicios/', views.atleta_exercicios, name='atleta_exercicios'),
+    path('atleta/timeline/', views.atleta_minha_timeline, name='atleta_minha_timeline'),
 
     # ============================================
     # Views do Fisioterapeuta

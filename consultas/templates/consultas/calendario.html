@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Calendário de Consultas{% endblock %}
+{% block page_title %}Calendário{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cal-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .cal-nav .mes-titulo {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 1.4rem;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .cal-nav .mes-titulo small {
+        display: block;
+        font-weight: 500;
+        font-size: 0.8rem;
+        color: var(--text-tertiary);
+        margin-top: 2px;
+    }
+
+    .cal-nav-btns { display: flex; gap: 8px; }
+
+    .cal-nav-btns a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .cal-nav-btns a:hover {
+        border-color: var(--green-soft-2);
+        color: var(--green);
+    }
+
+    .cal-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        padding: 12px;
+    }
+
+    .cal-dow {
+        text-align: center;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-tertiary);
+        padding: 8px 0;
+    }
+
+    .cal-dia {
+        min-height: 100px;
+        padding: 8px;
+        border-radius: 10px;
+        background: var(--bg-secondary);
+        border: 1px solid transparent;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        transition: all 0.2s;
+    }
+
+    .cal-dia.outro-mes { opacity: 0.35; }
+
+    .cal-dia.hoje {
+        border-color: var(--green);
+        background: rgba(16, 185, 129, 0.08);
+    }
+
+    .cal-dia .num {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 0.92rem;
+        color: var(--text-primary);
+        margin-bottom: 2px;
+    }
+
+    .cal-dia.hoje .num { color: var(--green); }
+
+    .cal-evento {
+        display: block;
+        padding: 3px 7px;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        background: rgba(13, 202, 240, 0.15);
+        color: #0891b2;
+        border-left: 3px solid #0891b2;
+    }
+
+    .cal-evento:hover { background: rgba(13, 202, 240, 0.25); color: #0891b2; }
+
+    .cal-evento.status-agendada { background: rgba(13,202,240,0.15); color: #0891b2; border-left-color: #0891b2; }
+    .cal-evento.status-confirmada { background: rgba(59,130,246,0.15); color: #2563eb; border-left-color: #2563eb; }
+    .cal-evento.status-realizada { background: rgba(16,185,129,0.15); color: #059669; border-left-color: #059669; }
+    .cal-evento.status-cancelada { background: rgba(239,68,68,0.15); color: #dc2626; border-left-color: #dc2626; }
+    .cal-evento.status-faltou { background: rgba(245,158,11,0.15); color: #d97706; border-left-color: #d97706; }
+
+    @media (max-width: 768px) {
+        .cal-dia { min-height: 70px; padding: 5px; }
+        .cal-evento { font-size: 0.62rem; padding: 2px 4px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— {{ projeto.nome }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-calendar-alt"></i>
+            Calendário
+        </div>
+        <h1 class="page-header-title">
+            Visão <span class="gradient-text">mensal.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            Todas as consultas do mês em formato calendário.
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+        <a href="{% url 'consultas:dashboard_consultas' %}" class="btn-outline-custom">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        {% if pode_gerenciar %}
+        <a href="{% url 'consultas:criar_consulta' %}" class="btn-primary-custom">
+            <i class="fas fa-plus"></i> Nova consulta
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="card-premium">
+        <div class="cal-nav">
+            <div>
+                <h2 class="mes-titulo">
+                    {{ mes_nome }} {{ ano }}
+                </h2>
+            </div>
+            <div class="cal-nav-btns">
+                <a href="?ano={{ ano_anterior }}&mes={{ mes_anterior }}" title="Mês anterior">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+                <a href="{% url 'consultas:calendario_consultas' %}" title="Hoje">
+                    <i class="fas fa-crosshairs"></i>
+                </a>
+                <a href="?ano={{ ano_proximo }}&mes={{ mes_proximo }}" title="Próximo mês">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="cal-grid">
+            <div class="cal-dow">Dom</div>
+            <div class="cal-dow">Seg</div>
+            <div class="cal-dow">Ter</div>
+            <div class="cal-dow">Qua</div>
+            <div class="cal-dow">Qui</div>
+            <div class="cal-dow">Sex</div>
+            <div class="cal-dow">Sáb</div>
+
+            {% for semana in semanas %}
+                {% for dia, consultas in semana %}
+                <div class="cal-dia {% if dia.month != mes %}outro-mes{% endif %} {% if dia == hoje %}hoje{% endif %}">
+                    <div class="num">{{ dia.day }}</div>
+                    {% for c in consultas %}
+                    <a href="{% url 'consultas:detalhes_consulta' c.id %}"
+                       class="cal-evento status-{{ c.status }}"
+                       title="{{ c.hora_inicio|time:'H:i' }} — {{ c.atleta.usuario.get_full_name }} — {{ c.get_tipo_display }}">
+                        {{ c.hora_inicio|time:"H:i" }} {{ c.atleta.usuario.get_full_name|truncatechars:14 }}
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

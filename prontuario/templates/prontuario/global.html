@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Timeline Global do Projeto{% endblock %}
+{% block page_title %}Timeline Global{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— {{ projeto.nome }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-stream"></i>
+            Timeline Global
+        </div>
+        <h1 class="page-header-title">
+            Todos os eventos <span class="gradient-text">do projeto.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            {{ total_eventos }} evento{{ total_eventos|pluralize }} ·
+            {{ grupos|length }} mês{{ grupos|length|pluralize }} com atividade
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+        <a href="{% url 'prontuario:lista_prontuarios' %}" class="btn-outline-custom">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+    </div>
+
+    <!-- Filtro por atleta -->
+    <form method="GET" style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; align-items: end;">
+        <div style="flex: 1; min-width: 220px;">
+            <label style="display: block; font-size: 0.72rem; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">
+                Filtrar por atleta
+            </label>
+            <select name="atleta" onchange="this.form.submit()"
+                    style="width: 100%; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-elevated); color: var(--text-primary);">
+                <option value="">Todos os atletas ({{ atletas|length }})</option>
+                {% for a in atletas %}
+                <option value="{{ a.id }}" {% if atleta_filtro == a.id|stringformat:"s" %}selected{% endif %}>
+                    {{ a.usuario.get_full_name|default:a.usuario.username }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        {% if atleta_filtro %}
+        <a href="{% url 'prontuario:timeline_global' %}" class="btn-outline-custom">
+            <i class="fas fa-rotate"></i> Limpar
+        </a>
+        {% endif %}
+    </form>
+
+    {% if grupos %}
+        {% for grupo in grupos %}
+        <div style="margin-bottom: 32px;">
+            <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--text-primary); padding: 8px 16px; background: var(--bg-secondary); border-radius: 10px; border-left: 4px solid var(--green); display: inline-block; margin-bottom: 16px;">
+                <i class="fas fa-calendar-day"></i>
+                {{ grupo.mes_ano }}
+                <span style="opacity: 0.5; font-weight: 500;">· {{ grupo.eventos|length }}</span>
+            </div>
+
+            {% for ev in grupo.eventos %}
+            <a href="{% if ev.link %}{{ ev.link }}{% else %}#{% endif %}"
+               style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; margin-bottom: 8px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-elevated); text-decoration: none; color: inherit; transition: all 0.2s;"
+               onmouseover="this.style.borderColor='var(--green-soft-2)'; this.style.transform='translateX(4px)'"
+               onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='none'">
+                <div style="width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.9rem;
+                    {% if ev.cor == 'info' %}background: rgba(13,202,240,0.15); color: #0891b2;
+                    {% elif ev.cor == 'success' %}background: rgba(16,185,129,0.15); color: #059669;
+                    {% elif ev.cor == 'danger' %}background: rgba(239,68,68,0.15); color: #dc2626;
+                    {% elif ev.cor == 'warning' %}background: rgba(245,158,11,0.15); color: #d97706;
+                    {% elif ev.cor == 'primary' %}background: rgba(124,58,237,0.15); color: #7c3aed;
+                    {% else %}background: rgba(107,114,128,0.15); color: #6b7280;
+                    {% endif %}">
+                    <i class="fas {{ ev.icone }}"></i>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-weight: 700; color: var(--text-primary); font-size: 0.9rem;">{{ ev.titulo }}</div>
+                    <div style="font-size: 0.72rem; color: var(--text-tertiary);">
+                        {{ ev.label_tipo }}
+                        {% if ev.extra.profissional %} · {{ ev.extra.profissional }}{% endif %}
+                        {% if ev.extra.tecnico %} · {{ ev.extra.tecnico }}{% endif %}
+                    </div>
+                </div>
+                <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 0.78rem; color: var(--text-tertiary); background: var(--bg-secondary); padding: 4px 10px; border-radius: 8px; white-space: nowrap;">
+                    {{ ev.data_date|date:"d/m" }}
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="card-premium" style="text-align: center; padding: 60px 20px;">
+            <i class="fas fa-stream" style="font-size: 3rem; opacity: 0.35; display: block; margin-bottom: 14px;"></i>
+            <h3 style="font-family: 'Plus Jakarta Sans', sans-serif;">Nenhum evento ainda</h3>
+            <p style="color: var(--text-tertiary);">Os eventos clínicos do projeto aparecerão aqui conforme forem registrados.</p>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -46,3 +46,7 @@ reabitech/
 # Pasta antiga duplicada do projeto
 reabitech/
 reabitech_old_backup/
+htmlcov/
+.pytest_cache/
+.coverage
+.env.prod

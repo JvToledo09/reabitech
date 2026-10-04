@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Todas as Consultas{% endblock %}
+{% block page_title %}Consultas{% endblock %}
+
+{% block extra_css %}
+<style>
+    .filtros-bar {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: end;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        padding: 16px 20px;
+        margin-bottom: 20px;
+    }
+
+    .filtros-bar .campo { flex: 1; min-width: 150px; }
+
+    .filtros-bar label {
+        display: block;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 6px;
+    }
+
+    .filtros-bar select,
+    .filtros-bar input {
+        width: 100%;
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-size: 0.88rem;
+    }
+
+    .consulta-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--bg-elevated);
+    }
+
+    .consulta-table thead {
+        background: var(--bg-secondary);
+    }
+
+    .consulta-table thead th {
+        padding: 14px 18px;
+        text-align: left;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--text-tertiary);
+        border-bottom: 1px solid var(--border-color);
+        white-space: nowrap;
+    }
+
+    .consulta-table tbody tr {
+        border-bottom: 1px solid var(--border-color);
+        transition: background 0.2s;
+    }
+
+    .consulta-table tbody tr:hover { background: var(--bg-secondary); }
+
+    .consulta-table tbody td {
+        padding: 14px 18px;
+        vertical-align: middle;
+        font-size: 0.88rem;
+        color: var(--text-secondary);
+    }
+
+    .data-cell {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        color: var(--text-primary);
+        white-space: nowrap;
+    }
+
+    .data-cell small {
+        display: block;
+        font-weight: 500;
+        color: var(--text-tertiary);
+        font-size: 0.72rem;
+    }
+
+    .tipo-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
+    }
+
+    .tipo-badge i { color: var(--green); }
+
+    .totais {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .totais .count {
+        font-size: 0.85rem;
+        color: var(--text-tertiary);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— {{ projeto.nome }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas fa-list"></i>
+            Consultas
+        </div>
+        <h1 class="page-header-title">
+            Todas as <span class="gradient-text">consultas.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            Lista completa com filtros por período, status, tipo e profissional.
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+        {% if pode_gerenciar %}
+        <a href="{% url 'consultas:criar_consulta' %}" class="btn-primary-custom">
+            <i class="fas fa-plus"></i> Nova consulta
+        </a>
+        {% endif %}
+        <a href="{% url 'consultas:dashboard_consultas' %}" class="btn-outline-custom">
+            <i class="fas fa-arrow-left"></i> Voltar ao dashboard
+        </a>
+        <a href="{% url 'consultas:calendario_consultas' %}" class="btn-outline-custom">
+            <i class="fas fa-calendar-alt"></i> Calendário
+        </a>
+    </div>
+
+    <!-- Filtros -->
+    <form method="GET" class="filtros-bar">
+        <div class="campo">
+            <label>Período</label>
+            <select name="periodo" onchange="this.form.submit()">
+                <option value="todas" {% if filtros.periodo == 'todas' %}selected{% endif %}>Todas</option>
+                <option value="hoje" {% if filtros.periodo == 'hoje' %}selected{% endif %}>Hoje</option>
+                <option value="semana" {% if filtros.periodo == 'semana' %}selected{% endif %}>Próximos 7 dias</option>
+                <option value="mes" {% if filtros.periodo == 'mes' %}selected{% endif %}>Este mês</option>
+                <option value="futuras" {% if filtros.periodo == 'futuras' %}selected{% endif %}>Futuras</option>
+                <option value="passadas" {% if filtros.periodo == 'passadas' %}selected{% endif %}>Passadas</option>
+            </select>
+        </div>
+        <div class="campo">
+            <label>Status</label>
+            <select name="status" onchange="this.form.submit()">
+                <option value="">Todos</option>
+                {% for val, label in status_choices %}
+                <option value="{{ val }}" {% if filtros.status == val %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="campo">
+            <label>Tipo</label>
+            <select name="tipo" onchange="this.form.submit()">
+                <option value="">Todos</option>
+                {% for val, label in tipo_choices %}
+                <option value="{{ val }}" {% if filtros.tipo == val %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="campo">
+            <label>Profissional</label>
+            <select name="profissional" onchange="this.form.submit()">
+                <option value="">Todos</option>
+                {% for m in profissionais %}
+                <option value="{{ m.usuario.id }}" {% if filtros.profissional == m.usuario.id|stringformat:"s" %}selected{% endif %}>
+                    {{ m.usuario.get_full_name|default:m.usuario.username }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="campo">
+            <a href="{% url 'consultas:lista_consultas' %}" class="btn-outline-custom" style="width: 100%; justify-content: center;">
+                <i class="fas fa-rotate"></i> Limpar
+            </a>
+        </div>
+    </form>
+
+    <div class="totais">
+        <span class="count"><strong>{{ total }}</strong> consulta{{ total|pluralize }}</span>
+    </div>
+
+    {% if consultas %}
+    <div class="card-premium" style="padding: 0; overflow: hidden;">
+        <div style="overflow-x: auto;">
+            <table class="consulta-table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Atleta</th>
+                        <th>Tipo</th>
+                        <th>Profissional</th>
+                        <th>Modalidade</th>
+                        <th>Prioridade</th>
+                        <th>Status</th>
+                        <th style="text-align: right;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in consultas %}
+                    <tr>
+                        <td>
+                            <span class="data-cell">
+                                {{ c.data|date:"d/m/Y" }}
+                                <small>{{ c.hora_inicio|time:"H:i" }} — {{ c.hora_fim|time:"H:i" }}</small>
+                            </span>
+                        </td>
+                        <td>
+                            <strong>{{ c.atleta.usuario.get_full_name|default:c.atleta.usuario.username }}</strong>
+                            {% if c.atleta.rm %}<div style="font-size: 0.72rem; color: var(--text-tertiary);">RM {{ c.atleta.rm }}</div>{% endif %}
+                        </td>
+                        <td>
+                            <span class="tipo-badge">
+                                <i class="fas {{ c.icone_tipo }}"></i>
+                                {{ c.get_tipo_display }}
+                            </span>
+                        </td>
+                        <td>{{ c.profissional.get_full_name|default:"—" }}</td>
+                        <td>{{ c.get_modalidade_display }}</td>
+                        <td><span class="badge bg-{{ c.cor_prioridade }}">{{ c.get_prioridade_display }}</span></td>
+                        <td><span class="badge bg-{{ c.cor_status }}">{{ c.get_status_display }}</span></td>
+                        <td style="text-align: right; white-space: nowrap;">
+                            <a href="{% url 'consultas:detalhes_consulta' c.id %}" class="action-icon-btn" title="Ver">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            {% if pode_gerenciar and c.pode_editar %}
+                            <a href="{% url 'consultas:editar_consulta' c.id %}" class="action-icon-btn" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="card-premium">
+        <div class="empty-state">
+            <div class="empty-state-icon"><i class="fas fa-calendar"></i></div>
+            <h3 class="empty-state-title">Nenhuma consulta encontrada</h3>
+            <p class="empty-state-desc">Ajuste os filtros ou crie uma nova consulta.</p>
+            {% if pode_gerenciar %}
+            <a href="{% url 'consultas:criar_consulta' %}" class="btn-primary-custom">
+                <i class="fas fa-plus"></i> Nova consulta
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

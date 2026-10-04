@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Consulta — {{ consulta.atleta.usuario.get_full_name }}{% endblock %}
+{% block page_title %}Detalhes da Consulta{% endblock %}
+
+{% block extra_css %}
+<style>
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 18px;
+        margin-bottom: 24px;
+    }
+
+    .info-item {
+        padding: 14px 16px;
+        border-radius: 12px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+    }
+
+    .info-item .label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-tertiary);
+        margin-bottom: 6px;
+    }
+
+    .info-item .value {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--text-primary);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <div class="page-header">
+        <span class="page-header-number">— {{ projeto.nome }}</span>
+        <div class="page-header-eyebrow">
+            <i class="fas {{ consulta.icone_tipo }}"></i>
+            {{ consulta.get_tipo_display }}
+        </div>
+        <h1 class="page-header-title">
+            Consulta de <span class="gradient-text">{{ consulta.atleta.usuario.get_full_name|default:consulta.atleta.usuario.username }}.</span>
+        </h1>
+        <p class="page-header-subtitle">
+            {{ consulta.data|date:"l, d \d\e F \d\e Y" }} · {{ consulta.hora_inicio|time:"H:i" }} às {{ consulta.hora_fim|time:"H:i" }}
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+        <a href="{% url 'consultas:lista_consultas' %}" class="btn-outline-custom">
+            <i class="fas fa-arrow-left"></i> Voltar
+        </a>
+        {% if pode_gerenciar and consulta.pode_editar %}
+        <a href="{% url 'consultas:editar_consulta' consulta.id %}" class="btn-outline-custom">
+            <i class="fas fa-edit"></i> Editar
+        </a>
+        {% endif %}
+        {% if pode_gerenciar %}
+        <form method="POST" action="{% url 'consultas:confirmar_consulta' consulta.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn-outline-custom" {% if consulta.status != 'agendada' %}disabled{% endif %}>
+                <i class="fas fa-check"></i> Confirmar
+            </button>
+        </form>
+        <form method="POST" action="{% url 'consultas:marcar_realizada' consulta.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn-primary-custom">
+                <i class="fas fa-check-double"></i> Marcar como realizada
+            </button>
+        </form>
+        <form method="POST" action="{% url 'consultas:marcar_falta' consulta.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn-outline-custom">
+                <i class="fas fa-user-slash"></i> Registrar falta
+            </button>
+        </form>
+        <a href="{% url 'consultas:cancelar_consulta' consulta.id %}" class="btn-outline-custom" style="color: #dc2626; border-color: rgba(239,68,68,0.35);">
+            <i class="fas fa-times"></i> Cancelar
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Status banner -->
+    <div class="card-premium" style="margin-bottom: 24px;">
+        <div class="info-grid" style="margin-bottom: 0;">
+            <div class="info-item">
+                <div class="label">Status</div>
+                <div class="value"><span class="badge bg-{{ consulta.cor_status }}">{{ consulta.get_status_display }}</span></div>
+            </div>
+            <div class="info-item">
+                <div class="label">Prioridade</div>
+                <div class="value"><span class="badge bg-{{ consulta.cor_prioridade }}">{{ consulta.get_prioridade_display }}</span></div>
+            </div>
+            <div class="info-item">
+                <div class="label">Duração</div>
+                <div class="value">{{ consulta.duracao_minutos }} min</div>
+            </div>
+            <div class="info-item">
+                <div class="label">Modalidade</div>
+                <div class="value">{{ consulta.get_modalidade_display }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card-premium">
+                <div class="section-tag" style="margin-top: 0;">
+                    <i class="fas fa-info-circle"></i> Informações
+                </div>
+                <div class="info-grid" style="grid-template-columns: 1fr;">
+                    <div class="info-item">
+                        <div class="label">Profissional</div>
+                        <div class="value">{{ consulta.profissional.get_full_name|default:"—" }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">Local</div>
+                        <div class="value">{{ consulta.local|default:"—" }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">Criado por</div>
+                        <div class="value">{{ consulta.criado_por.get_full_name|default:consulta.criado_por.username|default:"—" }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">Criado em</div>
+                        <div class="value">{{ consulta.criado_em|date:"d/m/Y H:i" }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card-premium">
+                <div class="section-tag" style="margin-top: 0;">
+                    <i class="fas fa-comment-medical"></i> Conteúdo
+                </div>
+
+                {% if consulta.motivo %}
+                <div style="margin-bottom: 18px;">
+                    <div class="info-item" style="background: transparent; border: none; padding: 0;">
+                        <div class="label">Motivo / objetivo</div>
+                        <div style="color: var(--text-secondary); margin-top: 6px; font-size: 0.92rem;">{{ consulta.motivo|linebreaksbr }}</div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if consulta.observacoes %}
+                <div style="margin-bottom: 18px;">
+                    <div class="info-item" style="background: transparent; border: none; padding: 0;">
+                        <div class="label">Observações</div>
+                        <div style="color: var(--text-secondary); margin-top: 6px; font-size: 0.92rem;">{{ consulta.observacoes|linebreaksbr }}</div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if consulta.motivo_cancelamento %}
+                <div>
+                    <div class="info-item" style="background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.25);">
+                        <div class="label" style="color: #dc2626;">Motivo do cancelamento</div>
+                        <div style="color: var(--text-secondary); margin-top: 6px; font-size: 0.92rem;">{{ consulta.motivo_cancelamento|linebreaksbr }}</div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if not consulta.motivo and not consulta.observacoes and not consulta.motivo_cancelamento %}
+                <p style="color: var(--text-tertiary); margin: 0; font-size: 0.9rem;">
+                    Nenhuma observação registrada.
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

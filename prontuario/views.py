@@ -1368,3 +1368,114 @@ def fisio_ver_observacoes_tecnico(request, prontuario_id):
         'positivas': observacoes.filter(nivel_impacto='positivo').count(),
         'atencao': observacoes.filter(nivel_impacto__in=['atencao', 'critico']).count(),
     })
+
+# ==============================================================================
+# 🔥 TIMELINE CLÍNICA UNIFICADA
+# ==============================================================================
+
+@login_required
+def timeline_atleta(request, atleta_id):
+    """Linha do tempo clínica completa de um atleta."""
+    from .timeline_utils import (
+        coletar_eventos, agrupar_por_mes, contagem_por_tipo, TIPOS_EVENTO,
+    )
+    from usuarios.models import Atleta
+
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        messages.error(request, 'Nenhum projeto ativo selecionado.')
+        return redirect('dashboard:dashboard')
+
+    atleta = get_object_or_404(
+        Atleta.objects.select_related('usuario'),
+        id=atleta_id,
+    )
+
+    # Verifica se o atleta é do projeto ativo
+    if not atleta.usuario.membros_projeto.filter(projeto=projeto, ativo=True).exists():
+        messages.error(request, 'Atleta não pertence ao projeto ativo.')
+        return redirect('prontuario:lista_prontuarios')
+
+    # Filtro por tipo (querystring: ?tipos=consulta,evolucao)
+    tipos_filtro = request.GET.get('tipos', '').strip()
+    tipos_desejados = [t.strip() for t in tipos_filtro.split(',') if t.strip()] if tipos_filtro else None
+
+    eventos = coletar_eventos(atleta, projeto, tipos_desejados=tipos_desejados)
+    grupos = agrupar_por_mes(eventos)
+    contagens = contagem_por_tipo(coletar_eventos(atleta, projeto))
+
+    context = {
+        'projeto': projeto,
+        'atleta': atleta,
+        'grupos': grupos,
+        'total_eventos': len(eventos),
+        'contagens': contagens,
+        'tipos_evento': TIPOS_EVENTO,
+        'tipos_ativos': tipos_desejados or [],
+        'tem_prontuario': hasattr(atleta, 'prontuario'),
+    }
+    return render(request, 'prontuario/timeline/atleta.html', context)
+
+
+@login_required
+@perfil_required('coordenador', 'fisioterapeuta', 'psicologo', 'tecnico')
+def timeline_global(request):
+    """Linha do tempo global do projeto — todos os atletas juntos.
+
+    OTIMIZACAO: coleta eventos UMA vez por atleta e reaproveita para contagem.
+    """
+    from .timeline_utils import agrupar_por_mes, contagem_por_tipo, TIPOS_EVENTO, TODOS_COLETORES
+    from usuarios.models import Atleta
+
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        messages.error(request, 'Nenhum projeto ativo selecionado.')
+        return redirect('dashboard:dashboard')
+
+    atletas = Atleta.objects.filter(
+        usuario__membros_projeto__projeto=projeto,
+        usuario__membros_projeto__ativo=True,
+        usuario__membros_projeto__tipo='atleta',
+    ).select_related('usuario').distinct()
+
+    atleta_filtro = (request.GET.get('atleta') or '').strip()
+    tipos_filtro = (request.GET.get('tipos') or '').strip()
+    tipos_desejados = [t.strip() for t in tipos_filtro.split(',') if t.strip()] if tipos_filtro else None
+
+    atletas_queryset = atletas
+    if atleta_filtro:
+        atletas_queryset = atletas.filter(id=atleta_filtro)
+
+    # ---- Coleta UMA vez por atleta (reaproveita para contagem) ----
+    eventos_todos = []
+    for atleta in atletas_queryset[:30]:
+        eventos_atleta = []
+        for coletor in TODOS_COLETORES:
+            try:
+                coletor(eventos_atleta, atleta, projeto)
+            except Exception as exc:
+                import logging
+                logging.getLogger(__name__).warning(f'Erro no coletor {coletor.__name__}: {exc}')
+        eventos_todos.extend(eventos_atleta)
+
+    # Contagem e' feita ANTES do filtro por tipo
+    contagens = contagem_por_tipo(eventos_todos)
+
+    # Filtro por tipo (em memoria, mais rapido que outra varredura)
+    if tipos_desejados:
+        eventos_todos = [e for e in eventos_todos if e['tipo'] in tipos_desejados]
+
+    eventos_todos.sort(key=lambda x: x['data'], reverse=True)
+    grupos = agrupar_por_mes(eventos_todos)
+
+    context = {
+        'projeto': projeto,
+        'grupos': grupos,
+        'total_eventos': len(eventos_todos),
+        'contagens': contagens,
+        'tipos_evento': TIPOS_EVENTO,
+        'tipos_ativos': tipos_desejados or [],
+        'atletas': atletas,
+        'atleta_filtro': atleta_filtro,
+    }
+    return render(request, 'prontuario/timeline/global.html', context)

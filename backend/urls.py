@@ -27,6 +27,8 @@ urlpatterns = [
     # Prontuário (namespace)
     path('prontuario/', include('prontuario.urls', namespace='prontuario')),
 
+    path('consultas/', include('consultas.urls')),
+
     # Usuários (namespace)
     path('usuarios/', include('usuarios.urls', namespace='usuarios')),
 

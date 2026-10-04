@@ -1931,6 +1931,96 @@ def perfil_usuario(request):
     return render(request, 'dashboard/perfil.html', context)
 
 # ==============================================================================
+# 🔥 API — NOTIFICAÇÕES EM TEMPO REAL (polling)
+# ==============================================================================
+
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
+def api_notificacoes_count(request):
+    """
+    Retorna JSON com contagem de notificações não lidas + últimas 5.
+    Usado pelo polling no base.html para atualizar o sino sem recarregar.
+    """
+    from usuarios.models import Notificacao
+
+    qs = Notificacao.objects.filter(usuario=request.user, lida=False).order_by('-criada_em')
+    total = qs.count()
+
+    ultimas = list(qs.values('id', 'titulo', 'mensagem', 'link', 'criada_em')[:5])
+    for item in ultimas:
+        # Formata data legível
+        item['criada_em'] = item['criada_em'].strftime('%d/%m/%Y %H:%M') if item['criada_em'] else ''
+
+    return JsonResponse({
+        'total': total,
+        'ultimas': ultimas,
+    })
+
+# ==============================================================================
+# 🔥 TIMELINE DO ATLETA — visão pessoal amigável
+# ==============================================================================
+
+@login_required
+@perfil_required('atleta')
+def atleta_minha_timeline(request):
+    """Timeline pessoal do atleta logado — versão simplificada e amigável."""
+    from prontuario.timeline_utils import (
+        coletar_eventos, agrupar_por_mes, contagem_por_tipo,
+    )
+    from usuarios.models import Atleta
+
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        messages.error(request, 'Nenhum projeto ativo selecionado.')
+        return redirect('dashboard:dashboard')
+
+    try:
+        atleta = Atleta.objects.select_related('usuario', 'modalidade').get(usuario=request.user)
+    except Atleta.DoesNotExist:
+        messages.error(request, 'Você não está cadastrado como atleta.')
+        return redirect('dashboard:dashboard')
+
+    # Tipos amigáveis pro atleta
+    TIPOS_ATLETA = [
+        'consulta', 'evolucao', 'evolucao_fisica', 'relatorio',
+        'objetivo', 'medicamento', 'observacao_tec',
+        'avaliacao_psi', 'questionario',
+    ]
+
+    eventos = coletar_eventos(atleta, projeto, tipos_desejados=TIPOS_ATLETA)
+    grupos = agrupar_por_mes(eventos)
+    contagens = contagem_por_tipo(eventos)
+
+    stats = {
+        'total': len(eventos),
+        'consultas': contagens.get('consulta', 0),
+        'evolucoes': contagens.get('evolucao', 0) + contagens.get('evolucao_fisica', 0),
+        'observacoes': contagens.get('observacao_tec', 0),
+    }
+
+    # Próxima consulta
+    from consultas.models import Consulta
+    from django.utils import timezone
+    proxima = Consulta.objects.filter(
+        atleta=atleta, projeto=projeto,
+        data__gte=timezone.localdate(),
+        status__in=['agendada', 'confirmada', 'remarcada'],
+    ).order_by('data', 'hora_inicio').first()
+
+    context = {
+        'projeto': projeto,
+        'atleta': atleta,
+        'grupos': grupos,
+        'total_eventos': len(eventos),
+        'stats': stats,
+        'proxima_consulta': proxima,
+    }
+    return render(request, 'dashboard/atleta/timeline.html', context)
+
+# ==============================================================================
 # HANDLERS DE ERRO
 # ==============================================================================
 def erro_404(request, exception):
