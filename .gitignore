@@ -50,3 +50,7 @@ htmlcov/
 .pytest_cache/
 .coverage
 .env.prod
+.env.prod
+*.bak
+conftest.py.bak
+settings.py.bak
