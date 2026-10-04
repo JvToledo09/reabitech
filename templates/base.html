@@ -161,6 +161,23 @@
             text-align: center;
         }
 
+        /* 🔥 Badge de mensagens não lidas na sidebar */
+        .badge-msg-sidebar {
+            margin-left: auto;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
+        }
+
         .sidebar-user {
             padding: 20px;
             margin-top: 20px;
@@ -537,6 +554,10 @@
         <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-folder-medical"></i><span>Prontuários</span></a>
         <a href="{% url 'prontuario:timeline_global' %}" class="sidebar-item {% if 'timeline' in request.path %}active{% endif %}"><i class="fas fa-stream"></i><span>Timeline</span></a>
         <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
+        <a href="{% url 'mensageria:lista_conversas' %}" class="sidebar-item {% if 'mensageria' in request.path %}active{% endif %}">
+            <i class="fas fa-comments"></i><span>Mensagens</span>
+            <span class="badge-msg-sidebar" id="badgeMensagensSidebar" {% if not total_mensagens_nao_lidas %}style="display:none;"{% endif %}>{% if total_mensagens_nao_lidas %}{{ total_mensagens_nao_lidas }}{% endif %}</span>
+        </a>
 
         {% elif user.perfil.tipo == 'tecnico' %}
         <a href="{% url 'dashboard:dashboard_tecnico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_tecnico' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
@@ -545,6 +566,10 @@
         <a href="{% url 'dashboard:tecnico_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_recuperacao' %}active{% endif %}"><i class="fas fa-heartbeat"></i><span>Recuperação</span></a>
         <a href="{% url 'prontuario:tecnico_prontuarios_compartilhados' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-share-nodes"></i><span>Compartilhados</span></a>
         <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
+        <a href="{% url 'mensageria:lista_conversas' %}" class="sidebar-item {% if 'mensageria' in request.path %}active{% endif %}">
+            <i class="fas fa-comments"></i><span>Mensagens</span>
+            <span class="badge-msg-sidebar" id="badgeMensagensSidebar" {% if not total_mensagens_nao_lidas %}style="display:none;"{% endif %}>{% if total_mensagens_nao_lidas %}{{ total_mensagens_nao_lidas }}{% endif %}</span>
+        </a>
 
         {% elif user.perfil.tipo == 'atleta' %}
         <a href="{% url 'dashboard:dashboard_atleta' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_atleta' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
@@ -562,12 +587,20 @@
         <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-folder-medical"></i><span>Prontuários</span></a>
         <a href="{% url 'prontuario:timeline_global' %}" class="sidebar-item {% if 'timeline' in request.path %}active{% endif %}"><i class="fas fa-stream"></i><span>Timeline</span></a>
         <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
+        <a href="{% url 'mensageria:lista_conversas' %}" class="sidebar-item {% if 'mensageria' in request.path %}active{% endif %}">
+            <i class="fas fa-comments"></i><span>Mensagens</span>
+            <span class="badge-msg-sidebar" id="badgeMensagensSidebar" {% if not total_mensagens_nao_lidas %}style="display:none;"{% endif %}>{% if total_mensagens_nao_lidas %}{{ total_mensagens_nao_lidas }}{% endif %}</span>
+        </a>
 
         {% elif user.perfil.tipo == 'psicologo' %}
         <a href="{% url 'dashboard:dashboard_psicologo' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_psicologo' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
         <a href="{% url 'dashboard:psicologo_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_atletas' %}active{% endif %}"><i class="fas fa-users"></i><span>Atendimentos</span></a>
         <a href="{% url 'dashboard:psicologo_avaliacoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_avaliacoes' %}active{% endif %}"><i class="fas fa-clipboard-list"></i><span>Avaliações</span></a>
         <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
+        <a href="{% url 'mensageria:lista_conversas' %}" class="sidebar-item {% if 'mensageria' in request.path %}active{% endif %}">
+            <i class="fas fa-comments"></i><span>Mensagens</span>
+            <span class="badge-msg-sidebar" id="badgeMensagensSidebar" {% if not total_mensagens_nao_lidas %}style="display:none;"{% endif %}>{% if total_mensagens_nao_lidas %}{{ total_mensagens_nao_lidas }}{% endif %}</span>
+        </a>
         {% endif %}
 
         <div style="height: 1px; background: rgba(255,255,255,0.08); margin: 15px 8px;"></div>
@@ -696,7 +729,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="{% static 'js/main.js' %}"></script>
     <script src="{% static 'js/charts.js' %}"></script>
-        <script src="{% static 'js/charts-theme.js' %}"></script>
+    <script src="{% static 'js/charts-theme.js' %}"></script>
     <script src="{% static 'js/confirm-delete.js' %}"></script>
 
     <script>
@@ -777,6 +810,7 @@
         });
     });
 </script>
+
     <!-- ============================================ -->
     <!-- POLLING: atualiza sino de notificações a cada 30s -->
     <!-- ============================================ -->
@@ -786,7 +820,6 @@
         const INTERVALO = 30000; // 30s
         const URL_API = '{% url "dashboard:api_notificacoes_count" %}';
 
-        // URL base para marcar como lida — troca o ID depois
         const URL_MARCAR_LIDA_BASE = '/dashboard/notificacoes/';
         const URL_MARCAR_LIDA_SUFIXO = '/lida/';
 
@@ -803,7 +836,6 @@
                 if (!resp.ok) return;
                 const data = await resp.json();
 
-                // Atualiza badge do sino
                 const sino = document.querySelector('.dropdown .btn-outline-custom .fa-bell')?.closest('button');
                 if (sino) {
                     let badge = sino.querySelector('.badge.bg-danger');
@@ -820,7 +852,6 @@
                     }
                 }
 
-                // Atualiza lista de notificações no dropdown
                 const lista = document.querySelector('ul.dropdown-menu[style*="min-width: 320px"]');
                 if (lista && data.ultimas.length > 0) {
                     const header = lista.querySelector('li:first-child');
@@ -858,6 +889,44 @@
 
         setTimeout(atualizarNotificacoes, 2000);
         setInterval(atualizarNotificacoes, INTERVALO);
+    })();
+    </script>
+
+    <!-- ============================================ -->
+    <!-- POLLING: badge de mensagens não lidas (15s) -->
+    <!-- ============================================ -->
+    <script>
+    (function() {
+        const INTERVALO = 15000; // 15s
+        const URL_MSG = '{% url "mensageria:api_nao_lidas" %}';
+        const badge = document.getElementById('badgeMensagensSidebar');
+
+        async function atualizarBadgeMensagens() {
+            if (document.hidden) return;
+            try {
+                const resp = await fetch(URL_MSG, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    credentials: 'same-origin',
+                });
+                if (!resp.ok) return;
+                const data = await resp.json();
+                if (!badge) return;
+
+                if (data.total > 0) {
+                    badge.textContent = data.total;
+                    badge.style.display = 'inline-flex';
+                } else {
+                    badge.style.display = 'none';
+                }
+            } catch (e) {
+                console.debug('Polling mensagens falhou:', e);
+            }
+        }
+
+        if (badge) {
+            setTimeout(atualizarBadgeMensagens, 3000);
+            setInterval(atualizarBadgeMensagens, INTERVALO);
+        }
     })();
     </script>
     {% endif %}

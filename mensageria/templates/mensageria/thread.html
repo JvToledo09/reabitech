@@ -1,0 +1,664 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo_conversa }} - REABITECH{% endblock %}
+{% block page_title %}Conversa{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chat-wrapper {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 20px;
+        height: calc(100vh - 180px);
+        min-height: 520px;
+    }
+
+    @media (max-width: 992px) {
+        .chat-wrapper {
+            grid-template-columns: 1fr;
+            height: auto;
+        }
+        .chat-sidebar { display: none !important; }
+    }
+
+    .chat-sidebar {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-sidebar-header {
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .chat-sidebar-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 1rem;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .chat-sidebar-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px;
+    }
+
+    .chat-side-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        text-decoration: none;
+        color: var(--text-primary);
+        transition: all 0.2s ease;
+        margin-bottom: 4px;
+    }
+
+    .chat-side-item:hover {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+    }
+
+    .chat-side-item.atual {
+        background: linear-gradient(135deg, rgba(52,211,153,0.18), rgba(43,161,129,0.08));
+        border-left: 3px solid #2BA181;
+    }
+
+    .chat-side-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #34d399, #2BA181);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 800;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+    }
+
+    .chat-side-avatar.grupo {
+        background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    }
+
+    .chat-side-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .chat-side-nome {
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .chat-side-badge {
+        background: linear-gradient(135deg, #2BA181, #1f8768);
+        color: white;
+        border-radius: 999px;
+        min-width: 20px;
+        height: 20px;
+        padding: 0 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.68rem;
+        font-weight: 700;
+    }
+
+    /* Área da conversa */
+    .chat-main {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .chat-header {
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(90deg, rgba(43,161,129,0.05), transparent);
+    }
+
+    .chat-header-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+    }
+
+    .chat-header-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #34d399, #2BA181);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 800;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .chat-header-avatar.grupo {
+        background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    }
+
+    .chat-header-nome {
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .chat-header-sub {
+        font-size: 0.75rem;
+        color: var(--text-tertiary);
+        margin: 0;
+    }
+
+    .chat-mensagens {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        background: var(--bg-primary);
+    }
+
+    .msg-row {
+        display: flex;
+        gap: 10px;
+        max-width: 78%;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg-row.propria {
+        align-self: flex-end;
+        flex-direction: row-reverse;
+    }
+
+    .msg-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #34d399, #2BA181);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .msg-bubble {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        padding: 10px 14px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .msg-row.propria .msg-bubble {
+        background: linear-gradient(135deg, #2BA181, #1f8768);
+        color: white;
+        border-color: transparent;
+    }
+
+    .msg-autor {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #2BA181;
+        margin-bottom: 3px;
+    }
+
+    .msg-row.propria .msg-autor {
+        color: rgba(255,255,255,0.85);
+    }
+
+    .msg-texto {
+        font-size: 0.88rem;
+        margin: 0 0 3px 0;
+        color: inherit;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .msg-hora {
+        font-size: 0.68rem;
+        color: var(--text-tertiary);
+        margin: 0;
+    }
+
+    .msg-row.propria .msg-hora {
+        color: rgba(255,255,255,0.75);
+    }
+
+    .msg-anexo-img {
+        max-width: 240px;
+        border-radius: 10px;
+        margin-top: 6px;
+        display: block;
+    }
+
+    .msg-anexo-pdf {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(239, 68, 68, 0.1);
+        color: #dc2626;
+        padding: 8px 12px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 0.82rem;
+        font-weight: 600;
+        margin-top: 6px;
+    }
+
+    .msg-row.propria .msg-anexo-pdf {
+        background: rgba(255,255,255,0.2);
+        color: white;
+    }
+
+    .chat-input-area {
+        padding: 14px 20px;
+        border-top: 1px solid var(--border-color);
+        background: var(--bg-elevated);
+    }
+
+    .chat-input-form {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+    }
+
+    .chat-input-form textarea {
+        flex: 1;
+        background: var(--bg-primary);
+        border: 1.5px solid var(--border-color);
+        color: var(--text-primary);
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-size: 0.9rem;
+        resize: none;
+        min-height: 44px;
+        max-height: 140px;
+        font-family: inherit;
+    }
+
+    .chat-input-form textarea:focus {
+        outline: none;
+        border-color: #2BA181;
+        box-shadow: 0 0 0 3px rgba(43,161,129,0.15);
+    }
+
+    .chat-send-btn {
+        background: linear-gradient(135deg, #2BA181, #1f8768);
+        color: white;
+        border: none;
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        box-shadow: 0 4px 12px rgba(43,161,129,0.25);
+        flex-shrink: 0;
+    }
+
+    .chat-send-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(43,161,129,0.4);
+    }
+
+    .anexo-preview {
+        font-size: 0.75rem;
+        color: var(--text-tertiary);
+        padding: 6px 10px;
+        background: var(--bg-primary);
+        border-radius: 8px;
+        margin-bottom: 8px;
+        display: none;
+    }
+
+    .anexo-preview.ativo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .participantes-pills {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .participante-pill {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    .empty-chat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: var(--text-tertiary);
+        padding: 40px;
+        text-align: center;
+    }
+
+    .empty-chat i {
+        font-size: 3.5rem;
+        opacity: 0.2;
+        margin-bottom: 16px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="chat-wrapper">
+
+    <!-- SIDEBAR DE CONVERSAS -->
+    <aside class="chat-sidebar">
+        <div class="chat-sidebar-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="chat-sidebar-title">
+                    <i class="fas fa-comments me-2" style="color: #2BA181;"></i>
+                    Conversas
+                </h6>
+                <a href="{% url 'mensageria:nova_conversa' %}" class="btn btn-sm" title="Nova conversa"
+                   style="background: linear-gradient(135deg, #2BA181, #1f8768); color: white; border-radius: 8px;">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </div>
+        </div>
+        <div class="chat-sidebar-list">
+            <!-- Conversa atual (destacada) -->
+            <div class="chat-side-item atual">
+                <div class="chat-side-avatar {% if conversa.tipo == 'grupo' %}grupo{% endif %}">
+                    {% if conversa.tipo == 'grupo' %}<i class="fas fa-users"></i>{% else %}{{ titulo_conversa|first|upper }}{% endif %}
+                </div>
+                <div class="chat-side-info">
+                    <p class="chat-side-nome">{{ titulo_conversa }}</p>
+                </div>
+            </div>
+
+            {% if outras_conversas %}
+            <div style="height: 1px; background: var(--border-color); margin: 8px 4px;"></div>
+            {% for item in outras_conversas %}
+            <a href="{% url 'mensageria:ver_conversa' conversa_id=item.conversa.id %}" class="chat-side-item">
+                <div class="chat-side-avatar {% if item.is_grupo %}grupo{% endif %}">
+                    {% if item.is_grupo %}<i class="fas fa-users"></i>{% else %}{{ item.titulo|first|upper }}{% endif %}
+                </div>
+                <div class="chat-side-info">
+                    <p class="chat-side-nome">{{ item.titulo }}</p>
+                </div>
+                {% if item.nao_lidas > 0 %}
+                <span class="chat-side-badge">{{ item.nao_lidas }}</span>
+                {% endif %}
+            </a>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </aside>
+
+    <!-- ÁREA PRINCIPAL DA CONVERSA -->
+    <main class="chat-main">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <div class="chat-header-avatar {% if conversa.tipo == 'grupo' %}grupo{% endif %}">
+                    {% if conversa.tipo == 'grupo' %}<i class="fas fa-users"></i>{% else %}{{ titulo_conversa|first|upper }}{% endif %}
+                </div>
+                <div style="min-width: 0;">
+                    <h6 class="chat-header-nome">{{ titulo_conversa }}</h6>
+                    <p class="chat-header-sub">
+                        {% if conversa.tipo == 'grupo' %}
+                            {{ total_participantes }} participante{{ total_participantes|pluralize:"s" }}
+                        {% else %}
+                            Conversa direta
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            <a href="{% url 'mensageria:lista_conversas' %}" class="btn-outline-custom" style="padding: 6px 14px; font-size: 0.8rem;">
+                <i class="fas fa-arrow-left"></i> <span class="d-none d-lg-inline">Voltar</span>
+            </a>
+        </div>
+
+        <!-- Mensagens -->
+        <div class="chat-mensagens" id="chatMensagens">
+            {% if mensagens %}
+                {% for msg in mensagens %}
+                <div class="msg-row {% if msg.autor == request.user %}propria{% endif %}" data-msg-id="{{ msg.id }}">
+                    <div class="msg-avatar">
+                        {{ msg.autor.first_name|first|default:msg.autor.username|first|upper }}
+                    </div>
+                    <div class="msg-bubble">
+                        {% if conversa.tipo == 'grupo' and msg.autor != request.user %}
+                        <p class="msg-autor">{{ msg.autor.get_full_name|default:msg.autor.username }}</p>
+                        {% endif %}
+                        {% if msg.conteudo %}
+                        <p class="msg-texto">{{ msg.conteudo }}</p>
+                        {% endif %}
+                        {% if msg.anexo %}
+                            {% if msg.is_imagem %}
+                            <a href="{{ msg.anexo.url }}" target="_blank">
+                                <img src="{{ msg.anexo.url }}" alt="anexo" class="msg-anexo-img">
+                            </a>
+                            {% elif msg.is_pdf %}
+                            <a href="{{ msg.anexo.url }}" target="_blank" class="msg-anexo-pdf">
+                                <i class="fas fa-file-pdf"></i> Abrir PDF
+                            </a>
+                            {% else %}
+                            <a href="{{ msg.anexo.url }}" target="_blank" class="msg-anexo-pdf">
+                                <i class="fas fa-paperclip"></i> Abrir anexo
+                            </a>
+                            {% endif %}
+                        {% endif %}
+                        <p class="msg-hora">{{ msg.criada_em|date:"d/m H:i" }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-chat">
+                    <i class="fas fa-comment-dots"></i>
+                    <h6 style="color: var(--text-secondary);">Nenhuma mensagem ainda</h6>
+                    <p class="small mb-0">Mande a primeira mensagem!</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Formulário de envio -->
+        <div class="chat-input-area">
+            <div class="anexo-preview" id="anexoPreview">
+                <span id="anexoNome"><i class="fas fa-paperclip me-1"></i></span>
+                <button type="button" class="btn btn-sm text-danger" onclick="limparAnexo()" title="Remover anexo">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form method="post" enctype="multipart/form-data" class="chat-input-form" id="chatForm">
+                {% csrf_token %}
+                <textarea name="conteudo" id="id_conteudo" placeholder="Escreva uma mensagem..."></textarea>
+                <label for="id_anexo" class="btn-outline-custom" style="cursor: pointer; padding: 12px; margin: 0;"
+                       title="Anexar arquivo (imagem ou PDF)">
+                    <i class="fas fa-paperclip"></i>
+                </label>
+                <input type="file" name="anexo" id="id_anexo" accept="image/*,application/pdf" style="display: none;">
+                <button type="submit" class="chat-send-btn" title="Enviar">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </main>
+</div>
+
+<!-- ============================================== -->
+<!-- POLLING: busca mensagens novas a cada 5s       -->
+<!-- ============================================== -->
+<script>
+(function() {
+    const chatBox = document.getElementById('chatMensagens');
+    if (!chatBox) return;
+
+    const URL_NOVAS = '{% url "mensageria:api_mensagens_novas" conversa_id=conversa.id %}';
+    const USER_ID = {{ request.user.id }};
+    const INTERVALO = 5000;
+    let ultimoId = 0;
+
+    // Pega o ID da última mensagem renderizada no HTML
+    const ultima = chatBox.querySelector('.msg-row:last-child');
+    if (ultima) ultimoId = parseInt(ultima.dataset.msgId) || 0;
+
+    // Scroll automático pro fim
+    function scrollParaFim() {
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    scrollParaFim();
+
+    // Escapa HTML
+    function esc(s) {
+        const d = document.createElement('div');
+        d.textContent = s || '';
+        return d.innerHTML;
+    }
+
+    function criarBubble(m) {
+        const propria = m.autor_id === USER_ID;
+        const div = document.createElement('div');
+        div.className = 'msg-row' + (propria ? ' propria' : '');
+        div.dataset.msgId = m.id;
+        const inicial = (m.autor || '?').charAt(0).toUpperCase();
+        const mostrarAutor = {% if conversa.tipo == 'grupo' %}true{% else %}false{% endif %} && !propria;
+
+        let anexoHtml = '';
+        if (m.tem_anexo) {
+            if (m.is_imagem) {
+                anexoHtml = `<a href="${m.anexo_url}" target="_blank"><img src="${m.anexo_url}" class="msg-anexo-img"></a>`;
+            } else if (m.is_pdf) {
+                anexoHtml = `<a href="${m.anexo_url}" target="_blank" class="msg-anexo-pdf"><i class="fas fa-file-pdf"></i> Abrir PDF</a>`;
+            } else {
+                anexoHtml = `<a href="${m.anexo_url}" target="_blank" class="msg-anexo-pdf"><i class="fas fa-paperclip"></i> Abrir anexo</a>`;
+            }
+        }
+
+        div.innerHTML = `
+            <div class="msg-avatar">${esc(inicial)}</div>
+            <div class="msg-bubble">
+                ${mostrarAutor ? `<p class="msg-autor">${esc(m.autor)}</p>` : ''}
+                ${m.conteudo ? `<p class="msg-texto">${esc(m.conteudo)}</p>` : ''}
+                ${anexoHtml}
+                <p class="msg-hora">${esc(m.criada_em)}</p>
+            </div>
+        `;
+        return div;
+    }
+
+    async function buscarNovas() {
+        // Se a aba não está visível, não busca (economiza requisições)
+        if (document.hidden) return;
+        try {
+            const resp = await fetch(URL_NOVAS + '?after_id=' + ultimoId, {
+                headers: {'X-Requested-With': 'XMLHttpRequest'},
+                credentials: 'same-origin',
+            });
+            if (!resp.ok) return;
+            const data = await resp.json();
+            if (!data.mensagens || data.mensagens.length === 0) return;
+
+            // Remove empty-chat se existir
+            const empty = chatBox.querySelector('.empty-chat');
+            if (empty) empty.remove();
+
+            data.mensagens.forEach(m => {
+                chatBox.appendChild(criarBubble(m));
+                if (m.id > ultimoId) ultimoId = m.id;
+            });
+            scrollParaFim();
+        } catch (e) {
+            console.debug('Polling mensagens falhou:', e);
+        }
+    }
+
+    // Só começa o polling depois do carregamento
+    setInterval(buscarNovas, INTERVALO);
+
+    // ============================================
+    // Anexo: mostra preview do nome do arquivo
+    // ============================================
+    const inputAnexo = document.getElementById('id_anexo');
+    const preview = document.getElementById('anexoPreview');
+    const nomeAnexo = document.getElementById('anexoNome');
+
+    if (inputAnexo) {
+        inputAnexo.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                nomeAnexo.innerHTML = '<i class="fas fa-paperclip me-1"></i> ' + esc(this.files[0].name);
+                preview.classList.add('ativo');
+            } else {
+                preview.classList.remove('ativo');
+            }
+        });
+    }
+
+    window.limparAnexo = function() {
+        if (inputAnexo) inputAnexo.value = '';
+        preview.classList.remove('ativo');
+    };
+
+    // Enter envia (Shift+Enter quebra linha)
+    const txt = document.getElementById('id_conteudo');
+    if (txt) {
+        txt.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                document.getElementById('chatForm').submit();
+            }
+        });
+        // Auto-grow
+        txt.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 140) + 'px';
+        });
+        txt.focus();
+    }
+})();
+</script>
+
+{% endblock %}

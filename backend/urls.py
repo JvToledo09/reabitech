@@ -27,7 +27,11 @@ urlpatterns = [
     # Prontuário (namespace)
     path('prontuario/', include('prontuario.urls', namespace='prontuario')),
 
+    # Consultas (namespace)
     path('consultas/', include('consultas.urls')),
+
+    # 🔥 Mensageria (namespace) — NOVO
+    path('mensageria/', include('mensageria.urls', namespace='mensageria')),
 
     # Usuários (namespace)
     path('usuarios/', include('usuarios.urls', namespace='usuarios')),
@@ -46,7 +50,7 @@ if settings.DEBUG:
 
 
 # ==============================================================================
-# HANDLERS DE ERRO (opcionais, mas recomendados para TCC)
+# HANDLERS DE ERRO
 # ==============================================================================
 handler404 = 'dashboard.views.erro_404'
 handler500 = 'dashboard.views.erro_500'

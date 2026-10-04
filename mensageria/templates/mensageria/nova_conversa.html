@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Nova Conversa - REABITECH{% endblock %}
+{% block page_title %}Nova Conversa{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-card {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 28px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .form-label-custom {
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control, .form-select {
+        background: var(--bg-primary);
+        border: 1.5px solid var(--border-color);
+        color: var(--text-primary);
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 0.9rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+        background: var(--bg-primary);
+        border-color: #2BA181;
+        color: var(--text-primary);
+        box-shadow: 0 0 0 3px rgba(43, 161, 129, 0.15);
+    }
+
+    .tipo-selector {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .tipo-option {
+        padding: 18px;
+        border: 2px solid var(--border-color);
+        border-radius: 14px;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.2s ease;
+        background: var(--bg-primary);
+    }
+
+    .tipo-option:hover {
+        border-color: #2BA181;
+        transform: translateY(-2px);
+    }
+
+    .tipo-option input {
+        display: none;
+    }
+
+    .tipo-option.selecionado {
+        border-color: #2BA181;
+        background: linear-gradient(135deg, rgba(52,211,153,0.1), rgba(43,161,129,0.05));
+        box-shadow: 0 4px 15px rgba(43,161,129,0.2);
+    }
+
+    .tipo-option i {
+        font-size: 1.6rem;
+        color: #2BA181;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .tipo-option strong {
+        display: block;
+        font-size: 0.9rem;
+        color: var(--text-primary);
+    }
+
+    .tipo-option small {
+        font-size: 0.72rem;
+        color: var(--text-tertiary);
+    }
+
+    .destinatarios-list {
+        max-height: 380px;
+        overflow-y: auto;
+        border: 1.5px solid var(--border-color);
+        border-radius: 12px;
+        padding: 8px;
+        background: var(--bg-primary);
+    }
+
+    .dest-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .dest-item:hover {
+        background: var(--bg-elevated);
+    }
+
+    .dest-item input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #2BA181;
+        cursor: pointer;
+    }
+
+    .dest-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #34d399, #2BA181);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+    }
+
+    .dest-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .dest-nome {
+        font-weight: 600;
+        font-size: 0.88rem;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .dest-tipo {
+        font-size: 0.72rem;
+        color: var(--text-tertiary);
+        margin: 0;
+    }
+
+    .nome-grupo-wrapper {
+        display: none;
+        margin-bottom: 20px;
+    }
+
+    .nome-grupo-wrapper.visivel {
+        display: block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="form-card">
+            <div class="mb-4">
+                <h4 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--text-primary); margin: 0 0 6px 0;">
+                    <i class="fas fa-comment-medical me-2" style="color: #2BA181;"></i>
+                    Iniciar Nova Conversa
+                </h4>
+                <p class="mb-0" style="color: var(--text-tertiary); font-size: 0.85rem;">
+                    Converse com os profissionais do projeto {{ projeto.nome }}
+                </p>
+            </div>
+
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for erro in form.non_field_errors %}{{ erro }}<br>{% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Seletor de tipo -->
+                <label class="form-label-custom">Tipo de conversa</label>
+                <div class="tipo-selector" id="tipoSelector">
+                    <label class="tipo-option {% if form.tipo.value == 'dm' or not form.tipo.value %}selecionado{% endif %}" data-tipo="dm">
+                        <input type="radio" name="tipo" value="dm" {% if form.tipo.value == 'dm' or not form.tipo.value %}checked{% endif %}>
+                        <i class="fas fa-user"></i>
+                        <strong>Conversa Direta</strong>
+                        <small>1 destinatário</small>
+                    </label>
+                    <label class="tipo-option {% if form.tipo.value == 'grupo' %}selecionado{% endif %}" data-tipo="grupo">
+                        <input type="radio" name="tipo" value="grupo" {% if form.tipo.value == 'grupo' %}checked{% endif %}>
+                        <i class="fas fa-users"></i>
+                        <strong>Grupo</strong>
+                        <small>2+ participantes</small>
+                    </label>
+                </div>
+                {% if form.tipo.errors %}
+                <div class="text-danger small mb-3">{{ form.tipo.errors|join:", " }}</div>
+                {% endif %}
+
+                <!-- Nome do grupo (aparece só se tipo=grupo) -->
+                <div class="nome-grupo-wrapper {% if form.tipo.value == 'grupo' %}visivel{% endif %}" id="nomeGrupoWrapper">
+                    <label class="form-label-custom" for="id_nome">Nome do grupo</label>
+                    <input type="text" name="nome" id="id_nome" class="form-control"
+                           placeholder="Ex: Equipe de Recuperação do João"
+                           value="{{ form.nome.value|default:'' }}" maxlength="150">
+                    {% if form.nome.errors %}
+                    <div class="text-danger small mt-1">{{ form.nome.errors|join:", " }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Destinatários -->
+                <label class="form-label-custom">
+                    Participantes
+                    <span id="contadorSelecionados" style="color: #2BA181; font-weight: 500; font-size: 0.8rem; margin-left: 6px;"></span>
+                </label>
+
+                {% if form.destinatarios.errors %}
+                <div class="text-danger small mb-2">{{ form.destinatarios.errors|join:", " }}</div>
+                {% endif %}
+
+                <div class="destinatarios-list mb-4">
+                    {% for choice in form.destinatarios %}
+                    <label class="dest-item">
+                        {{ choice.tag }}
+                        <div class="dest-avatar">
+                            {{ choice.choice_label|first|upper }}
+                        </div>
+                        <div class="dest-info">
+                            <p class="dest-nome">{{ choice.choice_label }}</p>
+                        </div>
+                    </label>
+                    {% empty %}
+                    <div class="text-center py-4 text-muted small">
+                        <i class="fas fa-user-slash d-block fs-3 mb-2 opacity-50"></i>
+                        Nenhum outro profissional disponível neste projeto.
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                    <a href="{% url 'mensageria:lista_conversas' %}" class="btn-outline-custom">
+                        <i class="fas fa-arrow-left"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn-primary-custom">
+                        <i class="fas fa-paper-plane"></i> Criar Conversa
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const tipoSelector = document.getElementById('tipoSelector');
+    const nomeWrapper = document.getElementById('nomeGrupoWrapper');
+    const contador = document.getElementById('contadorSelecionados');
+    const checkboxes = document.querySelectorAll('.dest-item input[type="checkbox"]');
+
+    // Alterna tipo
+    tipoSelector.querySelectorAll('.tipo-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+            tipoSelector.querySelectorAll('.tipo-option').forEach(o => o.classList.remove('selecionado'));
+            opt.classList.add('selecionado');
+            const tipo = opt.dataset.tipo;
+            if (tipo === 'grupo') {
+                nomeWrapper.classList.add('visivel');
+            } else {
+                nomeWrapper.classList.remove('visivel');
+            }
+        });
+    });
+
+    // Contador de selecionados
+    function atualizarContador() {
+        const total = document.querySelectorAll('.dest-item input[type="checkbox"]:checked').length;
+        contador.textContent = total > 0 ? `(${total} selecionado${total > 1 ? 's' : ''})` : '';
+    }
+    checkboxes.forEach(cb => cb.addEventListener('change', atualizarContador));
+    atualizarContador();
+})();
+</script>
+
+{% endblock %}

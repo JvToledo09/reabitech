@@ -31,9 +31,6 @@ CSRF_TRUSTED_ORIGINS = [
     ).split(',') if o.strip()
 ]
 
-# Carrega as variáveis do arquivo .env
-load_dotenv()
-
 # ==============================================================================
 # CONFIGURAÇÕES BÁSICAS E SEGURANÇA
 # ==============================================================================
@@ -55,8 +52,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
-    
-     # Apps do REABITECH
+
+    # Apps do REABITECH
     'usuarios',
     'projetos',
     'dashboard',
@@ -65,6 +62,7 @@ INSTALLED_APPS = [
     'psicologia',
     'painel',
     'consultas',
+    'mensageria',   # 🔥 NOVO — Mensageria interna
 ]
 
 MIDDLEWARE = [
@@ -96,34 +94,13 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'dashboard.context_processors.notificacoes_context',
                 'dashboard.context_processors.projeto_ativo_context',
+                'mensageria.context_processors.mensageria_context',   # 🔥 NOVO
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
-
-# ==============================================================================
-# BANCO DE DADOS
-# ==============================================================================
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-# Para usar PostgreSQL em produção, descomente o bloco abaixo e configure no .env
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DB_NAME', 'reabitech_db'),
-#         'USER': os.getenv('DB_USER', 'postgres'),
-#         'PASSWORD': os.getenv('DB_PASSWORD', ''),
-#         'HOST': os.getenv('DB_HOST', 'localhost'),
-#         'PORT': os.getenv('DB_PORT', '5432'),
-#     }
-# }
-
 
 # ==============================================================================
 # VALIDAÇÃO DE SENHAS E AUTENTICAÇÃO
@@ -135,8 +112,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Configurações de Login e Redirecionamento (CORRIGIDO)
-LOGIN_URL = '/login/'          # ✅ CORRIGIDO: aponta para a rota raiz
+# Configurações de Login e Redirecionamento
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/'
 
@@ -164,12 +141,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
-    # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    # EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
-    # EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
-    # EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
-    # EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
-    # EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
     pass
 
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@reabitech.com')
@@ -185,6 +156,7 @@ if not DEBUG:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
     X_FRAME_OPTIONS = 'DENY'
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # ==============================================================================
 # CAMPO DE ID PADRÃO
@@ -194,9 +166,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ==============================================================================
 # UTILITÁRIOS DE DESENVOLVIMENTO
 # ==============================================================================
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
+INTERNAL_IPS = ['127.0.0.1']
 
 # ==============================================================================
 # CONFIGURAÇÕES DE DESENVOLVIMENTO — COOKIES E CSRF
@@ -225,7 +195,7 @@ if DATABASE_URL:
         )
     }
 else:
-    # Fallback: SQLite (dev e PythonAnywhere free)
+    # Fallback: SQLite (dev)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -237,13 +207,9 @@ else:
 # ARQUIVOS ESTÁTICOS (WhiteNoise)
 # ==============================================================================
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# ==============================================================================
+# UPLOAD — Tamanho máximo de arquivo (10MB para anexos da mensageria)
+# ==============================================================================
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024      # 10MB em memória
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024      # 10MB no POST
