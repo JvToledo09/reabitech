@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="{% static 'css/internal-effects.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/animations.css' %}">
+    <link rel="stylesheet" href="{% static 'css/premium-effects.css' %}">
+    <link rel="stylesheet" href="{% static 'css/premium-responsive.css' %}">
     <link rel="stylesheet" href="{% static 'css/dark-mode-fixes.css' %}">
 
     <style>
@@ -935,6 +937,9 @@
     </script>
     {% endif %}
 
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <script src="{% static 'js/lenis-init.js' %}"></script>
+    <script src="{% static 'js/premium-effects.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

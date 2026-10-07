@@ -1,46 +1,154 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block title %}Entrar - REABITECH{% endblock %}
 
-{% block title %}Login - REABITECH{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login-premium.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="container-fluid vh-100 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #0f172a 0%, #1a1a2e 100%);">
-    <div class="row w-100 justify-content-center">
-        <div class="col-lg-5 col-md-8">
-            <div class="card-modern p-5 shadow-lg animate-fadeInUp" style="border-radius: 24px; background: rgba(255,255,255,0.98);">
-                <div class="text-center mb-4">
-                    <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="max-width: 120px; margin-bottom: 15px;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏥</text></svg>'">
-                    <h2 class="fw-bold" style="color: #0f172a;">Bem-vindo de volta</h2>
-                    <p class="text-muted">Acesse sua conta para continuar</p>
-                </div>
+<div class="login-page">
 
-                <form method="POST">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Usuário, E-mail ou RM</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-0"><i class="fas fa-user"></i></span>
-                            <input type="text" name="username" class="form-control bg-light border-0 shadow-sm" placeholder="Digite suas credenciais" required>
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <label class="form-label fw-bold">Senha</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-0"><i class="fas fa-lock"></i></span>
-                            <input type="password" name="password" class="form-control bg-light border-0 shadow-sm" placeholder="Digite sua senha" required>
-                        </div>
-                    </div>
+    <!-- ============================================================
+         PAINEL ESQUERDO - MARCA
+         ============================================================ -->
+    <aside class="login-brand">
 
-                    <button type="submit" class="btn btn-primary-custom w-100 py-3 shadow" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; border-radius: 12px;">
-                        <i class="fas fa-sign-in-alt me-2"></i>Entrar no Sistema
-                    </button>
-                </form>
-
-                <div class="text-center mt-4">
-                    <small class="text-muted">Não tem conta? <a href="#" class="fw-bold text-decoration-none">Solicite ao seu coordenador</a></small>
-                </div>
+        <div class="brand-top">
+            <div class="brand-logo-wrap">
+                <img src="{% static 'images/logo.png' %}"
+                     alt="REABITECH"
+                     class="brand-logo"
+                     onerror="this.style.display='none'">
+            </div>
+            <div>
+                <div class="brand-wordmark">Reabitech</div>
+                <span class="brand-wordmark-sub">Solu&ccedil;&otilde;es em Reabilita&ccedil;&atilde;o</span>
             </div>
         </div>
-    </div>
+
+        <div class="brand-center">
+            <div class="brand-eyebrow">Plataforma Cl&iacute;nica</div>
+            <h1 class="brand-headline">
+                Reabilita&ccedil;&atilde;o<br>
+                <em>em</em> <span class="accent">movimento</span>.
+            </h1>
+            <p class="brand-tagline">
+                Dados cl&iacute;nicos, fisioterapia, psicologia e performance &mdash;
+                integrados em uma &uacute;nica plataforma multi-tenant.
+            </p>
+        </div>
+
+        <div class="brand-bottom">
+            <div class="ecg-wrap">
+                <div class="ecg-label">
+                    <span class="ecg-dot"></span>
+                    Sinal Ativo
+                </div>
+                <svg class="ecg-svg" viewBox="0 0 300 40" preserveAspectRatio="none">
+                    <path class="ecg-line"
+                          d="M0,20 L60,20 L70,20 L75,8 L80,32 L85,20 L120,20 L130,20 L135,4 L140,36 L145,20 L180,20 L190,20 L195,10 L200,30 L205,20 L240,20 L250,20 L255,6 L260,34 L265,20 L300,20" />
+                </svg>
+            </div>
+            <div class="brand-copyright">
+                Reabitech &copy; 2026
+                <strong>v8.0</strong>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- ============================================================
+         PAINEL DIREITO - FORM COM GLASS
+         ============================================================ -->
+    <main class="login-form-panel">
+
+        <div class="glass-card">
+
+            <div class="form-header">
+                <div class="form-step">Acesso</div>
+                <h2 class="form-title">Bem-vindo <span>de volta</span>.</h2>
+                <p class="form-subtitle">
+                    Entre com seu usu&aacute;rio, e-mail ou RM para continuar.
+                </p>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    {% if 'error' in message.tags or 'danger' in message.tags %}
+                    <div class="alert-editorial">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" autocomplete="on">
+                {% csrf_token %}
+
+                <div class="field-editorial">
+                    <span class="field-number">01</span>
+                    <input type="text"
+                           name="username"
+                           id="id_username"
+                           placeholder="Usu&aacute;rio, e-mail ou RM"
+                           required
+                           autofocus
+                           autocomplete="username">
+                </div>
+
+                <div class="field-editorial">
+                    <span class="field-number">02</span>
+                    <input type="password"
+                           name="password"
+                           id="id_password"
+                           placeholder="Senha"
+                           required
+                           autocomplete="current-password">
+                    <button type="button"
+                            class="field-toggle"
+                            onclick="togglePassword()"
+                            title="Mostrar/ocultar senha"
+                            aria-label="Mostrar senha">
+                        <i class="fas fa-eye" id="togglePassIcon"></i>
+                    </button>
+                </div>
+
+                <button type="submit" class="btn-editorial">
+                    <span>Entrar na plataforma</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <div class="form-footer">
+                <a href="/">
+                    <i class="fas fa-arrow-left"></i>
+                    Voltar ao in&iacute;cio
+                </a>
+            </div>
+
+        </div>
+
+    </main>
+
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePassword() {
+    var input = document.getElementById('id_password');
+    var icon = document.getElementById('togglePassIcon');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+</script>
 {% endblock %}

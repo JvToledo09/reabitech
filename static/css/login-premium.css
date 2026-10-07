@@ -1,0 +1,727 @@
+/* ==============================================================================
+   REABITECH - LOGIN EDITORIAL + GLASS
+   Split-screen editorial com glassmorphism sutil
+   ============================================================================== */
+
+.login-page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    background: #f5f3ef;
+    position: relative;
+}
+
+/* ==========================================================================
+   PAINEL ESQUERDO - MARCA (escuro, editorial)
+   ========================================================================== */
+.login-brand {
+    background: #071a14;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 48px 56px;
+    color: #fff;
+}
+
+.login-brand::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(52, 211, 153, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(52, 211, 153, 0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse at top left, black 20%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at top left, black 20%, transparent 80%);
+}
+
+.login-brand::after {
+    content: '';
+    position: absolute;
+    width: 720px;
+    height: 720px;
+    border-radius: 50%;
+    border: 1px solid rgba(52, 211, 153, 0.12);
+    bottom: -420px;
+    right: -220px;
+    pointer-events: none;
+    animation: slowSpin 60s linear infinite;
+}
+
+@keyframes slowSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* Topo: logo GRANDE + wordmark */
+.brand-top {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    z-index: 2;
+    margin-bottom: auto;
+}
+
+/* Moldura glass da logo */
+.brand-logo-wrap {
+    position: relative;
+    width: 88px;
+    height: 88px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(52, 211, 153, 0.08);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    border: 1px solid rgba(52, 211, 153, 0.25);
+    box-shadow:
+        0 10px 40px rgba(52, 211, 153, 0.18),
+        0 0 60px rgba(52, 211, 153, 0.08) inset,
+        0 1px 0 rgba(255, 255, 255, 0.15) inset;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.brand-logo-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        transparent 50%,
+        rgba(52, 211, 153, 0.1) 100%);
+    pointer-events: none;
+}
+
+.brand-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 10px;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 4px 12px rgba(52, 211, 153, 0.4));
+}
+
+.brand-wordmark {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+.brand-wordmark-sub {
+    display: block;
+    font-size: 0.62rem;
+    letter-spacing: 0.28em;
+    color: rgba(52, 211, 153, 0.7);
+    font-weight: 500;
+    margin-top: 6px;
+    text-transform: uppercase;
+}
+
+/* Area central: headline */
+.brand-center {
+    position: relative;
+    z-index: 2;
+    padding: 60px 0 40px;
+}
+
+.brand-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(52, 211, 153, 0.9);
+    margin-bottom: 28px;
+}
+
+.brand-eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: rgba(52, 211, 153, 0.6);
+}
+
+.brand-headline {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+    margin: 0;
+    color: #fff;
+}
+
+.brand-headline em {
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(167, 243, 208, 0.7);
+    font-family: Georgia, serif;
+}
+
+.brand-headline .accent {
+    color: #34d399;
+    position: relative;
+    display: inline-block;
+}
+
+.brand-headline .accent::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.08em;
+    height: 0.12em;
+    background: rgba(52, 211, 153, 0.25);
+    z-index: -1;
+}
+
+.brand-tagline {
+    margin-top: 28px;
+    max-width: 380px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Rodape: ECG + copyright */
+.brand-bottom {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+}
+
+.ecg-wrap {
+    flex: 1;
+    max-width: 260px;
+}
+
+.ecg-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ecg-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 10px rgba(52, 211, 153, 0.9);
+    animation: pulse-dot 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+.ecg-svg {
+    width: 100%;
+    height: 40px;
+    overflow: visible;
+}
+
+.ecg-line {
+    fill: none;
+    stroke: #34d399;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 4px rgba(52, 211, 153, 0.6));
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    animation: ecgDraw 3s linear infinite;
+}
+
+@keyframes ecgDraw {
+    0% { stroke-dashoffset: 600; }
+    100% { stroke-dashoffset: -600; }
+}
+
+.brand-copyright {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
+    text-align: right;
+}
+
+.brand-copyright strong {
+    display: block;
+    color: rgba(52, 211, 153, 0.8);
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+/* ==========================================================================
+   PAINEL DIREITO - FORM COM GLASS
+   ========================================================================== */
+.login-form-panel {
+    background:
+        radial-gradient(circle at 20% 20%, rgba(52, 211, 153, 0.08), transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(43, 161, 129, 0.06), transparent 55%),
+        #f5f3ef;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 48px 40px;
+    position: relative;
+    overflow-y: auto;
+}
+
+/* Textura de grid tecnico sutil no fundo creme */
+.login-form-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(10, 31, 24, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10, 31, 24, 0.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+}
+
+/* Card de vidro central */
+.glass-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 460px;
+    padding: 52px 44px 44px;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(32px) saturate(1.6);
+    -webkit-backdrop-filter: blur(32px) saturate(1.6);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow:
+        0 30px 80px rgba(10, 31, 24, 0.12),
+        0 4px 12px rgba(10, 31, 24, 0.06),
+        0 0 0 1px rgba(52, 211, 153, 0.08) inset,
+        0 1px 0 rgba(255, 255, 255, 0.9) inset;
+    animation: formIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    overflow: hidden;
+}
+
+/* Brilho diagonal no topo do glass */
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 200%;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(52, 211, 153, 0.5) 50%,
+        transparent 100%);
+    animation: glassShine 4s ease-in-out infinite;
+}
+
+@keyframes glassShine {
+    0%, 100% { transform: translateX(-20%); opacity: 0.3; }
+    50% { transform: translateX(20%); opacity: 1; }
+}
+
+@keyframes formIn {
+    from { opacity: 0; transform: translateY(24px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.form-header {
+    margin-bottom: 40px;
+}
+
+.form-step {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #2BA181;
+    margin-bottom: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-step::after {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: #2BA181;
+}
+
+.form-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    color: #0a1f18;
+    margin: 0 0 12px;
+}
+
+.form-title span {
+    color: #2BA181;
+}
+
+.form-subtitle {
+    font-size: 0.88rem;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Fields */
+.field-editorial {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.field-number {
+    position: absolute;
+    left: 0;
+    top: 8px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #9ca3af;
+    transition: color 0.3s ease;
+    pointer-events: none;
+}
+
+.field-editorial input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(10, 31, 24, 0.08);
+    border-bottom: 1.5px solid #d4d0c8;
+    border-radius: 12px 12px 0 0;
+    padding: 16px 16px 14px 44px;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    color: #0a1f18;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.field-editorial input::placeholder {
+    color: #b8b4ac;
+    font-weight: 400;
+}
+
+.field-editorial input:focus {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(43, 161, 129, 0.3);
+    border-bottom-color: #2BA181;
+    box-shadow: 0 4px 20px rgba(43, 161, 129, 0.08);
+}
+
+.field-editorial input:focus ~ .field-number {
+    color: #2BA181;
+}
+
+.field-toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(43, 161, 129, 0.08);
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    transition: all 0.25s ease;
+}
+
+.field-toggle:hover {
+    color: #2BA181;
+    background: rgba(43, 161, 129, 0.15);
+}
+
+/* Botao editorial com glass shine */
+.btn-editorial {
+    width: 100%;
+    padding: 20px 28px;
+    background: #0a1f18;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.35s ease, letter-spacing 0.35s ease, transform 0.25s ease, box-shadow 0.35s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    box-shadow:
+        0 8px 24px rgba(10, 31, 24, 0.2),
+        0 1px 0 rgba(255, 255, 255, 0.1) inset;
+}
+
+.btn-editorial span {
+    position: relative;
+    z-index: 2;
+}
+
+.btn-editorial i {
+    position: relative;
+    z-index: 2;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-editorial::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #2BA181, #34d399);
+    transform: translateX(-100%);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 1;
+}
+
+.btn-editorial:hover {
+    letter-spacing: 0.16em;
+    transform: translateY(-2px);
+    box-shadow:
+        0 14px 36px rgba(43, 161, 129, 0.4),
+        0 1px 0 rgba(255, 255, 255, 0.15) inset;
+}
+
+.btn-editorial:hover::before {
+    transform: translateX(0);
+}
+
+.btn-editorial:hover i {
+    transform: translateX(6px);
+}
+
+.btn-editorial:active {
+    transform: translateY(0) scale(0.99);
+}
+
+/* Alerta */
+.alert-editorial {
+    background: rgba(254, 242, 242, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-left: 3px solid #dc2626;
+    padding: 14px 18px;
+    margin-bottom: 32px;
+    font-size: 0.85rem;
+    color: #991b1b;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border-radius: 0 10px 10px 0;
+    animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.alert-editorial i {
+    color: #dc2626;
+    font-size: 1rem;
+    margin-top: 1px;
+}
+
+/* Footer do form (sem demo badge) */
+.form-footer {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(10, 31, 24, 0.08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
+.form-footer a {
+    color: #6b7280;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.25s ease, transform 0.25s ease;
+    font-weight: 500;
+}
+
+.form-footer a:hover {
+    color: #2BA181;
+    transform: translateX(-3px);
+}
+
+/* ==========================================================================
+   RESPONSIVO MOBILE
+   ========================================================================== */
+@media (max-width: 900px) {
+    .login-page {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+
+    .login-brand {
+        padding: 24px 20px 20px;
+        min-height: auto;
+    }
+
+    .brand-top {
+        margin-bottom: 20px;
+        gap: 14px;
+    }
+
+    .brand-logo-wrap {
+        width: 62px;
+        height: 62px;
+        border-radius: 16px;
+    }
+
+    .brand-logo {
+        padding: 8px;
+    }
+
+    .brand-wordmark {
+        font-size: 1.25rem;
+        letter-spacing: 0.12em;
+    }
+
+    .brand-wordmark-sub {
+        font-size: 0.55rem;
+        letter-spacing: 0.22em;
+    }
+
+    .brand-center {
+        padding: 0;
+    }
+
+    .brand-headline {
+        font-size: 1.75rem;
+        line-height: 1;
+    }
+
+    .brand-tagline {
+        display: none;
+    }
+
+    .brand-eyebrow {
+        margin-bottom: 14px;
+        font-size: 0.62rem;
+    }
+
+    .brand-bottom {
+        margin-top: 20px;
+    }
+
+    .brand-copyright {
+        font-size: 0.6rem;
+    }
+
+    .ecg-wrap {
+        max-width: 140px;
+    }
+
+    .ecg-svg {
+        height: 32px;
+    }
+
+    .login-form-panel {
+        padding: 24px 16px 40px;
+        justify-content: flex-start;
+    }
+
+    .glass-card {
+        padding: 36px 24px 32px;
+        border-radius: 22px;
+    }
+
+    .form-header {
+        margin-bottom: 28px;
+    }
+
+    .form-title {
+        font-size: 1.75rem;
+    }
+
+    .field-editorial input {
+        font-size: 16px;
+        padding: 14px 14px 12px 40px;
+    }
+
+    .btn-editorial {
+        padding: 17px 22px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand-logo-wrap {
+        width: 54px;
+        height: 54px;
+        border-radius: 14px;
+    }
+
+    .brand-wordmark {
+        font-size: 1.1rem;
+    }
+
+    .brand-headline {
+        font-size: 1.45rem;
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+    }
+
+    .glass-card {
+        padding: 28px 20px 24px;
+    }
+
+    .login-form-panel {
+        padding: 20px 12px 32px;
+    }
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    .brand-headline,
+    .ecg-line,
+    .login-brand::after,
+    .form-inner,
+    .glass-card,
+    .glass-card::before {
+        animation: none !important;
+    }
+}

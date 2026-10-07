@@ -1,0 +1,408 @@
+/* ==============================================================================
+   REABITECH - PREMIUM RESPONSIVO (MOBILE-FIRST)
+   Corrige layouts em celular, tablet e telas pequenas
+   ============================================================================== */
+
+/* ==========================================================================
+   1. RESET MOBILE
+   ========================================================================== */
+@media (max-width: 992px) {
+    /* Sidebar nao ocupa espaco quando fechado */
+    .main-content:not(.no-sidebar) {
+        margin-left: 0 !important;
+        padding: 14px !important;
+    }
+
+    /* Top navbar compacta */
+    .top-navbar {
+        padding: 10px 14px !important;
+        border-radius: 14px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .page-title h2 {
+        font-size: 1.05rem !important;
+        line-height: 1.2;
+    }
+
+    .page-title p {
+        display: none !important;
+    }
+
+    /* Cards com padding reduzido */
+    .card-modern {
+        padding: 16px !important;
+        border-radius: 16px !important;
+    }
+
+    .stat-card {
+        padding: 16px 12px !important;
+        border-radius: 16px !important;
+    }
+
+    .stat-number {
+        font-size: 1.8rem !important;
+    }
+
+    .stat-icon {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 1.1rem !important;
+    }
+
+    /* Botoes fullwidth em mobile */
+    .btn-primary-custom,
+    .btn-outline-custom,
+    .btn-3d,
+    .btn-outline-3d {
+        padding: 11px 18px !important;
+        font-size: 0.85rem !important;
+    }
+
+    /* Padding interno geral */
+    body {
+        font-size: 14px;
+    }
+}
+
+/* ==========================================================================
+   2. TABELAS (scroll horizontal sem quebrar)
+   ========================================================================== */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+    table.table {
+        font-size: 0.8rem;
+    }
+
+    table.table th,
+    table.table td {
+        padding: 8px 10px !important;
+        white-space: nowrap;
+    }
+
+    /* Tabelas viram cards em mobile */
+    .table-cards-mobile thead {
+        display: none;
+    }
+
+    .table-cards-mobile tr {
+        display: block;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        margin-bottom: 12px;
+        padding: 12px;
+    }
+
+    .table-cards-mobile td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0 !important;
+        border: none !important;
+    }
+
+    .table-cards-mobile td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: var(--text-tertiary);
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-right: 12px;
+    }
+}
+
+/* ==========================================================================
+   3. GRID DE CARDS (empilha corretamente)
+   ========================================================================== */
+@media (max-width: 576px) {
+    .row.g-3 > [class*="col-"] {
+        margin-bottom: 8px;
+    }
+
+    /* Forca 1 coluna em telas muito pequenas */
+    .row.g-3 > .col-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    /* KPIs ficam em 2 colunas mesmo em mobile */
+    .kpi-card {
+        padding: 14px !important;
+        border-radius: 14px !important;
+    }
+
+    .kpi-valor {
+        font-size: 1.4rem !important;
+    }
+
+    .kpi-icon {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 0.95rem !important;
+    }
+
+    .kpi-titulo {
+        font-size: 0.78rem !important;
+    }
+
+    .kpi-label {
+        font-size: 0.65rem !important;
+    }
+}
+
+/* ==========================================================================
+   4. GRAFICOS CHART.JS
+   ========================================================================== */
+.chart-wrapper,
+.chart-wrapper.tall {
+    position: relative;
+    height: 240px;
+}
+
+@media (min-width: 768px) {
+    .chart-wrapper { height: 280px; }
+    .chart-wrapper.tall { height: 340px; }
+}
+
+@media (max-width: 576px) {
+    .chart-wrapper,
+    .chart-wrapper.tall {
+        height: 220px !important;
+    }
+
+    .chart-card {
+        padding: 16px !important;
+        border-radius: 16px !important;
+    }
+
+    .chart-titulo {
+        font-size: 0.9rem !important;
+    }
+
+    .chart-sub {
+        font-size: 0.72rem !important;
+    }
+}
+
+/* ==========================================================================
+   5. FORMULARIOS
+   ========================================================================== */
+@media (max-width: 768px) {
+    .form-control,
+    .form-select,
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    textarea {
+        font-size: 16px !important; /* evita zoom no iOS */
+        padding: 11px 14px !important;
+    }
+
+    .form-label,
+    .form-label-custom {
+        font-size: 0.8rem !important;
+    }
+}
+
+/* ==========================================================================
+   6. FILTROS / SEARCH BARS
+   ========================================================================== */
+@media (max-width: 992px) {
+    .filter-bar,
+    .filters-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .filter-bar > *,
+    .filters-row > * {
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   7. SIDEBAR MOBILE
+   ========================================================================== */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 280px !important;
+        max-width: 85vw;
+        transform: translateX(-100%);
+        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        box-shadow: 8px 0 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .sidebar.active {
+        transform: translateX(0) !important;
+        left: 0 !important;
+    }
+
+    .sidebar-overlay.active {
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+}
+
+/* ==========================================================================
+   8. DROPDOWN NOTIFICACOES (mobile)
+   ========================================================================== */
+@media (max-width: 576px) {
+    .dropdown-menu[style*="min-width: 320px"],
+    .dropdown-menu {
+        min-width: 280px !important;
+        max-width: calc(100vw - 24px) !important;
+        right: 0 !important;
+        left: auto !important;
+    }
+
+    .top-navbar .dropdown-menu {
+        position: fixed !important;
+        top: 70px !important;
+        right: 12px !important;
+        left: 12px !important;
+        width: auto !important;
+    }
+}
+
+/* ==========================================================================
+   9. RANKING / LISTAS
+   ========================================================================== */
+@media (max-width: 576px) {
+    .rank-item {
+        padding: 10px 12px !important;
+    }
+
+    .rank-nome {
+        font-size: 0.82rem !important;
+    }
+
+    .rank-valor {
+        font-size: 0.95rem !important;
+    }
+
+    .rank-pos {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 0.72rem !important;
+    }
+}
+
+/* ==========================================================================
+   10. CHAT / MENSAGERIA (mobile)
+   ========================================================================== */
+@media (max-width: 992px) {
+    .chat-wrapper {
+        grid-template-columns: 1fr !important;
+        height: auto !important;
+        min-height: 70vh;
+    }
+
+    .chat-main {
+        min-height: 70vh;
+    }
+
+    .chat-sidebar {
+        display: none !important;
+    }
+
+    .msg-row {
+        max-width: 88% !important;
+    }
+
+    .msg-bubble {
+        padding: 8px 12px !important;
+        font-size: 0.85rem;
+    }
+}
+
+/* ==========================================================================
+   11. TIMELINE (mobile)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .timeline-item {
+        padding-left: 40px !important;
+    }
+
+    .timeline-item::before {
+        left: 16px !important;
+    }
+}
+
+/* ==========================================================================
+   12. MODAIS / OVERLAYS
+   ========================================================================== */
+@media (max-width: 576px) {
+    .modal-dialog {
+        margin: 8px !important;
+        max-width: calc(100vw - 16px) !important;
+    }
+
+    .modal-content {
+        border-radius: 16px !important;
+    }
+
+    .modal-body {
+        padding: 16px !important;
+    }
+}
+
+/* ==========================================================================
+   13. UTILITARIOS RESPONSIVOS
+   ========================================================================== */
+.hide-mobile {
+    display: block;
+}
+
+.show-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .hide-mobile {
+        display: none !important;
+    }
+
+    .show-mobile {
+        display: block !important;
+    }
+}
+
+/* Touch targets maiores em mobile */
+@media (hover: none) and (pointer: coarse) {
+    .sidebar-item,
+    .btn,
+    .btn-primary-custom,
+    .btn-outline-custom,
+    a.dropdown-item,
+    button {
+        min-height: 44px;
+    }
+
+    /* Desabilita hover em touch (evita travar) */
+    .card-modern:hover,
+    .stat-card:hover,
+    .kpi-card:hover,
+    .tilt-3d:hover {
+        transform: none !important;
+    }
+}
+
+/* ==========================================================================
+   14. SAFE AREA (iPhone X+)
+   ========================================================================== */
+@supports (padding: max(0px)) {
+    .main-content {
+        padding-left: max(14px, env(safe-area-inset-left));
+        padding-right: max(14px, env(safe-area-inset-right));
+        padding-bottom: max(14px, env(safe-area-inset-bottom));
+    }
+}

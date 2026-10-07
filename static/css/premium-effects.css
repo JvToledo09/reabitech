@@ -1,0 +1,557 @@
+/* ==============================================================================
+   REABITECH - PREMIUM EFFECTS
+   Efeitos 3D, glassmorphism, glow, scrollbar customizada, animacoes
+   ============================================================================== */
+
+/* ==========================================================================
+   1. VARIAVEIS PREMIUM (complementam o theme.css)
+   ========================================================================== */
+:root {
+    --premium-glow-green: rgba(52, 211, 153, 0.45);
+    --premium-glow-green-strong: rgba(52, 211, 153, 0.7);
+    --premium-glow-red: rgba(239, 68, 68, 0.4);
+    --premium-glow-blue: rgba(59, 130, 246, 0.4);
+    --premium-glass-bg: rgba(255, 255, 255, 0.06);
+    --premium-glass-border: rgba(255, 255, 255, 0.12);
+    --premium-shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.08);
+    --premium-shadow-medium: 0 12px 40px rgba(0, 0, 0, 0.12);
+    --premium-shadow-strong: 0 24px 60px rgba(0, 0, 0, 0.18);
+    --premium-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --premium-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="dark"] {
+    --premium-glass-bg: rgba(255, 255, 255, 0.04);
+    --premium-glass-border: rgba(255, 255, 255, 0.08);
+    --premium-shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.3);
+    --premium-shadow-medium: 0 12px 40px rgba(0, 0, 0, 0.4);
+    --premium-shadow-strong: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   2. SCROLLBAR CUSTOMIZADA (complementa o Lenis)
+   ========================================================================== */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #34d399, #2BA181);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    transition: background 0.3s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #2BA181, #1f8768);
+    background-clip: padding-box;
+}
+
+/* ==========================================================================
+   3. BOTOES PREMIUM (3D + GLOW)
+   ========================================================================== */
+
+/* Botao 3D principal */
+.btn-3d {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 32px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    background: linear-gradient(135deg, #34d399 0%, #2BA181 50%, #1f8768 100%);
+    background-size: 200% 200%;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 -3px 0 rgba(0, 0, 0, 0.15) inset,
+        0 6px 20px rgba(43, 161, 129, 0.35),
+        0 12px 40px rgba(43, 161, 129, 0.15);
+    transition:
+        transform 0.35s var(--premium-ease),
+        box-shadow 0.35s var(--premium-ease),
+        background-position 0.6s var(--premium-ease);
+    transform: translateY(0) scale(1);
+    overflow: hidden;
+    letter-spacing: -0.01em;
+}
+
+.btn-3d::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.25) 50%,
+        transparent 100%);
+    transition: left 0.7s var(--premium-ease);
+}
+
+.btn-3d:hover {
+    transform: translateY(-3px) scale(1.02);
+    background-position: 100% 0;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.3) inset,
+        0 -3px 0 rgba(0, 0, 0, 0.15) inset,
+        0 12px 30px rgba(43, 161, 129, 0.5),
+        0 20px 60px rgba(43, 161, 129, 0.25);
+}
+
+.btn-3d:hover::before {
+    left: 100%;
+}
+
+.btn-3d:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 -2px 0 rgba(0, 0, 0, 0.2) inset,
+        0 3px 10px rgba(43, 161, 129, 0.3);
+}
+
+/* Botao outline premium */
+.btn-outline-3d {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 13px 30px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    border: 1.5px solid rgba(43, 161, 129, 0.5);
+    border-radius: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #2BA181;
+    background: rgba(43, 161, 129, 0.04);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.35s var(--premium-ease);
+}
+
+.btn-outline-3d:hover {
+    border-color: #2BA181;
+    background: rgba(43, 161, 129, 0.1);
+    color: #1f8768;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(43, 161, 129, 0.2);
+}
+
+.btn-outline-3d:active {
+    transform: translateY(0);
+}
+
+/* Botao pequeno (icone) */
+.btn-icon-3d {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #34d399, #2BA181);
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.2) inset,
+        0 4px 14px rgba(43, 161, 129, 0.3);
+    transition: all 0.3s var(--premium-ease);
+}
+
+.btn-icon-3d:hover {
+    transform: translateY(-2px) scale(1.05);
+    color: white;
+    box-shadow: 0 8px 24px rgba(43, 161, 129, 0.5);
+}
+
+.btn-icon-3d:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* ==========================================================================
+   4. CARDS PREMIUM (glass + 3D)
+   ========================================================================== */
+.card-glass {
+    background: var(--premium-glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--premium-glass-border);
+    border-radius: 20px;
+    box-shadow: var(--premium-shadow-soft);
+    transition: all 0.5s var(--premium-ease);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-glass:hover {
+    box-shadow: var(--premium-shadow-medium);
+    border-color: rgba(52, 211, 153, 0.3);
+}
+
+/* Card com borda luminosa */
+.card-glow {
+    position: relative;
+    background: var(--bg-elevated);
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid var(--border-color);
+    transition: all 0.4s var(--premium-ease);
+    overflow: hidden;
+}
+
+.card-glow::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 22px;
+    padding: 2px;
+    background: linear-gradient(135deg,
+        rgba(52, 211, 153, 0.6) 0%,
+        rgba(43, 161, 129, 0.2) 50%,
+        rgba(52, 211, 153, 0.6) 100%);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s var(--premium-ease);
+    pointer-events: none;
+}
+
+.card-glow:hover::before {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   5. TILT 3D (aplicado via JS)
+   ========================================================================== */
+.tilt-3d {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transition: transform 0.4s var(--premium-ease-out);
+    will-change: transform;
+}
+
+.tilt-3d-inner {
+    transform-style: preserve-3d;
+    transition: transform 0.4s var(--premium-ease-out);
+}
+
+.tilt-3d .tilt-layer-1 {
+    transform: translateZ(20px);
+}
+
+.tilt-3d .tilt-layer-2 {
+    transform: translateZ(40px);
+}
+
+.tilt-3d .tilt-layer-3 {
+    transform: translateZ(60px);
+}
+
+/* Glow que segue o mouse */
+.tilt-glow {
+    position: relative;
+    overflow: hidden;
+}
+
+.tilt-glow::after {
+    content: '';
+    position: absolute;
+    top: var(--mouse-y, 50%);
+    left: var(--mouse-x, 50%);
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle,
+        rgba(52, 211, 153, 0.15) 0%,
+        transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 0;
+}
+
+.tilt-glow:hover::after {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   6. ANIMACOES DE ENTRADA
+   ========================================================================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(52, 211, 153, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(52, 211, 153, 0.6);
+    }
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+
+.anim-fade-up {
+    animation: fadeInUp 0.7s var(--premium-ease) both;
+}
+
+.anim-fade-scale {
+    animation: fadeInScale 0.6s var(--premium-ease) both;
+}
+
+.anim-float {
+    animation: floatY 4s ease-in-out infinite;
+}
+
+.anim-pulse-glow {
+    animation: pulseGlow 2.5s ease-in-out infinite;
+}
+
+/* Delay progressivo */
+.anim-delay-1 { animation-delay: 0.1s; }
+.anim-delay-2 { animation-delay: 0.2s; }
+.anim-delay-3 { animation-delay: 0.3s; }
+.anim-delay-4 { animation-delay: 0.4s; }
+.anim-delay-5 { animation-delay: 0.5s; }
+
+/* ==========================================================================
+   7. EFEITOS DE TEXTO
+   ========================================================================== */
+.text-gradient {
+    background: linear-gradient(135deg, #34d399, #2BA181, #10b981);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientShift 4s ease infinite;
+}
+
+.text-shadow-glow {
+    text-shadow: 0 0 20px rgba(52, 211, 153, 0.5);
+}
+
+/* ==========================================================================
+   8. BADGES PREMIUM
+   ========================================================================== */
+.badge-premium {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    background: rgba(52, 211, 153, 0.12);
+    color: #2BA181;
+    border: 1px solid rgba(52, 211, 153, 0.25);
+    backdrop-filter: blur(8px);
+}
+
+.badge-premium.pulse {
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   9. LOADING SPINNER PREMIUM
+   ========================================================================== */
+.spinner-premium {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(52, 211, 153, 0.15);
+    border-top-color: #34d399;
+    border-right-color: #2BA181;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   10. MENU / DROPDOWN PREMIUM
+   ========================================================================== */
+.dropdown-menu {
+    border-radius: 14px !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: var(--premium-shadow-medium) !important;
+    background: var(--bg-elevated) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 8px !important;
+    margin-top: 8px !important;
+    animation: fadeInScale 0.25s var(--premium-ease) both;
+}
+
+.dropdown-item {
+    border-radius: 8px !important;
+    padding: 10px 14px !important;
+    transition: all 0.2s ease;
+    color: var(--text-secondary) !important;
+}
+
+.dropdown-item:hover {
+    background: rgba(52, 211, 153, 0.1) !important;
+    color: var(--text-primary) !important;
+    transform: translateX(4px);
+}
+
+/* ==========================================================================
+   11. SIDEBAR LINK ATIVO (pulse)
+   ========================================================================== */
+.sidebar-item.active {
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-item.active::after {
+    content: '';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    background: #34d399;
+    border-radius: 50%;
+    box-shadow: 0 0 12px #34d399;
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   12. BADGE NOTIFICACOES (ping)
+   ========================================================================== */
+.badge-ping {
+    position: relative;
+}
+
+.badge-ping::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: inherit;
+    animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+    opacity: 0.75;
+    z-index: -1;
+}
+
+@keyframes ping {
+    75%, 100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/* ==========================================================================
+   13. LENIS - AJUSTES
+   ========================================================================== */
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+/* Chat / areas com scroll interno devem ter data-lenis-prevent */
+[data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+/* ==========================================================================
+   14. DIVISOR PREMIUM
+   ========================================================================== */
+.divider-premium {
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(52, 211, 153, 0.4) 50%,
+        transparent 100%);
+    margin: 32px 0;
+    border: none;
+}
+
+/* ==========================================================================
+   15. UTILITARIOS
+   ========================================================================== */
+.glass-strong {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.will-change-transform {
+    will-change: transform;
+}
