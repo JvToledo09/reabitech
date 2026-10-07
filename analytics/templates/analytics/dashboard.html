@@ -1,0 +1,2265 @@
+{% extends 'base.html' %}
+
+
+{% load static %}
+
+
+{% load analytics_extras %}
+
+
+
+
+
+{% block title %}Dashboard Analítico - REABITECH{% endblock %}
+
+
+{% block page_title %}Dashboard Analítico{% endblock %}
+
+
+
+
+
+{% block extra_css %}
+
+
+<style>
+
+
+    .kpi-card {
+
+
+        background: var(--bg-elevated);
+
+
+        border: 1px solid var(--border-color);
+
+
+        border-radius: 18px;
+
+
+        padding: 20px;
+
+
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+
+        position: relative;
+
+
+        overflow: hidden;
+
+
+        box-shadow: var(--shadow-sm);
+
+
+        height: 100%;
+
+
+    }
+
+
+    .kpi-card::before {
+
+
+        content: '';
+
+
+        position: absolute;
+
+
+        top: 0; left: 0;
+
+
+        width: 100%; height: 4px;
+
+
+        background: linear-gradient(90deg, #34d399, #2BA181);
+
+
+    }
+
+
+    .kpi-card:hover {
+
+
+        transform: translateY(-4px);
+
+
+        box-shadow: var(--shadow-lg);
+
+
+    }
+
+
+    .kpi-icon {
+
+
+        width: 46px;
+
+
+        height: 46px;
+
+
+        border-radius: 12px;
+
+
+        display: flex;
+
+
+        align-items: center;
+
+
+        justify-content: center;
+
+
+        color: white;
+
+
+        font-size: 1.15rem;
+
+
+        flex-shrink: 0;
+
+
+    }
+
+
+    .kpi-header {
+
+
+        display: flex;
+
+
+        justify-content: space-between;
+
+
+        align-items: flex-start;
+
+
+        margin-bottom: 14px;
+
+
+        gap: 10px;
+
+
+    }
+
+
+    .kpi-label {
+
+
+        font-size: 0.75rem;
+
+
+        text-transform: uppercase;
+
+
+        letter-spacing: 0.05em;
+
+
+        color: var(--text-tertiary);
+
+
+        font-weight: 600;
+
+
+        margin: 0 0 3px 0;
+
+
+    }
+
+
+    .kpi-titulo {
+
+
+        font-weight: 700;
+
+
+        font-size: 0.9rem;
+
+
+        color: var(--text-primary);
+
+
+        margin: 0;
+
+
+    }
+
+
+    .kpi-valor {
+
+
+        font-family: 'Plus Jakarta Sans', sans-serif;
+
+
+        font-size: 2.1rem;
+
+
+        font-weight: 800;
+
+
+        color: var(--text-primary);
+
+
+        margin: 0;
+
+
+        line-height: 1;
+
+
+        letter-spacing: -0.03em;
+
+
+    }
+
+
+    .kpi-unidade {
+
+
+        font-size: 0.85rem;
+
+
+        font-weight: 600;
+
+
+        color: var(--text-tertiary);
+
+
+        margin-left: 4px;
+
+
+    }
+
+
+    .kpi-trend {
+
+
+        display: inline-flex;
+
+
+        align-items: center;
+
+
+        gap: 5px;
+
+
+        font-size: 0.75rem;
+
+
+        font-weight: 700;
+
+
+        margin-top: 10px;
+
+
+        padding: 3px 10px;
+
+
+        border-radius: 999px;
+
+
+        letter-spacing: 0.02em;
+
+
+    }
+
+
+    .trend-up   { background: rgba(34, 197, 94, 0.12);  color: #16a34a; }
+
+
+    .trend-down { background: rgba(239, 68, 68, 0.12);  color: #dc2626; }
+
+
+    .trend-flat { background: rgba(107, 114, 128, 0.12); color: #6b7280; }
+
+
+    .kpi-extra {
+
+
+        font-size: 0.7rem;
+
+
+        color: var(--text-tertiary);
+
+
+        margin-top: 6px;
+
+
+    }
+
+
+    .periodo-bar {
+
+
+        background: var(--bg-elevated);
+
+
+        border: 1px solid var(--border-color);
+
+
+        border-radius: 16px;
+
+
+        padding: 10px 14px;
+
+
+        margin-bottom: 20px;
+
+
+        display: flex;
+
+
+        justify-content: space-between;
+
+
+        align-items: center;
+
+
+        flex-wrap: wrap;
+
+
+        gap: 12px;
+
+
+        box-shadow: var(--shadow-sm);
+
+
+    }
+
+
+    .periodo-pills {
+
+
+        display: flex;
+
+
+        gap: 6px;
+
+
+        flex-wrap: wrap;
+
+
+    }
+
+
+    .periodo-pill {
+
+
+        padding: 7px 14px;
+
+
+        border-radius: 10px;
+
+
+        font-size: 0.8rem;
+
+
+        font-weight: 600;
+
+
+        color: var(--text-secondary);
+
+
+        text-decoration: none;
+
+
+        transition: all 0.2s ease;
+
+
+        background: var(--bg-primary);
+
+
+        border: 1px solid var(--border-color);
+
+
+    }
+
+
+    .periodo-pill:hover {
+
+
+        color: var(--text-primary);
+
+
+        border-color: #2BA181;
+
+
+        transform: translateY(-1px);
+
+
+    }
+
+
+    .periodo-pill.ativo {
+
+
+        background: linear-gradient(135deg, #2BA181, #1f8768);
+
+
+        color: white;
+
+
+        border-color: transparent;
+
+
+        box-shadow: 0 3px 10px rgba(43, 161, 129, 0.3);
+
+
+    }
+
+
+    .chart-card {
+
+
+        background: var(--bg-elevated);
+
+
+        border: 1px solid var(--border-color);
+
+
+        border-radius: 18px;
+
+
+        padding: 22px;
+
+
+        box-shadow: var(--shadow-sm);
+
+
+        height: 100%;
+
+
+    }
+
+
+    .chart-titulo {
+
+
+        font-family: 'Plus Jakarta Sans', sans-serif;
+
+
+        font-weight: 700;
+
+
+        font-size: 1rem;
+
+
+        color: var(--text-primary);
+
+
+        margin: 0 0 4px 0;
+
+
+        display: flex;
+
+
+        align-items: center;
+
+
+        gap: 10px;
+
+
+    }
+
+
+    .chart-sub {
+
+
+        font-size: 0.78rem;
+
+
+        color: var(--text-tertiary);
+
+
+        margin: 0 0 16px 0;
+
+
+    }
+
+
+    .chart-wrapper { position: relative; height: 280px; }
+
+
+    .chart-wrapper.tall { height: 340px; }
+
+
+    .heat-bars {
+
+
+        display: grid;
+
+
+        grid-template-columns: repeat(7, 1fr);
+
+
+        gap: 10px;
+
+
+    }
+
+
+    .heat-cell {
+
+
+        text-align: center;
+
+
+        padding: 14px 6px;
+
+
+        border-radius: 12px;
+
+
+        background: var(--bg-primary);
+
+
+        border: 1px solid var(--border-color);
+
+
+        transition: all 0.2s ease;
+
+
+    }
+
+
+    .heat-cell:hover { transform: translateY(-2px); }
+
+
+    .heat-cell .dia {
+
+
+        font-size: 0.75rem;
+
+
+        font-weight: 700;
+
+
+        color: var(--text-tertiary);
+
+
+        margin: 0 0 4px 0;
+
+
+        text-transform: uppercase;
+
+
+        letter-spacing: 0.05em;
+
+
+    }
+
+
+    .heat-cell .valor {
+
+
+        font-family: 'Plus Jakarta Sans', sans-serif;
+
+
+        font-size: 1.4rem;
+
+
+        font-weight: 800;
+
+
+        color: #2BA181;
+
+
+        margin: 0;
+
+
+        line-height: 1;
+
+
+    }
+
+
+    .rank-item {
+
+
+        display: flex;
+
+
+        align-items: center;
+
+
+        gap: 12px;
+
+
+        padding: 12px 14px;
+
+
+        border-radius: 12px;
+
+
+        background: var(--bg-primary);
+
+
+        margin-bottom: 8px;
+
+
+        border: 1px solid var(--border-color);
+
+
+        transition: all 0.2s ease;
+
+
+    }
+
+
+    .rank-item:hover {
+
+
+        transform: translateX(4px);
+
+
+        border-color: #2BA181;
+
+
+    }
+
+
+    .rank-pos {
+
+
+        width: 28px;
+
+
+        height: 28px;
+
+
+        border-radius: 8px;
+
+
+        background: linear-gradient(135deg, #34d399, #2BA181);
+
+
+        color: white;
+
+
+        display: flex;
+
+
+        align-items: center;
+
+
+        justify-content: center;
+
+
+        font-weight: 800;
+
+
+        font-size: 0.82rem;
+
+
+        flex-shrink: 0;
+
+
+    }
+
+
+    .rank-pos.ouro   { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+
+
+    .rank-pos.prata  { background: linear-gradient(135deg, #cbd5e1, #94a3b8); }
+
+
+    .rank-pos.bronze { background: linear-gradient(135deg, #d97706, #b45309); }
+
+
+    .rank-info { flex: 1; min-width: 0; }
+
+
+    .rank-nome {
+
+
+        font-weight: 600;
+
+
+        font-size: 0.88rem;
+
+
+        color: var(--text-primary);
+
+
+        margin: 0;
+
+
+        white-space: nowrap;
+
+
+        overflow: hidden;
+
+
+        text-overflow: ellipsis;
+
+
+    }
+
+
+    .rank-sub {
+
+
+        font-size: 0.72rem;
+
+
+        color: var(--text-tertiary);
+
+
+        margin: 0;
+
+
+    }
+
+
+    .rank-valor {
+
+
+        font-family: 'Plus Jakarta Sans', sans-serif;
+
+
+        font-weight: 800;
+
+
+        font-size: 1.1rem;
+
+
+        color: #2BA181;
+
+
+    }
+
+
+    .empty-mini {
+
+
+        text-align: center;
+
+
+        padding: 40px 20px;
+
+
+        color: var(--text-tertiary);
+
+
+    }
+
+
+    .empty-mini i {
+
+
+        font-size: 2.5rem;
+
+
+        opacity: 0.3;
+
+
+        display: block;
+
+
+        margin-bottom: 10px;
+
+
+    }
+
+
+    @media (max-width: 576px) {
+
+
+        .kpi-valor { font-size: 1.6rem; }
+
+
+        .heat-cell { padding: 10px 4px; }
+
+
+        .heat-cell .valor { font-size: 1.1rem; }
+
+
+    }
+
+
+</style>
+
+
+{% endblock %}
+
+
+
+
+
+{% block content %}
+
+
+
+
+
+<div class="periodo-bar">
+
+
+    <div class="periodo-pills">
+
+
+        {% for key, info in periodos.items %}
+
+
+        <a href="?periodo={{ key }}" class="periodo-pill {% if periodo_key == key %}ativo{% endif %}">
+
+
+            {{ info.label }}
+
+
+        </a>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+    <div class="d-flex gap-2 align-items-center">
+
+
+        <a href="{% url 'analytics:exportar_serie_csv' %}?periodo={{ periodo_key }}"
+
+
+           class="btn-outline-custom" title="Exportar série temporal em CSV">
+
+
+            <i class="fas fa-file-csv"></i> <span class="d-none d-lg-inline">Exportar CSV</span>
+
+
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<div class="row g-3 mb-4">
+
+
+    <div class="col-6 col-lg-4 col-xl-2">
+
+
+        <div class="kpi-card">
+
+
+            <div class="kpi-header">
+
+
+                <div><p class="kpi-label">Evoluções</p><p class="kpi-titulo">Registradas</p></div>
+
+
+                <div class="kpi-icon" style="background: linear-gradient(135deg, #34d399, #2BA181);"><i class="fas fa-chart-line"></i></div>
+
+
+            </div>
+
+
+            <p class="kpi-valor">{{ kpi_evolucoes.valor|floatformat:0 }}</p>
+
+
+            <span class="kpi-trend trend-{{ kpi_evolucoes.direcao }}">
+
+
+                <i class="fas fa-arrow-{% if kpi_evolucoes.direcao == 'up' %}up{% elif kpi_evolucoes.direcao == 'down' %}down{% else %}right{% endif %}"></i>
+
+
+                {{ kpi_evolucoes.variacao_pct }}%
+
+
+            </span>
+
+
+            <p class="kpi-extra">vs período anterior</p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="col-6 col-lg-4 col-xl-2">
+
+
+        <div class="kpi-card">
+
+
+            <div class="kpi-header">
+
+
+                <div><p class="kpi-label">Consultas</p><p class="kpi-titulo">Agendadas</p></div>
+
+
+                <div class="kpi-icon" style="background: linear-gradient(135deg, #60a5fa, #3b82f6);"><i class="fas fa-calendar-check"></i></div>
+
+
+            </div>
+
+
+            <p class="kpi-valor">{{ kpi_consultas.valor|floatformat:0 }}</p>
+
+
+            <span class="kpi-trend trend-{{ kpi_consultas.direcao }}">
+
+
+                <i class="fas fa-arrow-{% if kpi_consultas.direcao == 'up' %}up{% elif kpi_consultas.direcao == 'down' %}down{% else %}right{% endif %}"></i>
+
+
+                {{ kpi_consultas.variacao_pct }}%
+
+
+            </span>
+
+
+            <p class="kpi-extra">vs período anterior</p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="col-6 col-lg-4 col-xl-2">
+
+
+        <div class="kpi-card">
+
+
+            <div class="kpi-header">
+
+
+                <div><p class="kpi-label">Recuperação</p><p class="kpi-titulo">Média geral</p></div>
+
+
+                <div class="kpi-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-heart-pulse"></i></div>
+
+
+            </div>
+
+
+            <p class="kpi-valor">{{ kpi_recuperacao.valor|floatformat:1 }}<span class="kpi-unidade">%</span></p>
+
+
+            <span class="kpi-trend trend-{{ kpi_recuperacao.direcao }}">
+
+
+                <i class="fas fa-arrow-{% if kpi_recuperacao.direcao == 'up' %}up{% elif kpi_recuperacao.direcao == 'down' %}down{% else %}right{% endif %}"></i>
+
+
+                {{ kpi_recuperacao.variacao_pct }}%
+
+
+            </span>
+
+
+            <p class="kpi-extra">vs período anterior</p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="col-6 col-lg-4 col-xl-2">
+
+
+        <div class="kpi-card">
+
+
+            <div class="kpi-header">
+
+
+                <div><p class="kpi-label">Dor</p><p class="kpi-titulo">Média (0-10)</p></div>
+
+
+                <div class="kpi-icon" style="background: linear-gradient(135deg, #f87171, #dc2626);"><i class="fas fa-fire"></i></div>
+
+
+            </div>
+
+
+            <p class="kpi-valor">{{ kpi_dor.valor|floatformat:1 }}</p>
+
+
+            <span class="kpi-trend trend-{{ kpi_dor.cor }}">
+
+
+                <i class="fas fa-arrow-{% if kpi_dor.direcao == 'up' %}up{% elif kpi_dor.direcao == 'down' %}down{% else %}right{% endif %}"></i>
+
+
+                {{ kpi_dor.variacao_pct }}%
+
+
+            </span>
+
+
+            <p class="kpi-extra">dor ↓ é bom</p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="col-6 col-lg-4 col-xl-2">
+
+
+        <div class="kpi-card">
+
+
+            <div class="kpi-header">
+
+
+                <div><p class="kpi-label">Lesões</p><p class="kpi-titulo">Registradas</p></div>
+
+
+                <div class="kpi-icon" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);"><i class="fas fa-bone"></i></div>
+
+
+            </div>
+
+
+            <p class="kpi-valor">{{ kpi_lesoes.valor|floatformat:0 }}</p>
+
+
+            <span class="kpi-trend trend-{{ kpi_lesoes.direcao }}">
+
+
+                <i class="fas fa-arrow-{% if kpi_lesoes.direcao == 'up' %}up{% elif kpi_lesoes.direcao == 'down' %}down{% else %}right{% endif %}"></i>
+
+
+                {{ kpi_lesoes.variacao_pct }}%
+
+
+            </span>
+
+
+            <p class="kpi-extra">vs período anterior</p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="col-6 col-lg-4 col-xl-2">
+
+
+        <div class="kpi-card">
+
+
+            <div class="kpi-header">
+
+
+                <div><p class="kpi-label">Adesão</p><p class="kpi-titulo">Exercícios</p></div>
+
+
+                <div class="kpi-icon" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6);"><i class="fas fa-dumbbell"></i></div>
+
+
+            </div>
+
+
+            <p class="kpi-valor">{{ adesao_geral }}<span class="kpi-unidade">%</span></p>
+
+
+            <p class="kpi-extra">{{ total_exercicios_feitos }} de {{ total_exercicios }} concluídos</p>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<div class="row g-3 mb-4">
+
+
+    <div class="col-lg-8">
+
+
+        <div class="chart-card">
+
+
+            <h6 class="chart-titulo"><i class="fas fa-chart-area" style="color: #2BA181;"></i> Evolução de Recuperação e Dor</h6>
+
+
+            <p class="chart-sub">Média diária de todos os atletas do projeto</p>
+
+
+            <div class="chart-wrapper tall"><canvas id="chartSerieTemporal"></canvas></div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <div class="col-lg-4">
+
+
+        <div class="chart-card">
+
+
+            <h6 class="chart-titulo"><i class="fas fa-chart-pie" style="color: #3b82f6;"></i> Tipos de Lesão</h6>
+
+
+            <p class="chart-sub">Distribuição no período</p>
+
+
+            <div class="chart-wrapper tall"><canvas id="chartTiposLesao"></canvas></div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<div class="row g-3 mb-4">
+
+
+    <div class="col-lg-6">
+
+
+        <div class="chart-card">
+
+
+            <h6 class="chart-titulo"><i class="fas fa-calendar-day" style="color: #60a5fa;"></i> Consultas por Dia</h6>
+
+
+            <p class="chart-sub">Volume diário de agendamentos</p>
+
+
+            <div class="chart-wrapper"><canvas id="chartConsultas"></canvas></div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <div class="col-lg-3">
+
+
+        <div class="chart-card">
+
+
+            <h6 class="chart-titulo"><i class="fas fa-face-smile" style="color: #8b5cf6;"></i> Status Psicológico</h6>
+
+
+            <p class="chart-sub">Distribuição de ansiedade</p>
+
+
+            <div class="chart-wrapper"><canvas id="chartPsiStatus"></canvas></div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <div class="col-lg-3">
+
+
+        <div class="chart-card">
+
+
+            <h6 class="chart-titulo"><i class="fas fa-trophy" style="color: #f59e0b;"></i> Modalidades</h6>
+
+
+            <p class="chart-sub">Atletas por modalidade</p>
+
+
+            <div class="chart-wrapper"><canvas id="chartModalidades"></canvas></div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<div class="row g-3 mb-4">
+
+
+    <div class="col-12">
+
+
+        <div class="chart-card">
+
+
+            <h6 class="chart-titulo"><i class="fas fa-calendar-week" style="color: #2BA181;"></i> Visão Macro — Últimos 6 meses</h6>
+
+
+            <p class="chart-sub">Comparativo mensal de evoluções, consultas e avaliações psicológicas</p>
+
+
+            <div class="chart-wrapper"><canvas id="chartMensal"></canvas></div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<div class="row g-3 mb-4">
+
+
+    <div class="col-lg-4">
+
+
+        <div class="chart-card">
+
+
+            <h6 class="chart-titulo"><i class="fas fa-medal" style="color: #f59e0b;"></i> Top Atletas</h6>
+
+
+            <p class="chart-sub">Maior recuperação média no período</p>
+
+
+            {% if top_atletas %}
+
+
+                {% for r in top_atletas %}
+
+
+                <div class="rank-item">
+
+
+                    <div class="rank-pos {% if forloop.counter == 1 %}ouro{% elif forloop.counter == 2 %}prata{% elif forloop.counter == 3 %}bronze{% endif %}">{{ forloop.counter }}</div>
+
+
+                    <div class="rank-info">
+
+
+                        <p class="rank-nome">{{ r.atleta.usuario.get_full_name|default:r.atleta.usuario.username }}</p>
+
+
+                        <p class="rank-sub">{{ r.total_evolucoes }} evoluções · dor {{ r.media_dor }}</p>
+
+
+                    </div>
+
+
+                    <div class="rank-valor">{{ r.media_recuperacao }}%</div>
+
+
+                </div>
+
+
+                {% endfor %}
+
+
+            {% else %}
+
+
+                <div class="empty-mini"><i class="fas fa-users-slash"></i><p class="small mb-0">Sem dados no período</p></div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="col-lg-4">
+
+
+        <div class="chart-card">
+
+
+            <h6 class="chart-titulo"><i class="fas fa-triangle-exclamation" style="color: #dc2626;"></i> Atletas em Atenção</h6>
+
+
+            <p class="chart-sub">Recuperação abaixo de 40%</p>
+
+
+            {% if atletas_atencao %}
+
+
+                {% for r in atletas_atencao %}
+
+
+                <div class="rank-item" style="border-left: 3px solid #dc2626;">
+
+
+                    <div class="rank-pos" style="background: linear-gradient(135deg, #f87171, #dc2626);"><i class="fas fa-exclamation" style="font-size: 0.75rem;"></i></div>
+
+
+                    <div class="rank-info">
+
+
+                        <p class="rank-nome">{{ r.atleta.usuario.get_full_name|default:r.atleta.usuario.username }}</p>
+
+
+                        <p class="rank-sub">{{ r.total_evolucoes }} evoluções</p>
+
+
+                    </div>
+
+
+                    <div class="rank-valor" style="color: #dc2626;">{{ r.media_recuperacao }}%</div>
+
+
+                </div>
+
+
+                {% endfor %}
+
+
+            {% else %}
+
+
+                <div class="empty-mini"><i class="fas fa-circle-check" style="color: #16a34a; opacity: 0.5;"></i><p class="small mb-0">Nenhum atleta em atenção í¾‰</p></div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="col-lg-4">
+
+
+        <div class="chart-card">
+
+
+            <h6 class="chart-titulo"><i class="fas fa-fire-flame-curved" style="color: #f59e0b;"></i> Atividade por Dia</h6>
+
+
+            <p class="chart-sub">Evoluções + consultas por dia da semana</p>
+
+
+            <div class="heat-bars mt-4">
+
+
+                {% for dia in heatmap_labels %}
+
+
+                <div class="heat-cell">
+
+
+                    <p class="dia">{{ dia }}</p>
+
+
+                    <p class="valor">{{ heatmap_valores|index:forloop.counter0 }}</p>
+
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<div class="row g-3">
+
+
+    <div class="col-md-3">
+
+
+        <div class="card-modern p-3 text-center">
+
+
+            <i class="fas fa-users" style="font-size: 1.8rem; color: #2BA181; margin-bottom: 8px;"></i>
+
+
+            <div style="font-family: 'Plus Jakarta Sans'; font-size: 1.6rem; font-weight: 800; color: var(--text-primary);">{{ total_atletas }}</div>
+
+
+            <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em;">Atletas</div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <div class="col-md-3">
+
+
+        <div class="card-modern p-3 text-center">
+
+
+            <i class="fas fa-folder-medical" style="font-size: 1.8rem; color: #3b82f6; margin-bottom: 8px;"></i>
+
+
+            <div style="font-family: 'Plus Jakarta Sans'; font-size: 1.6rem; font-weight: 800; color: var(--text-primary);">{{ total_prontuarios }}</div>
+
+
+            <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em;">Prontuários</div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <div class="col-md-3">
+
+
+        <div class="card-modern p-3 text-center">
+
+
+            <i class="fas fa-brain" style="font-size: 1.8rem; color: #8b5cf6; margin-bottom: 8px;"></i>
+
+
+            <div style="font-family: 'Plus Jakarta Sans'; font-size: 1.6rem; font-weight: 800; color: var(--text-primary);">{{ kpi_psi.valor|floatformat:0 }}</div>
+
+
+            <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em;">Avaliações Ψ</div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <div class="col-md-3">
+
+
+        <div class="card-modern p-3 text-center">
+
+
+            <i class="fas fa-bell" style="font-size: 1.8rem; color: #dc2626; margin-bottom: 8px;"></i>
+
+
+            <div style="font-family: 'Plus Jakarta Sans'; font-size: 1.6rem; font-weight: 800; color: var(--text-primary);">{{ alertas_abertos }}</div>
+
+
+            <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em;">Alertas abertos</div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+{% block extra_js %}
+
+
+<script>
+
+
+(function() {
+
+
+    // ============================================================
+
+
+    // TEMA — lê CSS variables para as cores do Chart.js
+
+
+    // ============================================================
+
+
+    function isDark() {
+
+
+        return document.documentElement.getAttribute('data-theme') === 'dark';
+
+
+    }
+
+
+    function corTexto() { return isDark() ? '#cbd5e1' : '#475569'; }
+
+
+    function corGrid()  { return isDark() ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'; }
+
+
+
+
+
+    const PALETA = ['#2BA181', '#3b82f6', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4', '#ec4899', '#84cc16'];
+
+
+
+
+
+    // ============================================================
+
+
+    // 1. SÉRIE TEMPORAL (recuperação + dor)
+
+
+    // ============================================================
+
+
+    const evLabels = {{ ev_labels|safe }};
+
+
+    const evValores = {{ ev_valores|safe }};
+
+
+    const dorValores = {{ dor_valores|safe }};
+
+
+
+
+
+    if (evLabels.length > 0) {
+
+
+        new Chart(document.getElementById('chartSerieTemporal'), {
+
+
+            type: 'line',
+
+
+            data: {
+
+
+                labels: evLabels,
+
+
+                datasets: [
+
+
+                    {
+
+
+                        label: 'Recuperação (%)',
+
+
+                        data: evValores,
+
+
+                        borderColor: '#2BA181',
+
+
+                        backgroundColor: 'rgba(43, 161, 129, 0.12)',
+
+
+                        fill: true, tension: 0.35, borderWidth: 2.5,
+
+
+                        pointRadius: 3, pointHoverRadius: 6,
+
+
+                        yAxisID: 'y',
+
+
+                    },
+
+
+                    {
+
+
+                        label: 'Dor (0-10)',
+
+
+                        data: dorValores,
+
+
+                        borderColor: '#ef4444',
+
+
+                        backgroundColor: 'rgba(239, 68, 68, 0.08)',
+
+
+                        fill: true, tension: 0.35, borderWidth: 2.5,
+
+
+                        pointRadius: 3, pointHoverRadius: 6,
+
+
+                        yAxisID: 'y1',
+
+
+                    },
+
+
+                ],
+
+
+            },
+
+
+            options: {
+
+
+                responsive: true, maintainAspectRatio: false,
+
+
+                interaction: { mode: 'index', intersect: false },
+
+
+                plugins: {
+
+
+                    legend: { labels: { color: corTexto(), font: { family: 'Inter', size: 12, weight: 600 } } },
+
+
+                },
+
+
+                scales: {
+
+
+                    x: { ticks: { color: corTexto(), maxRotation: 0 }, grid: { color: corGrid() } },
+
+
+                    y: { position: 'left', min: 0, max: 100, ticks: { color: corTexto(), callback: v => v + '%' }, grid: { color: corGrid() } },
+
+
+                    y1: { position: 'right', min: 0, max: 10, ticks: { color: corTexto() }, grid: { drawOnChartArea: false } },
+
+
+                },
+
+
+            },
+
+
+        });
+
+
+    } else {
+
+
+        document.getElementById('chartSerieTemporal').outerHTML =
+
+
+            '<div class="empty-mini"><i class="fas fa-chart-line"></i><p class="small mb-0">Sem evoluções no período</p></div>';
+
+
+    }
+
+
+
+
+
+    // ============================================================
+
+
+    // 2. TIPOS DE LESÃO (rosca)
+
+
+    // ============================================================
+
+
+    const lesLabels = {{ les_tipos_labels|safe }};
+
+
+    const lesData = {{ les_tipos_data|safe }};
+
+
+
+
+
+    if (lesData.length > 0) {
+
+
+        new Chart(document.getElementById('chartTiposLesao'), {
+
+
+            type: 'doughnut',
+
+
+            data: { labels: lesLabels, datasets: [{ data: lesData, backgroundColor: PALETA, borderWidth: 0 }] },
+
+
+            options: {
+
+
+                responsive: true, maintainAspectRatio: false, cutout: '58%',
+
+
+                plugins: {
+
+
+                    legend: { position: 'bottom', labels: { color: corTexto(), font: { family: 'Inter', size: 11 }, boxWidth: 12, padding: 10 } },
+
+
+                },
+
+
+            },
+
+
+        });
+
+
+    } else {
+
+
+        document.getElementById('chartTiposLesao').outerHTML =
+
+
+            '<div class="empty-mini"><i class="fas fa-chart-pie"></i><p class="small mb-0">Sem lesões no período</p></div>';
+
+
+    }
+
+
+
+
+
+    // ============================================================
+
+
+    // 3. CONSULTAS POR DIA (barra)
+
+
+    // ============================================================
+
+
+    const consLabels = {{ cons_labels|safe }};
+
+
+    const consData = {{ cons_valores|safe }};
+
+
+
+
+
+    if (consLabels.length > 0 && consData.some(v => v > 0)) {
+
+
+        new Chart(document.getElementById('chartConsultas'), {
+
+
+            type: 'bar',
+
+
+            data: {
+
+
+                labels: consLabels,
+
+
+                datasets: [{ label: 'Consultas', data: consData, backgroundColor: '#3b82f6', borderRadius: 6, barPercentage: 0.65 }],
+
+
+            },
+
+
+            options: {
+
+
+                responsive: true, maintainAspectRatio: false,
+
+
+                plugins: { legend: { display: false } },
+
+
+                scales: {
+
+
+                    x: { ticks: { color: corTexto(), maxRotation: 0 }, grid: { display: false } },
+
+
+                    y: { beginAtZero: true, ticks: { color: corTexto(), precision: 0 }, grid: { color: corGrid() } },
+
+
+                },
+
+
+            },
+
+
+        });
+
+
+    } else {
+
+
+        document.getElementById('chartConsultas').outerHTML =
+
+
+            '<div class="empty-mini"><i class="fas fa-calendar-xmark"></i><p class="small mb-0">Sem consultas no período</p></div>';
+
+
+    }
+
+
+
+
+
+    // ============================================================
+
+
+    // 4. STATUS PSICOLÓGICO (pizza)
+
+
+    // ============================================================
+
+
+    const psiLabels = {{ psi_status_labels|safe }};
+
+
+    const psiData = {{ psi_status_data|safe }};
+
+
+
+
+
+    if (psiData.length > 0 && psiData.some(v => v > 0)) {
+
+
+        new Chart(document.getElementById('chartPsiStatus'), {
+
+
+            type: 'pie',
+
+
+            data: {
+
+
+                labels: psiLabels,
+
+
+                datasets: [{ data: psiData, backgroundColor: ['#22c55e', '#f59e0b', '#ef4444'], borderWidth: 0 }],
+
+
+            },
+
+
+            options: {
+
+
+                responsive: true, maintainAspectRatio: false,
+
+
+                plugins: {
+
+
+                    legend: { position: 'bottom', labels: { color: corTexto(), font: { family: 'Inter', size: 11 }, boxWidth: 12, padding: 8 } },
+
+
+                },
+
+
+            },
+
+
+        });
+
+
+    } else {
+
+
+        document.getElementById('chartPsiStatus').outerHTML =
+
+
+            '<div class="empty-mini"><i class="fas fa-face-meh"></i><p class="small mb-0">Sem avaliações</p></div>';
+
+
+    }
+
+
+
+
+
+    // ============================================================
+
+
+    // 5. MODALIDADES (barra horizontal)
+
+
+    // ============================================================
+
+
+    const modalLabels = {{ modal_labels|safe }};
+
+
+    const modalData = {{ modal_data|safe }};
+
+
+
+
+
+    if (modalLabels.length > 0) {
+
+
+        new Chart(document.getElementById('chartModalidades'), {
+
+
+            type: 'bar',
+
+
+            data: { labels: modalLabels, datasets: [{ data: modalData, backgroundColor: PALETA, borderRadius: 6 }] },
+
+
+            options: {
+
+
+                indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+
+
+                plugins: { legend: { display: false } },
+
+
+                scales: {
+
+
+                    x: { beginAtZero: true, ticks: { color: corTexto(), precision: 0 }, grid: { color: corGrid() } },
+
+
+                    y: { ticks: { color: corTexto() }, grid: { display: false } },
+
+
+                },
+
+
+            },
+
+
+        });
+
+
+    } else {
+
+
+        document.getElementById('chartModalidades').outerHTML =
+
+
+            '<div class="empty-mini"><i class="fas fa-trophy"></i><p class="small mb-0">Sem modalidades</p></div>';
+
+
+    }
+
+
+
+
+
+    // ============================================================
+
+
+    // 6. MENSAL (3 séries)
+
+
+    // ============================================================
+
+
+    const mesesLabels = {{ meses_labels|safe }};
+
+
+    const mesesEvol = {{ meses_evol|safe }};
+
+
+    const mesesCons = {{ meses_cons|safe }};
+
+
+    const mesesPsi = {{ meses_psi|safe }};
+
+
+
+
+
+    if (mesesLabels.length > 0) {
+
+
+        new Chart(document.getElementById('chartMensal'), {
+
+
+            type: 'line',
+
+
+            data: {
+
+
+                labels: mesesLabels,
+
+
+                datasets: [
+
+
+                    {
+
+
+                        label: 'Recuperação média (%)',
+
+
+                        data: mesesEvol,
+
+
+                        borderColor: '#2BA181',
+
+
+                        backgroundColor: 'rgba(43, 161, 129, 0.1)',
+
+
+                        fill: true, tension: 0.35, borderWidth: 2.5,
+
+
+                        yAxisID: 'y',
+
+
+                    },
+
+
+                    {
+
+
+                        label: 'Consultas',
+
+
+                        data: mesesCons,
+
+
+                        borderColor: '#3b82f6',
+
+
+                        backgroundColor: 'rgba(59, 130, 246, 0.08)',
+
+
+                        fill: true, tension: 0.35, borderWidth: 2.5,
+
+
+                        yAxisID: 'y1',
+
+
+                    },
+
+
+                    {
+
+
+                        label: 'Avaliações Ψ',
+
+
+                        data: mesesPsi,
+
+
+                        borderColor: '#8b5cf6',
+
+
+                        backgroundColor: 'rgba(139, 92, 246, 0.08)',
+
+
+                        fill: true, tension: 0.35, borderWidth: 2.5,
+
+
+                        yAxisID: 'y1',
+
+
+                    },
+
+
+                ],
+
+
+            },
+
+
+            options: {
+
+
+                responsive: true, maintainAspectRatio: false,
+
+
+                interaction: { mode: 'index', intersect: false },
+
+
+                plugins: {
+
+
+                    legend: { labels: { color: corTexto(), font: { family: 'Inter', size: 12, weight: 600 } } },
+
+
+                },
+
+
+                scales: {
+
+
+                    x: { ticks: { color: corTexto() }, grid: { color: corGrid() } },
+
+
+                    y: { position: 'left', ticks: { color: corTexto(), callback: v => v + '%' }, grid: { color: corGrid() } },
+
+
+                    y1: { position: 'right', beginAtZero: true, ticks: { color: corTexto(), precision: 0 }, grid: { drawOnChartArea: false } },
+
+
+                },
+
+
+            },
+
+
+        });
+
+
+    }
+
+
+
+
+
+    // ============================================================
+
+
+    // Re-renderiza gráficos quando o tema mudar
+
+
+    // ============================================================
+
+
+    const themeBtn = document.getElementById('themeToggleGlobal');
+
+
+    if (themeBtn) {
+
+
+        themeBtn.addEventListener('click', () => {
+
+
+            setTimeout(() => {
+
+
+                Object.values(Chart.instances).forEach(c => {
+
+
+                    if (c.options.plugins?.legend?.labels) {
+
+
+                        c.options.plugins.legend.labels.color = corTexto();
+
+
+                    }
+
+
+                    if (c.options.scales) {
+
+
+                        Object.values(c.options.scales).forEach(s => {
+
+
+                            if (s.ticks) s.ticks.color = corTexto();
+
+
+                            if (s.grid && s.grid.color) s.grid.color = corGrid();
+
+
+                        });
+
+
+                    }
+
+
+                    c.update();
+
+
+                });
+
+
+            }, 150);
+
+
+        });
+
+
+    }
+
+
+})();
+
+
+</script>
+
+
+{% endblock %}
+
+

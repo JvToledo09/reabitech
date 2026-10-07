@@ -554,6 +554,7 @@
         <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-folder-medical"></i><span>Prontuários</span></a>
         <a href="{% url 'prontuario:timeline_global' %}" class="sidebar-item {% if 'timeline' in request.path %}active{% endif %}"><i class="fas fa-stream"></i><span>Timeline</span></a>
         <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
+        <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="fas fa-chart-pie"></i><span>Analytics</span></a>
         <a href="{% url 'mensageria:lista_conversas' %}" class="sidebar-item {% if 'mensageria' in request.path %}active{% endif %}">
             <i class="fas fa-comments"></i><span>Mensagens</span>
             <span class="badge-msg-sidebar" id="badgeMensagensSidebar" {% if not total_mensagens_nao_lidas %}style="display:none;"{% endif %}>{% if total_mensagens_nao_lidas %}{{ total_mensagens_nao_lidas }}{% endif %}</span>
@@ -566,6 +567,7 @@
         <a href="{% url 'dashboard:tecnico_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_recuperacao' %}active{% endif %}"><i class="fas fa-heartbeat"></i><span>Recuperação</span></a>
         <a href="{% url 'prontuario:tecnico_prontuarios_compartilhados' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-share-nodes"></i><span>Compartilhados</span></a>
         <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
+        <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="fas fa-chart-pie"></i><span>Analytics</span></a>
         <a href="{% url 'mensageria:lista_conversas' %}" class="sidebar-item {% if 'mensageria' in request.path %}active{% endif %}">
             <i class="fas fa-comments"></i><span>Mensagens</span>
             <span class="badge-msg-sidebar" id="badgeMensagensSidebar" {% if not total_mensagens_nao_lidas %}style="display:none;"{% endif %}>{% if total_mensagens_nao_lidas %}{{ total_mensagens_nao_lidas }}{% endif %}</span>
@@ -587,6 +589,7 @@
         <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-folder-medical"></i><span>Prontuários</span></a>
         <a href="{% url 'prontuario:timeline_global' %}" class="sidebar-item {% if 'timeline' in request.path %}active{% endif %}"><i class="fas fa-stream"></i><span>Timeline</span></a>
         <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
+        <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="fas fa-chart-pie"></i><span>Analytics</span></a>
         <a href="{% url 'mensageria:lista_conversas' %}" class="sidebar-item {% if 'mensageria' in request.path %}active{% endif %}">
             <i class="fas fa-comments"></i><span>Mensagens</span>
             <span class="badge-msg-sidebar" id="badgeMensagensSidebar" {% if not total_mensagens_nao_lidas %}style="display:none;"{% endif %}>{% if total_mensagens_nao_lidas %}{{ total_mensagens_nao_lidas }}{% endif %}</span>
@@ -597,6 +600,7 @@
         <a href="{% url 'dashboard:psicologo_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_atletas' %}active{% endif %}"><i class="fas fa-users"></i><span>Atendimentos</span></a>
         <a href="{% url 'dashboard:psicologo_avaliacoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_avaliacoes' %}active{% endif %}"><i class="fas fa-clipboard-list"></i><span>Avaliações</span></a>
         <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
+        <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="fas fa-chart-pie"></i><span>Analytics</span></a>
         <a href="{% url 'mensageria:lista_conversas' %}" class="sidebar-item {% if 'mensageria' in request.path %}active{% endif %}">
             <i class="fas fa-comments"></i><span>Mensagens</span>
             <span class="badge-msg-sidebar" id="badgeMensagensSidebar" {% if not total_mensagens_nao_lidas %}style="display:none;"{% endif %}>{% if total_mensagens_nao_lidas %}{{ total_mensagens_nao_lidas }}{% endif %}</span>
