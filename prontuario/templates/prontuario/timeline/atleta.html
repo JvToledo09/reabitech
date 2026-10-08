@@ -220,54 +220,54 @@
         <div class="tl-header-info">
             <div class="tl-header-avatar">
                 {{ atleta.usuario.get_full_name|default:atleta.usuario.username|first|upper }}
-            </div>
+ </div>
             <div>
                 <h2>{{ atleta.usuario.get_full_name|default:atleta.usuario.username }}</h2>
                 <p>
                     RM {{ atleta.rm|default:"—" }}
                     {% if atleta.modalidade %}&nbsp;·&nbsp; {{ atleta.modalidade.nome }}{% endif %}
-                </p>
-            </div>
-        </div>
+ </p>
+ </div>
+ </div>
         <div class="tl-stats">
             <div class="tl-stat">
                 <div class="num">{{ total_eventos }}</div>
                 <div class="lbl">Eventos</div>
-            </div>
+ </div>
             <div class="tl-stat">
                 <div class="num">{{ grupos|length }}</div>
                 <div class="lbl">Meses</div>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
         {% if tem_prontuario %}
         <a href="{% url 'prontuario:dashboard_prontuario' atleta.prontuario.id %}" class="btn-primary-custom">
             <i class="fas fa-folder-medical"></i> Abrir prontuário
-        </a>
+ </a>
         {% endif %}
         <a href="{% url 'prontuario:timeline_global' %}" class="btn-outline-custom">
             <i class="fas fa-stream"></i> Timeline global
-        </a>
+ </a>
         <a href="{% url 'prontuario:lista_prontuarios' %}" class="btn-outline-custom">
             <i class="fas fa-arrow-left"></i> Voltar
-        </a>
-    </div>
+ </a>
+ </div>
 
     <div class="tl-filtros">
         <a href="{% url 'prontuario:timeline_atleta' atleta.id %}"
            class="tl-chip {% if not tipos_ativos %}active{% endif %}">
             <i class="fas fa-layer-group"></i> Todos
-        </a>
+ </a>
         {% for tipo, meta in tipos_evento.items %}
         <a href="?tipos={{ tipo }}"
            class="tl-chip {% if tipo in tipos_ativos %}active{% endif %}">
             <i class="fas {{ meta.icone }}"></i>
             {{ meta.label }}
-        </a>
+ </a>
         {% endfor %}
-    </div>
+ </div>
 
     {% if grupos %}
         {% for grupo in grupos %}
@@ -276,7 +276,7 @@
                 <i class="fas fa-calendar-day"></i>
                 {{ grupo.mes_ano }}
                 <span style="opacity: 0.5; font-weight: 500;">· {{ grupo.eventos|length }} evento{{ grupo.eventos|length|pluralize }}</span>
-            </div>
+ </div>
 
             <div class="tl-events">
                 {% for ev in grupo.eventos %}
@@ -284,24 +284,24 @@
                     <div class="tl-evento-header">
                         <div class="tl-evento-icon cor-{{ ev.cor }}">
                             <i class="fas {{ ev.icone }}"></i>
-                        </div>
+ </div>
                         <div class="tl-evento-meta">
                             <h4 class="tl-evento-titulo">{{ ev.titulo }}</h4>
                             <p class="tl-evento-sub">
                                 {{ ev.label_tipo }}
                                 {% if ev.extra.profissional %}&nbsp;·&nbsp; {{ ev.extra.profissional }}{% endif %}
                                 {% if ev.extra.tecnico %}&nbsp;·&nbsp; {{ ev.extra.tecnico }}{% endif %}
-                            </p>
-                        </div>
+ </p>
+ </div>
                         <div class="tl-evento-data">
                             {{ ev.data_date|date:"d/m/Y" }}
-                        </div>
-                    </div>
+ </div>
+ </div>
 
                     {% if ev.descricao %}
                     <div class="tl-evento-body">
                         {{ ev.descricao|truncatechars:220 }}
-                    </div>
+ </div>
                     {% endif %}
 
                     {% if ev.extra %}
@@ -310,7 +310,7 @@
                         {% if ev.extra.duracao %}<span class="tl-extra-badge">{{ ev.extra.duracao }} min</span>{% endif %}
                         {% if ev.extra.status %}<span class="tl-extra-badge">{{ ev.extra.status }}</span>{% endif %}
                         {% if ev.extra.dor %}<span class="tl-extra-badge">Dor: {{ ev.extra.dor }}/10</span>{% endif %}
-                        {% if ev.extra.dor_antes %}<span class="tl-extra-badge">Dor: {{ ev.extra.dor_antes }}→{{ ev.extra.dor_depois }}</span>{% endif %}
+                        {% if ev.extra.dor_antes %}<span class="tl-extra-badge">Dor: {{ ev.extra.dor_antes }}{{ ev.extra.dor_depois }}</span>{% endif %}
                         {% if ev.extra.impacto %}<span class="tl-extra-badge">{{ ev.extra.impacto }}</span>{% endif %}
                         {% if ev.extra.nivel %}<span class="tl-extra-badge">{{ ev.extra.nivel }}</span>{% endif %}
                         {% if ev.extra.percentual %}<span class="tl-extra-badge">{{ ev.extra.percentual }}%</span>{% endif %}
@@ -319,12 +319,12 @@
                         {% if ev.extra.especialidade %}<span class="tl-extra-badge">{{ ev.extra.especialidade }}</span>{% endif %}
                         {% if ev.extra.dosagem %}<span class="tl-extra-badge">{{ ev.extra.dosagem }}</span>{% endif %}
                         {% if ev.extra.via %}<span class="tl-extra-badge">{{ ev.extra.via }}</span>{% endif %}
-                    </div>
+ </div>
                     {% endif %}
-                </div>
+ </div>
                 {% endfor %}
-            </div>
-        </div>
+ </div>
+ </div>
         {% endfor %}
     {% else %}
         <div class="card-premium">
@@ -332,8 +332,8 @@
                 <i class="fas fa-stream"></i>
                 <h3 style="font-family: 'Plus Jakarta Sans', sans-serif;">Nenhum evento encontrado</h3>
                 <p>Este atleta ainda não tem registros clínicos no projeto ativo.</p>
-            </div>
-        </div>
+ </div>
+ </div>
     {% endif %}
 
 </div>

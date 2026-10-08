@@ -11,32 +11,32 @@
     <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: linear-gradient(135deg, #6f42c1 0%, #4c2a85 100%); color: white; border: none; position: relative; overflow: hidden;">
         <div style="position: absolute; top: -50px; right: -50px; font-size: 15rem; opacity: 0.08;">
             <i class="fas fa-brain"></i>
-        </div>
+ </div>
         <div class="row align-items-center position-relative">
             <div class="col-md-8">
-                <h3 class="fw-bold mb-2">Olá, {{ user.get_full_name|default:user.username }}! 🧠</h3>
+                <h3 class="fw-bold mb-2">Olá, {{ user.get_full_name|default:user.username }}! </h3>
                 <p class="mb-2 opacity-75">Bem-vindo à sua central de psicologia. Aqui você acompanha a saúde mental dos atletas.</p>
                 <div class="d-flex gap-3 mt-3 flex-wrap">
                     <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
                         <i class="fas fa-users me-1"></i> {{ atletas_acompanhados }} em acompanhamento
-                    </span>
+ </span>
                     <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
                         <i class="fas fa-clipboard-list me-1"></i> {{ total_avaliacoes }} avaliações
-                    </span>
+ </span>
                     {% if atletas_atencao %}
                     <span class="badge bg-danger text-white px-3 py-2 rounded-pill">
                         <i class="fas fa-exclamation-triangle me-1"></i> {{ atletas_atencao|length }} em atenção
-                    </span>
+ </span>
                     {% endif %}
-                </div>
-            </div>
+ </div>
+ </div>
             <div class="col-md-4 text-md-end">
                 <a href="{% url 'dashboard:psicologo_avaliacoes' %}" class="btn btn-light btn-lg shadow-sm">
                     <i class="fas fa-plus me-2"></i> Nova Avaliação
-                </a>
-            </div>
-        </div>
-    </div>
+ </a>
+ </div>
+ </div>
+ </div>
 
     <!-- Indicadores Principais -->
     <div class="row g-3 mb-4">
@@ -45,50 +45,50 @@
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #6f42c1, #4c2a85);">
                         <i class="fas fa-users" style="font-size: 22px;"></i>
-                    </div>
+ </div>
                     <span class="badge bg-primary bg-opacity-10 text-primary">Atletas</span>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ atletas_total }}</h2>
                 <p class="text-muted small mb-0">Total de Atletas</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card card-tilt p-3">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #0dcaf0, #0aa2c0);">
                         <i class="fas fa-clipboard-check" style="font-size: 22px;"></i>
-                    </div>
+ </div>
                     <span class="badge bg-info bg-opacity-10 text-info">Ativos</span>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ atletas_acompanhados }}</h2>
                 <p class="text-muted small mb-0">Em Acompanhamento</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card card-tilt p-3">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #ffc107, #ffca2c);">
                         <i class="fas fa-file-alt" style="font-size: 22px;"></i>
-                    </div>
+ </div>
                     <span class="badge bg-warning bg-opacity-10 text-warning">Total</span>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ total_avaliacoes }}</h2>
                 <p class="text-muted small mb-0">Avaliações Realizadas</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card card-tilt p-3">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #dc3545, #bb2d3b);">
                         <i class="fas fa-exclamation-triangle" style="font-size: 22px;"></i>
-                    </div>
+ </div>
                     <span class="badge bg-danger bg-opacity-10 text-danger">Atenção</span>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ atletas_atencao|length }}</h2>
                 <p class="text-muted small mb-0">Precisam de Atenção</p>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Médias dos Indicadores -->
     <div class="card-modern p-4 mb-4">
@@ -98,60 +98,60 @@
                 <div class="text-center p-3 bg-light rounded-4">
                     <div class="bg-danger bg-opacity-10 rounded-circle p-2 mx-auto mb-2" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-fire text-danger"></i>
-                    </div>
+ </div>
                     <small class="text-muted d-block">Ansiedade</small>
                     <h4 class="fw-bold mb-0 text-danger">{{ media_ansiedade }}</h4>
-                </div>
-            </div>
+ </div>
+ </div>
             <div class="col-md-2 col-6">
                 <div class="text-center p-3 bg-light rounded-4">
                     <div class="bg-success bg-opacity-10 rounded-circle p-2 mx-auto mb-2" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-bolt text-success"></i>
-                    </div>
+ </div>
                     <small class="text-muted d-block">Motivação</small>
                     <h4 class="fw-bold mb-0 text-success">{{ media_motivacao }}</h4>
-                </div>
-            </div>
+ </div>
+ </div>
             <div class="col-md-2 col-6">
                 <div class="text-center p-3 bg-light rounded-4">
                     <div class="bg-warning bg-opacity-10 rounded-circle p-2 mx-auto mb-2" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-brain text-warning"></i>
-                    </div>
+ </div>
                     <small class="text-muted d-block">Estresse</small>
                     <h4 class="fw-bold mb-0 text-warning">{{ media_estresse }}</h4>
-                </div>
-            </div>
+ </div>
+ </div>
             <div class="col-md-2 col-6">
                 <div class="text-center p-3 bg-light rounded-4">
                     <div class="bg-info bg-opacity-10 rounded-circle p-2 mx-auto mb-2" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-heart text-info"></i>
-                    </div>
+ </div>
                     <small class="text-muted d-block">Autoestima</small>
                     <h4 class="fw-bold mb-0 text-info">{{ media_autoestima }}</h4>
-                </div>
-            </div>
+ </div>
+ </div>
             <div class="col-md-2 col-6">
                 <div class="text-center p-3 bg-light rounded-4">
                     <div class="bg-primary bg-opacity-10 rounded-circle p-2 mx-auto mb-2" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-moon text-primary"></i>
-                    </div>
+ </div>
                     <small class="text-muted d-block">Sono</small>
                     <h4 class="fw-bold mb-0 text-primary">{{ media_sono }}</h4>
-                </div>
-            </div>
+ </div>
+ </div>
             <div class="col-md-2 col-6">
                 <div class="text-center p-3 bg-light rounded-4">
                     <div class="bg-success bg-opacity-10 rounded-circle p-2 mx-auto mb-2" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-check-circle text-success"></i>
-                    </div>
+ </div>
                     <small class="text-muted d-block">Bem Estar</small>
                     <h4 class="fw-bold mb-0 text-success">
                         {% widthratio media_motivacao|add:media_autoestima 2 1 %}
-                    </h4>
-                </div>
-            </div>
-        </div>
-    </div>
+ </h4>
+ </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Gráficos -->
     <div class="row g-4 mb-4">
@@ -160,18 +160,18 @@
                 <h5 class="fw-bold mb-3"><i class="fas fa-chart-line me-2 text-primary"></i>Evolução dos Indicadores</h5>
                 <div style="height: 320px;">
                     <canvas id="evolucaoPsicoChart"></canvas>
-                </div>
-            </div>
-        </div>
+ </div>
+ </div>
+ </div>
         <div class="col-lg-4">
             <div class="card-modern p-4 card-tilt">
                 <h5 class="fw-bold mb-3"><i class="fas fa-chart-pie me-2 text-info"></i>Distribuição Emocional</h5>
                 <div style="height: 320px;">
                     <canvas id="distribuicaoPsicoChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Atletas que Precisam de Atenção -->
     {% if atletas_atencao %}
@@ -184,21 +184,21 @@
                     <div class="d-flex align-items-center mb-2">
                         <div class="bg-danger bg-opacity-20 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                             <i class="fas fa-user text-danger"></i>
-                        </div>
+ </div>
                         <div>
                             <h6 class="fw-bold mb-0">{{ item.atleta.usuario.get_full_name|default:item.atleta.usuario.username }}</h6>
                             <small class="text-muted">{{ item.atleta.modalidade.nome|default:"Sem modalidade" }}</small>
-                        </div>
-                    </div>
+ </div>
+ </div>
                     <div class="d-flex justify-content-between align-items-center mt-2">
                         <span class="badge bg-danger bg-opacity-20 text-danger">Score: {{ item.score }}/10</span>
                         <small class="text-muted">{{ item.ultima_avaliacao.data|date:"d/m/Y" }}</small>
-                    </div>
-                </div>
-            </div>
+ </div>
+ </div>
+ </div>
             {% endfor %}
-        </div>
-    </div>
+ </div>
+ </div>
     {% endif %}
 
     <!-- Avaliações Recentes -->
@@ -206,7 +206,7 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h5 class="fw-bold mb-0"><i class="fas fa-clipboard-list me-2 text-info"></i>Avaliações Recentes</h5>
             <a href="{% url 'dashboard:psicologo_avaliacoes' %}" class="btn btn-sm btn-outline-custom">Ver Todas</a>
-        </div>
+ </div>
         <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead class="bg-light text-muted small fw-bold">
@@ -218,8 +218,8 @@
                         <th>Ansiedade</th>
                         <th>Motivação</th>
                         <th>Estresse</th>
-                    </tr>
-                </thead>
+ </tr>
+ </thead>
                 <tbody>
                     {% for av in avaliacoes_recentes %}
                     <tr>
@@ -227,10 +227,10 @@
                             <div class="d-flex align-items-center">
                                 <div class="bg-info bg-opacity-10 text-info rounded-circle p-2 me-2" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;">
                                     <i class="fas fa-user small"></i>
-                                </div>
+ </div>
                                 <strong class="small">{{ av.atleta.usuario.get_full_name|default:av.atleta.usuario.username }}</strong>
-                            </div>
-                        </td>
+ </div>
+ </td>
                         <td data-label="Data">{{ av.data|date:"d/m/Y" }}</td>
                         <td data-label="Score"><strong>{{ av.score_total }}</strong>/10</td>
                         <td data-label="Status">
@@ -241,23 +241,23 @@
                             {% else %}
                                 <span class="badge bg-danger bg-opacity-10 text-danger">Atenção</span>
                             {% endif %}
-                        </td>
+ </td>
                         <td data-label="Ansiedade">{{ av.ansiedade }}/10</td>
                         <td data-label="Motivação">{{ av.motivacao }}/10</td>
                         <td data-label="Estresse">{{ av.estresse }}/10</td>
-                    </tr>
+ </tr>
                     {% empty %}
                     <tr>
                         <td colspan="7" class="text-center py-4 text-muted">
                             <i class="fas fa-clipboard-list fs-3 d-block mb-2 opacity-25"></i>
                             Nenhuma avaliação registrada ainda.
-                        </td>
-                    </tr>
+ </td>
+ </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+ </tbody>
+ </table>
+ </div>
+ </div>
 
     <!-- Timeline de Avaliações -->
     <div class="card-modern p-4">
@@ -266,24 +266,24 @@
         <div class="d-flex mb-3">
             <div class="bg-{{ evento.cor }} bg-opacity-10 text-{{ evento.cor }} rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                 <i class="fas fa-brain"></i>
-            </div>
+ </div>
             <div class="flex-grow-1 border-bottom pb-3">
                 <div class="d-flex justify-content-between">
                     <h6 class="fw-bold mb-1">{{ evento.atleta_nome }}</h6>
                     <small class="text-muted">{{ evento.data|date:"d/m/Y" }}</small>
-                </div>
+ </div>
                 <p class="text-muted small mb-0">
                     Score: <strong>{{ evento.score }}/10</strong> - {{ evento.status }}
-                </p>
-            </div>
-        </div>
+ </p>
+ </div>
+ </div>
         {% empty %}
         <div class="text-center py-4">
             <i class="fas fa-history fs-1 d-block mb-2 opacity-25 text-muted"></i>
             <p class="text-muted mb-0">Nenhuma avaliação registrada ainda.</p>
-        </div>
+ </div>
         {% endfor %}
-    </div>
+ </div>
 
 </div>
 
@@ -301,7 +301,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // 🔥 Função auxiliar para ler dados com segurança
+        //  Função auxiliar para ler dados com segurança
         function getJSON(id) {
             const el = document.getElementById(id);
             return el ? JSON.parse(el.textContent) : [];

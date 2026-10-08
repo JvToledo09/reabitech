@@ -622,15 +622,15 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-users"></i>
             Gestão de membros
-        </div>
+ </div>
         <h1 class="page-header-title">
             Quem faz o projeto <span class="gradient-text">acontecer.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Gerencie membros do projeto <strong>{{ projeto.nome }}</strong>.
             Convide profissionais, defina funções e mantenha sua equipe conectada.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <!-- ============================================
          STATS PREMIUM
@@ -641,30 +641,30 @@
                 <div class="stat-premium-icon"><i class="fas fa-users"></i></div>
                 <div class="stat-premium-number">{{ membros|length }}</div>
                 <div class="stat-premium-label">Total de membros</div>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-lg-3 col-md-6">
             <div class="stat-premium">
                 <div class="stat-premium-icon"><i class="fas fa-user-md"></i></div>
                 <div class="stat-premium-number">{{ projeto.total_profissionais|default:0 }}</div>
                 <div class="stat-premium-label">Profissionais ativos</div>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-lg-3 col-md-6">
             <div class="stat-premium">
                 <div class="stat-premium-icon"><i class="fas fa-user-injured"></i></div>
                 <div class="stat-premium-number">{{ projeto.total_atletas|default:0 }}</div>
                 <div class="stat-premium-label">Pacientes</div>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-lg-3 col-md-6">
             <div class="stat-premium">
                 <div class="stat-premium-icon"><i class="fas fa-calendar"></i></div>
                 <div class="stat-premium-number">{{ projeto.criado_em|date:"Y" }}</div>
                 <div class="stat-premium-label">Projeto desde</div>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <!-- ============================================
          HEADER (com botão Gerenciar)
@@ -673,11 +673,11 @@
         <div class="d-flex align-items-center gap-2">
             <span class="pulse-dot"></span>
             <small style="color: #64748b;">Sincronizado em tempo real</small>
-        </div>
+ </div>
         <a href="{% url 'dashboard:coordenador_adicionar_membro' %}" class="btn-primary-custom">
             <i class="fas fa-user-plus"></i> Gerenciar Funções
-        </a>
-    </div>
+ </a>
+ </div>
 
     <!-- ============================================
          FILTROS
@@ -688,7 +688,7 @@
                 <label class="filter-label">Pesquisar</label>
                 <input type="text" name="q" value="{{ query|default:'' }}"
                        class="filter-input" placeholder="Nome, e-mail ou usuário...">
-            </div>
+ </div>
 
             <div>
                 <label class="filter-label">Função</label>
@@ -697,8 +697,8 @@
                     {% for value, label in tipos %}
                     <option value="{{ value }}" {% if filtro_tipo == value %}selected{% endif %}>{{ label }}</option>
                     {% endfor %}
-                </select>
-            </div>
+ </select>
+ </div>
 
             <div>
                 <label class="filter-label">Sexo</label>
@@ -707,8 +707,8 @@
                     {% for value, label in sexos %}
                     <option value="{{ value }}" {% if filtro_sexo == value %}selected{% endif %}>{{ label }}</option>
                     {% endfor %}
-                </select>
-            </div>
+ </select>
+ </div>
 
             <div>
                 <label class="filter-label">Modalidade</label>
@@ -717,19 +717,19 @@
                     {% for m in modalidades %}
                     <option value="{{ m.id }}" {% if filtro_modalidade == m.id|stringformat:"s" %}selected{% endif %}>{{ m.nome }}</option>
                     {% endfor %}
-                </select>
-            </div>
+ </select>
+ </div>
 
             <div style="display:flex;gap:8px;">
                 <button type="submit" class="btn-primary-custom" style="white-space:nowrap;">
                     <i class="fas fa-search"></i> Filtrar
-                </button>
+ </button>
                 <a href="{% url 'dashboard:coordenador_membros' %}" class="btn-outline-custom" style="white-space:nowrap;">
                     <i class="fas fa-times"></i>
-                </a>
-            </div>
-        </form>
-    </div>
+ </a>
+ </div>
+ </form>
+ </div>
 
     <!-- ============================================
          LISTA DE MEMBROS
@@ -746,8 +746,8 @@
                         <th>Sexo</th>
                         <th>Status</th>
                         <th style="text-align:right;">Ações</th>
-                    </tr>
-                </thead>
+ </tr>
+ </thead>
                 <tbody>
                     {% for membro in membros %}
                     <tr>
@@ -758,88 +758,88 @@
                                         {% cycle '#2BA181,#1f8768' '#0d6efd,#084298' '#6f42c1,#4c2a85' '#0dcaf0,#0aa2c0' '#ffc107,#d97706' %})"
                                      data-initial="{{ membro.usuario.get_full_name|default:membro.usuario.username|first|upper }}">
                                     {{ membro.usuario.get_full_name|default:membro.usuario.username|first|upper }}
-                                </div>
+ </div>
                                 <div>
                                     <div class="member-name">{{ membro.usuario.get_full_name|default:membro.usuario.username }}</div>
                                     <div class="member-email">{{ membro.usuario.email|default:"Sem e-mail" }}</div>
-                                </div>
-                            </div>
-                        </td>
+ </div>
+ </div>
+ </td>
                         <td data-label="Função">
                             <span class="role-badge {{ membro.tipo }}">
                                 <i class="fas fa-{% if membro.tipo == 'coordenador' %}user-tie{% elif membro.tipo == 'fisioterapeuta' %}user-md{% elif membro.tipo == 'psicologo' %}brain{% elif membro.tipo == 'tecnico' %}chalkboard-teacher{% else %}user{% endif %}"></i>
                                 {{ membro.get_tipo_display }}
-                            </span>
-                        </td>
+ </span>
+ </td>
                         <td data-label="Modalidade">
                             {% if membro.modalidade %}
                                 {{ membro.modalidade.nome }}
                             {% else %}
                                 <span class="text-muted">—</span>
                             {% endif %}
-                        </td>
+ </td>
                         <td data-label="Sexo">
                             {% if membro.get_sexo_display %}
                                 {{ membro.get_sexo_display }}
                             {% else %}
                                 <span class="text-muted">—</span>
                             {% endif %}
-                        </td>
+ </td>
                         <td data-label="Status">
                             {% if membro.ativo %}
                             <span class="status-badge ativo">Ativo</span>
                             {% else %}
                             <span class="status-badge inativo">Inativo</span>
                             {% endif %}
-                        </td>
+ </td>
                         <td data-label="Ações" style="text-align:right;">
                             <a href="{% url 'dashboard:coordenador_detalhes_membro' membro.id %}"
                                class="action-btn" title="Ver detalhes">
                                 <i class="fas fa-eye"></i>
-                            </a>
+ </a>
                             <a href="{% url 'dashboard:coordenador_adicionar_membro' %}"
                                class="action-btn" title="Editar função">
                                 <i class="fas fa-edit"></i>
-                            </a>
-                        </td>
-                    </tr>
+ </a>
+ </td>
+ </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
+ </tbody>
+ </table>
+ </div>
 
         {% elif query or filtro_tipo or filtro_sexo or filtro_modalidade %}
-        {# 🔥 NOVO ESTADO: filtros aplicados mas nenhum resultado #}
+        {#  NOVO ESTADO: filtros aplicados mas nenhum resultado #}
         <div class="empty-state">
             <div class="empty-state-icon" style="background: linear-gradient(135deg, #fef3c7, #fde68a); color: #d97706;">
                 <i class="fas fa-search"></i>
-            </div>
+ </div>
             <h3 class="empty-state-title">Nenhum resultado encontrado</h3>
             <p class="empty-state-desc">
                 Nenhum membro corresponde aos filtros aplicados.
                 Tente ajustar a busca ou limpar os filtros.
-            </p>
+ </p>
             <a href="{% url 'dashboard:coordenador_membros' %}" class="btn-outline-custom">
                 <i class="fas fa-times"></i> Limpar filtros
-            </a>
-        </div>
+ </a>
+ </div>
 
         {% else %}
         {# Projeto realmente vazio #}
         <div class="empty-state">
             <div class="empty-state-icon">
                 <i class="fas fa-user-plus"></i>
-            </div>
+ </div>
             <h3 class="empty-state-title">Nenhum membro cadastrado</h3>
             <p class="empty-state-desc">
                 Adicione os profissionais da sua equipe (fisioterapeutas, psicólogos, técnicos) e pacientes para começar.
-            </p>
+ </p>
             <a href="{% url 'dashboard:coordenador_adicionar_membro' %}" class="btn-primary-custom">
                 <i class="fas fa-user-plus"></i> Adicionar Primeiro Membro
-            </a>
-        </div>
+ </a>
+ </div>
         {% endif %}
-    </div>
+ </div>
 
 </div>
 {% endblock %}

@@ -136,47 +136,47 @@
             <div style="display: flex; align-items: center; gap: 20px;">
                 <div style="width: 80px; height: 80px; border-radius: 20px; background: linear-gradient(135deg, #34d399, #2BA181); display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.8rem; box-shadow: 0 12px 30px rgba(52, 211, 153, 0.35);">
                     {{ atleta.usuario.get_full_name|default:atleta.usuario.username|first|upper }}
-                </div>
+ </div>
                 <div>
                     <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.75rem; font-weight: 800; margin: 0 0 6px 0; letter-spacing: -0.02em;">
                         {{ atleta.usuario.get_full_name|default:atleta.usuario.username }}
-                    </h2>
+ </h2>
                     <p style="opacity: 0.75; margin: 0; font-size: 0.9rem;">
                         <strong style="color: #34d399;">{{ prontuario.numero_prontuario }}</strong>
                         &nbsp;·&nbsp; RM {{ atleta.rm|default:"—" }}
                         {% if atleta.modalidade %}&nbsp;·&nbsp; {{ atleta.modalidade.nome }}{% endif %}
-                    </p>
-                </div>
-            </div>
+ </p>
+ </div>
+ </div>
             <div style="text-align: right;">
                 <span style="display: inline-block; padding: 8px 18px; background: rgba(52, 211, 153, 0.2); border: 1px solid rgba(52, 211, 153, 0.4); border-radius: 999px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; color: #a7f3d0;">
                     {{ prontuario.get_status_display|upper }}
-                </span>
+ </span>
                 <p style="opacity: 0.6; font-size: 0.75rem; margin: 12px 0 0 0;">
                     Aberto em {{ prontuario.data_abertura|date:"d/m/Y" }}
-                </p>
-            </div>
-        </div>
+ </p>
+ </div>
+ </div>
 
         <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.1);" class="header-info-grid">
             <div class="header-info-item">
                 <div class="header-info-value" style="color: white;">{{ total_relatorios|default:0 }}</div>
                 <div class="header-info-label" style="color: rgba(255,255,255,0.5);">Sessões registradas</div>
-            </div>
+ </div>
             <div class="header-info-item">
                 <div class="header-info-value" style="color: white;">{{ objetivos_alcancados|default:0 }}/{{ total_objetivos|default:0 }}</div>
                 <div class="header-info-label" style="color: rgba(255,255,255,0.5);">Objetivos alcançados</div>
-            </div>
+ </div>
             <div class="header-info-item">
                 <div class="header-info-value" style="color: white;">{{ prontuario.dias_ate_arquivamento|default:"—" }}</div>
                 <div class="header-info-label" style="color: rgba(255,255,255,0.5);">Dias p/ arquivar</div>
-            </div>
+ </div>
             <div class="header-info-item">
                 <div class="header-info-value" style="color: white;">{{ total_evolucoes|default:0 }}</div>
                 <div class="header-info-label" style="color: rgba(255,255,255,0.5);">Evoluções</div>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Alertas -->
     {% if tem_alerta_risco_alto %}
@@ -184,7 +184,7 @@
         <i class="fas fa-exclamation-triangle"></i>
         <span><strong>Atenção:</strong> Este paciente possui escala de risco alta registrada. Verifique as últimas avaliações.</span>
         <a href="{% url 'prontuario:lista_escalas' prontuario.id %}" style="margin-left: auto; color: inherit; text-decoration: underline;">Ver escalas</a>
-    </div>
+ </div>
     {% endif %}
 
     {% if tem_alerta_cardio %}
@@ -192,49 +192,49 @@
         <i class="fas fa-heart-pulse"></i>
         <span><strong>Cardiorrespiratório:</strong> Dispneia de grau elevado detectada na última avaliação.</span>
         <a href="{% url 'prontuario:lista_cardio' prontuario.id %}" style="margin-left: auto; color: inherit; text-decoration: underline;">Ver avaliação</a>
-    </div>
+ </div>
     {% endif %}
 
     <!-- Botões de ação principais -->
     <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
         <a href="{% url 'prontuario:criar_triagem' prontuario.id %}" class="btn-primary-custom">
             <i class="fas fa-notes-medical"></i> Nova triagem
-        </a>
+ </a>
         <a href="{% url 'prontuario:criar_relatorio' prontuario.id %}" class="btn-primary-custom" style="background: linear-gradient(135deg, #0dcaf0, #0891b2);">
             <i class="fas fa-clipboard-check"></i> Nova sessão
-        </a>
+ </a>
         <a href="{% url 'prontuario:criar_evolucao' prontuario.id %}" class="btn-outline-custom">
             <i class="fas fa-chart-line"></i> Nova evolução
-        </a>
+ </a>
 <a href="{% url 'prontuario:timeline_atleta' atleta.id %}" class="btn-primary-custom" style="background: linear-gradient(135deg, #7c3aed, #5b21b6);">
     <i class="fas fa-stream"></i> Ver Timeline
 </a>
         <a href="{% url 'prontuario:imprimir_prontuario' prontuario.id %}" class="btn-outline-custom" target="_blank">
             <i class="fas fa-print"></i> Visualizar
-        </a>
+ </a>
         <a href="{% url 'prontuario:exportar_pdf_prontuario' prontuario.id %}"
            class="btn-primary-custom"
            style="background: linear-gradient(135deg, #dc2626, #991b1b);">
             <i class="fas fa-file-pdf"></i> Baixar PDF
-        </a>
+ </a>
 
-        <!-- 🔥 NOVOS BOTÕES — Colaboração com o Técnico -->
+        <!--  NOVOS BOTÕES — Colaboração com o Técnico -->
         <a href="{% url 'prontuario:fisio_gerenciar_compartilhamento' prontuario.id %}"
            class="btn-primary-custom"
            style="background: linear-gradient(135deg, #6f42c1, #4c2a85);">
             <i class="fas fa-share-nodes"></i> Compartilhar com Técnico
-        </a>
+ </a>
         <a href="{% url 'prontuario:fisio_ver_observacoes_tecnico' prontuario.id %}"
            class="btn-outline-custom">
             <i class="fas fa-comments"></i> Observações de Treino
-        </a>
-    </div>
+ </a>
+ </div>
 
     <!-- Grid de seções -->
     <div class="section-tag" style="margin-bottom: 16px;">
         <i class="fas fa-folder-tree"></i>
         Seções do prontuário
-    </div>
+ </div>
 
     <div class="section-grid">
 
@@ -242,93 +242,93 @@
             <div class="section-card-header">
                 <div class="section-card-icon"><i class="fas fa-notes-medical"></i></div>
                 <span class="section-card-count">{{ total_triagens|default:0 }}</span>
-            </div>
+ </div>
             <h3 class="section-card-title">Triagens</h3>
             <p class="section-card-desc">Histórico de queixas, sinais vitais e exames físicos iniciais.</p>
-        </a>
+ </a>
 
         <a href="{% url 'prontuario:lista_objetivos' prontuario.id %}" class="section-card">
             <div class="section-card-header">
                 <div class="section-card-icon"><i class="fas fa-bullseye"></i></div>
                 <span class="section-card-count">{{ total_objetivos|default:0 }}</span>
-            </div>
+ </div>
             <h3 class="section-card-title">Objetivos</h3>
             <p class="section-card-desc">Metas de curto, médio e longo prazo (SMART).</p>
-        </a>
+ </a>
 
         <a href="{% url 'prontuario:lista_medicamentos' prontuario.id %}" class="section-card">
             <div class="section-card-header">
                 <div class="section-card-icon"><i class="fas fa-pills"></i></div>
                 <span class="section-card-count">{{ total_medicamentos|default:0 }}</span>
-            </div>
+ </div>
             <h3 class="section-card-title">Medicamentos</h3>
             <p class="section-card-desc">Uso atual, dose, frequência e prescritor.</p>
-        </a>
+ </a>
 
         <a href="{% url 'prontuario:lista_cif' prontuario.id %}" class="section-card">
             <div class="section-card-header">
                 <div class="section-card-icon"><i class="fas fa-clipboard-list"></i></div>
                 <span class="section-card-count">{{ total_avaliacoes_cif|default:0 }}</span>
-            </div>
+ </div>
             <h3 class="section-card-title">CIF</h3>
             <p class="section-card-desc">Avaliação completa de funcionalidade (OMS).</p>
-        </a>
+ </a>
 
         <a href="{% url 'prontuario:lista_cardio' prontuario.id %}" class="section-card">
             <div class="section-card-header">
                 <div class="section-card-icon"><i class="fas fa-heart-pulse"></i></div>
                 <span class="section-card-count">{{ total_cardio|default:0 }}</span>
-            </div>
+ </div>
             <h3 class="section-card-title">Cardiorrespiratório</h3>
             <p class="section-card-desc">Asma, bronquite, pós-cirúrgico, dispneia.</p>
-        </a>
+ </a>
 
         <a href="{% url 'prontuario:lista_escalas' prontuario.id %}" class="section-card">
             <div class="section-card-header">
                 <div class="section-card-icon"><i class="fas fa-gauge-high"></i></div>
                 <span class="section-card-count">{{ total_escalas|default:0 }}</span>
-            </div>
+ </div>
             <h3 class="section-card-title">Escalas de risco</h3>
             <p class="section-card-desc">Berg, Morse, EVA, Glasgow, Barthel, ASHES.</p>
-        </a>
+ </a>
 
         <a href="{% url 'prontuario:lista_relatorios' prontuario.id %}" class="section-card">
             <div class="section-card-header">
                 <div class="section-card-icon"><i class="fas fa-clipboard-check"></i></div>
                 <span class="section-card-count">{{ total_relatorios|default:0 }}</span>
-            </div>
+ </div>
             <h3 class="section-card-title">Relatórios diários</h3>
             <p class="section-card-desc">Registro de cada sessão de fisioterapia.</p>
-        </a>
+ </a>
 
         <a href="{% url 'prontuario:lista_evolucoes' prontuario.id %}" class="section-card">
             <div class="section-card-header">
                 <div class="section-card-icon"><i class="fas fa-chart-line"></i></div>
                 <span class="section-card-count">{{ total_evolucoes|default:0 }}</span>
-            </div>
+ </div>
             <h3 class="section-card-title">Evoluções</h3>
             <p class="section-card-desc">Evolução fisioterapêutica detalhada (SOAP).</p>
-        </a>
+ </a>
 
         <a href="{% url 'prontuario:lista_encaminhamentos' prontuario.id %}" class="section-card">
             <div class="section-card-header">
                 <div class="section-card-icon"><i class="fas fa-share"></i></div>
                 <span class="section-card-count">{{ total_encaminhamentos|default:0 }}</span>
-            </div>
+ </div>
             <h3 class="section-card-title">Encaminhamentos</h3>
             <p class="section-card-desc">Encaminhamentos a especialistas médicos.</p>
-        </a>
+ </a>
 
         <a href="{% url 'prontuario:lista_exames' prontuario.id %}" class="section-card">
             <div class="section-card-header">
                 <div class="section-card-icon"><i class="fas fa-microscope"></i></div>
                 <span class="section-card-count">{{ total_exames|default:0 }}</span>
-            </div>
+ </div>
             <h3 class="section-card-title">Exames</h3>
             <p class="section-card-desc">Laboratoriais, imagem, ECG, laudos.</p>
-        </a>
+ </a>
 
-    </div>
+ </div>
 
 </div>
 {% endblock %}

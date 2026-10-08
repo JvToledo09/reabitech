@@ -14,16 +14,16 @@
             <div class="mt-4">
                 <a href="{% url 'criar_projeto' %}" class="btn btn-primary-custom btn-lg me-3">
                     <i class="fas fa-rocket"></i> Criar seu Projeto
-                </a>
+ </a>
                 <a href="{% url 'login' %}" class="btn btn-outline-custom btn-lg">
                     <i class="fas fa-sign-in-alt"></i> Entrar
-                </a>
-            </div>
-        </div>
+ </a>
+ </div>
+ </div>
         <div class="col-lg-6 text-center">
             <img src="{% static 'images/hero.svg' %}" alt="REABITECH" class="img-fluid" style="max-height:300px;">
-        </div>
-    </div>
+ </div>
+ </div>
 
     <!-- Projetos Parceiros -->
     {% if projetos %}
@@ -38,10 +38,10 @@
                 <h5>{{ projeto.nome }}</h5>
                 <p>{{ projeto.descricao|truncatechars:80 }}</p>
                 <a href="{{ projeto.site_oficial }}" target="_blank" class="btn btn-outline-custom btn-sm">Visitar</a>
-            </div>
-        </div>
+ </div>
+ </div>
         {% endfor %}
-    </div>
+ </div>
     {% endif %}
 
     <!-- Planos -->
@@ -58,11 +58,11 @@
                     {% if plano.inclui_fisioterapia %}<li><i class="fas fa-check text-success"></i> Fisioterapia</li>{% endif %}
                     {% if plano.inclui_psicologia %}<li><i class="fas fa-check text-success"></i> Psicologia</li>{% endif %}
                     {% if plano.inclui_relatorios %}<li><i class="fas fa-check text-success"></i> Relatórios</li>{% endif %}
-                </ul>
+ </ul>
                 <a href="{% url 'criar_projeto' %}?plano={{ plano.id }}" class="btn btn-primary-custom w-100">Assinar</a>
-            </div>
-        </div>
+ </div>
+ </div>
         {% endfor %}
-    </div>
+ </div>
 </div>
 {% endblock %}

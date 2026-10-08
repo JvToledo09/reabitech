@@ -129,28 +129,28 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-list"></i>
             Consultas
-        </div>
+ </div>
         <h1 class="page-header-title">
             Todas as <span class="gradient-text">consultas.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Lista completa com filtros por período, status, tipo e profissional.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
         {% if pode_gerenciar %}
         <a href="{% url 'consultas:criar_consulta' %}" class="btn-primary-custom">
             <i class="fas fa-plus"></i> Nova consulta
-        </a>
+ </a>
         {% endif %}
         <a href="{% url 'consultas:dashboard_consultas' %}" class="btn-outline-custom">
             <i class="fas fa-arrow-left"></i> Voltar ao dashboard
-        </a>
+ </a>
         <a href="{% url 'consultas:calendario_consultas' %}" class="btn-outline-custom">
             <i class="fas fa-calendar-alt"></i> Calendário
-        </a>
-    </div>
+ </a>
+ </div>
 
     <!-- Filtros -->
     <form method="GET" class="filtros-bar">
@@ -163,8 +163,8 @@
                 <option value="mes" {% if filtros.periodo == 'mes' %}selected{% endif %}>Este mês</option>
                 <option value="futuras" {% if filtros.periodo == 'futuras' %}selected{% endif %}>Futuras</option>
                 <option value="passadas" {% if filtros.periodo == 'passadas' %}selected{% endif %}>Passadas</option>
-            </select>
-        </div>
+ </select>
+ </div>
         <div class="campo">
             <label>Status</label>
             <select name="status" onchange="this.form.submit()">
@@ -172,8 +172,8 @@
                 {% for val, label in status_choices %}
                 <option value="{{ val }}" {% if filtros.status == val %}selected{% endif %}>{{ label }}</option>
                 {% endfor %}
-            </select>
-        </div>
+ </select>
+ </div>
         <div class="campo">
             <label>Tipo</label>
             <select name="tipo" onchange="this.form.submit()">
@@ -181,8 +181,8 @@
                 {% for val, label in tipo_choices %}
                 <option value="{{ val }}" {% if filtros.tipo == val %}selected{% endif %}>{{ label }}</option>
                 {% endfor %}
-            </select>
-        </div>
+ </select>
+ </div>
         <div class="campo">
             <label>Profissional</label>
             <select name="profissional" onchange="this.form.submit()">
@@ -190,20 +190,20 @@
                 {% for m in profissionais %}
                 <option value="{{ m.usuario.id }}" {% if filtros.profissional == m.usuario.id|stringformat:"s" %}selected{% endif %}>
                     {{ m.usuario.get_full_name|default:m.usuario.username }}
-                </option>
+ </option>
                 {% endfor %}
-            </select>
-        </div>
+ </select>
+ </div>
         <div class="campo">
             <a href="{% url 'consultas:lista_consultas' %}" class="btn-outline-custom" style="width: 100%; justify-content: center;">
                 <i class="fas fa-rotate"></i> Limpar
-            </a>
-        </div>
-    </form>
+ </a>
+ </div>
+ </form>
 
     <div class="totais">
         <span class="count"><strong>{{ total }}</strong> consulta{{ total|pluralize }}</span>
-    </div>
+ </div>
 
     {% if consultas %}
     <div class="card-premium" style="padding: 0; overflow: hidden;">
@@ -219,8 +219,8 @@
                         <th>Prioridade</th>
                         <th>Status</th>
                         <th style="text-align: right;">Ações</th>
-                    </tr>
-                </thead>
+ </tr>
+ </thead>
                 <tbody>
                     {% for c in consultas %}
                     <tr>
@@ -228,18 +228,18 @@
                             <span class="data-cell">
                                 {{ c.data|date:"d/m/Y" }}
                                 <small>{{ c.hora_inicio|time:"H:i" }} — {{ c.hora_fim|time:"H:i" }}</small>
-                            </span>
-                        </td>
+ </span>
+ </td>
                         <td>
                             <strong>{{ c.atleta.usuario.get_full_name|default:c.atleta.usuario.username }}</strong>
                             {% if c.atleta.rm %}<div style="font-size: 0.72rem; color: var(--text-tertiary);">RM {{ c.atleta.rm }}</div>{% endif %}
-                        </td>
+ </td>
                         <td>
                             <span class="tipo-badge">
                                 <i class="fas {{ c.icone_tipo }}"></i>
                                 {{ c.get_tipo_display }}
-                            </span>
-                        </td>
+ </span>
+ </td>
                         <td>{{ c.profissional.get_full_name|default:"—" }}</td>
                         <td>{{ c.get_modalidade_display }}</td>
                         <td><span class="badge bg-{{ c.cor_prioridade }}">{{ c.get_prioridade_display }}</span></td>
@@ -247,19 +247,19 @@
                         <td style="text-align: right; white-space: nowrap;">
                             <a href="{% url 'consultas:detalhes_consulta' c.id %}" class="action-icon-btn" title="Ver">
                                 <i class="fas fa-eye"></i>
-                            </a>
+ </a>
                             {% if pode_gerenciar and c.pode_editar %}
                             <a href="{% url 'consultas:editar_consulta' c.id %}" class="action-icon-btn" title="Editar">
                                 <i class="fas fa-edit"></i>
-                            </a>
+ </a>
                             {% endif %}
-                        </td>
-                    </tr>
+ </td>
+ </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+ </tbody>
+ </table>
+ </div>
+ </div>
     {% else %}
     <div class="card-premium">
         <div class="empty-state">
@@ -269,10 +269,10 @@
             {% if pode_gerenciar %}
             <a href="{% url 'consultas:criar_consulta' %}" class="btn-primary-custom">
                 <i class="fas fa-plus"></i> Nova consulta
-            </a>
+ </a>
             {% endif %}
-        </div>
-    </div>
+ </div>
+ </div>
     {% endif %}
 
 </div>

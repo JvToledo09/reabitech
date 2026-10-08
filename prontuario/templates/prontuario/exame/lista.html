@@ -12,23 +12,23 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-microscope"></i>
             Exames
-        </div>
+ </div>
         <h1 class="page-header-title">
             Exames <span class="gradient-text">complementares.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Laboratoriais, imagem, ECG, laudos e outros exames do paciente.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 24px; justify-content: space-between; flex-wrap: wrap;">
         <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" class="btn-outline-custom">
             <i class="fas fa-arrow-left"></i> Voltar
-        </a>
+ </a>
         <a href="{% url 'prontuario:criar_exame' prontuario.id %}" class="btn-primary-custom">
             <i class="fas fa-plus"></i> Novo exame
-        </a>
-    </div>
+ </a>
+ </div>
 
     {% if exames %}
     <div class="card-premium" style="padding: 0; overflow: hidden;">
@@ -41,8 +41,8 @@
                         <th>Data</th>
                         <th>Status</th>
                         <th style="text-align: right;">Ações</th>
-                    </tr>
-                </thead>
+ </tr>
+ </thead>
                 <tbody>
                     {% for e in exames %}
                     <tr>
@@ -52,24 +52,24 @@
                         <td>
                             <span class="badge-premium {% if e.status == 'laudo_disponivel' %}green{% elif e.status == 'realizado' %}blue{% elif e.status == 'agendado' %}amber{% else %}gray{% endif %}">
                                 {{ e.get_status_display }}
-                            </span>
-                        </td>
+ </span>
+ </td>
                         <td style="text-align: right;">
                             <a href="{% url 'prontuario:editar_exame' e.id %}" class="action-icon-btn" title="Editar">
                                 <i class="fas fa-edit"></i>
-                            </a>
+ </a>
                             {% if e.arquivo %}
                             <a href="{{ e.arquivo.url }}" target="_blank" class="action-icon-btn" title="Baixar arquivo">
                                 <i class="fas fa-download"></i>
-                            </a>
+ </a>
                             {% endif %}
-                        </td>
-                    </tr>
+ </td>
+ </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+ </tbody>
+ </table>
+ </div>
+ </div>
     {% else %}
     <div class="card-premium">
         <div class="empty-state">
@@ -77,12 +77,12 @@
             <h3 class="empty-state-title">Nenhum exame registrado</h3>
             <p class="empty-state-desc">
                 Registre exames complementares como raio-X, ressonância, ECG, exames laboratoriais e outros.
-            </p>
+ </p>
             <a href="{% url 'prontuario:criar_exame' prontuario.id %}" class="btn-primary-custom">
                 <i class="fas fa-plus"></i> Registrar primeiro exame
-            </a>
-        </div>
-    </div>
+ </a>
+ </div>
+ </div>
     {% endif %}
 
 </div>

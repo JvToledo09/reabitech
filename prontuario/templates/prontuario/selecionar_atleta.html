@@ -104,55 +104,55 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-folder-plus"></i>
             Novo prontuário
-        </div>
+ </div>
         <h1 class="page-header-title">
             Escolha um paciente para <span class="gradient-text">abrir o prontuário.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Atletas sem prontuário aparecem em destaque. Atletas que já possuem prontuário estão no final da lista.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 24px; justify-content: space-between; flex-wrap: wrap;">
         <a href="{% url 'prontuario:lista_prontuarios' %}" class="btn-outline-custom">
             <i class="fas fa-arrow-left"></i> Voltar
-        </a>
+ </a>
         <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="btn-outline-custom">
             <i class="fas fa-users"></i> Ver todos os pacientes
-        </a>
-    </div>
+ </a>
+ </div>
 
     {% if atletas_sem_prontuario %}
     <h3 class="section-title">
         <i class="fas fa-folder-plus"></i> Sem prontuário
         <span class="badge-premium green">{{ atletas_sem_prontuario|length }}</span>
-    </h3>
+ </h3>
     <div class="atletas-grid mb-5">
         {% for atleta in atletas_sem_prontuario %}
         <a href="{% url 'prontuario:criar_prontuario' atleta.id %}" class="atleta-card">
             <div class="atleta-card-header">
                 <div class="atleta-avatar">
                     {{ atleta.usuario.get_full_name|default:atleta.usuario.username|first|upper }}
-                </div>
+ </div>
                 <div style="flex: 1; min-width: 0;">
                     <h3 class="atleta-nome text-truncate">
                         {{ atleta.usuario.get_full_name|default:atleta.usuario.username }}
-                    </h3>
+ </h3>
                     <div class="atleta-info">
                         RM {{ atleta.rm|default:"—" }}
                         {% if atleta.modalidade %} · {{ atleta.modalidade.nome }}{% endif %}
-                    </div>
-                </div>
-            </div>
+ </div>
+ </div>
+ </div>
             <div class="atleta-card-footer">
                 <span style="color: var(--text-tertiary);">Sem prontuário</span>
                 <span style="color: var(--green); font-weight: 700;">
                     Criar <i class="fas fa-arrow-right ms-1"></i>
-                </span>
-            </div>
-        </a>
+ </span>
+ </div>
+ </a>
         {% endfor %}
-    </div>
+ </div>
     {% else %}
     <div class="card-premium mb-5">
         <div class="empty-state">
@@ -160,41 +160,41 @@
             <h3 class="empty-state-title">Todos os atletas já têm prontuário</h3>
             <p class="empty-state-desc">
                 Todos os pacientes do projeto já possuem prontuário aberto.
-            </p>
-        </div>
-    </div>
+ </p>
+ </div>
+ </div>
     {% endif %}
 
     {% if atletas_com_prontuario %}
     <h3 class="section-title">
         <i class="fas fa-folder"></i> Já têm prontuário
         <span class="badge-premium gray">{{ atletas_com_prontuario|length }}</span>
-    </h3>
+ </h3>
     <div class="atletas-grid">
         {% for atleta in atletas_com_prontuario %}
         <a href="{% url 'prontuario:dashboard_prontuario' atleta.prontuario.id %}" class="atleta-card ja-tem">
             <div class="atleta-card-header">
                 <div class="atleta-avatar">
                     {{ atleta.usuario.get_full_name|default:atleta.usuario.username|first|upper }}
-                </div>
+ </div>
                 <div style="flex: 1; min-width: 0;">
                     <h3 class="atleta-nome text-truncate">
                         {{ atleta.usuario.get_full_name|default:atleta.usuario.username }}
-                    </h3>
+ </h3>
                     <div class="atleta-info">
                         {{ atleta.prontuario.numero_prontuario }}
-                    </div>
-                </div>
-            </div>
+ </div>
+ </div>
+ </div>
             <div class="atleta-card-footer">
                 <span style="color: var(--text-tertiary);">{{ atleta.prontuario.get_status_display }}</span>
                 <span style="color: #6f42c1; font-weight: 700;">
                     Abrir <i class="fas fa-arrow-right ms-1"></i>
-                </span>
-            </div>
-        </a>
+ </span>
+ </div>
+ </a>
         {% endfor %}
-    </div>
+ </div>
     {% endif %}
 
 </div>

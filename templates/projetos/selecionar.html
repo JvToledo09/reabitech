@@ -8,7 +8,7 @@
     <div class="text-center mb-5">
         <h1 class="display-4 fw-bold">Selecione seu Projeto</h1>
         <p class="lead text-muted">Escolha o projeto que deseja acessar</p>
-    </div>
+ </div>
     
     <div class="row g-4 justify-content-center">
         {% for projeto in projetos %}
@@ -20,22 +20,22 @@
                     {% else %}
                     <div class="stat-icon mx-auto mb-3">
                         <i class="fas fa-building fa-2x"></i>
-                    </div>
+ </div>
                     {% endif %}
                     <h3>{{ projeto.nome }}</h3>
                     <p class="text-muted">{{ projeto.descricao|truncatechars:60 }}</p>
                     <span class="badge-success">{{ projeto.get_plano_display }}</span>
-                </div>
-            </a>
-        </div>
+ </div>
+ </a>
+ </div>
         {% empty %}
         <div class="col-12 text-center">
             <p class="text-muted">Você não tem projetos associados.</p>
             <a href="{% url 'criar_projeto' %}" class="btn-primary-custom mt-3">
                 <i class="fas fa-plus me-2"></i> Criar Projeto
-            </a>
-        </div>
+ </a>
+ </div>
         {% endfor %}
-    </div>
+ </div>
 </div>
 {% endblock %}

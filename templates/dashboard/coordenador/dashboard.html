@@ -365,7 +365,7 @@
     <div class="onboarding-card" id="onboardingCard">
         <button class="onboarding-close" onclick="hideOnboarding()" title="Fechar guia">
             <i class="fas fa-times"></i>
-        </button>
+ </button>
 
         <div class="onboarding-header">
             <div>
@@ -378,21 +378,21 @@
                     {% elif onboarding_progresso < 100 %}
                         Falta pouco para começar!
                     {% endif %}
-                </div>
+ </div>
                 <p class="onboarding-sub">
                     Complete os passos abaixo para configurar seu projeto
-                </p>
-            </div>
+ </p>
+ </div>
 
             <div class="onboarding-progress-wrapper">
                 <div class="onboarding-progress-text">
                     <strong>{{ onboarding_progresso }}%</strong> concluído
-                </div>
+ </div>
                 <div class="onboarding-progress-bar-bg">
                     <div class="onboarding-progress-bar-fill" style="width: {{ onboarding_progresso }}%;"></div>
-                </div>
-            </div>
-        </div>
+ </div>
+ </div>
+ </div>
 
         <div class="onboarding-steps">
             <!-- Passo 1: Criar projeto -->
@@ -403,21 +403,21 @@
                     {% else %}
                         1
                     {% endif %}
-                </span>
+ </span>
                 <div class="onboarding-step-icon">
                     <i class="fas fa-{% if onboarding.criar_projeto %}check{% else %}building{% endif %}"></i>
-                </div>
+ </div>
                 <div class="onboarding-step-title">
                     Criar projeto
-                </div>
+ </div>
                 <p class="onboarding-step-desc">
                     {% if onboarding.criar_projeto %}
-                        Concluído ✓
+                        Concluído 
                     {% else %}
                         Configure seu primeiro projeto
                     {% endif %}
-                </p>
-            </div>
+ </p>
+ </div>
 
             <!-- Passo 2: Convidar equipe -->
             <a href="{% url 'dashboard:coordenador_adicionar_membro' %}"
@@ -428,21 +428,21 @@
                     {% else %}
                         2
                     {% endif %}
-                </span>
+ </span>
                 <div class="onboarding-step-icon">
                     <i class="fas fa-{% if onboarding.convidar_equipe %}check{% else %}user-plus{% endif %}"></i>
-                </div>
+ </div>
                 <div class="onboarding-step-title">
                     Convidar equipe
-                </div>
+ </div>
                 <p class="onboarding-step-desc">
                     {% if onboarding.convidar_equipe %}
-                        Concluído ✓
+                        Concluído 
                     {% else %}
                         Adicione fisios, psicólogos e técnicos
                     {% endif %}
-                </p>
-            </a>
+ </p>
+ </a>
 
             <!-- Passo 3: Cadastrar paciente -->
             <a href="{% url 'dashboard:coordenador_adicionar_membro' %}"
@@ -453,21 +453,21 @@
                     {% else %}
                         3
                     {% endif %}
-                </span>
+ </span>
                 <div class="onboarding-step-icon">
                     <i class="fas fa-{% if onboarding.cadastrar_paciente %}check{% else %}user-injured{% endif %}"></i>
-                </div>
+ </div>
                 <div class="onboarding-step-title">
                     Cadastrar paciente
-                </div>
+ </div>
                 <p class="onboarding-step-desc">
                     {% if onboarding.cadastrar_paciente %}
-                        Concluído ✓
+                        Concluído 
                     {% else %}
                         Adicione o primeiro paciente/atleta
                     {% endif %}
-                </p>
-            </a>
+ </p>
+ </a>
 
             <!-- Passo 4: Criar tratamento -->
             <a href="{% url 'dashboard:fisioterapeuta_todos_atletas' %}"
@@ -478,35 +478,35 @@
                     {% else %}
                         4
                     {% endif %}
-                </span>
+ </span>
                 <div class="onboarding-step-icon">
                     <i class="fas fa-{% if onboarding.criar_tratamento %}check{% else %}notes-medical{% endif %}"></i>
-                </div>
+ </div>
                 <div class="onboarding-step-title">
                     Criar tratamento
-                </div>
+ </div>
                 <p class="onboarding-step-desc">
                     {% if onboarding.criar_tratamento %}
-                        Concluído ✓
+                        Concluído 
                     {% else %}
                         Registre a primeira lesão e tratamento
                     {% endif %}
-                </p>
-            </a>
-        </div>
-    </div>
+ </p>
+ </a>
+ </div>
+ </div>
     {% endif %}
 
     <!-- Saudação -->
     <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: var(--gradient); color: white; border: none;">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h3 class="fw-bold mb-1">Olá, {{ user.get_full_name|default:user.username }}! 👋</h3>
+                <h3 class="fw-bold mb-1">Olá, {{ user.get_full_name|default:user.username }}! </h3>
                 <p class="mb-0 opacity-75">Aqui está o resumo do projeto <strong>{{ projeto_ativo.nome }}</strong></p>
-            </div>
+ </div>
             <i class="fas fa-chart-pie fa-4x opacity-50"></i>
-        </div>
-    </div>
+ </div>
+ </div>
 
     <!-- Indicadores Principais -->
     <div class="row g-3 mb-4">
@@ -515,55 +515,55 @@
                 <div class="stat-icon"><i class="fas fa-users"></i></div>
                 <div class="stat-number fs-2">{{ total_atletas }}</div>
                 <p class="small">Total Atletas</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-2 col-md-4 col-6">
             <div class="stat-card p-3">
                 <div class="stat-icon" style="background: linear-gradient(135deg, #ffc107, #ffca2c);"><i class="fas fa-user-injured"></i></div>
                 <div class="stat-number fs-2">{{ atletas_lesionados }}</div>
                 <p class="small">Lesionados</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-2 col-md-4 col-6">
             <div class="stat-card p-3">
                 <div class="stat-icon" style="background: linear-gradient(135deg, #0dcaf0, #0aa2c0);"><i class="fas fa-heart-pulse"></i></div>
                 <div class="stat-number fs-2">{{ atletas_em_recuperacao }}</div>
                 <p class="small">Em Recuperação</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-2 col-md-4 col-6">
             <div class="stat-card p-3">
                 <div class="stat-icon" style="background: linear-gradient(135deg, #2BA181, #2BA181);"><i class="fas fa-check-double"></i></div>
                 <div class="stat-number fs-2">{{ atletas_liberados }}</div>
                 <p class="small">Liberados</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-2 col-md-4 col-6">
             <div class="stat-card p-3">
                 <div class="stat-icon" style="background: linear-gradient(135deg, #dc3545, #bb2d3b);"><i class="fas fa-notes-medical"></i></div>
                 <div class="stat-number fs-2">{{ tratamentos_ativos }}</div>
                 <p class="small">Trat. Ativos</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-2 col-md-4 col-6">
             <div class="stat-card p-3">
                 <div class="stat-icon" style="background: linear-gradient(135deg, #6f42c1, #8047d5);"><i class="fas fa-brain"></i></div>
                 <div class="stat-number fs-2">{{ avaliacoes_psico }}</div>
                 <p class="small">Avaliações</p>
-            </div>
-        </div>
+ </div>
+ </div>
             <div class="col-xl-2 col-md-4 col-6">
         <a href="{% url 'prontuario:lista_prontuarios' %}" style="text-decoration: none; color: inherit;">
             <div class="stat-card p-3">
                 <div class="stat-icon" style="background: linear-gradient(135deg, #6f42c1, #4c2a85);">
                     <i class="fas fa-folder-medical"></i>
-                </div>
+ </div>
                 <div class="stat-number fs-2">{{ total_prontuarios|default:0 }}</div>
                 <p class="small">Prontuários</p>
-            </div>
-        </a>
-    </div>
-    </div>
+ </div>
+ </a>
+ </div>
+ </div>
 
     <!-- Gráficos (Parte 1) -->
     <div class="row g-4 mb-4">
@@ -571,15 +571,15 @@
             <div class="card-modern p-4 card-tilt">
                 <h5 class="fw-bold mb-3"><i class="fas fa-chart-line me-2 text-success"></i>Evolução da Recuperação</h5>
                 <div style="height: 300px;"><canvas id="evolutionChart"></canvas></div>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-lg-4">
             <div class="card-modern p-4 card-tilt">
                 <h5 class="fw-bold mb-3"><i class="fas fa-chart-pie me-2 text-info"></i>Status dos Atletas</h5>
                 <div style="height: 300px;"><canvas id="statusChart"></canvas></div>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Gráficos (Parte 2) -->
     <div class="row g-4 mb-4">
@@ -587,15 +587,15 @@
             <div class="card-modern p-4 card-tilt">
                 <h5 class="fw-bold mb-3"><i class="fas fa-dumbbell me-2 text-warning"></i>Lesões por Modalidade</h5>
                 <div style="height: 250px;"><canvas id="modalChart"></canvas></div>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-lg-6">
             <div class="card-modern p-4 card-tilt">
                 <h5 class="fw-bold mb-3"><i class="fas fa-notes-medical me-2 text-danger"></i>Tipos de Lesões</h5>
                 <div style="height: 250px;"><canvas id="tiposChart"></canvas></div>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Gráficos (Parte 3) -->
     <div class="row g-4 mb-4">
@@ -603,32 +603,32 @@
             <div class="card-modern p-4 card-tilt">
                 <h5 class="fw-bold mb-3"><i class="fas fa-heartbeat me-2 text-success"></i>Taxa de Recuperação</h5>
                 <div style="height: 250px;"><canvas id="recuperacaoChart"></canvas></div>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-lg-4">
             <div class="card-modern p-4 card-tilt">
                 <h5 class="fw-bold mb-3"><i class="fas fa-brain me-2 text-primary"></i>Indicadores Psicológicos</h5>
                 <div style="height: 250px;"><canvas id="psicologicoChart"></canvas></div>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-lg-4">
             <div class="card-modern p-4 card-tilt">
                 <h5 class="fw-bold mb-3"><i class="fas fa-chart-bar me-2 text-warning"></i>Desempenho por Modalidade</h5>
                 <div style="height: 250px;"><canvas id="desempenhoChart"></canvas></div>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Alertas Recentes -->
     <div class="card-modern p-4 mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h5 class="fw-bold mb-0">
                 <i class="fas fa-exclamation-triangle me-2 text-warning"></i>Alertas Ativos
-            </h5>
+ </h5>
             {% if alertas_recentes %}
             <span class="badge bg-warning text-dark">{{ alertas_recentes|length }} ativo(s)</span>
             {% endif %}
-        </div>
+ </div>
 
         <div class="row g-3">
             {% for alerta in alertas_recentes %}
@@ -637,39 +637,39 @@
                     <div class="d-flex align-items-start">
                         <div class="bg-warning bg-opacity-20 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                             <i class="fas fa-exclamation-triangle text-warning"></i>
-                        </div>
+ </div>
                         <div class="flex-grow-1">
                             <h6 class="fw-bold mb-1">{{ alerta.get_tipo_display }}</h6>
                             <p class="text-muted small mb-2">{{ alerta.mensagem }}</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <small class="text-muted">
                                     <i class="fas fa-user me-1"></i>{{ alerta.atleta.usuario.get_full_name|default:alerta.atleta.usuario.username }}
-                                </small>
+ </small>
                                 <a href="{% url 'dashboard:resolver_alerta' alerta.id %}"
                                    class="btn btn-sm btn-success"
                                    onclick="return confirm('Marcar este alerta como resolvido?')">
                                     <i class="fas fa-check me-1"></i> Resolver
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+ </a>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
             {% empty %}
             <div class="col-12">
                 <div class="empty-state">
                     <div class="empty-state-icon">
                         <i class="fas fa-check-circle"></i>
-                    </div>
+ </div>
                     <h4 class="empty-state-title">Nenhum alerta ativo</h4>
                     <p class="empty-state-desc">
                         Todos os atletas estão sob controle! Você será notificado aqui quando algo precisar de atenção.
-                    </p>
-                </div>
-            </div>
+ </p>
+ </div>
+ </div>
             {% endfor %}
-        </div>
-    </div>
+ </div>
+ </div>
 
 </div>
 
@@ -693,7 +693,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-    // 🔥 Função auxiliar para ler dados do json_script com segurança
+    //  Função auxiliar para ler dados do json_script com segurança
     function getJSON(id) {
         const element = document.getElementById(id);
         return element ? JSON.parse(element.textContent) : [];
@@ -913,7 +913,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="d-flex flex-column align-items-center justify-content-center h-100 text-muted" style="opacity:0.6;">
                 <i class="fas fa-chart-line" style="font-size:2.5rem;margin-bottom:12px;"></i>
                 <p class="small mb-0 text-center px-3">${message}</p>
-            </div>
+ </div>
         `;
     }
 });
@@ -961,11 +961,11 @@ window.showToast = function(title, message, type = 'success') {
     toast.innerHTML = `
         <div class="toast-icon">
             <i class="fas ${icons[type] || icons.info}"></i>
-        </div>
+ </div>
         <div class="toast-content">
             <div class="toast-title">${title}</div>
             <p class="toast-message">${message}</p>
-        </div>
+ </div>
     `;
 
     container.appendChild(toast);

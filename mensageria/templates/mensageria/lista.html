@@ -185,14 +185,14 @@
             {% if total_nao_lidas > 0 %}
             <span class="msg-badge-total">{{ total_nao_lidas }} não lida{{ total_nao_lidas|pluralize:"s" }}</span>
             {% endif %}
-        </h2>
+ </h2>
         <p class="text-muted small mb-0" style="color: var(--text-tertiary);">
             Converse com a equipe do projeto <strong>{{ projeto.nome }}</strong>
-        </p>
-    </div>
+ </p>
+ </div>
     <a href="{% url 'mensageria:nova_conversa' %}" class="btn-primary-custom">
         <i class="fas fa-plus"></i> Nova Conversa
-    </a>
+ </a>
 </div>
 
 <div class="row g-4">
@@ -207,23 +207,23 @@
                     {% else %}
                         {{ item.titulo|first|upper }}
                     {% endif %}
-                </div>
+ </div>
                 <div class="conv-info">
                     <p class="conv-nome">
                         {{ item.titulo }}
                         <span class="conv-tipo-chip {% if item.is_grupo %}chip-grupo{% else %}chip-dm{% endif %}">
                             {% if item.is_grupo %}Grupo{% else %}DM{% endif %}
-                        </span>
-                    </p>
+ </span>
+ </p>
                     <p class="conv-ultima">
                         {% if item.ultima %}
                             <strong>{{ item.ultima.autor.get_full_name|default:item.ultima.autor.username|truncatechars:20 }}:</strong>
-                            {{ item.ultima.conteudo|default:"📎 anexo"|truncatechars:70 }}
+                            {{ item.ultima.conteudo|default:" anexo"|truncatechars:70 }}
                         {% else %}
                             <em>Sem mensagens ainda</em>
                         {% endif %}
-                    </p>
-                </div>
+ </p>
+ </div>
                 <div class="conv-meta">
                     {% if item.ultima %}
                     <span class="conv-hora">{{ item.ultima.criada_em|date:"d/m H:i" }}</span>
@@ -231,8 +231,8 @@
                     {% if item.nao_lidas > 0 %}
                     <span class="conv-badge">{{ item.nao_lidas }}</span>
                     {% endif %}
-                </div>
-            </a>
+ </div>
+ </a>
             {% endfor %}
         {% else %}
         <div class="card-modern">
@@ -242,39 +242,39 @@
                 <p class="mb-4">Comece uma conversa com alguém da equipe</p>
                 <a href="{% url 'mensageria:nova_conversa' %}" class="btn-primary-custom">
                     <i class="fas fa-plus"></i> Criar Primeira Conversa
-                </a>
-            </div>
-        </div>
+ </a>
+ </div>
+ </div>
         {% endif %}
-    </div>
+ </div>
 
     <div class="col-lg-4">
         <div class="card-modern p-4">
             <h6 style="font-weight: 700; color: var(--text-primary); margin-bottom: 16px;">
                 <i class="fas fa-user-friends me-2" style="color: #2BA181;"></i>
                 Equipe disponível
-            </h6>
+ </h6>
             {% if membros_disponiveis %}
                 {% for m in membros_disponiveis %}
                 <div class="d-flex align-items-center gap-3 py-2" style="border-bottom: 1px solid var(--border-color);">
                     <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #34d399, #2BA181); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">
                         {{ m.usuario.first_name|first|default:m.usuario.username|first|upper }}
-                    </div>
+ </div>
                     <div style="min-width: 0; flex: 1;">
                         <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                             {{ m.usuario.get_full_name|default:m.usuario.username }}
-                        </div>
+ </div>
                         <div style="font-size: 0.72rem; color: var(--text-tertiary);">
                             {{ m.get_tipo_display }}
-                        </div>
-                    </div>
-                </div>
+ </div>
+ </div>
+ </div>
                 {% endfor %}
             {% else %}
                 <p class="text-muted small mb-0">Só você na equipe por enquanto.</p>
             {% endif %}
-        </div>
-    </div>
+ </div>
+ </div>
 </div>
 
 {% endblock %}

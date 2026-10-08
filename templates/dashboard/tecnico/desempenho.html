@@ -11,61 +11,61 @@
       <div class="stat-card card-tilt p-3">
         <div class="stat-icon" style="width:50px;height:50px;margin:0;background:linear-gradient(135deg,#0d6efd,#084298);">
           <i class="fas fa-users" style="font-size:22px;"></i>
-        </div>
+ </div>
         <h2 class="fw-bold mt-3 mb-1">{{ total_atletas }}</h2>
         <p class="text-muted small mb-0">Atletas Avaliados</p>
-      </div>
-    </div>
+ </div>
+ </div>
     <div class="col-xl-3 col-md-6">
       <div class="stat-card card-tilt p-3">
         <div class="stat-icon" style="width:50px;height:50px;margin:0;background:linear-gradient(135deg,#2BA181,#1e7e5c);">
           <i class="fas fa-chart-line" style="font-size:22px;"></i>
-        </div>
+ </div>
         <h2 class="fw-bold mt-3 mb-1">{{ media_geral }}/10</h2>
         <p class="text-muted small mb-0">Média Geral</p>
-      </div>
-    </div>
+ </div>
+ </div>
     <div class="col-xl-3 col-md-6">
       <div class="stat-card card-tilt p-3">
         <div class="stat-icon" style="width:50px;height:50px;margin:0;background:linear-gradient(135deg,#ffc107,#ffca2c);">
           <i class="fas fa-trophy" style="font-size:22px;"></i>
-        </div>
+ </div>
         <h2 class="fw-bold mt-3 mb-1">{% if melhor_atleta %}{{ melhor_atleta.media }}/10{% else %}—{% endif %}</h2>
         <p class="text-muted small mb-0">
           Melhor: {{ melhor_atleta.atleta.usuario.get_full_name|default:melhor_atleta.atleta.usuario.username|default:"—" }}
-        </p>
-      </div>
-    </div>
+ </p>
+ </div>
+ </div>
     <div class="col-xl-3 col-md-6">
       <div class="stat-card card-tilt p-3">
         <div class="stat-icon" style="width:50px;height:50px;margin:0;background:linear-gradient(135deg,#6f42c1,#4a2a8a);">
           <i class="fas fa-ranking-star" style="font-size:22px;"></i>
-        </div>
+ </div>
         <h2 class="fw-bold mt-3 mb-1">{{ ranking|length|default:0 }}</h2>
         <p class="text-muted small mb-0">No Ranking</p>
-      </div>
-    </div>
-  </div>
+ </div>
+ </div>
+ </div>
 
   <div class="row g-4 mb-4">
     <div class="col-lg-7">
       <div class="card-modern p-4 card-tilt">
         <h5 class="fw-bold mb-3"><i class="fas fa-chart-bar me-2 text-primary"></i>Média vs. Último Desempenho</h5>
         <div style="height: 320px;"><canvas id="desempenhoChart"></canvas></div>
-      </div>
-    </div>
+ </div>
+ </div>
     <div class="col-lg-5">
       <div class="card-modern p-4 card-tilt">
         <h5 class="fw-bold mb-3"><i class="fas fa-chart-pie me-2 text-info"></i>Distribuição por Faixa</h5>
         <div style="height: 320px;"><canvas id="faixasChart"></canvas></div>
-      </div>
-    </div>
-  </div>
+ </div>
+ </div>
+ </div>
 
   <div class="card-modern p-4 mb-4 card-tilt">
     <h5 class="fw-bold mb-3"><i class="fas fa-chart-line me-2 text-success"></i>Evolução Média do Grupo</h5>
     <div style="height: 280px;"><canvas id="evolucaoChart"></canvas></div>
-  </div>
+ </div>
 
   <div class="card-modern p-4">
     <h5 class="fw-bold mb-3"><i class="fas fa-ranking-star me-2 text-warning"></i>Ranking Completo</h5>
@@ -76,8 +76,8 @@
             <th>#</th><th>Atleta</th><th>Modalidade</th>
             <th class="text-center">Média</th><th class="text-center">Último</th>
             <th class="text-center">Tendência</th><th class="text-center">Evoluções</th><th></th>
-          </tr>
-        </thead>
+ </tr>
+ </thead>
         <tbody>
           {% for r in ranking %}
           <tr>
@@ -86,13 +86,13 @@
               <div class="d-flex align-items-center">
                 <div class="bg-primary bg-opacity-10 rounded-circle me-2" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;">
                   <i class="fas fa-user text-primary"></i>
-                </div>
+ </div>
                 <div>
                   <strong>{{ r.atleta.usuario.get_full_name|default:r.atleta.usuario.username }}</strong><br>
                   <small class="text-muted">RM: {{ r.atleta.rm }}</small>
-                </div>
-              </div>
-            </td>
+ </div>
+ </div>
+ </td>
             <td><small>{{ r.atleta.modalidade.nome|default:"—" }}</small></td>
             <td class="text-center"><strong>{{ r.media }}/10</strong></td>
             <td class="text-center">{{ r.ultimo }}/10</td>
@@ -104,21 +104,21 @@
               {% else %}
                 <span class="badge bg-secondary bg-opacity-10 text-secondary"><i class="fas fa-minus"></i> 0</span>
               {% endif %}
-            </td>
+ </td>
             <td class="text-center"><small class="text-muted">{{ r.evolucoes }}</small></td>
             <td class="text-end">
               <a href="{% url 'dashboard:tecnico_detalhes_atleta' r.atleta.id %}" class="btn btn-sm btn-outline-primary">
                 <i class="fas fa-eye"></i>
-              </a>
-            </td>
-          </tr>
+ </a>
+ </td>
+ </tr>
           {% empty %}
           <tr><td colspan="8" class="text-center text-muted py-4">Nenhum dado de desempenho registrado.</td></tr>
           {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
+ </tbody>
+ </table>
+ </div>
+ </div>
 </div>
 
 {{ chart_labels|json_script:"c_labels" }}

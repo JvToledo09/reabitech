@@ -8,7 +8,7 @@
     <div class="card-modern mt-4">
         <div class="card-header-custom">
             <i class="fas fa-heartbeat me-2"></i> Lesões em Andamento
-        </div>
+ </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-custom mb-0">
@@ -19,14 +19,14 @@
                             <td>{{ lesao.atleta.usuario.get_full_name }}</td>
                             <td>{{ lesao.get_tipo_display }} - {{ lesao.local }}</td>
                             <td><span class="badge-warning">{{ lesao.get_gravidade_display }}</span></td>
-                        </tr>
+ </tr>
                         {% empty %}
                         <tr><td colspan="3" class="text-center">Nenhuma lesão registrada</td></tr>
                         {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </div>
 </div>
 {% endblock %}

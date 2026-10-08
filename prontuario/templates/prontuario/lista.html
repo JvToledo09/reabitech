@@ -127,14 +127,14 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-folder-medical"></i>
             Registros clínicos
-        </div>
+ </div>
         <h1 class="page-header-title">
             Todos os prontuários <span class="gradient-text">do projeto.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Cada paciente possui um prontuário único, arquivado por 20 anos conforme normas do COFFITO e Lei 13.787/2018.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <!-- Stat total -->
     <div class="row g-4 mb-4">
@@ -143,8 +143,8 @@
                 <div class="stat-premium-icon"><i class="fas fa-folder"></i></div>
                 <div class="stat-premium-number">{{ total|default:0 }}</div>
                 <div class="stat-premium-label">Total de prontuários</div>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-lg-3 col-md-6">
             <div class="stat-premium">
                 <div class="stat-premium-icon"><i class="fas fa-user-check"></i></div>
@@ -152,43 +152,43 @@
                     {% with ativos=prontuarios|length %}
                         {{ ativos }}
                     {% endwith %}
-                </div>
+ </div>
                 <div class="stat-premium-label">Nesta página</div>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-lg-3 col-md-6">
             <div class="stat-premium">
                 <div class="stat-premium-icon"><i class="fas fa-clock"></i></div>
                 <div class="stat-premium-number">20</div>
                 <div class="stat-premium-label">Anos de arquivamento</div>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-lg-3 col-md-6">
             <div class="stat-premium">
                 <div class="stat-premium-icon"><i class="fas fa-shield-halved"></i></div>
                 <div class="stat-premium-number">100%</div>
                 <div class="stat-premium-label">Conformidade COFFITO</div>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
 <!-- Botão de ação principal -->
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
     <div style="display: flex; align-items: center; gap: 8px;">
         <span class="pulse-dot"></span>
         <small class="text-muted">{{ total }} prontuário{{ total|pluralize }} no projeto</small>
-    </div>
+ </div>
     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
         <a href="{% url 'prontuario:relatorio_consolidado_pdf' %}" 
            class="btn-outline-custom" 
            target="_blank"
            title="Baixar relatório com todos os prontuários em PDF">
             <i class="fas fa-file-pdf"></i> Relatório Consolidado
-        </a>
+ </a>
         <a href="{% url 'prontuario:selecionar_atleta_prontuario' %}" class="btn-primary-custom">
             <i class="fas fa-folder-plus"></i> Novo prontuário
-        </a>
-    </div>
+ </a>
+ </div>
 </div>
 
     <!-- Filtros -->
@@ -198,7 +198,7 @@
             <label class="form-label">Pesquisar</label>
             <input type="text" name="q" value="{{ busca|default:'' }}"
                    class="form-control" placeholder="Nome, RM ou número...">
-        </div>
+ </div>
         <div class="col-md-2">
             <label class="form-label">Status</label>
             <select name="status" class="form-select">
@@ -206,8 +206,8 @@
                 {% for valor, label in status_choices %}
                 <option value="{{ valor }}" {% if status_filtro == valor %}selected{% endif %}>{{ label }}</option>
                 {% endfor %}
-            </select>
-        </div>
+ </select>
+ </div>
         <div class="col-md-2">
             <label class="form-label">Período</label>
             <select name="periodo" class="form-select">
@@ -216,25 +216,25 @@
                 <option value="30d" {% if periodo == '30d' %}selected{% endif %}>Últimos 30 dias</option>
                 <option value="90d" {% if periodo == '90d' %}selected{% endif %}>Últimos 90 dias</option>
                 <option value="ano" {% if periodo == 'ano' %}selected{% endif %}>Este ano</option>
-            </select>
-        </div>
+ </select>
+ </div>
         <div class="col-md-2">
             <label class="form-label">Data inicial</label>
             <input type="date" name="data_ini" value="{{ data_ini|default:'' }}" class="form-control">
-        </div>
+ </div>
         <div class="col-md-2">
             <label class="form-label">Data final</label>
             <input type="date" name="data_fim" value="{{ data_fim|default:'' }}" class="form-control">
-        </div>
+ </div>
         <div class="col-12 d-flex gap-2">
             <button type="submit" class="btn-primary-custom">
                 <i class="fas fa-filter"></i> Filtrar
-            </button>
+ </button>
             <a href="{% url 'prontuario:lista_prontuarios' %}" class="btn-outline-custom">
                 <i class="fas fa-times"></i> Limpar
-            </a>
-        </div>
-    </form>
+ </a>
+ </div>
+ </form>
 </div>
 
     <!-- Lista -->
@@ -245,52 +245,52 @@
             <div class="prontuario-card-header">
                 <div class="prontuario-avatar">
                     {{ p.atleta.usuario.get_full_name|default:p.atleta.usuario.username|first|upper }}
-                </div>
+ </div>
                 <div style="flex: 1; min-width: 0;">
                     <h3 class="prontuario-nome text-truncate">
                         {{ p.atleta.usuario.get_full_name|default:p.atleta.usuario.username }}
-                    </h3>
+ </h3>
                     <span class="prontuario-numero">{{ p.numero_prontuario }}</span>
-                </div>
+ </div>
                 <span class="status-pill {{ p.status }}">
                     {% if p.status == 'ativo' %}<span class="pulse-dot" style="width:6px;height:6px;"></span>{% endif %}
                     {{ p.get_status_display }}
-                </span>
-            </div>
+ </span>
+ </div>
 
             <div class="prontuario-info">
                 <div class="prontuario-info-item">
                     <span class="prontuario-info-label">RM</span>
                     <span class="prontuario-info-value">{{ p.atleta.rm|default:"—" }}</span>
-                </div>
+ </div>
                 <div class="prontuario-info-item">
                     <span class="prontuario-info-label">Modalidade</span>
                     <span class="prontuario-info-value">{{ p.atleta.modalidade.nome|default:"—" }}</span>
-                </div>
+ </div>
                 <div class="prontuario-info-item">
                     <span class="prontuario-info-label">Abertura</span>
                     <span class="prontuario-info-value">{{ p.data_abertura|date:"d/m/Y" }}</span>
-                </div>
+ </div>
                 <div class="prontuario-info-item">
                     <span class="prontuario-info-label">Fisioterapeuta</span>
                     <span class="prontuario-info-value">
                         {{ p.fisioterapeuta_responsavel.get_short_name|default:"—" }}
-                    </span>
-                </div>
-            </div>
+ </span>
+ </div>
+ </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-tertiary); padding-top: 12px; border-top: 1px solid var(--border-color);">
                 <span>
                     <i class="fas fa-calendar me-1"></i>
                     Arquivamento: {{ p.data_arquivamento_previsto|date:"d/m/Y"|default:"—" }}
-                </span>
+ </span>
                 <span style="color: var(--green); font-weight: 700;">
                     Abrir <i class="fas fa-arrow-right ms-1"></i>
-                </span>
-            </div>
-        </a>
+ </span>
+ </div>
+ </a>
         {% endfor %}
-    </div>
+ </div>
 
     <!-- Paginação -->
     {% if prontuarios.has_other_pages %}
@@ -299,20 +299,20 @@
         <a href="?page={{ prontuarios.previous_page_number }}{% if busca %}&q={{ busca }}{% endif %}{% if status_filtro %}&status={{ status_filtro }}{% endif %}"
            class="btn-outline-custom">
             <i class="fas fa-arrow-left"></i> Anterior
-        </a>
+ </a>
         {% endif %}
 
         <span style="padding: 10px 20px; background: var(--bg-secondary); border-radius: 10px; font-weight: 600; color: var(--text-secondary);">
             Página {{ prontuarios.number }} de {{ prontuarios.paginator.num_pages }}
-        </span>
+ </span>
 
         {% if prontuarios.has_next %}
         <a href="?page={{ prontuarios.next_page_number }}{% if busca %}&q={{ busca }}{% endif %}{% if status_filtro %}&status={{ status_filtro }}{% endif %}"
            class="btn-outline-custom">
             Próxima <i class="fas fa-arrow-right"></i>
-        </a>
+ </a>
         {% endif %}
-    </div>
+ </div>
     {% endif %}
 
     {% else %}
@@ -321,16 +321,16 @@
         <div class="empty-state">
             <div class="empty-state-icon">
                 <i class="fas fa-folder-open"></i>
-            </div>
+ </div>
             <h3 class="empty-state-title">Nenhum prontuário cadastrado ainda</h3>
             <p class="empty-state-desc">
                 Os prontuários são criados a partir da lista de pacientes. Vá em <strong>Pacientes</strong>, escolha um atleta e clique em <strong>Novo prontuário</strong>.
-            </p>
+ </p>
             <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="btn-primary-custom">
                 <i class="fas fa-users"></i> Ver pacientes
-            </a>
-        </div>
-    </div>
+ </a>
+ </div>
+ </div>
     {% endif %}
 
 </div>

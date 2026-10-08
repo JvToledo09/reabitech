@@ -5,14 +5,14 @@
 {% block content %}
 <div class="container-fluid p-0 d-flex align-items-center justify-content-center" style="min-height: 70vh;">
     <div class="card-modern p-5 text-center" style="max-width: 500px;">
-        <div style="font-size: 5rem; margin-bottom: 16px;">🔒</div>
+        <div style="font-size: 5rem; margin-bottom: 16px;"></div>
         <h2 class="fw-bold mb-3">Acesso negado</h2>
         <p class="text-muted mb-4">
             Você não tem permissão para acessar esta página.
-        </p>
+ </p>
         <a href="{% url 'dashboard:dashboard' %}" class="btn btn-primary-custom">
             <i class="fas fa-arrow-left me-2"></i>Voltar ao dashboard
-        </a>
-    </div>
+ </a>
+ </div>
 </div>
 {% endblock %}

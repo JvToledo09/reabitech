@@ -65,14 +65,14 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-clipboard-list"></i>
             Classificação Internacional de Funcionalidade
-        </div>
+ </div>
         <h1 class="page-header-title">
             {{ titulo }} <span class="gradient-text">(CIF/OMS).</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Avaliação padronizada pela OMS. Escala: 0 = sem problema, 1 = leve, 2 = moderado, 3 = grave, 4 = completo.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div class="card-premium">
         <form method="POST">
@@ -86,25 +86,25 @@
                     <div class="col-md-6 cif-field">
                         <label>b1 — Funções Mentais (atenção, memória, emoções)</label>
                         {{ form.b1_funcoes_mentais }}
-                    </div>
+ </div>
                     <div class="col-md-6 cif-field">
                         <label>b2 — Funções Sensoriais e Dor</label>
                         {{ form.b2_funcoes_sensoriais }}
-                    </div>
+ </div>
                     <div class="col-md-6 cif-field">
                         <label>b4 — Funções Cardiovasculares e Respiratórias</label>
                         {{ form.b4_cardiorrespiratorias }}
-                    </div>
+ </div>
                     <div class="col-md-6 cif-field">
                         <label>b7 — Funções Neuromusculoesqueléticas (movimento)</label>
                         {{ form.b7_neuromusculoesqueleticas }}
-                    </div>
+ </div>
                     <div class="col-md-6 cif-field">
                         <label>b8 — Funções da Pele</label>
                         {{ form.b8_pele }}
-                    </div>
-                </div>
-            </div>
+ </div>
+ </div>
+ </div>
 
             <!-- Componente 2 -->
             <div class="cif-section">
@@ -119,8 +119,8 @@
                     <div class="col-md-6 cif-field"><label>d6 — Vida Doméstica</label>{{ form.d6_vida_domestica }}</div>
                     <div class="col-md-6 cif-field"><label>d7 — Relações Interpessoais</label>{{ form.d7_relacoes }}</div>
                     <div class="col-md-6 cif-field"><label>d8/d9 — Esporte, Lazer, Educação</label>{{ form.d8_areas_principais }}</div>
-                </div>
-            </div>
+ </div>
+ </div>
 
             <!-- Componente 3 -->
             <div class="cif-section">
@@ -132,8 +132,8 @@
                     <div class="col-md-6 cif-field"><label>e3 — Apoio e Relacionamentos (família, técnicos)</label>{{ form.e3_apoio_relacionamentos }}</div>
                     <div class="col-md-6 cif-field"><label>e4 — Atitudes (individuais e sociais)</label>{{ form.e4_atitudes }}</div>
                     <div class="col-md-6 cif-field"><label>e5 — Serviços, Sistemas e Políticas</label>{{ form.e5_servicos_sistemas }}</div>
-                </div>
-            </div>
+ </div>
+ </div>
 
             <!-- Perfil -->
             <div class="cif-section">
@@ -142,23 +142,23 @@
                 <div class="cif-field">
                     <label>Perfil de Funcionalidade</label>
                     {{ form.perfil_funcionalidade }}
-                </div>
+ </div>
                 <div class="cif-field">
                     <label>Objetivos baseados na CIF</label>
                     {{ form.objetivos_cif }}
-                </div>
-            </div>
+ </div>
+ </div>
 
             <div class="d-flex gap-2 pt-4 border-top mt-4">
                 <button type="submit" class="btn-primary-custom">
                     <i class="fas fa-save"></i> Salvar avaliação CIF
-                </button>
+ </button>
                 <a href="{% url 'prontuario:lista_cif' prontuario.id %}" class="btn-outline-custom">
                     Cancelar
-                </a>
-            </div>
-        </form>
-    </div>
+ </a>
+ </div>
+ </form>
+ </div>
 
 </div>
 {% endblock %}

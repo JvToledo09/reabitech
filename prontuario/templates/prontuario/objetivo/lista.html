@@ -160,23 +160,23 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-bullseye"></i>
             Objetivos terapêuticos
-        </div>
+ </div>
         <h1 class="page-header-title">
             Metas do <span class="gradient-text">{{ prontuario.atleta.usuario.get_first_name }}.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Acompanhe o progresso dos objetivos definidos em curto, médio e longo prazo.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; justify-content: space-between; align-items: center;">
         <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" class="btn-outline-custom">
             <i class="fas fa-arrow-left"></i> Voltar ao prontuário
-        </a>
+ </a>
         <a href="{% url 'prontuario:criar_objetivo' prontuario.id %}" class="btn-primary-custom">
             <i class="fas fa-plus"></i> Novo objetivo
-        </a>
-    </div>
+ </a>
+ </div>
 
     <!-- CURTO PRAZO -->
     {% if objetivos_curto %}
@@ -187,7 +187,7 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
                 <h4 class="objetivo-titulo">{{ obj.titulo }}</h4>
                 <span class="prazo-badge curto">CURTO</span>
-            </div>
+ </div>
             {% if obj.descricao %}
             <p class="objetivo-desc">{{ obj.descricao }}</p>
             {% endif %}
@@ -195,25 +195,25 @@
                 <div class="objetivo-progresso-label">
                     <span>Progresso</span>
                     <strong style="color: var(--green);">{{ obj.percentual_alcancado }}%</strong>
-                </div>
+ </div>
                 <div class="objetivo-progresso-bg">
                     <div class="objetivo-progresso-fill" style="width: {{ obj.percentual_alcancado }}%;"></div>
-                </div>
-            </div>
+ </div>
+ </div>
             <div class="objetivo-footer">
                 <span class="status-dot {{ obj.status }}">{{ obj.get_status_display }}</span>
                 <div style="display: flex; gap: 6px;">
                     <a href="{% url 'prontuario:editar_objetivo' obj.id %}" class="action-icon-btn" title="Editar">
                         <i class="fas fa-edit"></i>
-                    </a>
+ </a>
                     <a href="{% url 'prontuario:deletar_objetivo' obj.id %}" class="action-icon-btn danger" title="Remover">
                         <i class="fas fa-trash-alt"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
+ </a>
+ </div>
+ </div>
+ </div>
         {% endfor %}
-    </div>
+ </div>
     {% endif %}
 
     <!-- MÉDIO PRAZO -->
@@ -225,7 +225,7 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
                 <h4 class="objetivo-titulo">{{ obj.titulo }}</h4>
                 <span class="prazo-badge medio">MÉDIO</span>
-            </div>
+ </div>
             {% if obj.descricao %}
             <p class="objetivo-desc">{{ obj.descricao }}</p>
             {% endif %}
@@ -233,25 +233,25 @@
                 <div class="objetivo-progresso-label">
                     <span>Progresso</span>
                     <strong style="color: #d97706;">{{ obj.percentual_alcancado }}%</strong>
-                </div>
+ </div>
                 <div class="objetivo-progresso-bg">
                     <div class="objetivo-progresso-fill" style="width: {{ obj.percentual_alcancado }}%; background: linear-gradient(90deg, #f59e0b, #d97706);"></div>
-                </div>
-            </div>
+ </div>
+ </div>
             <div class="objetivo-footer">
                 <span class="status-dot {{ obj.status }}">{{ obj.get_status_display }}</span>
                 <div style="display: flex; gap: 6px;">
                     <a href="{% url 'prontuario:editar_objetivo' obj.id %}" class="action-icon-btn" title="Editar">
                         <i class="fas fa-edit"></i>
-                    </a>
+ </a>
                     <a href="{% url 'prontuario:deletar_objetivo' obj.id %}" class="action-icon-btn danger" title="Remover">
                         <i class="fas fa-trash-alt"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
+ </a>
+ </div>
+ </div>
+ </div>
         {% endfor %}
-    </div>
+ </div>
     {% endif %}
 
     <!-- LONGO PRAZO -->
@@ -263,7 +263,7 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
                 <h4 class="objetivo-titulo">{{ obj.titulo }}</h4>
                 <span class="prazo-badge longo">LONGO</span>
-            </div>
+ </div>
             {% if obj.descricao %}
             <p class="objetivo-desc">{{ obj.descricao }}</p>
             {% endif %}
@@ -271,25 +271,25 @@
                 <div class="objetivo-progresso-label">
                     <span>Progresso</span>
                     <strong style="color: #0891b2;">{{ obj.percentual_alcancado }}%</strong>
-                </div>
+ </div>
                 <div class="objetivo-progresso-bg">
                     <div class="objetivo-progresso-fill" style="width: {{ obj.percentual_alcancado }}%; background: linear-gradient(90deg, #0dcaf0, #0891b2);"></div>
-                </div>
-            </div>
+ </div>
+ </div>
             <div class="objetivo-footer">
                 <span class="status-dot {{ obj.status }}">{{ obj.get_status_display }}</span>
                 <div style="display: flex; gap: 6px;">
                     <a href="{% url 'prontuario:editar_objetivo' obj.id %}" class="action-icon-btn" title="Editar">
                         <i class="fas fa-edit"></i>
-                    </a>
+ </a>
                     <a href="{% url 'prontuario:deletar_objetivo' obj.id %}" class="action-icon-btn danger" title="Remover">
                         <i class="fas fa-trash-alt"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
+ </a>
+ </div>
+ </div>
+ </div>
         {% endfor %}
-    </div>
+ </div>
     {% endif %}
 
     {% if not objetivos_curto and not objetivos_medio and not objetivos_longo %}
@@ -300,12 +300,12 @@
             <p class="empty-state-desc">
                 Defina metas de curto, médio e longo prazo para o paciente.
                 Objetivos SMART aumentam a adesão ao tratamento.
-            </p>
+ </p>
             <a href="{% url 'prontuario:criar_objetivo' prontuario.id %}" class="btn-primary-custom">
                 <i class="fas fa-plus"></i> Criar primeiro objetivo
-            </a>
-        </div>
-    </div>
+ </a>
+ </div>
+ </div>
     {% endif %}
 
 </div>

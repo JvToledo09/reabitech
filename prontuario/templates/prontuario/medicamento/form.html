@@ -12,14 +12,14 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-pills"></i>
             Medicamento
-        </div>
+ </div>
         <h1 class="page-header-title">
             {{ titulo }} <span class="gradient-text">prescrito.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Paciente: <strong>{{ prontuario.atleta.usuario.get_full_name }}</strong>
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div class="card-premium">
         <form method="POST">
@@ -31,26 +31,26 @@
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Nome *</label>
                     {{ form.nome }}
-                </div>
+ </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Princípio ativo</label>
                     {{ form.principio_ativo }}
-                </div>
+ </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Dosagem *</label>
                     {{ form.dosagem }}
                     <small class="text-muted">Ex: 500mg, 20mg</small>
-                </div>
+ </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Quantidade por dose *</label>
                     {{ form.quantidade }}
                     <small class="text-muted">Ex: 1 comprimido</small>
-                </div>
+ </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Via de administração *</label>
                     {{ form.via }}
-                </div>
-            </div>
+ </div>
+ </div>
 
             <!-- Grupo 2: Administração -->
             <div class="section-tag"><i class="fas fa-clock"></i> Administração</div>
@@ -58,13 +58,13 @@
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Frequência *</label>
                     {{ form.frequencia }}
-                </div>
+ </div>
                 <div class="col-md-8">
                     <label class="form-label fw-bold">Horários</label>
                     {{ form.horarios }}
                     <small class="text-muted">Ex: 08h, 14h, 20h</small>
-                </div>
-            </div>
+ </div>
+ </div>
 
             <!-- Grupo 3: Prescrição -->
             <div class="section-tag"><i class="fas fa-user-doctor"></i> Prescrição Médica</div>
@@ -72,24 +72,24 @@
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Médico prescritor</label>
                     {{ form.prescritor }}
-                </div>
+ </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">CRM</label>
                     {{ form.crm_prescritor }}
-                </div>
+ </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Início do uso</label>
                     {{ form.data_inicio }}
-                </div>
+ </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Fim do uso</label>
                     {{ form.data_fim }}
-                </div>
+ </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Status</label>
                     {{ form.status }}
-                </div>
-            </div>
+ </div>
+ </div>
 
             <!-- Grupo 4: Observações -->
             <div class="section-tag"><i class="fas fa-comment-medical"></i> Observações</div>
@@ -97,27 +97,27 @@
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Indicação / motivo</label>
                     {{ form.indicacao }}
-                </div>
+ </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Efeitos colaterais observados</label>
                     {{ form.efeitos_colaterais }}
-                </div>
+ </div>
                 <div class="col-12">
                     <label class="form-label fw-bold">Observações gerais</label>
                     {{ form.observacoes }}
-                </div>
-            </div>
+ </div>
+ </div>
 
             <div class="d-flex gap-2 pt-4 border-top">
                 <button type="submit" class="btn-primary-custom">
                     <i class="fas fa-save"></i> Salvar
-                </button>
+ </button>
                 <a href="{% url 'prontuario:lista_medicamentos' prontuario.id %}" class="btn-outline-custom">
                     Cancelar
-                </a>
-            </div>
-        </form>
-    </div>
+ </a>
+ </div>
+ </form>
+ </div>
 
 </div>
 {% endblock %}

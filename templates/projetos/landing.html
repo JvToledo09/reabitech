@@ -437,7 +437,7 @@
 
         .lp-logo:hover { transform: scale(1.03); }
 
-        /* ⭐ NOVA LOGO — MAIS DESTACADA */
+        /*  NOVA LOGO — MAIS DESTACADA */
     .lp-logo-img-wrapper {
     position: relative;
     width: 72px;
@@ -586,7 +586,7 @@
             perspective: 1500px;
         }
 
-        /* 🎬 VÍDEO DE FUNDO — funcionando com fallback */
+        /*  VÍDEO DE FUNDO — funcionando com fallback */
         .hero-video-wrapper {
             position: absolute;
             inset: 0;
@@ -660,7 +660,7 @@
             }
         }
 
-        /* ⭐ LOGO GRANDE DESTACADA NO HERO */
+        /*  LOGO GRANDE DESTACADA NO HERO */
 
 .hero-logo-display {
     display: inline-flex;
@@ -1946,7 +1946,7 @@
             }
             .reveal { opacity: 1; transform: none; }
         }
-    </style>
+ </style>
 </head>
 <body>
 
@@ -1955,12 +1955,12 @@
         <div class="bg-blob blob-1"></div>
         <div class="bg-blob blob-2"></div>
         <div class="bg-blob blob-3"></div>
-    </div>
+ </div>
 
     <!-- BOTÃO TOGGLE DARK MODE (flutuante) -->
     <button class="theme-toggle" id="themeToggle" title="Alternar tema">
         <i class="fas fa-moon"></i>
-    </button>
+ </button>
 
     <!-- NAVBAR -->
     <nav class="lp-nav" id="lpNav">
@@ -1968,30 +1968,30 @@
             <a href="/" class="lp-logo">
                 <div class="lp-logo-img-wrapper">
                     <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'">
-                </div>
+ </div>
                 <span>REABITECH</span>
-            </a>
+ </a>
             <ul class="lp-nav-links">
                 <li><a href="#recursos">Recursos</a></li>
                 <li><a href="#planos">Planos</a></li>
                 <li><a href="#depoimentos">Depoimentos</a></li>
                 <li><a href="#faq">FAQ</a></li>
-            </ul>
+ </ul>
             <div class="lp-nav-actions">
                 <a href="{% url 'login' %}" class="hero-btn hero-btn-outline" style="padding: 10px 22px; font-size: 0.9rem;">
                     Entrar
-                </a>
+ </a>
                 <a href="{% url 'signup' %}" class="hero-btn hero-btn-primary" style="padding: 10px 22px; font-size: 0.9rem;">
                     Começar <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-        </div>
-    </nav>
+ </a>
+ </div>
+ </div>
+ </nav>
 
     <!-- HERO -->
     <section class="lp-hero">
 
-        <!-- 🎬 VÍDEO DE FUNDO (com fallback automático) -->
+        <!--  VÍDEO DE FUNDO (com fallback automático) -->
         <div class="hero-video-wrapper">
             <div class="hero-video-fallback"></div>
             <video
@@ -2006,9 +2006,9 @@
                 <!-- Substitua por um vídeo real em static/videos/hero.mp4 -->
                 <source src="{% static 'videos/hero.mp4' %}" type="video/mp4">
                 <!-- Fallback: se não tiver vídeo, o gradiente aparece -->
-            </video>
+ </video>
             <div class="hero-video-overlay"></div>
-        </div>
+ </div>
 
         <div class="particles" id="particles"></div>
 
@@ -2016,37 +2016,37 @@
             <div class="lp-hero-grid">
                 <div>
 
-                    <!-- ⭐ LOGO GRANDE DESTACADA -->
+                    <!--  LOGO GRANDE DESTACADA -->
                     <div class="hero-logo-display reveal visible">
                         <div class="hero-logo-icon">
                             <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'">
-                        </div>
+ </div>
                         <div class="hero-logo-text">
                             <span class="hero-logo-name">REABITECH</span>
                             <span class="hero-logo-tag">Plataforma de Reabilitação</span>
-                        </div>
-                    </div>
+ </div>
+ </div>
 
                     <h1 class="lp-hero-title reveal visible delay-1">
                         Recuperar não é voltar.<br>
                         É <span class="gradient-text">avançar com clareza.</span>
-                    </h1>
+ </h1>
 
                     <p class="lp-hero-desc reveal visible delay-2">
                         Uma plataforma para clínicas, escolas, times e consultórios que tratam pessoas — não prontuários. Fisioterapia, psicologia e desempenho técnico num só ambiente.
-                    </p>
+ </p>
 
                     <div class="lp-hero-actions reveal visible delay-3">
                         <a href="{% url 'signup' %}" class="hero-btn hero-btn-primary">
                             <i class="fas fa-rocket"></i>
                             Criar minha conta
-                        </a>
+ </a>
                         <a href="#recursos" class="hero-btn hero-btn-outline">
                             <i class="fas fa-play-circle"></i>
                             Ver recursos
-                        </a>
-                    </div>
-                </div>
+ </a>
+ </div>
+ </div>
 
                 <div class="lp-hero-card-wrapper reveal visible delay-4">
                     <div class="lp-hero-card" id="heroCard">
@@ -2055,34 +2055,34 @@
                             <div>
                                 <div class="lp-hero-card-name">João Silva</div>
                                 <div class="lp-hero-card-sub">Paciente · Fisioterapia Ortopédica</div>
-                            </div>
-                        </div>
+ </div>
+ </div>
 
                         <div class="hero-stat-row">
                             <span class="hero-stat-label">Recuperação</span>
                             <span class="hero-stat-value">82%</span>
-                        </div>
+ </div>
                         <div class="hero-progress">
                             <div class="hero-progress-bar" style="width: 82%;"></div>
-                        </div>
+ </div>
 
                         <div class="hero-stat-row" style="margin-top: 20px;">
                             <span class="hero-stat-label">Nível de dor</span>
                             <span class="hero-stat-value" style="color: var(--green);">2/10</span>
-                        </div>
+ </div>
                         <div class="hero-progress">
                             <div class="hero-progress-bar" style="width: 20%;"></div>
-                        </div>
+ </div>
 
                         <div class="hero-stat-row" style="margin-top: 20px;">
                             <span class="hero-stat-label">Próxima sessão</span>
                             <span class="hero-stat-value">Hoje, 14h</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
 
     <!-- MARQUEE -->
     <div class="rv-marquee">
@@ -2099,8 +2099,8 @@
             <div class="rv-marquee-item">Consultórios individuais</div>
             <div class="rv-marquee-item">Academias</div>
             <div class="rv-marquee-item">Projetos sociais</div>
-        </div>
-    </div>
+ </div>
+ </div>
 
     <!-- ESTATÍSTICAS -->
    <section class="lp-stats">
@@ -2109,23 +2109,23 @@
             <div class="lp-stat-icon"><i class="fas fa-user-group"></i></div>
             <div class="lp-stat-number" data-counter="{{ total_pacientes }}" data-suffix="+">0</div>
             <div class="lp-stat-label">Pacientes acompanhados</div>
-        </div>
+ </div>
         <div class="lp-stat-card ds-reveal ds-delay-1">
             <div class="lp-stat-icon"><i class="fas fa-heart-pulse"></i></div>
             <div class="lp-stat-number" data-counter="{{ media_recuperacao }}" data-suffix="%" data-decimal="1">0</div>
             <div class="lp-stat-label">Recuperação média</div>
-        </div>
+ </div>
         <div class="lp-stat-card ds-reveal ds-delay-2">
             <div class="lp-stat-icon"><i class="fas fa-user-md"></i></div>
             <div class="lp-stat-number" data-counter="{{ total_profissionais }}" data-suffix="+">0</div>
             <div class="lp-stat-label">Profissionais ativos</div>
-        </div>
+ </div>
         <div class="lp-stat-card ds-reveal ds-delay-3">
             <div class="lp-stat-icon"><i class="fas fa-notes-medical"></i></div>
             <div class="lp-stat-number" data-counter="{{ total_evolucoes }}" data-suffix="+">0</div>
             <div class="lp-stat-label">Avaliações registradas</div>
-        </div>
-    </div>
+ </div>
+ </div>
 </section>
 
 <!-- ============================================ -->
@@ -2140,14 +2140,14 @@
             <div class="section-eyebrow">
                 <i class="fas fa-handshake"></i>
                 Quem confia no REABITECH
-            </div>
+ </div>
             <h2 class="section-heading">
                 Instituições que já <span class="gradient-text">usam a plataforma.</span>
-            </h2>
+ </h2>
             <p class="section-sub" style="max-width: 600px; margin: 16px auto 0;">
                 Clínicas, escolas, times e projetos sociais que acompanham seus pacientes com o REABITECH.
-            </p>
-        </div>
+ </p>
+ </div>
 
         <!-- Grid de projetos -->
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;">
@@ -2166,24 +2166,24 @@
                 <div class="projeto-logo"
                      style="width: 100px; height: 100px; border-radius: 20px; background: linear-gradient(135deg, #34d399, #2BA181); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 2.5rem; transition: transform 0.4s ease;">
                     {{ projeto.nome|first|upper }}
-                </div>
+ </div>
                 {% endif %}
 
                 <!-- Nome e tipo -->
                 <div>
                     <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.15rem; font-weight: 800; margin: 0 0 6px 0; color: var(--text-primary);">
                         {{ projeto.nome }}
-                    </h3>
+ </h3>
                     <p style="font-size: 0.85rem; color: var(--text-tertiary); margin: 0;">
                         {{ projeto.get_tipo_display }}
-                    </p>
-                </div>
+ </p>
+ </div>
 
                 <!-- Descrição -->
                 {% if projeto.descricao %}
                 <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                     {{ projeto.descricao|truncatechars:100 }}
-                </p>
+ </p>
                 {% endif %}
 
                 <!-- Contadores -->
@@ -2191,35 +2191,35 @@
                     <div style="text-align: center;">
                         <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--text-primary); font-size: 1.2rem;">
                             {{ projeto.total_atletas }}
-                        </div>
+ </div>
                         <div style="color: var(--text-tertiary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;">
                             Pacientes
-                        </div>
-                    </div>
+ </div>
+ </div>
                     <div style="text-align: center;">
                         <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--text-primary); font-size: 1.2rem;">
                             {{ projeto.total_profissionais }}
-                        </div>
+ </div>
                         <div style="color: var(--text-tertiary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;">
                             Profissionais
-                        </div>
-                    </div>
-                </div>
+ </div>
+ </div>
+ </div>
 
                 <!-- CTA -->
                 <div style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--green-soft-2); color: var(--green); border-radius: 999px; font-weight: 700; font-size: 0.82rem; margin-top: 4px;">
                     <i class="fas fa-sign-in-alt"></i> Acessar
-                </div>
-            </a>
+ </div>
+ </a>
             {% empty %}
             <div style="grid-column: 1 / -1; text-align: center; padding: 60px 24px; color: var(--text-tertiary);">
                 <i class="fas fa-building" style="font-size: 3rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
                 <p>Nenhum projeto parceiro cadastrado ainda.</p>
-            </div>
+ </div>
             {% endfor %}
-        </div>
+ </div>
 
-    </div>
+ </div>
 </section>
 
 <style>
@@ -2249,15 +2249,15 @@
             <div class="section-eyebrow">
                 <i class="fas fa-star"></i>
                 Módulos da plataforma
-            </div>
+ </div>
             <h2 class="section-heading">
                 Três capítulos.<br>
                 <span class="gradient-text">Uma história por paciente.</span>
-            </h2>
+ </h2>
             <p class="section-sub">
                 Do diagnóstico inicial à alta completa, tudo integrado em um só ambiente.
-            </p>
-        </div>
+ </p>
+ </div>
 
         <div class="features-grid">
             <div class="feature-card reveal">
@@ -2266,8 +2266,8 @@
                 <h3 class="feature-title">Fisioterapia Integrada</h3>
                 <p class="feature-desc">
                     Lesões, tratamentos, exercícios e evolução física. Cada paciente tem uma linha do tempo viva, com gráficos detalhados do progresso.
-                </p>
-            </div>
+ </p>
+ </div>
 
             <div class="feature-card reveal delay-1">
                 <span class="feature-number">02</span>
@@ -2275,8 +2275,8 @@
                 <h3 class="feature-title">Saúde Mental</h3>
                 <p class="feature-desc">
                     Avaliações psicológicas, questionários periódicos e monitoramento contínuo do bem-estar. Recuperar o corpo sem cuidar da mente não é recuperar por inteiro.
-                </p>
-            </div>
+ </p>
+ </div>
 
             <div class="feature-card reveal delay-2">
                 <span class="feature-number">03</span>
@@ -2284,8 +2284,8 @@
                 <h3 class="feature-title">Análise de Progresso</h3>
                 <p class="feature-desc">
                     Dashboards em tempo real, métricas comparativas e alertas automáticos. Tudo o que a equipe técnica precisa para decidir com clareza.
-                </p>
-            </div>
+ </p>
+ </div>
 
             <div class="feature-card reveal">
                 <span class="feature-number">04</span>
@@ -2293,8 +2293,8 @@
                 <h3 class="feature-title">Gestão de Equipe</h3>
                 <p class="feature-desc">
                     Notificações automáticas quando um paciente precisa de atenção multidisciplinar. Ninguém fica sem saber.
-                </p>
-            </div>
+ </p>
+ </div>
 
             <div class="feature-card reveal delay-1">
                 <span class="feature-number">05</span>
@@ -2302,8 +2302,8 @@
                 <h3 class="feature-title">Acesso em Qualquer Lugar</h3>
                 <p class="feature-desc">
                     Funciona em desktop, tablet e celular. Sem instalar nada. Sem perder um registro.
-                </p>
-            </div>
+ </p>
+ </div>
 
             <div class="feature-card reveal delay-2">
                 <span class="feature-number">06</span>
@@ -2311,10 +2311,10 @@
                 <h3 class="feature-title">Isolamento Multi-tenant</h3>
                 <p class="feature-desc">
                     Cada clínica, escola ou time vê apenas os seus dados. Controle de acesso por perfil e proteção rigorosa de informações médicas.
-                </p>
-            </div>
-        </div>
-    </section>
+ </p>
+ </div>
+ </div>
+ </section>
 
     <!-- PLANOS -->
     <section class="lp-planos" id="planos">
@@ -2323,15 +2323,15 @@
             <div class="section-eyebrow">
                 <i class="fas fa-crown"></i>
                 Planos
-            </div>
+ </div>
             <h2 class="section-heading">
                 Um plano para cada<br>
                 <span class="gradient-text">tamanho de história.</span>
-            </h2>
+ </h2>
             <p class="section-sub">
                 Do consultório individual à grande instituição. Escolha o plano ideal e comece hoje.
-            </p>
-        </div>
+ </p>
+ </div>
 
         <div class="planos-grid">
             {% for plano in planos %}
@@ -2348,14 +2348,14 @@
                     {% else %}
                         R$ {{ plano.preco_mensal|floatformat:0 }}
                     {% endif %}
-                </div>
+ </div>
                 <div class="plano-preco-periodo">
                     {% if plano.preco_mensal == 0 %}
                         Trial de 30 dias · sem cartão
                     {% else %}
                         por mês · cancele quando quiser
                     {% endif %}
-                </div>
+ </div>
 
                 <p class="plano-descricao">{{ plano.descricao|default:"" }}</p>
 
@@ -2363,36 +2363,36 @@
                     <li>
                         <i class="fas fa-check"></i>
                         {% if plano.max_usuarios == 0 %}Usuários ilimitados{% else %}Até {{ plano.max_usuarios }} usuários{% endif %}
-                    </li>
+ </li>
                     <li>
                         <i class="fas fa-check"></i>
                         {% if plano.max_projetos == 0 %}Projetos ilimitados{% else %}Até {{ plano.max_projetos }} projeto(s){% endif %}
-                    </li>
+ </li>
                     <li>
                         <i class="fas fa-check"></i>
                         Módulo de Fisioterapia
-                    </li>
+ </li>
                     <li class="{% if 'psicologia' not in plano.modulos_inclusos %}disabled{% endif %}">
                         <i class="fas {% if 'psicologia' in plano.modulos_inclusos %}fa-check{% else %}fa-xmark{% endif %}"></i>
                         Módulo de Psicologia
-                    </li>
+ </li>
                     <li class="{% if 'tecnico' not in plano.modulos_inclusos %}disabled{% endif %}">
                         <i class="fas {% if 'tecnico' in plano.modulos_inclusos %}fa-check{% else %}fa-xmark{% endif %}"></i>
                         Módulo de Análise Técnica
-                    </li>
-                </ul>
+ </li>
+ </ul>
 
                 <a href="{% url 'signup' %}?plano={{ plano.id }}" class="plano-cta">
                     {% if plano.destaque %}Começar agora{% else %}Assinar plano{% endif %}
-                </a>
-            </div>
+ </a>
+ </div>
             {% empty %}
             <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-tertiary);">
                 <p>Nenhum plano disponível no momento.</p>
-            </div>
+ </div>
             {% endfor %}
-        </div>
-    </section>
+ </div>
+ </section>
 
     <!-- TABELA COMPARATIVA (NOVO) -->
     <section class="rv-compare">
@@ -2401,12 +2401,12 @@
             <div class="section-eyebrow">
                 <i class="fas fa-table-columns"></i>
                 Comparativo
-            </div>
+ </div>
             <h2 class="section-heading">
                 Veja lado a lado<br>
                 <span class="gradient-text">o que cada plano oferece.</span>
-            </h2>
-        </div>
+ </h2>
+ </div>
 
         <div class="compare-wrapper">
             <table class="compare-table reveal">
@@ -2416,33 +2416,33 @@
                         {% for plano in planos %}
                         <th class="{% if plano.destaque %}destaque-col{% endif %}">{{ plano.nome }}</th>
                         {% endfor %}
-                    </tr>
-                </thead>
+ </tr>
+ </thead>
                 <tbody>
                     <tr>
                         <td>Usuários</td>
                         {% for plano in planos %}
                         <td class="{% if plano.destaque %}destaque-col{% endif %}">
                             {% if plano.max_usuarios == 0 %}Ilimitado{% else %}{{ plano.max_usuarios }}{% endif %}
-                        </td>
+ </td>
                         {% endfor %}
-                    </tr>
+ </tr>
                     <tr>
                         <td>Projetos</td>
                         {% for plano in planos %}
                         <td class="{% if plano.destaque %}destaque-col{% endif %}">
                             {% if plano.max_projetos == 0 %}Ilimitado{% else %}{{ plano.max_projetos }}{% endif %}
-                        </td>
+ </td>
                         {% endfor %}
-                    </tr>
+ </tr>
                     <tr>
                         <td>Módulo Fisioterapia</td>
                         {% for plano in planos %}
                         <td class="{% if plano.destaque %}destaque-col{% endif %}">
                             <span class="compare-check"><i class="fas fa-check"></i></span>
-                        </td>
+ </td>
                         {% endfor %}
-                    </tr>
+ </tr>
                     <tr>
                         <td>Módulo Psicologia</td>
                         {% for plano in planos %}
@@ -2452,9 +2452,9 @@
                             {% else %}
                             <span class="compare-x"><i class="fas fa-minus"></i></span>
                             {% endif %}
-                        </td>
+ </td>
                         {% endfor %}
-                    </tr>
+ </tr>
                     <tr>
                         <td>Módulo Análise Técnica</td>
                         {% for plano in planos %}
@@ -2464,17 +2464,17 @@
                             {% else %}
                             <span class="compare-x"><i class="fas fa-minus"></i></span>
                             {% endif %}
-                        </td>
+ </td>
                         {% endfor %}
-                    </tr>
+ </tr>
                     <tr>
                         <td>Suporte por e-mail</td>
                         {% for plano in planos %}
                         <td class="{% if plano.destaque %}destaque-col{% endif %}">
                             <span class="compare-check"><i class="fas fa-check"></i></span>
-                        </td>
+ </td>
                         {% endfor %}
-                    </tr>
+ </tr>
                     <tr>
                         <td>Suporte prioritário</td>
                         {% for plano in planos %}
@@ -2484,13 +2484,13 @@
                             {% else %}
                             <span class="compare-x"><i class="fas fa-minus"></i></span>
                             {% endif %}
-                        </td>
+ </td>
                         {% endfor %}
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+ </section>
 
     <!-- DEPOIMENTOS (NOVO) -->
     <section class="rv-testimonials" id="depoimentos">
@@ -2499,12 +2499,12 @@
             <div class="section-eyebrow">
                 <i class="fas fa-quote-left"></i>
                 Quem usa
-            </div>
+ </div>
             <h2 class="section-heading">
                 Histórias de quem já<br>
                 <span class="gradient-text">avançou com o REABITECH.</span>
-            </h2>
-        </div>
+ </h2>
+ </div>
 
         <div class="testimonials-wrapper">
             <div class="testimonials-scroll" id="testimonialsScroll">
@@ -2513,7 +2513,7 @@
                     <div class="testimonial-quote">"</div>
                     <p class="testimonial-text">
                         Antes eu perdia tempo organizando planilhas de evolução dos pacientes. Agora tudo está num só lugar, e a equipe toda vê o mesmo quadro. Mudou nossa rotina.
-                    </p>
+ </p>
                     <div class="testimonial-author">
                         <div class="testimonial-avatar">DR</div>
                         <div class="testimonial-info">
@@ -2521,16 +2521,16 @@
                             <span class="testimonial-role">Fisioterapeuta · Clínica FisioVida</span>
                             <div class="testimonial-rating">
                                 <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
                 <div class="testimonial-card">
                     <div class="testimonial-quote">"</div>
                     <p class="testimonial-text">
                         A parte psicológica integrada fez toda diferença. Consigo ver como o emocional do paciente impacta a recuperação física. A equipe tomou decisões melhores.
-                    </p>
+ </p>
                     <div class="testimonial-author">
                         <div class="testimonial-avatar">CA</div>
                         <div class="testimonial-info">
@@ -2538,16 +2538,16 @@
                             <span class="testimonial-role">Psicólogo Esportivo</span>
                             <div class="testimonial-rating">
                                 <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
                 <div class="testimonial-card">
                     <div class="testimonial-quote">"</div>
                     <p class="testimonial-text">
                         Gerenciar 47 alunos atletas era um caos. Hoje, em 5 minutos, sei quem está lesionado, quem precisa de atenção e quem está pronto para voltar.
-                    </p>
+ </p>
                     <div class="testimonial-author">
                         <div class="testimonial-avatar">MS</div>
                         <div class="testimonial-info">
@@ -2555,16 +2555,16 @@
                             <span class="testimonial-role">Coordenador · Etec Araras</span>
                             <div class="testimonial-rating">
                                 <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
                 <div class="testimonial-card">
                     <div class="testimonial-quote">"</div>
                     <p class="testimonial-text">
                         A plataforma é intuitiva. Treinamos a equipe em uma tarde e todos os profissionais já estavam usando no dia seguinte. Sem resistência.
-                    </p>
+ </p>
                     <div class="testimonial-author">
                         <div class="testimonial-avatar">JP</div>
                         <div class="testimonial-info">
@@ -2572,16 +2572,16 @@
                             <span class="testimonial-role">Gestora · Projeto Reabilitar</span>
                             <div class="testimonial-rating">
                                 <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
                 <div class="testimonial-card">
                     <div class="testimonial-quote">"</div>
                     <p class="testimonial-text">
                         O suporte é rápido e o sistema evolui. Cada mês tem algo novo que resolve um problema real do nosso dia. Vale cada centavo.
-                    </p>
+ </p>
                     <div class="testimonial-author">
                         <div class="testimonial-avatar">RL</div>
                         <div class="testimonial-info">
@@ -2589,23 +2589,23 @@
                             <span class="testimonial-role">Fisioterapeuta · Time Sub-20</span>
                             <div class="testimonial-rating">
                                 <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
-            </div>
+ </div>
 
             <div class="testimonial-nav">
                 <button id="testimonialPrev" aria-label="Anterior">
                     <i class="fas fa-arrow-left"></i>
-                </button>
+ </button>
                 <button id="testimonialNext" aria-label="Próximo">
                     <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-        </div>
-    </section>
+ </button>
+ </div>
+ </div>
+ </section>
 
     <!-- COMO FUNCIONA -->
     <section class="lp-steps" id="como-funciona">
@@ -2614,12 +2614,12 @@
             <div class="section-eyebrow">
                 <i class="fas fa-route"></i>
                 Como funciona
-            </div>
+ </div>
             <h2 class="section-heading">
                 Da primeira consulta<br>
                 <span class="gradient-text">à alta. Sem perder nada.</span>
-            </h2>
-        </div>
+ </h2>
+ </div>
 
         <div class="steps-grid">
             <div class="step-card reveal">
@@ -2627,26 +2627,26 @@
                 <h3 class="step-title">Criar o ambiente</h3>
                 <p class="step-desc">
                     Você cria a conta, escolhe o plano, configura o projeto da sua clínica ou escola. Em menos de 2 minutos.
-                </p>
-            </div>
+ </p>
+ </div>
 
             <div class="step-card reveal delay-1">
                 <div class="step-number">2</div>
                 <h3 class="step-title">Convidar a equipe</h3>
                 <p class="step-desc">
                     Fisioterapeutas, psicólogos e técnicos entram com permissões específicas. Cada um vê só o que precisa.
-                </p>
-            </div>
+ </p>
+ </div>
 
             <div class="step-card reveal delay-2">
                 <div class="step-number">3</div>
                 <h3 class="step-title">Acompanhar a recuperação</h3>
                 <p class="step-desc">
                     Cada especialista registra avaliações. Tudo fica no perfil do paciente. A equipe toda vê o mesmo quadro.
-                </p>
-            </div>
-        </div>
-    </section>
+ </p>
+ </div>
+ </div>
+ </section>
 
     <!-- FAQ (NOVO) -->
     <section class="rv-faq" id="faq">
@@ -2655,87 +2655,87 @@
             <div class="section-eyebrow">
                 <i class="fas fa-circle-question"></i>
                 Perguntas frequentes
-            </div>
+ </div>
             <h2 class="section-heading">
                 Ainda com dúvidas?<br>
                 <span class="gradient-text">A gente responde.</span>
-            </h2>
-        </div>
+ </h2>
+ </div>
 
         <div class="faq-wrapper">
             <div class="faq-item reveal">
                 <button class="faq-question">
                     <span>Preciso instalar algo para usar a plataforma?</span>
                     <span class="faq-icon"><i class="fas fa-plus"></i></span>
-                </button>
+ </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
                         Não. O REABITECH é 100% web. Você acessa pelo navegador, em qualquer dispositivo — desktop, tablet ou celular. Sem downloads, sem instalações.
-                    </div>
-                </div>
-            </div>
+ </div>
+ </div>
+ </div>
 
             <div class="faq-item reveal">
                 <button class="faq-question">
                     <span>O plano Trial realmente é grátis?</span>
                     <span class="faq-icon"><i class="fas fa-plus"></i></span>
-                </button>
+ </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
                         Sim. Você tem 30 dias completos para testar, sem cadastrar cartão de crédito. Se ao final do período você quiser continuar, escolhe um plano. Se não, sua conta é desativada automaticamente.
-                    </div>
-                </div>
-            </div>
+ </div>
+ </div>
+ </div>
 
             <div class="faq-item reveal">
                 <button class="faq-question">
                     <span>Meus dados ficam seguros?</span>
                     <span class="faq-icon"><i class="fas fa-plus"></i></span>
-                </button>
+ </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
                         Sim. Cada projeto tem isolamento total — ninguém vê dados de outro projeto. Além disso, seguimos boas práticas de segurança e estamos adequados à LGPD.
-                    </div>
-                </div>
-            </div>
+ </div>
+ </div>
+ </div>
 
             <div class="faq-item reveal">
                 <button class="faq-question">
                     <span>Posso usar em escolas, times e clínicas?</span>
                     <span class="faq-icon"><i class="fas fa-plus"></i></span>
-                </button>
+ </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
                         Sim. O REABITECH foi desenhado para múltiplos contextos: clínicas de fisioterapia, escolas, times esportivos, academias, consultórios individuais e projetos sociais. Você escolhe o tipo ao criar sua conta.
-                    </div>
-                </div>
-            </div>
+ </div>
+ </div>
+ </div>
 
             <div class="faq-item reveal">
                 <button class="faq-question">
                     <span>Como funciona o suporte?</span>
                     <span class="faq-icon"><i class="fas fa-plus"></i></span>
-                </button>
+ </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
                         Todos os planos têm suporte por e-mail. Nos planos Profissional e Empresarial, há suporte prioritário com resposta em até 4 horas úteis. Você também pode usar o chat no canto da tela.
-                    </div>
-                </div>
-            </div>
+ </div>
+ </div>
+ </div>
 
             <div class="faq-item reveal">
                 <button class="faq-question">
                     <span>Posso cancelar quando quiser?</span>
                     <span class="faq-icon"><i class="fas fa-plus"></i></span>
-                </button>
+ </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
                         Sim. Não há contrato de fidelidade. Você cancela direto no painel, quando quiser, sem burocracia. Após cancelar, mantém acesso até o final do período já pago.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
 
     <!-- CTA FINAL -->
     <section class="lp-cta">
@@ -2744,16 +2744,16 @@
             <h2 class="cta-title">
                 Criar sua conta leva<br>
                 menos que um café.
-            </h2>
+ </h2>
             <p class="cta-desc">
                 Sem cartão de crédito no plano Trial. Sem contrato de fidelidade. Sem tempo perdido com configuração.
-            </p>
+ </p>
             <a href="{% url 'signup' %}" class="hero-btn hero-btn-primary" style="font-size: 1.05rem;">
                 <i class="fas fa-rocket"></i>
                 Criar minha conta grátis
-            </a>
-        </div>
-    </section>
+ </a>
+ </div>
+ </section>
 
     <!-- FOOTER -->
     <footer class="lp-footer" id="contato">
@@ -2762,11 +2762,11 @@
                 <a href="/" class="lp-logo">
                     <div class="lp-logo-img-wrapper">
                         <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'">
-                    </div>
+ </div>
                     <span>REABITECH</span>
-                </a>
+ </a>
                 <p>Plataforma integrada de reabilitação para clínicas, escolas, times e consultórios que tratam pessoas — não casos.</p>
-            </div>
+ </div>
 
             <div>
                 <div class="footer-heading">Produto</div>
@@ -2774,8 +2774,8 @@
                     <li><a href="#recursos">Recursos</a></li>
                     <li><a href="#planos">Planos</a></li>
                     <li><a href="#faq">FAQ</a></li>
-                </ul>
-            </div>
+ </ul>
+ </div>
 
             <div>
                 <div class="footer-heading">Empresa</div>
@@ -2783,8 +2783,8 @@
                     <li><a href="#">Sobre nós</a></li>
                     <li><a href="#">Contato</a></li>
                     <li><a href="#">Blog</a></li>
-                </ul>
-            </div>
+ </ul>
+ </div>
 
             <div>
                 <div class="footer-heading">Legal</div>
@@ -2792,15 +2792,15 @@
                     <li><a href="#">Termos</a></li>
                     <li><a href="#">Privacidade</a></li>
                     <li><a href="#">LGPD</a></li>
-                </ul>
-            </div>
-        </div>
+ </ul>
+ </div>
+ </div>
 
         <div class="footer-bottom">
             <div>&copy; {% now "Y" %} REABITECH — Todos os direitos reservados.</div>
             <div>TCC · Etec Prefeito Alberto Feres · Araras/SP</div>
-        </div>
-    </footer>
+ </div>
+ </footer>
 
     <!-- CHAT DE SUPORTE FLUTUANTE -->
     <div class="chat-widget">
@@ -2808,33 +2808,33 @@
             <div class="chat-header">
                 <div class="chat-header-avatar">
                     <i class="fas fa-headset"></i>
-                </div>
+ </div>
                 <div>
                     <div class="chat-header-name">Suporte REABITECH</div>
                     <div class="chat-header-status">Online agora</div>
-                </div>
-            </div>
+ </div>
+ </div>
             <div class="chat-body" id="chatBody">
                 <div class="chat-message">
                     <div class="chat-message-avatar">
                         <i class="fas fa-headset"></i>
-                    </div>
+ </div>
                     <div class="chat-message-bubble">
-                        Olá! 👋 Sou do suporte REABITECH. Como posso ajudar você hoje?
-                    </div>
-                </div>
-            </div>
+                        Olá!  Sou do suporte REABITECH. Como posso ajudar você hoje?
+ </div>
+ </div>
+ </div>
             <div class="chat-footer">
                 <input type="text" class="chat-input" id="chatInput" placeholder="Escreva sua mensagem...">
                 <button class="chat-send" id="chatSend">
                     <i class="fas fa-paper-plane"></i>
-                </button>
-            </div>
-        </div>
+ </button>
+ </div>
+ </div>
         <button class="chat-button" id="chatButton" aria-label="Abrir chat">
             <i class="fas fa-comment-dots"></i>
-        </button>
-    </div>
+ </button>
+ </div>
 
     <!-- SCRIPTS -->
     <script>
@@ -3050,7 +3050,7 @@ counters.forEach(c => counterObserver.observe(c));
                 userMsg.innerHTML = `
                     <div class="chat-message-bubble" style="background: var(--green); color: white; border-radius: 14px 14px 4px 14px;">
                         ${msg}
-                    </div>
+ </div>
                 `;
                 chatBody.appendChild(userMsg);
                 chatInput.value = '';
@@ -3064,7 +3064,7 @@ counters.forEach(c => counterObserver.observe(c));
                         <div class="chat-message-avatar"><i class="fas fa-headset"></i></div>
                         <div class="chat-message-bubble">
                             Obrigado pela mensagem! Nossa equipe vai responder em instantes. Você também pode enviar um e-mail para <strong>suporte@reabitech.com</strong>.
-                        </div>
+ </div>
                     `;
                     chatBody.appendChild(botMsg);
                     chatBody.scrollTop = chatBody.scrollHeight;
@@ -3096,6 +3096,6 @@ counters.forEach(c => counterObserver.observe(c));
             }
 
         });
-    </script>
+ </script>
 </body>
 </html>

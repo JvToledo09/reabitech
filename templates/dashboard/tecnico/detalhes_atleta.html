@@ -13,25 +13,25 @@
             <div class="col-md-8 d-flex align-items-center">
                 <div class="bg-white bg-opacity-25 rounded-circle p-4 me-4" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
                     <i class="fas fa-user fa-3x"></i>
-                </div>
+ </div>
                 <div>
                     <h2 class="fw-bold mb-1">{{ atleta.usuario.get_full_name|default:atleta.usuario.username }}</h2>
                     <p class="mb-2 opacity-75">
                         <i class="fas fa-id-badge me-2"></i>RM: {{ atleta.rm }}
                         {% if atleta.modalidade %} | <i class="fas fa-running me-2"></i>{{ atleta.modalidade.nome }}{% endif %}
-                    </p>
+ </p>
                     <p class="mb-0 opacity-75">
                         <i class="fas fa-envelope me-2"></i>{{ atleta.usuario.email|default:"Sem email" }}
-                    </p>
-                </div>
-            </div>
+ </p>
+ </div>
+ </div>
             <div class="col-md-4 text-md-end">
                 <a href="{% url 'dashboard:tecnico_atletas' %}" class="btn btn-light shadow-sm">
                     <i class="fas fa-arrow-left me-2"></i>Voltar
-                </a>
-            </div>
-        </div>
-    </div>
+ </a>
+ </div>
+ </div>
+ </div>
 
     <!-- Indicadores -->
     <div class="row g-3 mb-4">
@@ -39,47 +39,47 @@
             <div class="stat-card card-tilt p-3">
                 <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #28a745, #1e7e34);">
                     <i class="fas fa-chart-line" style="font-size: 22px;"></i>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ progresso }}%</h2>
                 <p class="text-muted small mb-0">Recuperação Atual</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card card-tilt p-3">
                 <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #0d6efd, #084298);">
                     <i class="fas fa-medal" style="font-size: 22px;"></i>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ media_desempenho }}</h2>
                 <p class="text-muted small mb-0">Desempenho Médio</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card card-tilt p-3">
                 <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #dc3545, #bb2d3b);">
                     <i class="fas fa-user-injured" style="font-size: 22px;"></i>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ lesoes_ativas|length }}</h2>
                 <p class="text-muted small mb-0">Lesões Ativas</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card card-tilt p-3">
                 <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #ffc107, #ffca2c);">
                     <i class="fas fa-notes-medical" style="font-size: 22px;"></i>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ tratamentos_ativos|length }}</h2>
                 <p class="text-muted small mb-0">Tratamentos Ativos</p>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Gráfico de Evolução -->
     <div class="card-modern p-4 mb-4">
         <h5 class="fw-bold mb-3"><i class="fas fa-chart-area me-2 text-primary"></i>Evolução dos Indicadores</h5>
         <div style="height: 320px;">
             <canvas id="evolucaoAtletaTecChart"></canvas>
-        </div>
-    </div>
+ </div>
+ </div>
 
     <!-- Informações Pessoais -->
     <div class="row g-4 mb-4">
@@ -90,26 +90,26 @@
                     <div class="col-6">
                         <small class="text-muted d-block">Altura</small>
                         <strong>{{ atleta.altura|default:"-" }} cm</strong>
-                    </div>
+ </div>
                     <div class="col-6">
                         <small class="text-muted d-block">Peso</small>
                         <strong>{{ atleta.peso|default:"-" }} kg</strong>
-                    </div>
+ </div>
                     <div class="col-6">
                         <small class="text-muted d-block">IMC</small>
                         <strong>{{ atleta.imc|default:"-" }}</strong>
-                    </div>
+ </div>
                     <div class="col-6">
                         <small class="text-muted d-block">Data de Ingresso</small>
                         <strong>{{ atleta.data_ingresso|date:"d/m/Y" }}</strong>
-                    </div>
+ </div>
                     <div class="col-12">
                         <small class="text-muted d-block">Total de Evoluções</small>
                         <strong>{{ total_evolucoes }} registros</strong>
-                    </div>
-                </div>
-            </div>
-        </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
         <!-- Lesões Ativas -->
         <div class="col-md-6">
@@ -119,21 +119,21 @@
                 <div class="d-flex align-items-center p-2 mb-2 bg-light rounded-3">
                     <div class="bg-danger bg-opacity-10 rounded-circle p-2 me-2" style="width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-exclamation-triangle text-danger small"></i>
-                    </div>
+ </div>
                     <div class="flex-grow-1">
                         <strong class="small d-block">{{ lesao.get_tipo_display }} - {{ lesao.local }}</strong>
                         <small class="text-muted">{{ lesao.get_gravidade_display }}</small>
-                    </div>
-                </div>
+ </div>
+ </div>
                 {% empty %}
                 <div class="text-center py-4">
                     <i class="fas fa-check-circle fs-2 text-success d-block mb-2"></i>
                     <p class="text-success mb-0">Nenhuma lesão ativa!</p>
-                </div>
+ </div>
                 {% endfor %}
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Histórico de Evoluções -->
     <div class="card-modern p-4">
@@ -148,8 +148,8 @@
                         <th>Força</th>
                         <th>Desempenho</th>
                         <th>Recuperação</th>
-                    </tr>
-                </thead>
+ </tr>
+ </thead>
                 <tbody>
                     {% for ev in evolucoes %}
                     <tr>
@@ -162,18 +162,18 @@
                             <div class="d-flex align-items-center">
                                 <div class="progress me-2" style="width: 60px; height: 6px;">
                                     <div class="progress-bar bg-success" style="width: {{ ev.percentual_recuperacao }}%"></div>
-                                </div>
+ </div>
                                 <strong class="text-success small">{{ ev.percentual_recuperacao }}%</strong>
-                            </div>
-                        </td>
-                    </tr>
+ </div>
+ </td>
+ </tr>
                     {% empty %}
                     <tr><td colspan="6" class="text-center py-4 text-muted">Sem evoluções registradas.</td></tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+ </tbody>
+ </table>
+ </div>
+ </div>
 
 </div>
 

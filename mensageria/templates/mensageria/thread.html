@@ -401,23 +401,23 @@
                 <h6 class="chat-sidebar-title">
                     <i class="fas fa-comments me-2" style="color: #2BA181;"></i>
                     Conversas
-                </h6>
+ </h6>
                 <a href="{% url 'mensageria:nova_conversa' %}" class="btn btn-sm" title="Nova conversa"
                    style="background: linear-gradient(135deg, #2BA181, #1f8768); color: white; border-radius: 8px;">
                     <i class="fas fa-plus"></i>
-                </a>
-            </div>
-        </div>
+ </a>
+ </div>
+ </div>
         <div class="chat-sidebar-list">
             <!-- Conversa atual (destacada) -->
             <div class="chat-side-item atual">
                 <div class="chat-side-avatar {% if conversa.tipo == 'grupo' %}grupo{% endif %}">
                     {% if conversa.tipo == 'grupo' %}<i class="fas fa-users"></i>{% else %}{{ titulo_conversa|first|upper }}{% endif %}
-                </div>
+ </div>
                 <div class="chat-side-info">
                     <p class="chat-side-nome">{{ titulo_conversa }}</p>
-                </div>
-            </div>
+ </div>
+ </div>
 
             {% if outras_conversas %}
             <div style="height: 1px; background: var(--border-color); margin: 8px 4px;"></div>
@@ -425,18 +425,18 @@
             <a href="{% url 'mensageria:ver_conversa' conversa_id=item.conversa.id %}" class="chat-side-item">
                 <div class="chat-side-avatar {% if item.is_grupo %}grupo{% endif %}">
                     {% if item.is_grupo %}<i class="fas fa-users"></i>{% else %}{{ item.titulo|first|upper }}{% endif %}
-                </div>
+ </div>
                 <div class="chat-side-info">
                     <p class="chat-side-nome">{{ item.titulo }}</p>
-                </div>
+ </div>
                 {% if item.nao_lidas > 0 %}
                 <span class="chat-side-badge">{{ item.nao_lidas }}</span>
                 {% endif %}
-            </a>
+ </a>
             {% endfor %}
             {% endif %}
-        </div>
-    </aside>
+ </div>
+ </aside>
 
     <!-- ÁREA PRINCIPAL DA CONVERSA -->
     <main class="chat-main">
@@ -445,7 +445,7 @@
             <div class="chat-header-info">
                 <div class="chat-header-avatar {% if conversa.tipo == 'grupo' %}grupo{% endif %}">
                     {% if conversa.tipo == 'grupo' %}<i class="fas fa-users"></i>{% else %}{{ titulo_conversa|first|upper }}{% endif %}
-                </div>
+ </div>
                 <div style="min-width: 0;">
                     <h6 class="chat-header-nome">{{ titulo_conversa }}</h6>
                     <p class="chat-header-sub">
@@ -454,13 +454,13 @@
                         {% else %}
                             Conversa direta
                         {% endif %}
-                    </p>
-                </div>
-            </div>
+ </p>
+ </div>
+ </div>
             <a href="{% url 'mensageria:lista_conversas' %}" class="btn-outline-custom" style="padding: 6px 14px; font-size: 0.8rem;">
                 <i class="fas fa-arrow-left"></i> <span class="d-none d-lg-inline">Voltar</span>
-            </a>
-        </div>
+ </a>
+ </div>
 
         <!-- Mensagens -->
         <div class="chat-mensagens" id="chatMensagens">
@@ -469,7 +469,7 @@
                 <div class="msg-row {% if msg.autor == request.user %}propria{% endif %}" data-msg-id="{{ msg.id }}">
                     <div class="msg-avatar">
                         {{ msg.autor.first_name|first|default:msg.autor.username|first|upper }}
-                    </div>
+ </div>
                     <div class="msg-bubble">
                         {% if conversa.tipo == 'grupo' and msg.autor != request.user %}
                         <p class="msg-autor">{{ msg.autor.get_full_name|default:msg.autor.username }}</p>
@@ -481,29 +481,29 @@
                             {% if msg.is_imagem %}
                             <a href="{{ msg.anexo.url }}" target="_blank">
                                 <img src="{{ msg.anexo.url }}" alt="anexo" class="msg-anexo-img">
-                            </a>
+ </a>
                             {% elif msg.is_pdf %}
                             <a href="{{ msg.anexo.url }}" target="_blank" class="msg-anexo-pdf">
                                 <i class="fas fa-file-pdf"></i> Abrir PDF
-                            </a>
+ </a>
                             {% else %}
                             <a href="{{ msg.anexo.url }}" target="_blank" class="msg-anexo-pdf">
                                 <i class="fas fa-paperclip"></i> Abrir anexo
-                            </a>
+ </a>
                             {% endif %}
                         {% endif %}
                         <p class="msg-hora">{{ msg.criada_em|date:"d/m H:i" }}</p>
-                    </div>
-                </div>
+ </div>
+ </div>
                 {% endfor %}
             {% else %}
                 <div class="empty-chat">
                     <i class="fas fa-comment-dots"></i>
                     <h6 style="color: var(--text-secondary);">Nenhuma mensagem ainda</h6>
                     <p class="small mb-0">Mande a primeira mensagem!</p>
-                </div>
+ </div>
             {% endif %}
-        </div>
+ </div>
 
         <!-- Formulário de envio -->
         <div class="chat-input-area">
@@ -511,22 +511,22 @@
                 <span id="anexoNome"><i class="fas fa-paperclip me-1"></i></span>
                 <button type="button" class="btn btn-sm text-danger" onclick="limparAnexo()" title="Remover anexo">
                     <i class="fas fa-times"></i>
-                </button>
-            </div>
+ </button>
+ </div>
             <form method="post" enctype="multipart/form-data" class="chat-input-form" id="chatForm">
                 {% csrf_token %}
                 <textarea name="conteudo" id="id_conteudo" placeholder="Escreva uma mensagem..."></textarea>
                 <label for="id_anexo" class="btn-outline-custom" style="cursor: pointer; padding: 12px; margin: 0;"
                        title="Anexar arquivo (imagem ou PDF)">
                     <i class="fas fa-paperclip"></i>
-                </label>
+ </label>
                 <input type="file" name="anexo" id="id_anexo" accept="image/*,application/pdf" style="display: none;">
                 <button type="submit" class="chat-send-btn" title="Enviar">
                     <i class="fas fa-paper-plane"></i>
-                </button>
-            </form>
-        </div>
-    </main>
+ </button>
+ </form>
+ </div>
+ </main>
 </div>
 
 <!-- ============================================== -->
@@ -585,7 +585,7 @@
                 ${m.conteudo ? `<p class="msg-texto">${esc(m.conteudo)}</p>` : ''}
                 ${anexoHtml}
                 <p class="msg-hora">${esc(m.criada_em)}</p>
-            </div>
+ </div>
         `;
         return div;
     }

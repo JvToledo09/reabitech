@@ -12,23 +12,23 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-share"></i>
             Encaminhamentos
-        </div>
+ </div>
         <h1 class="page-header-title">
             Histórico de <span class="gradient-text">encaminhamentos.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Todos os encaminhamentos médicos realizados para este paciente.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 24px; justify-content: space-between; flex-wrap: wrap;">
         <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" class="btn-outline-custom">
             <i class="fas fa-arrow-left"></i> Voltar
-        </a>
+ </a>
         <a href="{% url 'prontuario:criar_encaminhamento' prontuario.id %}" class="btn-primary-custom">
             <i class="fas fa-plus"></i> Novo encaminhamento
-        </a>
-    </div>
+ </a>
+ </div>
 
     {% if encaminhamentos %}
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px;">
@@ -38,21 +38,21 @@
                 <div class="icon-wrapper icon-sm" style="margin-bottom: 0;"><i class="fas fa-user-doctor"></i></div>
                 <span class="badge-premium {% if e.status == 'realizado' %}green{% elif e.status == 'agendado' %}blue{% elif e.status == 'cancelado' %}red{% else %}amber{% endif %}">
                     {{ e.get_status_display }}
-                </span>
-            </div>
+ </span>
+ </div>
             <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 4px;">
                 {{ e.get_especialidade_display }}
-            </div>
+ </div>
             <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-bottom: 12px;">
                 {{ e.data_encaminhamento|date:"d/m/Y" }}
                 · <span class="badge-premium {% if e.urgencia == 'urgente' %}red{% elif e.urgencia == 'prioritario' %}amber{% else %}gray{% endif %}" style="font-size: 0.62rem;">{{ e.get_urgencia_display }}</span>
-            </div>
+ </div>
             <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                 {{ e.motivo|truncatechars:120 }}
-            </p>
-        </a>
+ </p>
+ </a>
         {% endfor %}
-    </div>
+ </div>
     {% else %}
     <div class="card-premium">
         <div class="empty-state">
@@ -60,12 +60,12 @@
             <h3 class="empty-state-title">Nenhum encaminhamento registrado</h3>
             <p class="empty-state-desc">
                 Registre encaminhamentos médicos quando necessário (ortopedia, cardiologia, etc).
-            </p>
+ </p>
             <a href="{% url 'prontuario:criar_encaminhamento' prontuario.id %}" class="btn-primary-custom">
                 <i class="fas fa-plus"></i> Novo encaminhamento
-            </a>
-        </div>
-    </div>
+ </a>
+ </div>
+ </div>
     {% endif %}
 
 </div>

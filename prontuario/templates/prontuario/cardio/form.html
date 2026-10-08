@@ -12,14 +12,14 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-heart-pulse"></i>
             Cardiorrespiratório
-        </div>
+ </div>
         <h1 class="page-header-title">
             {{ titulo }} <span class="gradient-text">cardiorrespiratória.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Avaliação específica para pacientes com asma, bronquite, pós-cirurgia cardíaca e outras condições.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div class="card-premium">
         <form method="POST">
@@ -30,135 +30,135 @@
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Condição *</label>
                     {{ form.condicao_principal }}
-                </div>
+ </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Tempo desde o diagnóstico</label>
                     {{ form.tempo_diagnostico }}
-                </div>
+ </div>
                 <div class="col-12">
                     <label class="form-label fw-bold">Outras condições</label>
                     {{ form.outras_condicoes }}
-                </div>
-            </div>
+ </div>
+ </div>
 
             <div class="section-tag"><i class="fas fa-smoking"></i> Tabagismo</div>
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Histórico</label>
                     {{ form.tabagismo }}
-                </div>
+ </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Carga tabágica</label>
                     {{ form.carga_tabagica }}
-                </div>
-            </div>
+ </div>
+ </div>
 
             <div class="section-tag"><i class="fas fa-lungs"></i> Sinais e Sintomas</div>
             <div class="row g-3 mb-4">
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Frequência de dispneia (0-4)</label>
                     {{ form.frequencia_dispneia }}
-                </div>
+ </div>
                 <div class="col-md-2">
                     <label class="form-label fw-bold d-block">Tosse</label>
                     <div class="form-check form-switch">{{ form.tosse }}</div>
-                </div>
+ </div>
                 <div class="col-md-2">
                     <label class="form-label fw-bold d-block">Tosse produtiva</label>
                     <div class="form-check form-switch">{{ form.tosse_produtiva }}</div>
-                </div>
+ </div>
                 <div class="col-md-2">
                     <label class="form-label fw-bold d-block">Sibilos</label>
                     <div class="form-check form-switch">{{ form.sibilos }}</div>
-                </div>
+ </div>
                 <div class="col-md-2">
                     <label class="form-label fw-bold d-block">Cianose</label>
                     <div class="form-check form-switch">{{ form.cianose }}</div>
-                </div>
+ </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold d-block">Uso de músculos acessórios</label>
                     <div class="form-check form-switch">{{ form.uso_musculos_acessorios }}</div>
-                </div>
+ </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold d-block">Limitação nas AVDs</label>
                     <div class="form-check form-switch">{{ form.limitacao_atividade }}</div>
-                </div>
-            </div>
+ </div>
+ </div>
 
             <div class="section-tag"><i class="fas fa-heartbeat"></i> Testes Funcionais</div>
             <div class="row g-3 mb-4">
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Caminhada 6 min (m)</label>
                     {{ form.teste_caminhada_6min }}
-                </div>
+ </div>
                 <div class="col-md-2">
                     <label class="form-label fw-bold">SpO₂ repouso (%)</label>
                     {{ form.spo2_reouso }}
-                </div>
+ </div>
                 <div class="col-md-2">
                     <label class="form-label fw-bold">SpO₂ esforço (%)</label>
                     {{ form.spo2_esforco }}
-                </div>
+ </div>
                 <div class="col-md-2">
                     <label class="form-label fw-bold">FC repouso (bpm)</label>
                     {{ form.fc_repouso }}
-                </div>
+ </div>
                 <div class="col-md-2">
                     <label class="form-label fw-bold">FC máx (bpm)</label>
                     {{ form.fc_maxima }}
-                </div>
+ </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold">PA repouso</label>
                     {{ form.pa_repouso }}
-                </div>
+ </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Escala de Borg (0-10)</label>
                     {{ form.escala_borg }}
-                </div>
-            </div>
+ </div>
+ </div>
 
             <div class="section-tag"><i class="fas fa-microscope"></i> Exames Complementares</div>
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Espirometria</label>
                     {{ form.espirometria }}
-                </div>
+ </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">ECG</label>
                     {{ form.ecg }}
-                </div>
+ </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Ecocardiograma</label>
                     {{ form.ecocardiograma }}
-                </div>
+ </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Raio-X de Tórax</label>
                     {{ form.raio_x_torax }}
-                </div>
-            </div>
+ </div>
+ </div>
 
             <div class="section-tag"><i class="fas fa-clipboard-check"></i> Plano Terapêutico</div>
             <div class="row g-3 mb-4">
                 <div class="col-12">
                     <label class="form-label fw-bold">Plano fisioterapêutico cardiorrespiratório</label>
                     {{ form.plano_cardiorrespiratorio }}
-                </div>
+ </div>
                 <div class="col-12">
                     <label class="form-label fw-bold">Observações</label>
                     {{ form.observacoes }}
-                </div>
-            </div>
+ </div>
+ </div>
 
             <div class="d-flex gap-2 pt-4 border-top">
                 <button type="submit" class="btn-primary-custom">
                     <i class="fas fa-save"></i> Salvar avaliação
-                </button>
+ </button>
                 <a href="{% url 'prontuario:lista_cardio' prontuario.id %}" class="btn-outline-custom">
                     Cancelar
-                </a>
-            </div>
-        </form>
-    </div>
+ </a>
+ </div>
+ </form>
+ </div>
 
 </div>
 {% endblock %}

@@ -12,7 +12,7 @@
                     <div class="mb-3">
                         <label for="nome" class="form-label">Nome do Projeto</label>
                         <input type="text" class="form-control" id="nome" name="nome" required>
-                    </div>
+ </div>
                     <div class="mb-3">
                         <label for="tipo" class="form-label">Tipo de Projeto</label>
                         <select class="form-control" id="tipo" name="tipo" required>
@@ -20,24 +20,24 @@
                             <option value="escola">Projeto Escolar</option>
                             <option value="clinica">Consultório/Clínica</option>
                             <option value="outro">Outro</option>
-                        </select>
-                    </div>
+ </select>
+ </div>
                     <div class="mb-3">
                         <label for="descricao" class="form-label">Descrição (opcional)</label>
                         <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
-                    </div>
+ </div>
                     <div class="mb-3">
                         <label for="plano" class="form-label">Plano</label>
                         <select class="form-control" id="plano" name="plano" required>
                             {% for plano in planos %}
                             <option value="{{ plano.id }}">{{ plano.nome }} - R$ {{ plano.preco_mensal }}</option>
                             {% endfor %}
-                        </select>
-                    </div>
+ </select>
+ </div>
                     <button type="submit" class="btn btn-primary-custom w-100">Criar Projeto</button>
-                </form>
-            </div>
-        </div>
-    </div>
+ </form>
+ </div>
+ </div>
+ </div>
 </div>
 {% endblock %}

@@ -118,23 +118,23 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-pills"></i>
             Medicamentos
-        </div>
+ </div>
         <h1 class="page-header-title">
             Medicamentos em <span class="gradient-text">uso contínuo.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Registro completo de medicamentos prescritos, com dose, via e frequência.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; justify-content: space-between; align-items: center;">
         <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" class="btn-outline-custom">
             <i class="fas fa-arrow-left"></i> Voltar ao prontuário
-        </a>
+ </a>
         <a href="{% url 'prontuario:criar_medicamento' prontuario.id %}" class="btn-primary-custom">
             <i class="fas fa-plus"></i> Novo medicamento
-        </a>
-    </div>
+ </a>
+ </div>
 
     <!-- ATIVOS -->
     {% if medicamentos_ativos %}
@@ -151,8 +151,8 @@
                         <th>Prescritor</th>
                         <th>Status</th>
                         <th style="text-align: right;">Ações</th>
-                    </tr>
-                </thead>
+ </tr>
+ </thead>
                 <tbody>
                     {% for med in medicamentos_ativos %}
                     <tr>
@@ -161,11 +161,11 @@
                             {% if med.principio_ativo %}
                             <span class="med-dosagem">{{ med.principio_ativo }}</span>
                             {% endif %}
-                        </td>
+ </td>
                         <td>
                             <strong>{{ med.dosagem }}</strong>
                             <div style="font-size: 0.78rem; color: var(--text-tertiary);">{{ med.quantidade }}</div>
-                        </td>
+ </td>
                         <td><span class="via-badge">{{ med.get_via_display }}</span></td>
                         <td>{{ med.get_frequencia_display }}</td>
                         <td>
@@ -174,22 +174,22 @@
                             {% else %}
                             <span class="text-muted">—</span>
                             {% endif %}
-                        </td>
+ </td>
                         <td><span class="status-badge-med {{ med.status }}">{{ med.get_status_display }}</span></td>
                         <td style="text-align: right;">
                             <a href="{% url 'prontuario:editar_medicamento' med.id %}" class="action-icon-btn" title="Editar">
                                 <i class="fas fa-edit"></i>
-                            </a>
+ </a>
                             <a href="{% url 'prontuario:deletar_medicamento' med.id %}" class="action-icon-btn danger" title="Remover">
                                 <i class="fas fa-trash-alt"></i>
-                            </a>
-                        </td>
-                    </tr>
+ </a>
+ </td>
+ </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+ </tbody>
+ </table>
+ </div>
+ </div>
     {% endif %}
 
     <!-- ENCERRADOS -->
@@ -206,8 +206,8 @@
                         <th>Término</th>
                         <th>Status</th>
                         <th style="text-align: right;">Ações</th>
-                    </tr>
-                </thead>
+ </tr>
+ </thead>
                 <tbody>
                     {% for med in medicamentos_encerrados %}
                     <tr>
@@ -219,17 +219,17 @@
                         <td style="text-align: right;">
                             <a href="{% url 'prontuario:editar_medicamento' med.id %}" class="action-icon-btn" title="Editar">
                                 <i class="fas fa-edit"></i>
-                            </a>
+ </a>
                             <a href="{% url 'prontuario:deletar_medicamento' med.id %}" class="action-icon-btn danger" title="Remover">
                                 <i class="fas fa-trash-alt"></i>
-                            </a>
-                        </td>
-                    </tr>
+ </a>
+ </td>
+ </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+ </tbody>
+ </table>
+ </div>
+ </div>
     {% endif %}
 
     {% if not medicamentos_ativos and not medicamentos_encerrados %}
@@ -239,12 +239,12 @@
             <h3 class="empty-state-title">Nenhum medicamento registrado</h3>
             <p class="empty-state-desc">
                 Registre os medicamentos que o paciente está tomando para que a equipe possa acompanhar interações com o tratamento.
-            </p>
+ </p>
             <a href="{% url 'prontuario:criar_medicamento' prontuario.id %}" class="btn-primary-custom">
                 <i class="fas fa-plus"></i> Adicionar primeiro medicamento
-            </a>
-        </div>
-    </div>
+ </a>
+ </div>
+ </div>
     {% endif %}
 
 </div>

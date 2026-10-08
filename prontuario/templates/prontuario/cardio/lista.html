@@ -12,23 +12,23 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-heart-pulse"></i>
             Cardiorrespiratório
-        </div>
+ </div>
         <h1 class="page-header-title">
             Histórico <span class="gradient-text">cardiorrespiratório.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Avaliações de asma, bronquite, DPOC, pós-cirurgia cardíaca e outras condições.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 24px; justify-content: space-between; flex-wrap: wrap;">
         <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" class="btn-outline-custom">
             <i class="fas fa-arrow-left"></i> Voltar
-        </a>
+ </a>
         <a href="{% url 'prontuario:criar_cardio' prontuario.id %}" class="btn-primary-custom">
             <i class="fas fa-plus"></i> Nova avaliação
-        </a>
-    </div>
+ </a>
+ </div>
 
     {% if avaliacoes %}
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
@@ -37,22 +37,22 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
                 <div class="icon-wrapper icon-sm" style="margin-bottom: 0;">
                     <i class="fas fa-heart-pulse"></i>
-                </div>
+ </div>
                 <span class="badge-premium blue">{{ av.get_condicao_principal_display }}</span>
-            </div>
+ </div>
             <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: var(--text-primary);">
                 {{ av.data_avaliacao|date:"d/m/Y" }}
-            </div>
+ </div>
             <div style="font-size: 0.82rem; color: var(--text-tertiary); margin-bottom: 12px;">
                 Dispneia: <strong style="color: var(--text-primary);">{{ av.frequencia_dispneia }}/4</strong>
                 {% if av.spo2_reouso %} · SpO₂: <strong style="color: var(--text-primary);">{{ av.spo2_reouso }}%</strong>{% endif %}
-            </div>
+ </div>
             <div style="font-size: 0.75rem; color: var(--text-tertiary); padding-top: 10px; border-top: 1px solid var(--border-color);">
                 Avaliador: {{ av.avaliador.get_short_name|default:"—" }}
-            </div>
-        </a>
+ </div>
+ </a>
         {% endfor %}
-    </div>
+ </div>
     {% else %}
     <div class="card-premium">
         <div class="empty-state">
@@ -60,12 +60,12 @@
             <h3 class="empty-state-title">Nenhuma avaliação cardiorrespiratória</h3>
             <p class="empty-state-desc">
                 Registre avaliações para pacientes com asma, bronquite, pós-cirurgia cardíaca e outras condições respiratórias.
-            </p>
+ </p>
             <a href="{% url 'prontuario:criar_cardio' prontuario.id %}" class="btn-primary-custom">
                 <i class="fas fa-plus"></i> Nova avaliação
-            </a>
-        </div>
-    </div>
+ </a>
+ </div>
+ </div>
     {% endif %}
 
 </div>

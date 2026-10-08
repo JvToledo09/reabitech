@@ -12,14 +12,14 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-times-circle"></i>
             Cancelamento
-        </div>
+ </div>
         <h1 class="page-header-title">
             Cancelar <span class="gradient-text">consulta.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Esta ação não pode ser desfeita. A consulta ficará marcada como <strong>cancelada</strong>.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div class="card-premium" style="max-width: 640px;">
         <div style="padding: 16px 20px; border-radius: 12px; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); margin-bottom: 24px;">
@@ -29,10 +29,10 @@
                     <strong style="color: #dc2626;">Tem certeza que deseja cancelar?</strong>
                     <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">
                         {{ consulta.atleta.usuario.get_full_name }} — {{ consulta.data|date:"d/m/Y" }} às {{ consulta.hora_inicio|time:"H:i" }}
-                    </div>
-                </div>
-            </div>
-        </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
         <form method="POST">
             {% csrf_token %}
@@ -41,18 +41,18 @@
                 <label class="form-label fw-bold">Motivo do cancelamento</label>
                 {{ form.motivo }}
                 <small class="text-muted">Opcional, mas ajuda a manter o histórico organizado.</small>
-            </div>
+ </div>
 
             <div class="d-flex gap-2 pt-4 border-top">
                 <button type="submit" class="btn-primary-custom" style="background: linear-gradient(135deg, #dc2626, #991b1b);">
                     <i class="fas fa-times"></i> Confirmar cancelamento
-                </button>
+ </button>
                 <a href="{% url 'consultas:detalhes_consulta' consulta.id %}" class="btn-outline-custom">
                     Voltar
-                </a>
-            </div>
-        </form>
-    </div>
+ </a>
+ </div>
+ </form>
+ </div>
 
 </div>
 {% endblock %}

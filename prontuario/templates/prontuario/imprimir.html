@@ -159,62 +159,62 @@
             transform: translateY(-2px);
             box-shadow: 0 12px 32px rgba(43, 161, 129, 0.55);
         }
-    </style>
+ </style>
 </head>
 <body>
 
     <button class="print-btn no-print" onclick="window.print()">
-        🖨️ Imprimir / Salvar PDF
-    </button>
+        ️ Imprimir / Salvar PDF
+ </button>
 
     <!-- Header -->
     <div class="header">
         <div class="logo">
             REABITECH
             <small>Plataforma de Reabilitação</small>
-        </div>
+ </div>
         <div class="prontuario-info">
             Prontuário Nº <strong>{{ prontuario.numero_prontuario }}</strong><br>
             Emitido em {% now "d/m/Y H:i" %}<br>
             Projeto: {{ prontuario.projeto.nome }}
-        </div>
-    </div>
+ </div>
+ </div>
 
     <!-- Dados do paciente -->
     <div class="patient-card">
         <div class="field">
             <span class="label">Paciente</span>
             <span class="value">{{ atleta.usuario.get_full_name }}</span>
-        </div>
+ </div>
         <div class="field">
             <span class="label">RM / Registro</span>
             <span class="value">{{ atleta.rm|default:"—" }}</span>
-        </div>
+ </div>
         <div class="field">
             <span class="label">Modalidade</span>
             <span class="value">{{ atleta.modalidade.nome|default:"—" }}</span>
-        </div>
+ </div>
         <div class="field">
             <span class="label">Status</span>
             <span class="value">{{ prontuario.get_status_display }}</span>
-        </div>
+ </div>
         <div class="field">
             <span class="label">Data de Abertura</span>
             <span class="value">{{ prontuario.data_abertura|date:"d/m/Y" }}</span>
-        </div>
+ </div>
         <div class="field">
             <span class="label">Fisioterapeuta</span>
             <span class="value">{{ prontuario.fisioterapeuta_responsavel.get_full_name|default:"—" }}</span>
-        </div>
+ </div>
         <div class="field">
             <span class="label">Nascimento</span>
             <span class="value">{{ atleta.usuario.perfil.data_nascimento|date:"d/m/Y"|default:"—" }}</span>
-        </div>
+ </div>
         <div class="field">
             <span class="label">Arquivamento Previsto</span>
             <span class="value">{{ prontuario.data_arquivamento_previsto|date:"d/m/Y"|default:"—" }}</span>
-        </div>
-    </div>
+ </div>
+ </div>
 
     <!-- Triagens -->
     <div class="section">
@@ -228,8 +228,8 @@
                     <th>Descrição</th>
                     <th>PA</th>
                     <th>SpO₂</th>
-                </tr>
-            </thead>
+ </tr>
+ </thead>
             <tbody>
                 {% for t in triagens %}
                 <tr>
@@ -238,12 +238,12 @@
                     <td>{{ t.descricao_queixa|truncatechars:80 }}</td>
                     <td>{{ t.pressao_arterial|default:"—" }}</td>
                     <td>{{ t.saturacao_o2|default:"—" }}{% if t.saturacao_o2 %}%{% endif %}</td>
-                </tr>
+ </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+ </tbody>
+ </table>
         {% else %}<p class="empty">Nenhuma triagem registrada.</p>{% endif %}
-    </div>
+ </div>
 
     <!-- Objetivos -->
     <div class="section">
@@ -258,12 +258,12 @@
                     <td>{{ o.titulo }}</td>
                     <td>{{ o.get_status_display }}</td>
                     <td>{{ o.percentual_alcancado }}%</td>
-                </tr>
+ </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+ </tbody>
+ </table>
         {% else %}<p class="empty">Nenhum objetivo cadastrado.</p>{% endif %}
-    </div>
+ </div>
 
     <!-- Medicamentos -->
     <div class="section">
@@ -279,12 +279,12 @@
                     <td>{{ m.get_via_display }}</td>
                     <td>{{ m.get_frequencia_display }}</td>
                     <td>{{ m.prescritor|default:"—" }}</td>
-                </tr>
+ </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+ </tbody>
+ </table>
         {% else %}<p class="empty">Nenhum medicamento registrado.</p>{% endif %}
-    </div>
+ </div>
 
     <!-- CIF -->
     <div class="section page-break">
@@ -295,16 +295,16 @@
             <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
                 <strong>{{ cif.data_avaliacao|date:"d/m/Y" }}</strong>
                 <span style="color: #1f8768; font-weight: 700;">{{ cif.pontuacao_global }} pts · {{ cif.classificacao_global }}</span>
-            </div>
+ </div>
             <div style="font-size: 9pt; color: #64748b;">
                 Funções: {{ cif.pontuacao_funcoes_corpo }} ·
                 Atividades: {{ cif.pontuacao_atividades }} ·
                 Ambientais: {{ cif.pontuacao_fatores_ambientais }}
-            </div>
-        </div>
+ </div>
+ </div>
         {% endfor %}
         {% else %}<p class="empty">Nenhuma avaliação CIF registrada.</p>{% endif %}
-    </div>
+ </div>
 
     <!-- Cardio -->
     {% if avaliacoes_cardio %}
@@ -319,11 +319,11 @@
                     <td>{{ c.get_condicao_principal_display }}</td>
                     <td>{{ c.frequencia_dispneia }}/4</td>
                     <td>{{ c.spo2_reouso|default:"—" }}%</td>
-                </tr>
+ </tr>
                 {% endfor %}
-            </tbody>
-        </table>
-    </div>
+ </tbody>
+ </table>
+ </div>
     {% endif %}
 
     <!-- Escalas -->
@@ -339,11 +339,11 @@
                     <td>{{ e.data_aplicacao|date:"d/m/Y" }}</td>
                     <td>{{ e.pontuacao }}/{{ e.pontuacao_maxima }}</td>
                     <td>{{ e.get_nivel_risco_display }}</td>
-                </tr>
+ </tr>
                 {% endfor %}
-            </tbody>
-        </table>
-    </div>
+ </tbody>
+ </table>
+ </div>
     {% endif %}
 
     <!-- Relatórios diários -->
@@ -351,20 +351,20 @@
         <h2 class="section-title">Relatórios de Sessão (últimos 20)</h2>
         {% if relatorios %}
         <table>
-            <thead><tr><th>Data</th><th>Procedimentos</th><th>Dor (início → fim)</th><th>Fisioterapeuta</th></tr></thead>
+            <thead><tr><th>Data</th><th>Procedimentos</th><th>Dor (início  fim)</th><th>Fisioterapeuta</th></tr></thead>
             <tbody>
                 {% for r in relatorios %}
                 <tr>
                     <td>{{ r.data_sessao|date:"d/m/Y" }}</td>
                     <td style="font-size: 9pt;">{{ r.procedimentos|truncatechars:100 }}</td>
-                    <td>{{ r.dor_inicio }} → {{ r.dor_fim }}</td>
+                    <td>{{ r.dor_inicio }}  {{ r.dor_fim }}</td>
                     <td>{{ r.fisioterapeuta.get_short_name|default:"—" }}</td>
-                </tr>
+ </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+ </tbody>
+ </table>
         {% else %}<p class="empty">Nenhum relatório registrado.</p>{% endif %}
-    </div>
+ </div>
 
     <!-- Evoluções -->
     {% if evolucoes %}
@@ -379,11 +379,11 @@
                     <td>{{ e.get_tipo_display }}</td>
                     <td style="font-size: 9pt;">{{ e.avaliacao|truncatechars:100 }}</td>
                     <td>{{ e.escala_dor|default:"—" }}</td>
-                </tr>
+ </tr>
                 {% endfor %}
-            </tbody>
-        </table>
-    </div>
+ </tbody>
+ </table>
+ </div>
     {% endif %}
 
     <!-- Encaminhamentos -->
@@ -399,11 +399,11 @@
                     <td>{{ e.get_especialidade_display }}</td>
                     <td style="font-size: 9pt;">{{ e.motivo|truncatechars:80 }}</td>
                     <td>{{ e.get_status_display }}</td>
-                </tr>
+ </tr>
                 {% endfor %}
-            </tbody>
-        </table>
-    </div>
+ </tbody>
+ </table>
+ </div>
     {% endif %}
 
     <!-- Exames -->
@@ -419,18 +419,18 @@
                     <td>{{ e.get_tipo_display }}</td>
                     <td style="font-size: 9pt;">{{ e.descricao|truncatechars:80 }}</td>
                     <td>{{ e.get_status_display }}</td>
-                </tr>
+ </tr>
                 {% endfor %}
-            </tbody>
-        </table>
-    </div>
+ </tbody>
+ </table>
+ </div>
     {% endif %}
 
     <!-- Footer -->
     <div class="footer">
         Documento gerado eletronicamente pelo REABITECH — Plataforma de Reabilitação<br>
         {% now "d/m/Y à\s H:i" %} · Prontuário arquivado por 20 anos conforme COFFITO e Lei 13.787/2018
-    </div>
+ </div>
 
 </body>
 </html>

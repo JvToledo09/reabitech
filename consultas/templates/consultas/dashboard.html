@@ -143,29 +143,29 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-calendar-check"></i>
             Agenda
-        </div>
+ </div>
         <h1 class="page-header-title">
             Sua agenda de <span class="gradient-text">consultas.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Visão geral dos agendamentos de hoje, próximos dias e pendências.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <!-- Ações -->
     <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
         {% if pode_gerenciar %}
         <a href="{% url 'consultas:criar_consulta' %}" class="btn-primary-custom">
             <i class="fas fa-plus"></i> Nova consulta
-        </a>
+ </a>
         {% endif %}
         <a href="{% url 'consultas:calendario_consultas' %}" class="btn-outline-custom">
             <i class="fas fa-calendar-alt"></i> Ver calendário
-        </a>
+ </a>
         <a href="{% url 'consultas:lista_consultas' %}" class="btn-outline-custom">
             <i class="fas fa-list"></i> Ver todas
-        </a>
-    </div>
+ </a>
+ </div>
 
     <!-- Stats -->
     <div class="stats-grid">
@@ -174,37 +174,37 @@
             <div>
                 <div class="num">{{ stats.hoje }}</div>
                 <div class="label">Hoje</div>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="stat-card-mini">
             <div class="icon green"><i class="fas fa-calendar-week"></i></div>
             <div>
                 <div class="num">{{ stats.semana }}</div>
                 <div class="label">Próximos 7 dias</div>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="stat-card-mini">
             <div class="icon orange"><i class="fas fa-clock"></i></div>
             <div>
                 <div class="num">{{ stats.pendentes }}</div>
                 <div class="label">Pendentes</div>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="stat-card-mini">
             <div class="icon green"><i class="fas fa-check-circle"></i></div>
             <div>
                 <div class="num">{{ stats.realizadas_mes }}</div>
                 <div class="label">Realizadas (mês)</div>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="stat-card-mini">
             <div class="icon red"><i class="fas fa-times-circle"></i></div>
             <div>
                 <div class="num">{{ stats.canceladas_mes }}</div>
                 <div class="label">Canceladas/Faltas</div>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <div class="row g-4">
         <!-- HOJE -->
@@ -213,7 +213,7 @@
                 <div class="section-tag" style="margin-top: 0;">
                     <i class="fas fa-sun"></i>
                     Hoje — {{ hoje|date:"d/m/Y" }}
-                </div>
+ </div>
 
                 {% if consultas_hoje %}
                     {% for c in consultas_hoje %}
@@ -221,25 +221,25 @@
                         <div class="consulta-hora">
                             {{ c.hora_inicio|time:"H:i" }}
                             <small>até {{ c.hora_fim|time:"H:i" }}</small>
-                        </div>
+ </div>
                         <div class="consulta-icon">
                             <i class="fas {{ c.icone_tipo }}"></i>
-                        </div>
+ </div>
                         <div class="consulta-info">
                             <h4>{{ c.atleta.usuario.get_full_name|default:c.atleta.usuario.username }}</h4>
                             <p>{{ c.get_tipo_display }} · {{ c.get_modalidade_display }}</p>
-                        </div>
+ </div>
                         <span class="badge bg-{{ c.cor_status }}">{{ c.get_status_display }}</span>
-                    </a>
+ </a>
                     {% endfor %}
                 {% else %}
                     <div class="empty-mini">
                         <i class="fas fa-mug-hot"></i>
                         Nenhuma consulta agendada para hoje.
-                    </div>
+ </div>
                 {% endif %}
-            </div>
-        </div>
+ </div>
+ </div>
 
         <!-- PRÓXIMAS -->
         <div class="col-lg-6">
@@ -247,7 +247,7 @@
                 <div class="section-tag" style="margin-top: 0;">
                     <i class="fas fa-calendar-week"></i>
                     Próximos dias
-                </div>
+ </div>
 
                 {% if consultas_semana %}
                     {% for c in consultas_semana %}
@@ -255,26 +255,26 @@
                         <div class="consulta-hora">
                             {{ c.data|date:"d/m" }}
                             <small>{{ c.hora_inicio|time:"H:i" }}</small>
-                        </div>
+ </div>
                         <div class="consulta-icon">
                             <i class="fas {{ c.icone_tipo }}"></i>
-                        </div>
+ </div>
                         <div class="consulta-info">
                             <h4>{{ c.atleta.usuario.get_full_name|default:c.atleta.usuario.username }}</h4>
                             <p>{{ c.get_tipo_display }} · {{ c.profissional.get_full_name|default:"—" }}</p>
-                        </div>
+ </div>
                         <span class="badge bg-{{ c.cor_status }}">{{ c.get_status_display }}</span>
-                    </a>
+ </a>
                     {% endfor %}
                 {% else %}
                     <div class="empty-mini">
                         <i class="fas fa-calendar"></i>
                         Nenhuma consulta nos próximos 7 dias.
-                    </div>
+ </div>
                 {% endif %}
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
 </div>
 {% endblock %}

@@ -237,42 +237,42 @@
         <div class="tl-hero-info">
             <div class="tl-hero-avatar">
                 {{ atleta.usuario.get_full_name|default:atleta.usuario.username|first|upper }}
-            </div>
+ </div>
             <div>
                 <h1>Olá, {{ atleta.usuario.get_full_name|default:atleta.usuario.username }}!</h1>
                 <p>
                     {% if atleta.modalidade %}Modalidade: <strong>{{ atleta.modalidade.nome }}</strong>{% endif %}
                     {% if atleta.rm %}&nbsp;·&nbsp; RM {{ atleta.rm }}{% endif %}
-                </p>
-            </div>
-        </div>
+ </p>
+ </div>
+ </div>
 
         <div class="tl-hero-stats">
             <div class="tl-hero-stat">
                 <div class="num">{{ stats.total }}</div>
                 <div class="lbl">Eventos</div>
-            </div>
+ </div>
             <div class="tl-hero-stat">
                 <div class="num">{{ stats.consultas }}</div>
                 <div class="lbl">Consultas</div>
-            </div>
+ </div>
             <div class="tl-hero-stat">
                 <div class="num">{{ stats.evolucoes }}</div>
                 <div class="lbl">Evoluções</div>
-            </div>
+ </div>
             <div class="tl-hero-stat">
                 <div class="num">{{ stats.observacoes }}</div>
                 <div class="lbl">Observações do Técnico</div>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Próxima consulta -->
     {% if proxima_consulta %}
     <div class="proxima-consulta">
         <div class="icon-box">
             <i class="fas fa-calendar-check"></i>
-        </div>
+ </div>
         <div class="info">
             <h4>Próxima consulta</h4>
             <p>
@@ -282,12 +282,12 @@
                 {% if proxima_consulta.profissional %}
                 · {{ proxima_consulta.profissional.get_full_name }}
                 {% endif %}
-            </p>
-        </div>
+ </p>
+ </div>
         <a href="{% url 'consultas:detalhes_consulta' proxima_consulta.id %}" class="btn-outline-custom">
             Ver detalhes <i class="fas fa-arrow-right"></i>
-        </a>
-    </div>
+ </a>
+ </div>
     {% endif %}
 
     <!-- Timeline -->
@@ -301,14 +301,14 @@
                 <div class="tl-card">
                     <div class="tl-card-icon cor-{{ ev.cor }}">
                         <i class="fas {{ ev.icone }}"></i>
-                    </div>
+ </div>
                     <div class="tl-card-body">
                         <h4 class="tl-card-titulo">{{ ev.titulo }}</h4>
                         <p class="tl-card-sub">
                             {{ ev.label_tipo }}
                             {% if ev.extra.profissional %}&nbsp;·&nbsp; {{ ev.extra.profissional }}{% endif %}
                             {% if ev.extra.tecnico %}&nbsp;·&nbsp; {{ ev.extra.tecnico }}{% endif %}
-                        </p>
+ </p>
 
                         {% if ev.descricao %}
                         <p class="tl-card-desc">{{ ev.descricao|truncatechars:200 }}</p>
@@ -317,19 +317,19 @@
                         <div class="tl-card-badges">
                             {% if ev.extra.hora %}<span class="tl-badge-mini"><i class="fas fa-clock"></i> {{ ev.extra.hora }}</span>{% endif %}
                             {% if ev.extra.dor %}<span class="tl-badge-mini"><i class="fas fa-heart"></i> Dor {{ ev.extra.dor }}/10</span>{% endif %}
-                            {% if ev.extra.dor_antes %}<span class="tl-badge-mini"><i class="fas fa-heart"></i> Dor {{ ev.extra.dor_antes }} → {{ ev.extra.dor_depois }}</span>{% endif %}
+                            {% if ev.extra.dor_antes %}<span class="tl-badge-mini"><i class="fas fa-heart"></i> Dor {{ ev.extra.dor_antes }}  {{ ev.extra.dor_depois }}</span>{% endif %}
                             {% if ev.extra.status %}<span class="tl-badge-mini">{{ ev.extra.status }}</span>{% endif %}
                             {% if ev.extra.dosagem %}<span class="tl-badge-mini"><i class="fas fa-pills"></i> {{ ev.extra.dosagem }}</span>{% endif %}
                             {% if ev.extra.percentual %}<span class="tl-badge-mini">{{ ev.extra.percentual }}% concluído</span>{% endif %}
-                        </div>
-                    </div>
+ </div>
+ </div>
                     <div class="tl-card-data">
                         {{ ev.data_date|date:"d/m/Y" }}
-                    </div>
-                </div>
+ </div>
+ </div>
                 {% endfor %}
-            </div>
-        </div>
+ </div>
+ </div>
         {% endfor %}
     {% else %}
         <div class="card-premium">
@@ -337,8 +337,8 @@
                 <i class="fas fa-heart-pulse"></i>
                 <h3>Sua jornada começa aqui</h3>
                 <p>Assim que houver registros clínicos (consultas, evoluções, observações), eles aparecerão nesta linha do tempo.</p>
-            </div>
-        </div>
+ </div>
+ </div>
     {% endif %}
 
 </div>

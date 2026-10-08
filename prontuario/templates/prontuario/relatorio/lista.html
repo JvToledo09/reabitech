@@ -12,23 +12,23 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-clipboard-check"></i>
             Relatórios diários
-        </div>
+ </div>
         <h1 class="page-header-title">
             Histórico de <span class="gradient-text">sessões.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Cada sessão do paciente fica registrada aqui, com todos os procedimentos e reações.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 24px; justify-content: space-between; flex-wrap: wrap;">
         <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" class="btn-outline-custom">
             <i class="fas fa-arrow-left"></i> Voltar
-        </a>
+ </a>
         <a href="{% url 'prontuario:criar_relatorio' prontuario.id %}" class="btn-primary-custom">
             <i class="fas fa-plus"></i> Nova sessão
-        </a>
-    </div>
+ </a>
+ </div>
 
     {% if relatorios %}
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
@@ -38,46 +38,46 @@
                 <div>
                     <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">
                         {{ r.data_sessao|date:"d/m/Y" }}
-                    </div>
+ </div>
                     <div style="font-size: 0.78rem; color: var(--text-tertiary);">
                         {{ r.horario_inicio|time:"H:i" }} - {{ r.horario_fim|time:"H:i" }}
                         {% if r.duracao_minutos %} · {{ r.duracao_minutos }} min{% endif %}
-                    </div>
-                </div>
+ </div>
+ </div>
                 {% if r.dor_fim < r.dor_inicio %}
                 <span class="badge-premium green">
                     <i class="fas fa-arrow-down"></i> Dor
-                </span>
+ </span>
                 {% elif r.dor_fim > r.dor_inicio %}
                 <span class="badge-premium red">
                     <i class="fas fa-arrow-up"></i> Dor
-                </span>
+ </span>
                 {% else %}
                 <span class="badge-premium gray">Estável</span>
                 {% endif %}
-            </div>
+ </div>
 
             <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                 {{ r.procedimentos|truncatechars:120 }}
-            </p>
+ </p>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem; padding-top: 12px; border-top: 1px solid var(--border-color);">
                 <div>
                     <span style="color: var(--text-tertiary);">Dor início</span>
                     <strong style="color: var(--text-primary);">{{ r.dor_inicio }}/10</strong>
-                </div>
+ </div>
                 <div>
                     <span style="color: var(--text-tertiary);">Dor fim</span>
                     <strong style="color: var(--text-primary);">{{ r.dor_fim }}/10</strong>
-                </div>
+ </div>
                 <div style="grid-column: 1 / -1;">
                     <span style="color: var(--text-tertiary);">Fisioterapeuta:</span>
                     <strong style="color: var(--text-primary);">{{ r.fisioterapeuta.get_full_name|default:"—" }}</strong>
-                </div>
-            </div>
-        </a>
+ </div>
+ </div>
+ </a>
         {% endfor %}
-    </div>
+ </div>
     {% else %}
     <div class="card-premium">
         <div class="empty-state">
@@ -85,12 +85,12 @@
             <h3 class="empty-state-title">Nenhum relatório registrado</h3>
             <p class="empty-state-desc">
                 Os relatórios diários documentam cada sessão de fisioterapia, com procedimentos, reações e evolução.
-            </p>
+ </p>
             <a href="{% url 'prontuario:criar_relatorio' prontuario.id %}" class="btn-primary-custom">
                 <i class="fas fa-plus"></i> Registrar primeira sessão
-            </a>
-        </div>
-    </div>
+ </a>
+ </div>
+ </div>
     {% endif %}
 
 </div>

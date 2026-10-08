@@ -139,45 +139,45 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-calendar-alt"></i>
             Calendário
-        </div>
+ </div>
         <h1 class="page-header-title">
             Visão <span class="gradient-text">mensal.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Todas as consultas do mês em formato calendário.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
         <a href="{% url 'consultas:dashboard_consultas' %}" class="btn-outline-custom">
             <i class="fas fa-arrow-left"></i> Voltar
-        </a>
+ </a>
         {% if pode_gerenciar %}
         <a href="{% url 'consultas:criar_consulta' %}" class="btn-primary-custom">
             <i class="fas fa-plus"></i> Nova consulta
-        </a>
+ </a>
         {% endif %}
-    </div>
+ </div>
 
     <div class="card-premium">
         <div class="cal-nav">
             <div>
                 <h2 class="mes-titulo">
                     {{ mes_nome }} {{ ano }}
-                </h2>
-            </div>
+ </h2>
+ </div>
             <div class="cal-nav-btns">
                 <a href="?ano={{ ano_anterior }}&mes={{ mes_anterior }}" title="Mês anterior">
                     <i class="fas fa-chevron-left"></i>
-                </a>
+ </a>
                 <a href="{% url 'consultas:calendario_consultas' %}" title="Hoje">
                     <i class="fas fa-crosshairs"></i>
-                </a>
+ </a>
                 <a href="?ano={{ ano_proximo }}&mes={{ mes_proximo }}" title="Próximo mês">
                     <i class="fas fa-chevron-right"></i>
-                </a>
-            </div>
-        </div>
+ </a>
+ </div>
+ </div>
 
         <div class="cal-grid">
             <div class="cal-dow">Dom</div>
@@ -197,13 +197,13 @@
                        class="cal-evento status-{{ c.status }}"
                        title="{{ c.hora_inicio|time:'H:i' }} — {{ c.atleta.usuario.get_full_name }} — {{ c.get_tipo_display }}">
                         {{ c.hora_inicio|time:"H:i" }} {{ c.atleta.usuario.get_full_name|truncatechars:14 }}
-                    </a>
+ </a>
                     {% endfor %}
-                </div>
+ </div>
                 {% endfor %}
             {% endfor %}
-        </div>
-    </div>
+ </div>
+ </div>
 
 </div>
 {% endblock %}

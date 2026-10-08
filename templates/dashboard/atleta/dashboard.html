@@ -11,31 +11,31 @@
     <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: linear-gradient(135deg, #2BA181 0%, #5A6461 100%); color: white; border: none; position: relative; overflow: hidden;">
         <div style="position: absolute; top: -60px; right: -60px; font-size: 16rem; opacity: 0.08;">
             <i class="fas fa-running"></i>
-        </div>
+ </div>
         <div class="row align-items-center position-relative">
             <div class="col-md-8">
-                <h2 class="fw-bold mb-2">Olá, {{ atleta.usuario.get_full_name|default:atleta.usuario.username }}! 💪</h2>
+                <h2 class="fw-bold mb-2">Olá, {{ atleta.usuario.get_full_name|default:atleta.usuario.username }}! </h2>
                 <p class="mb-3 opacity-75">Continue firme no seu tratamento. Cada exercício é um passo mais próximo da recuperação total!</p>
                 <div class="d-flex gap-3 flex-wrap">
                     <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
                         <i class="fas fa-trophy me-1"></i> {{ progresso_recuperacao }}% Recuperado
-                    </span>
+ </span>
                     <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
                         <i class="fas fa-dumbbell me-1"></i> {{ exercicios_concluidos }}/{{ total_exercicios }} Exercícios
-                    </span>
+ </span>
                     <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
                         <i class="fas fa-medal me-1"></i> {{ adesao }}% Adesão
-                    </span>
-                </div>
-            </div>
+ </span>
+ </div>
+ </div>
             <div class="col-md-4 text-md-end">
                 <div class="bg-white bg-opacity-25 rounded-circle p-4 d-inline-block" style="backdrop-filter: blur(10px);">
                     <h1 class="fw-bold mb-0 display-3">{{ progresso_recuperacao }}%</h1>
                     <small class="d-block">Recuperação Total</small>
-                </div>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Indicadores Principais -->
     <div class="row g-3 mb-4">
@@ -44,50 +44,50 @@
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #dc3545, #bb2d3b);">
                         <i class="fas fa-user-injured" style="font-size: 22px;"></i>
-                    </div>
+ </div>
                     <span class="badge bg-danger bg-opacity-10 text-danger">Ativas</span>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ lesoes|length }}</h2>
                 <p class="text-muted small mb-0">Lesões em tratamento</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card card-tilt p-3">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #ffc107, #ffca2c);">
                         <i class="fas fa-notes-medical" style="font-size: 22px;"></i>
-                    </div>
+ </div>
                     <span class="badge bg-warning bg-opacity-10 text-warning">Em curso</span>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ tratamentos_ativos }}</h2>
                 <p class="text-muted small mb-0">Tratamentos ativos</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card card-tilt p-3">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #0dcaf0, #0aa2c0);">
                         <i class="fas fa-brain" style="font-size: 22px;"></i>
-                    </div>
+ </div>
                     <span class="badge bg-info bg-opacity-10 text-info">{{ status_mental }}</span>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ score_mental }}</h2>
                 <p class="text-muted small mb-0">Saúde Mental (0-10)</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card card-tilt p-3">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #2BA181, #1a7a5f);">
                         <i class="fas fa-fire" style="font-size: 22px;"></i>
-                    </div>
+ </div>
                     <span class="badge bg-success bg-opacity-10 text-success">Ativo</span>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ ultimo_desempenho }}</h2>
                 <p class="text-muted small mb-0">Último Desempenho</p>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Barra de Progresso Detalhada -->
     <div class="card-modern p-4 mb-4">
@@ -95,12 +95,12 @@
         <div class="d-flex justify-content-between mb-2">
             <span class="fw-bold">Progresso Geral</span>
             <span class="fw-bold text-success">{{ progresso_recuperacao }}%</span>
-        </div>
+ </div>
         <div class="progress mb-4" style="height: 20px; border-radius: 15px;">
             <div class="progress-bar bg-success" style="width: {{ progresso_recuperacao }}%; border-radius: 15px;" role="progressbar">
                 {% if progresso_recuperacao >= 20 %}{{ progresso_recuperacao }}%{% endif %}
-            </div>
-        </div>
+ </div>
+ </div>
 
         {% if ultima_evolucao %}
         <div class="row g-3">
@@ -108,29 +108,29 @@
                 <div class="text-center p-3 bg-light rounded-4">
                     <small class="text-muted d-block">Dor</small>
                     <h4 class="fw-bold mb-0 text-danger">{{ ultima_evolucao.dor }}/10</h4>
-                </div>
-            </div>
+ </div>
+ </div>
             <div class="col-md-3">
                 <div class="text-center p-3 bg-light rounded-4">
                     <small class="text-muted d-block">Mobilidade</small>
                     <h4 class="fw-bold mb-0 text-info">{{ ultima_evolucao.mobilidade }}/10</h4>
-                </div>
-            </div>
+ </div>
+ </div>
             <div class="col-md-3">
                 <div class="text-center p-3 bg-light rounded-4">
                     <small class="text-muted d-block">Força</small>
                     <h4 class="fw-bold mb-0 text-warning">{{ ultima_evolucao.forca }}/10</h4>
-                </div>
-            </div>
+ </div>
+ </div>
             <div class="col-md-3">
                 <div class="text-center p-3 bg-light rounded-4">
                     <small class="text-muted d-block">Desempenho</small>
                     <h4 class="fw-bold mb-0 text-success">{{ ultima_evolucao.desempenho }}/10</h4>
-                </div>
-            </div>
-        </div>
+ </div>
+ </div>
+ </div>
         {% endif %}
-    </div>
+ </div>
 
     <!-- Gráficos de Evolução -->
     <div class="row g-4 mb-4">
@@ -139,18 +139,18 @@
                 <h5 class="fw-bold mb-3"><i class="fas fa-chart-area me-2 text-primary"></i>Evolução dos Indicadores</h5>
                 <div style="height: 320px;">
                     <canvas id="evolucaoAtletaChart"></canvas>
-                </div>
-            </div>
-        </div>
+ </div>
+ </div>
+ </div>
         <div class="col-lg-4">
             <div class="card-modern p-4 card-tilt">
                 <h5 class="fw-bold mb-3"><i class="fas fa-heartbeat me-2 text-success"></i>Nível de Recuperação</h5>
                 <div style="height: 320px;">
                     <canvas id="recuperacaoAtletaChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Exercícios Pendentes -->
     <div class="row g-4 mb-4">
@@ -159,42 +159,42 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold mb-0"><i class="fas fa-dumbbell me-2 text-info"></i>Meus Exercícios Pendentes</h5>
                     <a href="{% url 'dashboard:atleta_exercicios' %}" class="btn btn-sm btn-outline-custom">Ver Todos</a>
-                </div>
+ </div>
                 {% for ex in exercicios %}
                 <div class="d-flex align-items-center p-3 mb-2 bg-light rounded-4">
                     <div class="bg-info bg-opacity-10 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-running text-info"></i>
-                    </div>
+ </div>
                     <div class="flex-grow-1">
                         <h6 class="fw-bold mb-0">{{ ex.nome }}</h6>
                         <small class="text-muted">{{ ex.series }}x{{ ex.repeticoes }} | {{ ex.frequencia }}</small>
-                    </div>
+ </div>
                     <span class="badge bg-warning bg-opacity-10 text-warning">Pendente</span>
-                </div>
+ </div>
                 {% empty %}
                 <div class="text-center py-4">
                     <i class="fas fa-check-circle fs-1 text-success d-block mb-2 opacity-50"></i>
-                    <p class="text-muted mb-0">Você concluiu todos os exercícios! 🎉</p>
-                </div>
+                    <p class="text-muted mb-0">Você concluiu todos os exercícios! </p>
+ </div>
                 {% endfor %}
-            </div>
-        </div>
+ </div>
+ </div>
 
         <!-- Card de Adesão -->
         <div class="col-lg-5">
             <div class="card-modern p-4 h-100 d-flex flex-column justify-content-center text-center">
                 <div class="bg-success bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
                     <i class="fas fa-medal fa-3x text-success"></i>
-                </div>
+ </div>
                 <h2 class="fw-bold mb-1">{{ adesao }}%</h2>
                 <p class="text-muted">Taxa de Adesão aos Exercícios</p>
                 <div class="progress mt-3" style="height: 10px; border-radius: 10px;">
                     <div class="progress-bar bg-success" style="width: {{ adesao }}%; border-radius: 10px;"></div>
-                </div>
+ </div>
                 <small class="text-muted mt-2">{{ exercicios_concluidos }} de {{ total_exercicios }} concluídos</small>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Timeline Pessoal -->
     <div class="card-modern p-4 mb-4">
@@ -203,22 +203,22 @@
         <div class="d-flex mb-3">
             <div class="bg-{{ evento.cor }} bg-opacity-10 text-{{ evento.cor }} rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                 <i class="fas {{ evento.icone }}"></i>
-            </div>
+ </div>
             <div class="flex-grow-1 border-bottom pb-3">
                 <div class="d-flex justify-content-between">
                     <h6 class="fw-bold mb-1">{{ evento.titulo }}</h6>
                     <small class="text-muted">{{ evento.data|date:"d/m/Y" }}</small>
-                </div>
+ </div>
                 <p class="text-muted small mb-0">{{ evento.descricao }}</p>
-            </div>
-        </div>
+ </div>
+ </div>
         {% empty %}
         <div class="text-center py-4">
             <i class="fas fa-history fs-1 d-block mb-2 opacity-25 text-muted"></i>
             <p class="text-muted mb-0">Nenhuma atividade registrada ainda.</p>
-        </div>
+ </div>
         {% endfor %}
-    </div>
+ </div>
 
     <!-- Últimas Avaliações Psicológicas -->
     {% if avaliacoes %}
@@ -235,15 +235,15 @@
                             {% elif av.score_total >= 4 %}bg-warning bg-opacity-10 text-warning
                             {% else %}bg-danger bg-opacity-10 text-danger{% endif %}">
                             {{ av.status_emocional }}
-                        </span>
-                    </div>
+ </span>
+ </div>
                     <h4 class="fw-bold mb-0">{{ av.score_total }}/10</h4>
                     <small class="text-muted">Score Total</small>
-                </div>
-            </div>
+ </div>
+ </div>
             {% endfor %}
-        </div>
-    </div>
+ </div>
+ </div>
     {% endif %}
 
 <!-- Progresso dos Objetivos -->
@@ -252,11 +252,11 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h5 class="fw-bold mb-0">
             <i class="fas fa-bullseye me-2 text-success"></i>Meus Objetivos
-        </h5>
+ </h5>
         <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">
             {{ objetivos_alcancados }}/{{ total_objetivos }} alcançados
-        </span>
-    </div>
+ </span>
+ </div>
 
     <div class="row g-3">
         {% for obj in objetivos_atleta %}
@@ -271,7 +271,7 @@
                         {% elif obj.prazo == 'medio' %}text-warning
                         {% else %}text-info{% endif %} rounded-pill">
                         {{ obj.get_prazo_display }}
-                    </span>
+ </span>
                     <span class="badge 
                         {% if obj.status == 'alcancado' %}bg-success
                         {% elif obj.status == 'em_andamento' %}bg-warning
@@ -280,8 +280,8 @@
                         {% elif obj.status == 'em_andamento' %}text-warning
                         {% else %}text-secondary{% endif %} rounded-pill">
                         {{ obj.get_status_display }}
-                    </span>
-                </div>
+ </span>
+ </div>
                 <h6 class="fw-bold mb-2">{{ obj.titulo }}</h6>
                 {% if obj.descricao %}
                 <p class="small text-muted mb-3">{{ obj.descricao|truncatechars:100 }}</p>
@@ -289,14 +289,14 @@
                 <div class="d-flex justify-content-between small mb-1">
                     <span class="text-muted">Progresso</span>
                     <strong class="text-success">{{ obj.percentual_alcancado }}%</strong>
-                </div>
+ </div>
                 <div class="progress" style="height: 8px; border-radius: 10px;">
                     <div class="progress-bar bg-success" style="width: {{ obj.percentual_alcancado }}%"></div>
-                </div>
-            </div>
-        </div>
+ </div>
+ </div>
+ </div>
         {% endfor %}
-    </div>
+ </div>
 </div>
 {% endif %}
 
@@ -305,7 +305,7 @@
 <div class="card-modern p-4 mb-4">
     <h5 class="fw-bold mb-4">
         <i class="fas fa-clipboard-check me-2 text-primary"></i>Minhas Últimas Sessões
-    </h5>
+ </h5>
 
     <div class="table-responsive">
         <table class="table table-hover align-middle">
@@ -315,31 +315,31 @@
                     <th>Duração</th>
                     <th>Procedimentos</th>
                     <th>Dor</th>
-                </tr>
-            </thead>
+ </tr>
+ </thead>
             <tbody>
                 {% for s in ultimas_sessoes %}
                 <tr>
                     <td data-label="Data"><strong>{{ s.data_sessao|date:"d/m/Y" }}</strong></td>
                     <td data-label="Duração">
                         {{ s.horario_inicio|time:"H:i" }} - {{ s.horario_fim|time:"H:i" }}
-                    </td>
+ </td>
                     <td data-label="Procedimentos">
                         <span class="small">{{ s.procedimentos|truncatechars:80 }}</span>
-                    </td>
+ </td>
                     <td data-label="Dor">
                         <span class="badge 
                             {% if s.dor_fim <= 3 %}bg-success bg-opacity-10 text-success
                             {% elif s.dor_fim <= 6 %}bg-warning bg-opacity-10 text-warning
                             {% else %}bg-danger bg-opacity-10 text-danger{% endif %} rounded-pill">
-                            {{ s.dor_inicio }} → {{ s.dor_fim }}
-                        </span>
-                    </td>
-                </tr>
+                            {{ s.dor_inicio }}  {{ s.dor_fim }}
+ </span>
+ </td>
+ </tr>
                 {% endfor %}
-            </tbody>
-        </table>
-    </div>
+ </tbody>
+ </table>
+ </div>
 
     {% if dor_media > 0 %}
     <div class="alert alert-info mt-3 mb-0 rounded-4 d-flex align-items-center gap-2">
@@ -347,9 +347,9 @@
         <span>
             Sua média de dor nas últimas {{ ultimas_sessoes|length }} sessões é 
             <strong>{{ dor_media }}/10</strong>. 
-            {% if dor_media <= 3 %} Continue assim! 🎉{% endif %}
-        </span>
-    </div>
+            {% if dor_media <= 3 %} Continue assim! {% endif %}
+ </span>
+ </div>
     {% endif %}
 </div>
 {% endif %}
@@ -361,17 +361,17 @@
         <div class="d-flex align-items-center gap-3">
             <div class="bg-white bg-opacity-25 rounded-circle p-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
                 <i class="fas fa-folder-medical fa-xl"></i>
-            </div>
+ </div>
             <div>
                 <h5 class="fw-bold mb-0">Meu Prontuário Clínico</h5>
                 <small class="opacity-75">Nº {{ prontuario.numero_prontuario }}</small>
-            </div>
-        </div>
+ </div>
+ </div>
         <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" 
            class="btn btn-light fw-bold">
             Ver detalhes <i class="fas fa-arrow-right ms-1"></i>
-        </a>
-    </div>
+ </a>
+ </div>
 </div>
 {% endif %}
 

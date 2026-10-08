@@ -12,15 +12,15 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-folder-plus"></i>
             Abertura
-        </div>
+ </div>
         <h1 class="page-header-title">
             Abrir prontuário <span class="gradient-text">clínico.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Paciente: <strong>{{ atleta.usuario.get_full_name|default:atleta.usuario.username }}</strong>
             (RM {{ atleta.rm|default:"—" }})
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div class="row g-4">
         <div class="col-lg-8">
@@ -31,7 +31,7 @@
                     <div class="section-tag">
                         <i class="fas fa-info-circle"></i>
                         Informações do prontuário
-                    </div>
+ </div>
 
                     {% if form.errors %}
                     <div class="alert alert-danger" style="border-radius: 12px; margin-bottom: 20px;">
@@ -42,8 +42,8 @@
                                 <li>{{ field }}: {{ error }}</li>
                                 {% endfor %}
                             {% endfor %}
-                        </ul>
-                    </div>
+ </ul>
+ </div>
                     {% endif %}
 
                     {% for field in form %}
@@ -51,7 +51,7 @@
                         <label class="form-label fw-bold">
                             {{ field.label }}
                             {% if field.field.required %}<span style="color: #dc2626;">*</span>{% endif %}
-                        </label>
+ </label>
                         {{ field }}
                         {% if field.help_text %}
                         <small class="text-muted d-block mt-1">{{ field.help_text }}</small>
@@ -59,45 +59,45 @@
                         {% if field.errors %}
                         <div style="color: #dc2626; font-size: 0.85rem; margin-top: 4px;">
                             {{ field.errors.0 }}
-                        </div>
+ </div>
                         {% endif %}
-                    </div>
+ </div>
                     {% endfor %}
 
                     <div class="d-flex gap-2 pt-4 border-top mt-4">
                         <button type="submit" class="btn-primary-custom">
                             <i class="fas fa-save"></i>
                             Abrir prontuário
-                        </button>
+ </button>
                         <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="btn-outline-custom">
                             Cancelar
-                        </a>
-                    </div>
-                </form>
-            </div>
-        </div>
+ </a>
+ </div>
+ </form>
+ </div>
+ </div>
 
         <!-- Lateral informativa -->
         <div class="col-lg-4">
             <div class="card-premium" style="background: linear-gradient(135deg, var(--green-soft), var(--green-soft-2));">
                 <div class="icon-wrapper">
                     <i class="fas fa-shield-halved"></i>
-                </div>
+ </div>
                 <h5 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">
                     Arquivamento garantido
-                </h5>
+ </h5>
                 <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">
                     Este prontuário será mantido por <strong>20 anos</strong> após a última movimentação,
                     conforme normas do COFFITO e a Lei 13.787/2018.
-                </p>
+ </p>
                 <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.85rem; color: var(--text-secondary);">
                     <li style="padding: 6px 0;"><i class="fas fa-check" style="color: var(--green); margin-right: 8px;"></i> Numeração automática</li>
                     <li style="padding: 6px 0;"><i class="fas fa-check" style="color: var(--green); margin-right: 8px;"></i> Backup local seguro</li>
                     <li style="padding: 6px 0;"><i class="fas fa-check" style="color: var(--green); margin-right: 8px;"></i> Auditável</li>
-                </ul>
-            </div>
-        </div>
-    </div>
+ </ul>
+ </div>
+ </div>
+ </div>
 
 </div>
 {% endblock %}

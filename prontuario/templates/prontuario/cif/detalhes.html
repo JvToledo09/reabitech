@@ -12,33 +12,33 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-clipboard-list"></i>
             CIF
-        </div>
+ </div>
         <h1 class="page-header-title">
             Avaliação de <span class="gradient-text">{{ cif.data_avaliacao|date:"d/m/Y" }}.</span>
-        </h1>
-    </div>
+ </h1>
+ </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 24px; justify-content: space-between; flex-wrap: wrap;">
         <a href="{% url 'prontuario:lista_cif' prontuario.id %}" class="btn-outline-custom">
             <i class="fas fa-arrow-left"></i> Voltar
-        </a>
+ </a>
         <a href="{% url 'prontuario:editar_cif' cif.id %}" class="btn-primary-custom">
             <i class="fas fa-edit"></i> Editar
-        </a>
-    </div>
+ </a>
+ </div>
 
     <!-- Card de pontuação -->
     <div class="card-premium mb-4" style="text-align: center; padding: 40px; background: linear-gradient(135deg, var(--green-soft), var(--green-soft-2));">
         <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-tertiary); margin-bottom: 8px;">
             Pontuação Global
-        </div>
+ </div>
         <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 4rem; font-weight: 900; color: var(--green-deep); line-height: 1; margin-bottom: 12px;">
             {{ cif.pontuacao_global }}
-        </div>
+ </div>
         <span class="badge-premium {% if 'Sem' in cif.classificacao_global %}green{% elif 'leve' in cif.classificacao_global %}green{% elif 'moderada' in cif.classificacao_global %}amber{% else %}red{% endif %}" style="font-size: 0.9rem; padding: 10px 20px;">
             {{ cif.classificacao_global }}
-        </span>
-    </div>
+ </span>
+ </div>
 
     <div class="row g-4">
         <!-- Funções -->
@@ -49,30 +49,30 @@
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">b1 — Mentais</span>
                         <strong>{{ cif.b1_funcoes_mentais }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">b2 — Sensoriais</span>
                         <strong>{{ cif.b2_funcoes_sensoriais }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">b4 — Cardiorrespiratórias</span>
                         <strong>{{ cif.b4_cardiorrespiratorias }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">b7 — Neuromusculoesqueléticas</span>
                         <strong>{{ cif.b7_neuromusculoesqueleticas }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">b8 — Pele</span>
                         <strong>{{ cif.b8_pele }}</strong>
-                    </li>
-                </ul>
+ </li>
+ </ul>
                 <div style="margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--green-soft-2); display: flex; justify-content: space-between; font-weight: 800;">
                     <span style="color: var(--text-secondary); font-size: 0.85rem;">Subtotal</span>
                     <span style="color: var(--green-deep); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.1rem;">{{ cif.pontuacao_funcoes_corpo }}</span>
-                </div>
-            </div>
-        </div>
+ </div>
+ </div>
+ </div>
 
         <!-- Atividades -->
         <div class="col-md-4">
@@ -82,42 +82,42 @@
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">d1 — Aprendizagem</span>
                         <strong>{{ cif.d1_aprendizagem }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">d2 — Tarefas gerais</span>
                         <strong>{{ cif.d2_tarefas_gerais }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">d3 — Comunicação</span>
                         <strong>{{ cif.d3_comunicacao }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">d4 — Mobilidade</span>
                         <strong>{{ cif.d4_mobilidade }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">d5 — Cuidado pessoal</span>
                         <strong>{{ cif.d5_cuidado_pessoal }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">d6 — Vida doméstica</span>
                         <strong>{{ cif.d6_vida_domestica }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">d7 — Relações</span>
                         <strong>{{ cif.d7_relacoes }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">d8/d9 — Esporte/Lazer</span>
                         <strong>{{ cif.d8_areas_principais }}</strong>
-                    </li>
-                </ul>
+ </li>
+ </ul>
                 <div style="margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--green-soft-2); display: flex; justify-content: space-between; font-weight: 800;">
                     <span style="color: var(--text-secondary); font-size: 0.85rem;">Subtotal</span>
                     <span style="color: var(--green-deep); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.1rem;">{{ cif.pontuacao_atividades }}</span>
-                </div>
-            </div>
-        </div>
+ </div>
+ </div>
+ </div>
 
         <!-- Ambientais -->
         <div class="col-md-4">
@@ -127,48 +127,48 @@
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">e1 — Produtos</span>
                         <strong>{{ cif.e1_produtos_tecnologia }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">e2 — Ambiente natural</span>
                         <strong>{{ cif.e2_ambiente_natural }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">e3 — Apoio</span>
                         <strong>{{ cif.e3_apoio_relacionamentos }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">e4 — Atitudes</span>
                         <strong>{{ cif.e4_atitudes }}</strong>
-                    </li>
+ </li>
                     <li style="padding: 8px 0; display: flex; justify-content: space-between;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);">e5 — Serviços</span>
                         <strong>{{ cif.e5_servicos_sistemas }}</strong>
-                    </li>
-                </ul>
+ </li>
+ </ul>
                 <div style="margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--green-soft-2); display: flex; justify-content: space-between; font-weight: 800;">
                     <span style="color: var(--text-secondary); font-size: 0.85rem;">Subtotal</span>
                     <span style="color: var(--green-deep); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.1rem;">{{ cif.pontuacao_fatores_ambientais }}</span>
-                </div>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
+ </div>
 
     {% if cif.perfil_funcionalidade or cif.objetivos_cif %}
     <div class="card-premium mt-4">
         {% if cif.perfil_funcionalidade %}
         <h5 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; margin-bottom: 12px;">
             <i class="fas fa-user-check me-2" style="color: var(--green);"></i> Perfil Funcional
-        </h5>
+ </h5>
         <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap;">{{ cif.perfil_funcionalidade }}</p>
         {% endif %}
 
         {% if cif.objetivos_cif %}
         <h5 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; margin: 24px 0 12px 0;">
             <i class="fas fa-bullseye me-2" style="color: var(--green);"></i> Objetivos CIF
-        </h5>
+ </h5>
         <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap;">{{ cif.objetivos_cif }}</p>
         {% endif %}
-    </div>
+ </div>
     {% endif %}
 
 </div>

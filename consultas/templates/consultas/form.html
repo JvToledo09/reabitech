@@ -12,14 +12,14 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-calendar-plus"></i>
             Consulta
-        </div>
+ </div>
         <h1 class="page-header-title">
             {{ titulo }} <span class="gradient-text">agendada.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Preencha os dados abaixo. Conflitos de horário são validados automaticamente.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div class="card-premium">
         {% if form.non_field_errors %}
@@ -27,7 +27,7 @@
             {% for err in form.non_field_errors %}
             <div><i class="fas fa-exclamation-circle"></i> {{ err }}</div>
             {% endfor %}
-        </div>
+ </div>
         {% endif %}
 
         <form method="POST">
@@ -40,13 +40,13 @@
                     <label class="form-label fw-bold">Atleta / Paciente *</label>
                     {{ form.atleta }}
                     {% if form.atleta.errors %}<div class="text-danger small">{{ form.atleta.errors.0 }}</div>{% endif %}
-                </div>
+ </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Profissional Responsável</label>
                     {{ form.profissional }}
                     {% if form.profissional.errors %}<div class="text-danger small">{{ form.profissional.errors.0 }}</div>{% endif %}
-                </div>
-            </div>
+ </div>
+ </div>
 
             <!-- Grupo 2: Tipo e prioridade -->
             <div class="section-tag"><i class="fas fa-tags"></i> Classificação</div>
@@ -54,16 +54,16 @@
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Tipo de consulta *</label>
                     {{ form.tipo }}
-                </div>
+ </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Prioridade *</label>
                     {{ form.prioridade }}
-                </div>
+ </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Modalidade *</label>
                     {{ form.modalidade }}
-                </div>
-            </div>
+ </div>
+ </div>
 
             <!-- Grupo 3: Data e hora -->
             <div class="section-tag"><i class="fas fa-clock"></i> Data e Horário</div>
@@ -72,21 +72,21 @@
                     <label class="form-label fw-bold">Data *</label>
                     {{ form.data }}
                     {% if form.data.errors %}<div class="text-danger small">{{ form.data.errors.0 }}</div>{% endif %}
-                </div>
+ </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Início *</label>
                     {{ form.hora_inicio }}
-                </div>
+ </div>
                 <div class="col-md-4">
                     <label class="form-label fw-bold">Término *</label>
                     {{ form.hora_fim }}
-                </div>
+ </div>
                 <div class="col-12">
                     <label class="form-label fw-bold">Local</label>
                     {{ form.local }}
                     <small class="text-muted">Ex: Sala 2, Clínica Central, link do Meet</small>
-                </div>
-            </div>
+ </div>
+ </div>
 
             <!-- Grupo 4: Conteúdo -->
             <div class="section-tag"><i class="fas fa-comment-medical"></i> Detalhes</div>
@@ -94,25 +94,25 @@
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Motivo / objetivo</label>
                     {{ form.motivo }}
-                </div>
+ </div>
                 <div class="col-md-6">
                     <label class="form-label fw-bold">Observações</label>
                     {{ form.observacoes }}
-                </div>
-            </div>
+ </div>
+ </div>
 
             <div class="d-flex gap-2 pt-4 border-top">
                 <button type="submit" class="btn-primary-custom">
                     <i class="fas fa-save"></i> Salvar
-                </button>
+ </button>
                 {% if consulta %}
                 <a href="{% url 'consultas:detalhes_consulta' consulta.id %}" class="btn-outline-custom">Cancelar</a>
                 {% else %}
                 <a href="{% url 'consultas:dashboard_consultas' %}" class="btn-outline-custom">Cancelar</a>
                 {% endif %}
-            </div>
-        </form>
-    </div>
+ </div>
+ </form>
+ </div>
 
 </div>
 {% endblock %}

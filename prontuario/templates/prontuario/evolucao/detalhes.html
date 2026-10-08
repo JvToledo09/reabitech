@@ -12,23 +12,23 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-chart-line"></i>
             {{ evolucao.get_tipo_display }}
-        </div>
+ </div>
         <h1 class="page-header-title">
             Evolução de <span class="gradient-text">{{ evolucao.data|date:"d/m/Y" }}.</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Fisioterapeuta: <strong>{{ evolucao.fisioterapeuta.get_full_name|default:"—" }}</strong>
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 24px; justify-content: space-between; flex-wrap: wrap;">
         <a href="{% url 'prontuario:lista_evolucoes' prontuario.id %}" class="btn-outline-custom">
             <i class="fas fa-arrow-left"></i> Voltar
-        </a>
+ </a>
         <a href="{% url 'prontuario:editar_evolucao' evolucao.id %}" class="btn-primary-custom">
             <i class="fas fa-edit"></i> Editar
-        </a>
-    </div>
+ </a>
+ </div>
 
     <!-- Tags de status -->
     {% if evolucao.paciente_estavel or evolucao.necessita_encaminhamento %}
@@ -39,7 +39,7 @@
         {% if evolucao.necessita_encaminhamento %}
         <span class="badge-premium red"><i class="fas fa-exclamation-triangle"></i> Necessita encaminhamento</span>
         {% endif %}
-    </div>
+ </div>
     {% endif %}
 
     <!-- SOAP -->
@@ -49,10 +49,10 @@
             <div class="card-premium h-100">
                 <div class="section-tag" style="background: rgba(13, 202, 240, 0.15); color: #0891b2; border-color: rgba(13, 202, 240, 0.3);">
                     <i class="fas fa-comment"></i> S — Subjetivo
-                </div>
+ </div>
                 <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap; margin: 16px 0 0 0;">{{ evolucao.subjetivo }}</p>
-            </div>
-        </div>
+ </div>
+ </div>
         {% endif %}
 
         {% if evolucao.objetivo %}
@@ -60,10 +60,10 @@
             <div class="card-premium h-100">
                 <div class="section-tag" style="background: rgba(43, 161, 129, 0.15); color: #1f8768; border-color: rgba(43, 161, 129, 0.3);">
                     <i class="fas fa-stethoscope"></i> O — Objetivo
-                </div>
+ </div>
                 <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap; margin: 16px 0 0 0;">{{ evolucao.objetivo }}</p>
-            </div>
-        </div>
+ </div>
+ </div>
         {% endif %}
 
         {% if evolucao.avaliacao %}
@@ -71,10 +71,10 @@
             <div class="card-premium h-100">
                 <div class="section-tag" style="background: rgba(245, 158, 11, 0.15); color: #d97706; border-color: rgba(245, 158, 11, 0.3);">
                     <i class="fas fa-chart-line"></i> A — Avaliação
-                </div>
+ </div>
                 <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap; margin: 16px 0 0 0;">{{ evolucao.avaliacao }}</p>
-            </div>
-        </div>
+ </div>
+ </div>
         {% endif %}
 
         {% if evolucao.plano %}
@@ -82,12 +82,12 @@
             <div class="card-premium h-100">
                 <div class="section-tag" style="background: rgba(111, 66, 193, 0.15); color: #6f42c1; border-color: rgba(111, 66, 193, 0.3);">
                     <i class="fas fa-clipboard-list"></i> P — Plano
-                </div>
+ </div>
                 <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap; margin: 16px 0 0 0;">{{ evolucao.plano }}</p>
-            </div>
-        </div>
+ </div>
+ </div>
         {% endif %}
-    </div>
+ </div>
 
     <!-- Avaliações específicas -->
     {% if evolucao.escala_dor is not None or evolucao.forca_muscular or evolucao.amplitude_movimento %}
@@ -98,22 +98,22 @@
             <div>
                 <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Dor (EVA)</div>
                 <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.8rem; font-weight: 800; color: {% if evolucao.escala_dor <= 3 %}#10b981{% elif evolucao.escala_dor <= 6 %}#d97706{% else %}#dc2626{% endif %}; line-height: 1;">{{ evolucao.escala_dor }}<span style="font-size: 0.9rem; color: var(--text-tertiary);">/10</span></div>
-            </div>
+ </div>
             {% endif %}
             {% if evolucao.forca_muscular %}
             <div>
                 <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Força (MRC)</div>
                 <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--text-primary); line-height: 1;">{{ evolucao.forca_muscular }}</div>
-            </div>
+ </div>
             {% endif %}
             {% if evolucao.amplitude_movimento %}
             <div style="grid-column: span 2;">
                 <div style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Amplitude de Movimento</div>
                 <div style="font-size: 1rem; font-weight: 600; color: var(--text-primary);">{{ evolucao.amplitude_movimento }}</div>
-            </div>
+ </div>
             {% endif %}
-        </div>
-    </div>
+ </div>
+ </div>
     {% endif %}
 
     <!-- Conduta -->
@@ -124,26 +124,26 @@
             <div class="card-premium h-100">
                 <div class="section-tag"><i class="fas fa-microscope"></i> Testes Especiais</div>
                 <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap; margin: 16px 0 0 0;">{{ evolucao.testes_especiais }}</p>
-            </div>
-        </div>
+ </div>
+ </div>
         {% endif %}
         {% if evolucao.conduta %}
         <div class="col-md-6">
             <div class="card-premium h-100">
                 <div class="section-tag"><i class="fas fa-hand-holding-medical"></i> Conduta</div>
                 <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap; margin: 16px 0 0 0;">{{ evolucao.conduta }}</p>
-            </div>
-        </div>
+ </div>
+ </div>
         {% endif %}
         {% if evolucao.resposta_ao_tratamento %}
         <div class="col-12">
             <div class="card-premium">
                 <div class="section-tag"><i class="fas fa-heart"></i> Resposta ao Tratamento</div>
                 <p style="color: var(--text-secondary); line-height: 1.7; white-space: pre-wrap; margin: 16px 0 0 0;">{{ evolucao.resposta_ao_tratamento }}</p>
-            </div>
-        </div>
+ </div>
+ </div>
         {% endif %}
-    </div>
+ </div>
     {% endif %}
 
 </div>

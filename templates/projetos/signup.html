@@ -394,7 +394,7 @@
         .signup-footer a:hover {
             color: #a7f3d0;
         }
-    </style>
+ </style>
 </head>
 <body>
 
@@ -405,10 +405,10 @@
             <a href="{% url 'landing' %}">
                 <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'">
                 <span class="logo-text">REABITECH</span>
-            </a>
+ </a>
             <h1>Crie seu ambiente de trabalho</h1>
             <p>Configure sua conta de gestor e comece a usar em minutos</p>
-        </div>
+ </div>
 
         <!-- Card -->
         <div class="signup-card">
@@ -420,9 +420,9 @@
                 <div class="alert alert-{{ message.tags }}">
                     <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
                     <span>{{ message }}</span>
-                </div>
+ </div>
                 {% endfor %}
-            </div>
+ </div>
             {% endif %}
 
             <form method="POST" action="{% url 'signup' %}">
@@ -433,16 +433,16 @@
                     <div class="step-label">
                         <i class="fas fa-user-shield"></i>
                         Etapa 1 de 3
-                    </div>
+ </div>
                     <h2 class="form-section-title">
                         <i class="fas fa-user-tie"></i>
                         Seus dados
-                    </h2>
+ </h2>
 
                     <div class="form-group">
                         <label class="form-label" for="nome_responsavel">
                             Nome completo <span class="required">*</span>
-                        </label>
+ </label>
                         <input
                             type="text"
                             id="nome_responsavel"
@@ -452,13 +452,13 @@
                             value="{{ request.POST.nome_responsavel|default:'' }}"
                             required
                         >
-                    </div>
+ </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label" for="email">
                                 E-mail <span class="required">*</span>
-                            </label>
+ </label>
                             <input
                                 type="email"
                                 id="email"
@@ -469,12 +469,12 @@
                                 required
                             >
                             <small class="form-hint">Será usado para fazer login</small>
-                        </div>
+ </div>
 
                         <div class="form-group">
                             <label class="form-label" for="senha">
                                 Senha <span class="required">*</span>
-                            </label>
+ </label>
                             <input
                                 type="password"
                                 id="senha"
@@ -484,13 +484,13 @@
                                 minlength="6"
                                 required
                             >
-                        </div>
-                    </div>
+ </div>
+ </div>
 
                     <div class="form-group">
                         <label class="form-label" for="senha_confirm">
                             Confirme a senha <span class="required">*</span>
-                        </label>
+ </label>
                         <input
                             type="password"
                             id="senha_confirm"
@@ -500,25 +500,25 @@
                             minlength="6"
                             required
                         >
-                    </div>
-                </div>
+ </div>
+ </div>
 
                 <!-- ========== SEÇÃO 2: DADOS DO PROJETO ========== -->
                 <div class="form-section">
                     <div class="step-label">
                         <i class="fas fa-building"></i>
                         Etapa 2 de 3
-                    </div>
+ </div>
                     <h2 class="form-section-title">
                         <i class="fas fa-clinic-medical"></i>
                         Seu projeto / clínica
-                    </h2>
+ </h2>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label" for="nome_projeto">
                                 Nome do projeto <span class="required">*</span>
-                            </label>
+ </label>
                             <input
                                 type="text"
                                 id="nome_projeto"
@@ -528,12 +528,12 @@
                                 value="{{ request.POST.nome_projeto|default:'' }}"
                                 required
                             >
-                        </div>
+ </div>
 
                         <div class="form-group">
                             <label class="form-label" for="tipo_projeto">
                                 Tipo de instituição <span class="required">*</span>
-                            </label>
+ </label>
                             <select
                                 id="tipo_projeto"
                                 name="tipo_projeto"
@@ -542,40 +542,40 @@
                             >
                                 <option value="clinica" {% if request.POST.tipo_projeto == 'clinica' %}selected{% endif %}>
                                     Clínica de Fisioterapia / Reabilitação
-                                </option>
+ </option>
                                 <option value="escola" {% if request.POST.tipo_projeto == 'escola' %}selected{% endif %}>
                                     Escola / Instituição de Ensino
-                                </option>
+ </option>
                                 <option value="time" {% if request.POST.tipo_projeto == 'time' %}selected{% endif %}>
                                     Time / Clube Esportivo
-                                </option>
+ </option>
                                 <option value="academia" {% if request.POST.tipo_projeto == 'academia' %}selected{% endif %}>
                                     Academia
-                                </option>
+ </option>
                                 <option value="projeto_social" {% if request.POST.tipo_projeto == 'projeto_social' %}selected{% endif %}>
                                     Projeto Social
-                                </option>
+ </option>
                                 <option value="consultorio" {% if request.POST.tipo_projeto == 'consultorio' %}selected{% endif %}>
                                     Consultório Individual
-                                </option>
+ </option>
                                 <option value="outro" {% if request.POST.tipo_projeto == 'outro' %}selected{% endif %}>
                                     Outro
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+ </option>
+ </select>
+ </div>
+ </div>
+ </div>
 
                 <!-- ========== SEÇÃO 3: ESCOLHA DO PLANO ========== -->
                 <div class="form-section">
                     <div class="step-label">
                         <i class="fas fa-crown"></i>
                         Etapa 3 de 3
-                    </div>
+ </div>
                     <h2 class="form-section-title">
                         <i class="fas fa-tags"></i>
                         Escolha seu plano
-                    </h2>
+ </h2>
 
                     <div class="planos-grid">
                         {% for plano in planos %}
@@ -599,34 +599,34 @@
                                         R$ {{ plano.preco_mensal|floatformat:0 }}
                                         <span style="font-size:0.7rem;font-weight:500;color:#94a3b8;">/mês</span>
                                     {% endif %}
-                                </div>
+ </div>
                                 <div class="plano-desc">{{ plano.descricao|truncatechars:60 }}</div>
-                            </div>
-                        </label>
+ </div>
+ </label>
                         {% empty %}
                         <div style="grid-column:1/-1;text-align:center;padding:20px;color:#94a3b8;">
                             Nenhum plano disponível. Contate o administrador.
-                        </div>
+ </div>
                         {% endfor %}
-                    </div>
-                </div>
+ </div>
+ </div>
 
                 <!-- Botão de envio -->
                 <button type="submit" class="btn-submit">
                     <i class="fas fa-rocket"></i>
                     Criar Conta e Começar
-                </button>
+ </button>
 
-            </form>
-        </div>
+ </form>
+ </div>
 
         <!-- Footer -->
         <div class="signup-footer">
             Já tem uma conta?
             <a href="{% url 'login' %}">Faça login</a>
-        </div>
+ </div>
 
-    </div>
+ </div>
 
 </body>
 </html>

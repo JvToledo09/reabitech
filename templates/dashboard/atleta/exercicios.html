@@ -11,40 +11,40 @@
             <div class="card-modern">
                 <div class="card-header-custom">
                     <i class="fas fa-dumbbell me-2"></i> {{ exercicio.nome }}
-                </div>
+ </div>
                 <div class="card-body">
                     <p>{{ exercicio.descricao }}</p>
                     <div class="row mt-3">
                         <div class="col-4">
                             <small class="text-muted">Séries</small>
                             <h5 class="mb-0">{{ exercicio.series }}</h5>
-                        </div>
+ </div>
                         <div class="col-4">
                             <small class="text-muted">Repetições</small>
                             <h5 class="mb-0">{{ exercicio.repeticoes }}</h5>
-                        </div>
+ </div>
                         <div class="col-4">
                             <small class="text-muted">Frequência</small>
                             <h5 class="mb-0">{{ exercicio.frequencia }}</h5>
-                        </div>
-                    </div>
+ </div>
+ </div>
                     {% if exercicio.video_url %}
                     <a href="{{ exercicio.video_url }}" target="_blank" class="btn btn-outline-custom mt-3 w-100">
                         <i class="fab fa-youtube me-2"></i> Ver vídeo demonstrativo
-                    </a>
+ </a>
                     {% endif %}
-                </div>
-            </div>
-        </div>
+ </div>
+ </div>
+ </div>
         {% empty %}
         <div class="col-12">
             <div class="card-modern text-center p-5">
                 <i class="fas fa-dumbbell fa-4x text-muted mb-3"></i>
                 <p class="text-muted">Nenhum exercício atribuído ainda.</p>
                 <p class="small text-muted">Seu fisioterapeuta irá recomendar exercícios para sua recuperação.</p>
-            </div>
-        </div>
+ </div>
+ </div>
         {% endfor %}
-    </div>
+ </div>
 </div>
 {% endblock %}

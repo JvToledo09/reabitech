@@ -12,7 +12,7 @@
         <h1 style="font-size: 3rem; font-weight: 700; margin: 0;">REABITECH</h1>
         <p style="font-size: 1.2rem; opacity: 0.8; margin: 10px 0;">Plataforma SaaS para reabilitação esportiva</p>
         <p style="font-size: 1rem; opacity: 0.7;">Gerencie clubes, equipes e atletas em um só lugar</p>
-    </div>
+ </div>
 
     <!-- PROJETOS PARCEIROS -->
     <h2 style="text-align: center; font-size: 2rem; font-weight: 600;">Projetos Parceiros</h2>
@@ -29,31 +29,31 @@
                 <div style="display: flex; justify-content: center; gap: 15px; font-size: 0.85rem; color: #888;">
                     <span><i class="fas fa-users"></i> {{ projeto.quantidade_atletas }} atletas</span>
                     <span><i class="fas fa-user-md"></i> {{ projeto.quantidade_profissionais }} profissionais</span>
-                </div>
+ </div>
                 <div style="margin-top: 15px; background: #2BA181; color: white; padding: 8px 20px; border-radius: 20px; display: inline-block; font-size: 0.85rem;">
                     <i class="fas fa-sign-in-alt"></i> Acessar
-                </div>
-            </div>
-        </a>
+ </div>
+ </div>
+ </a>
         {% empty %}
         <div style="text-align: center; color: #888; padding: 40px; background: #f9f9f9; border-radius: 20px; width: 100%;">
             <p style="font-size: 1.2rem;">Nenhum projeto parceiro ainda.</p>
             <p>Seja o primeiro! <a href="{% url 'nova_parceria' %}" style="color: #2BA181; font-weight: 600;">Fazer parceria</a></p>
-        </div>
+ </div>
         {% endfor %}
         
         <!-- Card para Nova Parceria -->
         <a href="{% url 'nova_parceria' %}" style="text-decoration: none; flex: 1; min-width: 250px; max-width: 300px;">
             <div style="background: white; border-radius: 20px; padding: 30px 25px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 2px dashed #2BA181; transition: all 0.3s ease; cursor: pointer; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-                <div style="font-size: 3rem; margin-bottom: 15px;">➕</div>
+                <div style="font-size: 3rem; margin-bottom: 15px;"></div>
                 <h4 style="color: #2BA181; margin: 0;">Nova Parceria</h4>
                 <p style="color: #888; font-size: 0.9rem; margin: 10px 0;">Crie um novo projeto parceiro</p>
                 <div style="margin-top: 15px; border: 2px solid #2BA181; color: #2BA181; padding: 8px 20px; border-radius: 20px; display: inline-block; font-size: 0.85rem; background: transparent;">
                     <i class="fas fa-handshake"></i> Solicitar
-                </div>
-            </div>
-        </a>
-    </div>
+ </div>
+ </div>
+ </a>
+ </div>
 
     <!-- PLANOS -->
     <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 40px;">
@@ -63,45 +63,45 @@
             {% for plano in planos %}
             <div style="flex: 1; min-width: 250px; max-width: 350px; background: white; border-radius: 20px; padding: 30px 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); text-align: center; border: 1px solid #eee; {% if plano.destaque %}border: 3px solid #2BA181;{% endif %}">
                 {% if plano.destaque %}
-                <div style="background: #2BA181; color: white; padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; display: inline-block; margin-bottom: 15px; font-weight: 600;">⭐ Mais Popular</div>
+                <div style="background: #2BA181; color: white; padding: 4px 14px; border-radius: 20px; font-size: 0.75rem; display: inline-block; margin-bottom: 15px; font-weight: 600;"> Mais Popular</div>
                 {% endif %}
                 <h4 style="font-size: 1.3rem; margin: 0;">{{ plano.get_nome_display }}</h4>
                 <div style="font-size: 2.5rem; font-weight: 700; color: #2BA181; margin: 10px 0;">
                     R$ {{ plano.valor_mensal|floatformat:2 }} <span style="font-size: 0.9rem; color: #999; font-weight: 400;">/mês</span>
-                </div>
+ </div>
                 <p style="color: #888; font-size: 0.9rem;">{{ plano.descricao }}</p>
                 <ul style="list-style: none; padding: 0; text-align: left; margin: 20px 0;">
                     <li style="padding: 8px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 10px;">
                         <i class="fas fa-check-circle" style="color:#2BA181;"></i> Até {{ plano.max_projetos }} projeto(s)
-                    </li>
+ </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 10px;">
                         <i class="fas fa-check-circle" style="color:#2BA181;"></i> Até {{ plano.max_atletas }} atletas
-                    </li>
+ </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 10px;">
                         <i class="fas fa-check-circle" style="color:#2BA181;"></i> Até {{ plano.max_profissionais }} profissionais
-                    </li>
+ </li>
                     {% if plano.tem_fisioterapia %}
                     <li style="padding: 8px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 10px;">
                         <i class="fas fa-check-circle" style="color:#2BA181;"></i> Módulo Fisioterapia
-                    </li>
+ </li>
                     {% endif %}
                     {% if plano.tem_psicologia %}
                     <li style="padding: 8px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 10px;">
                         <i class="fas fa-check-circle" style="color:#2BA181;"></i> Módulo Psicologia
-                    </li>
+ </li>
                     {% endif %}
-                </ul>
+ </ul>
                 <a href="{% url 'nova_parceria' %}?plano={{ plano.id }}" style="display: block; background: linear-gradient(135deg, #2BA181, #5A6461); color: white; padding: 12px; border-radius: 12px; text-decoration: none; font-weight: 600; text-align: center;">
                     <i class="fas fa-rocket"></i> Assinar
-                </a>
-            </div>
+ </a>
+ </div>
             {% endfor %}
-        </div>
-    </div>
+ </div>
+ </div>
 
     <!-- FOOTER -->
     <div style="text-align: center; padding: 30px; color: #999; font-size: 0.85rem; border-top: 1px solid #eee; margin-top: 40px;">
         &copy; {% now "Y" %} REABITECH - Soluções em Reabilitação Esportiva
-    </div>
+ </div>
 </div>
 {% endblock %}

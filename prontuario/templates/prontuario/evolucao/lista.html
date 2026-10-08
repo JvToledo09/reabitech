@@ -12,23 +12,23 @@
         <div class="page-header-eyebrow">
             <i class="fas fa-chart-line"></i>
             Evoluções
-        </div>
+ </div>
         <h1 class="page-header-title">
             Histórico de <span class="gradient-text">evoluções (SOAP).</span>
-        </h1>
+ </h1>
         <p class="page-header-subtitle">
             Registro detalhado de cada avaliação fisioterapêutica.
-        </p>
-    </div>
+ </p>
+ </div>
 
     <div style="display: flex; gap: 12px; margin-bottom: 24px; justify-content: space-between; flex-wrap: wrap;">
         <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" class="btn-outline-custom">
             <i class="fas fa-arrow-left"></i> Voltar
-        </a>
+ </a>
         <a href="{% url 'prontuario:criar_evolucao' prontuario.id %}" class="btn-primary-custom">
             <i class="fas fa-plus"></i> Nova evolução
-        </a>
-    </div>
+ </a>
+ </div>
 
     {% if evolucoes %}
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px;">
@@ -38,20 +38,20 @@
                 <div>
                     <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--text-primary);">
                         {{ e.data|date:"d/m/Y" }}
-                    </div>
+ </div>
                     <div style="font-size: 0.78rem; color: var(--text-tertiary);">{{ e.get_tipo_display }}</div>
-                </div>
+ </div>
                 {% if e.escala_dor is not None %}
                 <span class="badge-premium {% if e.escala_dor <= 3 %}green{% elif e.escala_dor <= 6 %}amber{% else %}red{% endif %}">
                     Dor {{ e.escala_dor }}/10
-                </span>
+ </span>
                 {% endif %}
-            </div>
+ </div>
 
             {% if e.avaliacao %}
             <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                 {{ e.avaliacao|truncatechars:120 }}
-            </p>
+ </p>
             {% endif %}
 
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; padding-top: 12px; border-top: 1px solid var(--border-color);">
@@ -61,10 +61,10 @@
                 {% elif e.paciente_estavel %}
                 <span class="badge-premium green" style="font-size: 0.65rem;">Estável</span>
                 {% endif %}
-            </div>
-        </a>
+ </div>
+ </a>
         {% endfor %}
-    </div>
+ </div>
     {% else %}
     <div class="card-premium">
         <div class="empty-state">
@@ -72,12 +72,12 @@
             <h3 class="empty-state-title">Nenhuma evolução registrada</h3>
             <p class="empty-state-desc">
                 Registre a evolução fisioterapêutica detalhada de cada atendimento (método SOAP).
-            </p>
+ </p>
             <a href="{% url 'prontuario:criar_evolucao' prontuario.id %}" class="btn-primary-custom">
                 <i class="fas fa-plus"></i> Registrar primeira evolução
-            </a>
-        </div>
-    </div>
+ </a>
+ </div>
+ </div>
     {% endif %}
 
 </div>

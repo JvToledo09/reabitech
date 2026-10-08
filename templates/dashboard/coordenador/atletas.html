@@ -8,13 +8,13 @@
     <div class="card-modern mt-4">
         <div class="card-header-custom">
             <i class="fas fa-list me-2"></i> Lista de Atletas
-        </div>
+ </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-custom mb-0">
                     <thead>
                         <tr><th>RM</th><th>Nome</th><th>Modalidade</th><th>Status</th></tr>
-                    </thead>
+ </thead>
                     <tbody>
                         {% for atleta in atletas %}
                         <tr>
@@ -22,14 +22,14 @@
                             <td>{{ atleta.usuario.get_full_name }}</td>
                             <td>{{ atleta.modalidade.nome|default:"-" }}</td>
                             <td><span class="badge-success">Ativo</span></td>
-                        </tr>
+ </tr>
                         {% empty %}
                         <tr><td colspan="4" class="text-center">Nenhum atleta cadastrado</td></tr>
                         {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </div>
 </div>
 {% endblock %}

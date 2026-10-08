@@ -11,30 +11,30 @@
     <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: linear-gradient(135deg, #0d6efd 0%, #084298 100%); color: white; border: none; position: relative; overflow: hidden;">
         <div style="position: absolute; top: -50px; right: -50px; font-size: 15rem; opacity: 0.08;">
             <i class="fas fa-futbol"></i>
-        </div>
+ </div>
         <div class="row align-items-center position-relative">
             <div class="col-md-8">
-               <h3 class="fw-bold mb-2">Olá, {{ user.get_full_name|default:user.username }}! ⚽</h3>
+               <h3 class="fw-bold mb-2">Olá, {{ user.get_full_name|default:user.username }}! </h3>
                 <p class="mb-2 opacity-75">Acompanhe o desempenho e recuperação dos seus atletas.</p>
                 <div class="d-flex gap-3 mt-3 flex-wrap">
                     <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
                         <i class="fas fa-users me-1"></i> {{ total_meus_atletas }} atletas
-                    </span>
+ </span>
                     <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
                         <i class="fas fa-heartbeat me-1"></i> {{ recuperacao_media }}% recuperação média
-                    </span>
+ </span>
                     <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
                         <i class="fas fa-chart-line me-1"></i> {{ desempenho_medio }} desempenho
-                    </span>
-                </div>
-            </div>
+ </span>
+ </div>
+ </div>
             <div class="col-md-4 text-md-end">
                 <a href="{% url 'dashboard:tecnico_atletas' %}" class="btn btn-light btn-lg shadow-sm">
                     <i class="fas fa-list me-2"></i> Ver Atletas
-                </a>
-            </div>
-        </div>
-    </div>
+ </a>
+ </div>
+ </div>
+ </div>
 
     <!-- Indicadores Principais -->
     <div class="row g-3 mb-4">
@@ -43,50 +43,50 @@
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #0d6efd, #084298);">
                         <i class="fas fa-users" style="font-size: 22px;"></i>
-                    </div>
+ </div>
                     <span class="badge bg-primary bg-opacity-10 text-primary">Total</span>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ total_meus_atletas }}</h2>
                 <p class="text-muted small mb-0">Meus Atletas</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card card-tilt p-3">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #dc3545, #bb2d3b);">
                         <i class="fas fa-user-injured" style="font-size: 22px;"></i>
-                    </div>
+ </div>
                     <span class="badge bg-danger bg-opacity-10 text-danger">Lesionados</span>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ meus_atletas_lesionados }}</h2>
                 <p class="text-muted small mb-0">Atletas em Recuperação</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card card-tilt p-3">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #28a745, #1e7e34);">
                         <i class="fas fa-check-circle" style="font-size: 22px;"></i>
-                    </div>
+ </div>
                     <span class="badge bg-success bg-opacity-10 text-success">Liberados</span>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ atletas_liberados }}</h2>
                 <p class="text-muted small mb-0">Atletas Liberados</p>
-            </div>
-        </div>
+ </div>
+ </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card card-tilt p-3">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #ffc107, #ffca2c);">
                         <i class="fas fa-chart-line" style="font-size: 22px;"></i>
-                    </div>
+ </div>
                     <span class="badge bg-warning bg-opacity-10 text-warning">Média</span>
-                </div>
+ </div>
                 <h2 class="fw-bold mt-3 mb-1">{{ desempenho_medio }}</h2>
                 <p class="text-muted small mb-0">Desempenho Médio</p>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Gráficos -->
 <div class="row g-4 mb-4">
@@ -95,25 +95,25 @@
             <h5 class="fw-bold mb-3"><i class="fas fa-chart-bar me-2 text-primary"></i>Desempenho por Atleta</h5>
             <div style="height: 300px;">
                 <canvas id="desempenhoAtletasChart"></canvas>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
     <div class="col-lg-5">
         <div class="card-modern p-4 card-tilt">
             <h5 class="fw-bold mb-3"><i class="fas fa-chart-pie me-2 text-info"></i>Status dos Atletas</h5>
             <div style="height: 300px;">
                 <canvas id="statusChart"></canvas>
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 </div>
 
-<!-- 🔥 NOVO GRÁFICO: Evolução do Grupo -->
+<!--  NOVO GRÁFICO: Evolução do Grupo -->
 <div class="card-modern p-4 mb-4 card-tilt">
     <h5 class="fw-bold mb-3"><i class="fas fa-chart-line me-2 text-success"></i>Evolução Média do Grupo</h5>
     <div style="height: 280px;">
         <canvas id="evolucaoGrupoChart"></canvas>
-    </div>
+ </div>
 </div>
 
     <!-- Top Atletas e Atenção -->
@@ -125,21 +125,21 @@
                 <div class="d-flex align-items-center p-3 mb-2 rounded-4" style="background: linear-gradient(135deg, #fffef0, #fff9db);">
                     <div class="bg-warning bg-opacity-20 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                         <strong class="text-warning">{{ forloop.counter }}º</strong>
-                    </div>
+ </div>
                     <div class="flex-grow-1">
                         <h6 class="fw-bold mb-0">{{ item.atleta.usuario.get_full_name|default:item.atleta.usuario.username }}</h6>
                         <small class="text-muted">{{ item.atleta.modalidade.nome|default:"-" }}</small>
-                    </div>
+ </div>
                     <div class="text-end">
                         <h5 class="fw-bold mb-0 text-success">{{ item.desempenho }}/10</h5>
                         <small class="text-muted">Desempenho</small>
-                    </div>
-                </div>
+ </div>
+ </div>
                 {% empty %}
                 <p class="text-muted text-center py-4">Nenhum atleta com dados suficientes.</p>
                 {% endfor %}
-            </div>
-        </div>
+ </div>
+ </div>
 
         <div class="col-lg-6">
             <div class="card-modern p-4 h-100">
@@ -148,25 +148,25 @@
                 <div class="d-flex align-items-center p-3 mb-2 rounded-4" style="background: linear-gradient(135deg, #fff5f5, #ffe0e0);">
                     <div class="bg-danger bg-opacity-20 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-user-injured text-danger"></i>
-                    </div>
+ </div>
                     <div class="flex-grow-1">
                         <h6 class="fw-bold mb-0">{{ item.atleta.usuario.get_full_name|default:item.atleta.usuario.username }}</h6>
                         <small class="text-muted">{{ item.total_lesoes }} lesão(ões) ativa(s)</small>
-                    </div>
+ </div>
                     <div class="text-end">
                         <h5 class="fw-bold mb-0 text-danger">{{ item.progresso }}%</h5>
                         <small class="text-muted">Recuperação</small>
-                    </div>
-                </div>
+ </div>
+ </div>
                 {% empty %}
                 <p class="text-muted text-center py-4">
                     <i class="fas fa-check-circle text-success me-2"></i>
-                    Todos os atletas estão liberados! 🎉
-                </p>
+                    Todos os atletas estão liberados! 
+ </p>
                 {% endfor %}
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
     <!-- Lista Detalhada dos Atletas -->
     <div class="card-modern p-4">
@@ -174,8 +174,8 @@
             <h5 class="fw-bold mb-0"><i class="fas fa-list me-2 text-primary"></i>Todos os Meus Atletas</h5>
             <a href="{% url 'dashboard:tecnico_atletas' %}" class="btn btn-sm btn-outline-custom">
                 Ver Completo <i class="fas fa-arrow-right ms-1"></i>
-            </a>
-        </div>
+ </a>
+ </div>
         <div class="row g-3">
             {% for item in atletas_detalhados %}
             <div class="col-xl-4 col-md-6">
@@ -183,46 +183,46 @@
                     <div class="d-flex align-items-center mb-3">
                         <div class="{% if item.status == 'lesionado' %}bg-danger{% else %}bg-success{% endif %} bg-opacity-10 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
                             <i class="fas fa-user {% if item.status == 'lesionado' %}text-danger{% else %}text-success{% endif %}"></i>
-                        </div>
+ </div>
                         <div class="flex-grow-1">
                             <h6 class="fw-bold mb-0">{{ item.atleta.usuario.get_full_name|default:item.atleta.usuario.username }}</h6>
                             <small class="text-muted">{{ item.atleta.modalidade.nome|default:"-" }}</small>
-                        </div>
+ </div>
                         {% if item.status == 'lesionado' %}
                         <span class="badge bg-danger bg-opacity-10 text-danger">Lesionado</span>
                         {% else %}
                         <span class="badge bg-success bg-opacity-10 text-success">Liberado</span>
                         {% endif %}
-                    </div>
+ </div>
 
                     <a href="{% url 'dashboard:tecnico_detalhes_atleta' item.atleta.id %}" class="btn btn-sm btn-primary-custom w-100 mb-3">
                         <i class="fas fa-eye me-1"></i> Ver Detalhes do Atleta
-                    </a>
+ </a>
 
                     <div class="d-flex justify-content-between small mb-2">
                         <span class="text-muted">Desempenho</span>
                         <strong>{{ item.desempenho }}/10</strong>
-                    </div>
+ </div>
                     <div class="progress mb-3" style="height: 6px; border-radius: 10px;">
                         <div class="progress-bar bg-primary" style="width: {% widthratio item.desempenho 10 100 %}%"></div>
-                    </div>
+ </div>
 
                     <div class="d-flex justify-content-between small mb-1">
                         <span class="text-muted">Recuperação</span>
                         <strong class="text-success">{{ item.progresso }}%</strong>
-                    </div>
+ </div>
                     <div class="progress" style="height: 6px; border-radius: 10px;">
                         <div class="progress-bar bg-success" style="width: {{ item.progresso }}%"></div>
-                    </div>
-                </div>
-            </div>
+ </div>
+ </div>
+ </div>
             {% empty %}
             <div class="col-12 text-center py-4">
                 <p class="text-muted">Nenhum atleta vinculado a você ainda.</p>
-            </div>
+ </div>
             {% endfor %}
-        </div>
-    </div>
+ </div>
+ </div>
 
 </div>
 
@@ -304,7 +304,7 @@
             }]
         });
 
-        // 🔥 NOVO GRÁFICO: Evolução Média do Grupo
+        //  NOVO GRÁFICO: Evolução Média do Grupo
         const ctx3 = document.getElementById('evolucaoGrupoChart').getContext('2d');
         new Chart(ctx3, {
             type: 'line',
