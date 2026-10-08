@@ -248,7 +248,7 @@
 
 /* Ponto pulsante pra badges de notificacao */
 .position-absolute.badge.bg-danger {
-    animation: none !important;
+    animation: pulse-badge 2s ease-in-out infinite;
 }
 
 @keyframes pulse-badge {

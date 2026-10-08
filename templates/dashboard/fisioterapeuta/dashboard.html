@@ -354,7 +354,22 @@
         border-radius: 18px;
         padding: 24px;
         margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
     }
+
+    /* Borda animada 3D no topo */
+    .fisio-section::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #34d399, #2BA181, transparent);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .fisio-section:hover::before { opacity: 1; }
 
     .fisio-section-head {
         display: flex;
@@ -680,7 +695,7 @@
     <!-- STATS -->
     <div class="row g-3 mb-4">
         <div class="col-xl-3 col-md-6">
-            <div class="fisio-stat">
+            <div class="fisio-stat fx-3d">
                 <div class="fisio-stat-top">
                     <div class="fisio-stat-icon"><i class="fas fa-user-injured"></i></div>
                     <span class="fisio-stat-badge neutral">Ativos</span>
@@ -691,7 +706,7 @@
         </div>
 
         <div class="col-xl-3 col-md-6">
-            <div class="fisio-stat">
+            <div class="fisio-stat fx-3d">
                 <div class="fisio-stat-top">
                     <div class="fisio-stat-icon"><i class="fas fa-notes-medical"></i></div>
                     <span class="fisio-stat-badge warn">Em curso</span>
@@ -702,7 +717,7 @@
         </div>
 
         <div class="col-xl-3 col-md-6">
-            <div class="fisio-stat">
+            <div class="fisio-stat fx-3d">
                 <div class="fisio-stat-top">
                     <div class="fisio-stat-icon"><i class="fas fa-chart-line"></i></div>
                     <span class="fisio-stat-badge info">Hoje</span>
@@ -713,7 +728,7 @@
         </div>
 
         <div class="col-xl-3 col-md-6">
-            <div class="fisio-stat">
+            <div class="fisio-stat fx-3d">
                 <div class="fisio-stat-top">
                     <div class="fisio-stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
                     <span class="fisio-stat-badge danger">Aten&ccedil;&atilde;o</span>
@@ -725,7 +740,7 @@
     </div>
 
     <!-- ACOES RAPIDAS -->
-    <div class="fisio-section">
+    <div class="fisio-section fx-3d">
         <div class="fisio-section-head">
             <h5 class="fisio-section-title">
                 <i class="fas fa-bolt"></i>
@@ -734,7 +749,7 @@
         </div>
 
         <div class="fisio-actions">
-            <a href="{% url 'dashboard:fisioterapeuta_todos_atletas' %}" class="fisio-action">
+            <a href="{% url 'dashboard:fisioterapeuta_todos_atletas' %}" class="fisio-action fx-3d">
                 <div class="fisio-action-icon"><i class="fas fa-user-injured"></i></div>
                 <div class="fisio-action-text">
                     <p class="fisio-action-title">Registrar Les&atilde;o</p>
@@ -743,7 +758,7 @@
                 <i class="fas fa-arrow-right fisio-action-arrow"></i>
             </a>
 
-            <a href="{% url 'dashboard:fisioterapeuta_tratamentos' %}" class="fisio-action">
+            <a href="{% url 'dashboard:fisioterapeuta_tratamentos' %}" class="fisio-action fx-3d">
                 <div class="fisio-action-icon"><i class="fas fa-notes-medical"></i></div>
                 <div class="fisio-action-text">
                     <p class="fisio-action-title">Tratamentos</p>
@@ -752,7 +767,7 @@
                 <i class="fas fa-arrow-right fisio-action-arrow"></i>
             </a>
 
-            <a href="{% url 'dashboard:fisioterapeuta_evolucoes' %}" class="fisio-action">
+            <a href="{% url 'dashboard:fisioterapeuta_evolucoes' %}" class="fisio-action fx-3d">
                 <div class="fisio-action-icon"><i class="fas fa-chart-line"></i></div>
                 <div class="fisio-action-text">
                     <p class="fisio-action-title">Evolu&ccedil;&otilde;es</p>
@@ -761,7 +776,7 @@
                 <i class="fas fa-arrow-right fisio-action-arrow"></i>
             </a>
 
-            <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="fisio-action">
+            <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="fisio-action fx-3d">
                 <div class="fisio-action-icon"><i class="fas fa-users"></i></div>
                 <div class="fisio-action-text">
                     <p class="fisio-action-title">Pacientes</p>
@@ -774,7 +789,7 @@
 
     <!-- PRONTUARIOS RECENTES -->
     {% if ultimos_prontuarios %}
-    <div class="fisio-section">
+    <div class="fisio-section fx-3d">
         <div class="fisio-section-head">
             <h5 class="fisio-section-title">
                 <i class="fas fa-folder-medical"></i>
@@ -788,7 +803,7 @@
 
         <div class="fisio-pront-grid">
             {% for p in ultimos_prontuarios %}
-            <a href="{% url 'prontuario:dashboard_prontuario' p.id %}" class="fisio-pront">
+            <a href="{% url 'prontuario:dashboard_prontuario' p.id %}" class="fisio-pront fx-3d">
                 <div class="fisio-pront-avatar">
                     {{ p.atleta.usuario.get_full_name|default:p.atleta.usuario.username|first|upper }}
                 </div>
@@ -806,7 +821,7 @@
     {% endif %}
 
     <!-- ATLETAS EM RECUPERACAO -->
-    <div class="fisio-section">
+    <div class="fisio-section fx-3d">
         <div class="fisio-section-head">
             <h5 class="fisio-section-title">
                 <i class="fas fa-user-injured"></i>
@@ -821,7 +836,7 @@
         <div class="row g-3">
             {% for atleta in atletas_em_atendimento %}
             <div class="col-xl-4 col-md-6">
-                <div class="fisio-atleta">
+                <div class="fisio-atleta fx-3d">
                     <div class="fisio-atleta-head">
                         <div class="fisio-atleta-id">
                             <div class="fisio-atleta-avatar">

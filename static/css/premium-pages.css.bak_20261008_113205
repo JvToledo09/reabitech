@@ -122,7 +122,7 @@ body {
 }
 
 .stat-card:hover {
-    transform: translateY(-3px) !important;
+    transform: translateY(-6px) !important;
     border-color: rgba(52, 211, 153, 0.3) !important;
     box-shadow:
         0 24px 60px rgba(10, 31, 24, 0.12),

@@ -1358,466 +1358,6 @@
             }
         }
 
-
-        /* ================================================================
-           FIX FINAL — dropdown, tilt suave, sem batimento, mobile
-           ================================================================ */
-
-        /* ---------- 1. Navbar: remove stacking context e fica opaco ---------- */
-        .top-navbar {
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            filter: none !important;
-            transform: none !important;
-            perspective: none !important;
-            will-change: auto !important;
-            overflow: visible !important;
-            z-index: 1050 !important;
-            background: var(--bg-elevated, #ffffff) !important;
-            position: relative !important;
-        }
-
-        .main-content {
-            overflow: visible !important;
-            transform: none !important;
-            filter: none !important;
-        }
-
-        /* ---------- 2. Dropdown: sempre acima, opaco, sem corte ---------- */
-        .top-navbar .dropdown {
-            position: relative;
-        }
-
-        .top-navbar .dropdown-menu {
-            position: absolute !important;
-            z-index: 99999 !important;
-            top: calc(100% + 10px) !important;
-            right: 0 !important;
-            left: auto !important;
-            margin: 0 !important;
-            background: var(--bg-elevated, #ffffff) !important;
-            border: 1px solid var(--border-color, #e5e7eb) !important;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(52, 211, 153, 0.06) !important;
-            border-radius: 16px !important;
-            overflow: hidden !important;
-            min-width: 320px;
-            padding: 0 !important;
-        }
-
-        .top-navbar .dropdown-menu.show {
-            display: block !important;
-            animation: dropInSafe 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes dropInSafe {
-            from { opacity: 0; transform: translateY(-6px) scale(0.98); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .top-navbar .dropdown-menu,
-        .top-navbar .dropdown-menu * { color: var(--text-primary, #1f2937); }
-
-        .top-navbar .dropdown-menu .dropdown-item {
-            color: var(--text-primary, #1f2937) !important;
-        }
-        .top-navbar .dropdown-menu .dropdown-item:hover,
-        .top-navbar .dropdown-menu .dropdown-item:focus {
-            background: rgba(52, 211, 153, 0.08) !important;
-            color: var(--text-primary, #1f2937) !important;
-        }
-        .top-navbar .dropdown-menu .text-muted,
-        .top-navbar .dropdown-menu small,
-        .top-navbar .dropdown-menu .small {
-            color: var(--text-tertiary, #6b7280) !important;
-        }
-
-        /* ---------- 3. SEM batimento/pulse nos cards ---------- */
-        .dash-stat, .dash-section, .dash-action, .dash-cta,
-        .fisio-stat, .fisio-section, .fisio-action,
-        .coord-stat, .coord-section, .coord-action,
-        .stat-card, .card-modern,
-        .dash-stat *, .dash-section *, .dash-action *,
-        .fisio-stat *, .fisio-section *, .fisio-action *,
-        .coord-stat *, .coord-section *, .coord-action *,
-        [class*="pulse"], [class*="Pulse"],
-        [class*="live-pulse"], [class*="status-dot"] {
-            animation: none !important;
-            animation-duration: 0s !important;
-            animation-iteration-count: 1 !important;
-        }
-
-        /* Remove a linha animada do topo dos cards */
-        .dash-stat::before,
-        .fisio-stat::before,
-        .coord-stat::before,
-        .stat-card::before {
-            display: none !important;
-        }
-
-        /* Remove linha animada de hover das seções */
-        .dash-section::before,
-        .fisio-section::before,
-        .coord-section::before {
-            display: none !important;
-        }
-
-        /* Hover dos cards: APENAS sombra + borda (sem rotação/scale) */
-        .dash-stat:hover,
-        .fisio-stat:hover,
-        .coord-stat:hover,
-        .stat-card:hover {
-            transform: translateY(-2px) !important;
-        }
-
-        .dash-stat:hover .dash-stat-icon,
-        .fisio-stat:hover .fisio-stat-icon,
-        .coord-stat:hover .coord-stat-icon {
-            transform: none !important;
-        }
-
-        /* ---------- 4. Sidebar: remove pulse do dot do projeto ---------- */
-        .sidebar *,
-        .sidebar *::before,
-        .sidebar *::after {
-            animation-duration: 0s !important;
-            animation-iteration-count: 1 !important;
-        }
-
-        /* ---------- 5. MOBILE — todas as telas ---------- */
-        @media (max-width: 1200px) {
-            .dash-actions, .fisio-actions, .coord-actions {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .top-navbar {
-                padding: 12px 14px !important;
-                border-radius: 14px;
-                gap: 10px;
-            }
-
-            .top-navbar .d-flex.align-items-center.gap-3 {
-                width: 100%;
-                justify-content: space-between;
-                gap: 10px !important;
-            }
-
-            /* Dropdown full-width no mobile */
-            .top-navbar .dropdown-menu,
-            .top-navbar .dropdown-menu.show {
-                position: fixed !important;
-                left: 12px !important;
-                right: 12px !important;
-                top: auto !important;
-                bottom: auto !important;
-                width: auto !important;
-                min-width: 0 !important;
-                max-width: none !important;
-            }
-
-            .top-navbar .btn-outline-custom {
-                padding: 10px 12px !important;
-            }
-            .top-navbar .btn-outline-custom span {
-                display: none;
-            }
-
-            .page-title h2 { font-size: 1.05rem !important; }
-            .page-title p { display: none; }
-
-            .dash-hero, .fisio-hero, .coord-hero {
-                padding: 24px 20px !important;
-                border-radius: 16px !important;
-            }
-            .dash-hero h3, .fisio-hero h3, .coord-hero h3 {
-                font-size: 1.4rem !important;
-            }
-
-            .dash-section, .fisio-section, .coord-section {
-                padding: 18px !important;
-                border-radius: 14px !important;
-            }
-
-            .dash-stat, .fisio-stat, .coord-stat {
-                padding: 18px !important;
-            }
-
-            .dash-stat-number, .fisio-stat-number, .coord-stat-number {
-                font-size: 1.8rem !important;
-            }
-
-            .dash-chart, .fisio-chart, .coord-chart {
-                height: 240px !important;
-            }
-            .dash-chart-sm, .fisio-chart-sm, .coord-chart-sm {
-                height: 210px !important;
-            }
-            .dash-chart-lg {
-                height: 260px !important;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .main-content { padding: 12px !important; }
-
-            .top-navbar {
-                padding: 10px 12px !important;
-                border-radius: 12px;
-                margin-bottom: 14px;
-            }
-            .top-navbar .toggle-btn-integrated {
-                width: 38px;
-                height: 38px;
-                font-size: 0.95rem;
-            }
-            .page-title h2 { font-size: 0.95rem !important; }
-            .page-title { gap: 10px; }
-
-            .dash-hero, .fisio-hero, .coord-hero {
-                padding: 20px 16px !important;
-            }
-            .dash-hero h3, .fisio-hero h3, .coord-hero h3 {
-                font-size: 1.2rem !important;
-            }
-            .dash-hero-pills, .fisio-hero-pills, .coord-hero-pills {
-                gap: 6px !important;
-            }
-            .dash-pill, .fisio-pill, .coord-pill {
-                font-size: 0.72rem !important;
-                padding: 6px 10px !important;
-            }
-            .btn-dash-cta, .btn-hero-cta {
-                width: 100%;
-                justify-content: center;
-                padding: 13px 20px !important;
-            }
-
-            .dash-section, .fisio-section, .coord-section {
-                padding: 14px !important;
-                border-radius: 12px !important;
-            }
-            .dash-stat, .fisio-stat, .coord-stat {
-                padding: 16px !important;
-            }
-            .dash-stat-number, .fisio-stat-number, .coord-stat-number {
-                font-size: 1.6rem !important;
-            }
-            .dash-stat-icon, .fisio-stat-icon, .coord-stat-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 0.95rem;
-            }
-
-            .dash-actions, .fisio-actions, .coord-actions {
-                grid-template-columns: 1fr !important;
-                gap: 10px !important;
-            }
-            .dash-action, .fisio-action, .coord-action {
-                min-height: 68px !important;
-                padding: 14px !important;
-            }
-            .dash-action-icon, .fisio-action-icon, .coord-action-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 0.9rem;
-            }
-
-            .dash-chart, .fisio-chart, .coord-chart {
-                height: 220px !important;
-            }
-            .dash-chart-sm, .fisio-chart-sm, .coord-chart-sm {
-                height: 190px !important;
-            }
-            .dash-chart-lg {
-                height: 230px !important;
-            }
-        }
-
-
-        /* ================================================================
-           KILL SWITCH — mata ECG/batimento/pulse em QUALQUER card
-           (esse override é temporário até atacar a fonte no CSS original)
-           ================================================================ */
-
-        /* 1. Mata QUALQUER animação em pseudo-elementos de cards/seções */
-        .main-content [class*="card"]::before,
-        .main-content [class*="card"]::after,
-        .main-content [class*="stat"]::before,
-        .main-content [class*="stat"]::after,
-        .main-content [class*="section"]::before,
-        .main-content [class*="section"]::after,
-        .main-content [class*="atleta"]::before,
-        .main-content [class*="atleta"]::after,
-        .main-content [class*="pront"]::before,
-        .main-content [class*="pront"]::after,
-        .main-content [class*="member"]::before,
-        .main-content [class*="member"]::after,
-        .main-content [class*="patient"]::before,
-        .main-content [class*="patient"]::after,
-        .main-content [class*="recovery"]::before,
-        .main-content [class*="recovery"]::after {
-            animation: none !important;
-            animation-duration: 0s !important;
-            animation-iteration-count: 1 !important;
-            animation-play-state: paused !important;
-        }
-
-        /* 2. Se o ECG é um <svg>/<path> decorativo dentro de cards */
-        .main-content [class*="card"] svg,
-        .main-content [class*="stat"] svg,
-        .main-content [class*="section"] svg,
-        .main-content [class*="atleta"] svg,
-        .main-content [class*="pront"] svg {
-            animation: none !important;
-        }
-
-        .main-content [class*="card"] svg path,
-        .main-content [class*="card"] svg polyline,
-        .main-content [class*="card"] svg line,
-        .main-content [class*="stat"] svg path,
-        .main-content [class*="stat"] svg polyline,
-        .main-content [class*="stat"] svg line,
-        .main-content [class*="section"] svg path,
-        .main-content [class*="section"] svg polyline,
-        .main-content [class*="section"] svg line {
-            animation: none !important;
-            stroke-dasharray: none !important;
-            stroke-dashoffset: 0 !important;
-        }
-
-        /* 3. Classes suspeitas por nome */
-        .main-content [class*="ecg"],
-        .main-content [class*="ECG"],
-        .main-content [class*="heartbeat"],
-        .main-content [class*="heart-beat"],
-        .main-content [class*="beat"],
-        .main-content [class*="Beat"],
-        .main-content [class*="pulse"],
-        .main-content [class*="Pulse"],
-        .main-content [class*="live-"],
-        .main-content [class*="Live"],
-        .main-content [class*="wave"],
-        .main-content [class*="Wave"],
-        .main-content [class*="ripple"],
-        .main-content [class*="breath"],
-        .main-content [class*="flash"] {
-            animation: none !important;
-            animation-duration: 0s !important;
-            animation-iteration-count: 1 !important;
-            animation-play-state: paused !important;
-        }
-
-        /* 4. Mata @keyframes de ECG/batimento por nome (se estiverem definidos localmente) */
-        @keyframes ecg { from { transform: none; } to { transform: none; } }
-        @keyframes heartbeat { from { transform: none; } to { transform: none; } }
-        @keyframes heartbeat-line { from { transform: none; } to { transform: none; } }
-        @keyframes pulse { from { opacity: 1; } to { opacity: 1; } }
-        @keyframes pulse-dot { from { transform: none; } to { transform: none; } }
-        @keyframes live-pulse { from { transform: none; } to { transform: none; } }
-
-        /* 5. Garantia: qualquer elemento que tenha linha ondulada e esteja piscando */
-        .main-content *[style*="animation"] {
-            animation: none !important;
-        }
-
-
-        /* ================================================================
-           KILL SWITCH FINAL — mata qualquer ECG/batimento/pulse decorativo
-           ================================================================ */
-        .card-ecg::after,
-        .card-ecg:hover::after,
-        .card-ecg::before,
-        .card-ecg:hover::before {
-            display: none !important;
-            content: none !important;
-            background-image: none !important;
-            animation: none !important;
-            opacity: 0 !important;
-        }
-
-        .pulse-breathe,
-        .breathing-indicator,
-        .breathing-indicator::before,
-        .breathing-indicator::after,
-        .pulse-dot,
-        .anim-pulse-glow,
-        .badge-premium.pulse,
-        .badge-ping::before,
-        .sidebar-item.active::after,
-        .sidebar-user .avatar::after,
-        /* Escopo: só mata dentro do .main-content (dashboards). Login fica livre. */
-        .main-content [class*="pulse"],
-        .main-content [class*="Pulse"],
-        .main-content [class*="ecg"],
-        .main-content [class*="ECG"],
-        .main-content [class*="heartbeat"],
-        .main-content [class*="breathe"],
-        .main-content [class*="Breath"] {
-            animation: none !important;
-        }
-
-        .sidebar-item.active::after,
-        .sidebar > div[style*="padding: 0 12px 16px"] > div::before,
-        .sidebar-user .avatar::after {
-            display: none !important;
-        }
-
-        /* Hover dos cards: levantar suave, sem 3D exagerado */
-        .stat-card:hover,
-        .card-modern:hover {
-            transform: translateY(-3px) !important;
-        }
-
-        .stat-card:hover .stat-icon,
-        .card-modern:hover .stat-icon,
-        .card-premium:hover .icon-wrapper {
-            transform: translateY(-2px) scale(1.04) !important;
-        }
-
-
-        /* ================================================================
-           SIDEBAR TOGGLE — desktop colapsa e main expande, mobile desliza
-           ================================================================ */
-
-        @media (min-width: 993px) {
-            /* No desktop o toggle usa body.sidebar-collapsed */
-            .sidebar {
-                left: 0 !important;
-                transform: translateX(0);
-                transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            }
-
-            body.sidebar-collapsed .sidebar {
-                transform: translateX(-100%) !important;
-            }
-
-            .main-content:not(.no-sidebar) {
-                transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            body.sidebar-collapsed .main-content:not(.no-sidebar) {
-                margin-left: 0 !important;
-            }
-
-            /* Overlay NUNCA aparece no desktop */
-            .sidebar-overlay,
-            .sidebar-overlay.active {
-                display: none !important;
-            }
-
-            /* .active do mobile não afeta o desktop */
-            .sidebar.active {
-                left: 0 !important;
-                transform: translateX(0);
-            }
-        }
-
-        /* Mobile: reset do estado collapsed caso venha do desktop */
-        @media (max-width: 992px) {
-            body.sidebar-collapsed .sidebar { transform: none !important; }
-        }
-
  </style>
 
     {% block extra_css %}{% endblock %}
@@ -1881,7 +1421,7 @@
         <a href="{% url 'dashboard:coordenador_psicologia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_psicologia' %}active{% endif %}"><i class="fas fa-brain"></i><span>Psicologia</span></a>
         <a href="{% url 'dashboard:coordenador_relatorios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_relatorios' %}active{% endif %}"><i class="fas fa-chart-line"></i><span>Relatórios</span></a>
         <a href="{% url 'dashboard:coordenador_membros' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_membros' %}active{% endif %}"><i class="fas fa-user-plus"></i><span>Membros</span></a>
-        <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-folder-open"></i><span>Prontuários</span></a>
+        <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-folder-medical"></i><span>Prontuários</span></a>
         <a href="{% url 'prontuario:timeline_global' %}" class="sidebar-item {% if 'timeline' in request.path %}active{% endif %}"><i class="fas fa-stream"></i><span>Timeline</span></a>
         <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
         <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="fas fa-chart-pie"></i><span>Analytics</span></a>
@@ -1896,6 +1436,8 @@
         <a href="{% url 'dashboard:tecnico_desempenho' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_desempenho' %}active{% endif %}"><i class="fas fa-chart-simple"></i><span>Desempenho</span></a>
         <a href="{% url 'dashboard:tecnico_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_recuperacao' %}active{% endif %}"><i class="fas fa-heartbeat"></i><span>Recuperação</span></a>
         <a href="{% url 'prontuario:tecnico_prontuarios_compartilhados' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-share-nodes"></i><span>Compartilhados</span></a>
+        <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
+        <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="fas fa-chart-pie"></i><span>Analytics</span></a>
         <a href="{% url 'mensageria:lista_conversas' %}" class="sidebar-item {% if 'mensageria' in request.path %}active{% endif %}">
             <i class="fas fa-comments"></i><span>Mensagens</span>
             <span class="badge-msg-sidebar" id="badgeMensagensSidebar" {% if not total_mensagens_nao_lidas %}style="display:none;"{% endif %}>{% if total_mensagens_nao_lidas %}{{ total_mensagens_nao_lidas }}{% endif %}</span>
@@ -1914,7 +1456,7 @@
         <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_atletas' %}active{% endif %}"><i class="fas fa-user-injured"></i><span>Pacientes</span></a>
         <a href="{% url 'dashboard:fisioterapeuta_tratamentos' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_tratamentos' %}active{% endif %}"><i class="fas fa-notes-medical"></i><span>Tratamentos</span></a>
         <a href="{% url 'dashboard:fisioterapeuta_evolucoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_evolucoes' %}active{% endif %}"><i class="fas fa-chart-line"></i><span>Evoluções</span></a>
-        <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-folder-open"></i><span>Prontuários</span></a>
+        <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-folder-medical"></i><span>Prontuários</span></a>
         <a href="{% url 'prontuario:timeline_global' %}" class="sidebar-item {% if 'timeline' in request.path %}active{% endif %}"><i class="fas fa-stream"></i><span>Timeline</span></a>
         <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
         <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="fas fa-chart-pie"></i><span>Analytics</span></a>
@@ -1974,7 +1516,7 @@
 
                 <!-- Notificações -->
                 <div class="dropdown">
-                    <button class="btn btn-outline-custom position-relative dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-outline-custom position-relative dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static">
                         <i class="fas fa-bell"></i>
                         {% if total_notificacoes > 0 %}
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">
@@ -2020,7 +1562,7 @@
 
                 <!-- Perfil -->
                 <div class="dropdown">
-                    <button class="btn btn-outline-custom dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-outline-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static">
                         <i class="fas fa-user-circle"></i>
                         <span>{{ user.get_short_name|default:user.username|truncatechars:15 }}</span>
  </button>
@@ -2078,19 +1620,9 @@
         const desktopToggleBtn = document.getElementById('desktopToggleBtn');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-        function isDesktop() {
-            return window.innerWidth > 992;
-        }
-
         function toggleSidebar() {
-            if (isDesktop()) {
-                // Desktop: colapsa via body class, ajusta main-content
-                document.body.classList.toggle('sidebar-collapsed');
-            } else {
-                // Mobile: desliza + overlay
-                if (sidebar) sidebar.classList.toggle('active');
-                if (sidebarOverlay) sidebarOverlay.classList.toggle('active');
-            }
+            if (sidebar) sidebar.classList.toggle('active');
+            if (sidebarOverlay) sidebarOverlay.classList.toggle('active');
         }
 
         function closeSidebar() {
@@ -2109,13 +1641,7 @@
         });
 
         window.addEventListener('resize', function() {
-            if (window.innerWidth > 992) {
-                // Voltando pro desktop: fecha overlay mobile, limpa .active
-                closeSidebar();
-            } else {
-                // Indo pro mobile: garante que o body nao ta "collapsed"
-                document.body.classList.remove('sidebar-collapsed');
-            }
+            if (window.innerWidth > 992) closeSidebar();
         });
 
         // ============================================
@@ -2310,8 +1836,8 @@
                 el.style.setProperty('--my', yPct + '%');
 
                 // tilt sutil (rotação máx ~2.5 graus)
-                const rx = ((yPct - 50) / 50) * -0.8;
-                const ry = ((xPct - 50) / 50) * 0.8;
+                const rx = ((yPct - 50) / 50) * -2.5;
+                const ry = ((xPct - 50) / 50) * 2.5;
 
                 el.style.transform =
                     `perspective(900px) translateY(-6px) scale(1.008) rotateX(${rx}deg) rotateY(${ry}deg)`;
@@ -2338,9 +1864,9 @@
                 const yPct = ((e.clientY - rect.top) / rect.height) * 100;
                 el.style.setProperty('--mx', xPct + '%');
                 el.style.setProperty('--my', yPct + '%');
-                const rx = ((yPct - 50) / 50) * -0.8;
-                const ry = ((xPct - 50) / 50) * 0.8;
-                el.style.transform = `perspective(1600px) translateY(-2px) scale(1.002) rotateX(${rx}deg) rotateY(${ry}deg)`;
+                const rx = ((yPct - 50) / 50) * -2.5;
+                const ry = ((xPct - 50) / 50) * 2.5;
+                el.style.transform = `perspective(900px) translateY(-5px) scale(1.006) rotateX(${rx}deg) rotateY(${ry}deg)`;
             });
             el.addEventListener('mouseleave', () => {
                 el.style.transform = '';

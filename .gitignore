@@ -54,3 +54,7 @@ htmlcov/
 *.bak
 conftest.py.bak
 settings.py.bak
+
+# Snapshot pessoal (não versionar)
+snapshot_reabitech.txt
+

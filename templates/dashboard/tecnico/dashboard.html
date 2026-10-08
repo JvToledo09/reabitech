@@ -7,231 +7,331 @@
 {% block content %}
 <div class="container-fluid p-0">
 
-    <!-- Hero / Saudação -->
-    <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: linear-gradient(135deg, #0d6efd 0%, #084298 100%); color: white; border: none; position: relative; overflow: hidden;">
-        <div style="position: absolute; top: -50px; right: -50px; font-size: 15rem; opacity: 0.08;">
-            <i class="fas fa-futbol"></i>
- </div>
-        <div class="row align-items-center position-relative">
-            <div class="col-md-8">
-               <h3 class="fw-bold mb-2">Olá, {{ user.get_full_name|default:user.username }}! </h3>
-                <p class="mb-2 opacity-75">Acompanhe o desempenho e recuperação dos seus atletas.</p>
-                <div class="d-flex gap-3 mt-3 flex-wrap">
-                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
-                        <i class="fas fa-users me-1"></i> {{ total_meus_atletas }} atletas
- </span>
-                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
-                        <i class="fas fa-heartbeat me-1"></i> {{ recuperacao_media }}% recuperação média
- </span>
-                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
-                        <i class="fas fa-chart-line me-1"></i> {{ desempenho_medio }} desempenho
- </span>
- </div>
- </div>
-            <div class="col-md-4 text-md-end">
-                <a href="{% url 'dashboard:tecnico_atletas' %}" class="btn btn-light btn-lg shadow-sm">
-                    <i class="fas fa-list me-2"></i> Ver Atletas
- </a>
- </div>
- </div>
- </div>
+    <!-- HERO -->
+    <div class="dash-hero">
+        <div class="dash-hero-inner">
+            <div>
+                <div class="dash-hero-eyebrow">Painel do Técnico</div>
+                <h3>Ol&aacute;, {{ user.get_full_name|default:user.username }}</h3>
+                <p>Acompanhe o desempenho e a recupera&ccedil;&atilde;o dos seus atletas em tempo real.</p>
+                <div class="dash-hero-pills">
+                    <span class="dash-pill">
+                        <i class="fas fa-users"></i>
+                        {{ total_meus_atletas }} atletas
+                    </span>
+                    <span class="dash-pill">
+                        <i class="fas fa-heartbeat"></i>
+                        {{ recuperacao_media }}% recupera&ccedil;&atilde;o m&eacute;dia
+                    </span>
+                    <span class="dash-pill">
+                        <i class="fas fa-chart-line"></i>
+                        {{ desempenho_medio }} desempenho
+                    </span>
+                </div>
+            </div>
+            <a href="{% url 'dashboard:tecnico_atletas' %}" class="btn-dash-cta">
+                <i class="fas fa-list"></i>
+                Ver Atletas
+            </a>
+        </div>
+    </div>
 
-    <!-- Indicadores Principais -->
+    <!-- STATS -->
     <div class="row g-3 mb-4">
         <div class="col-xl-3 col-md-6">
-            <div class="stat-card card-tilt p-3">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #0d6efd, #084298);">
-                        <i class="fas fa-users" style="font-size: 22px;"></i>
- </div>
-                    <span class="badge bg-primary bg-opacity-10 text-primary">Total</span>
- </div>
-                <h2 class="fw-bold mt-3 mb-1">{{ total_meus_atletas }}</h2>
-                <p class="text-muted small mb-0">Meus Atletas</p>
- </div>
- </div>
+            <div class="dash-stat fx-3d">
+                <div class="dash-stat-top">
+                    <div class="dash-stat-icon"><i class="fas fa-users"></i></div>
+                    <span class="dash-stat-badge neutral">Total</span>
+                </div>
+                <h2 class="dash-stat-number">{{ total_meus_atletas }}</h2>
+                <p class="dash-stat-label">Meus atletas</p>
+            </div>
+        </div>
         <div class="col-xl-3 col-md-6">
-            <div class="stat-card card-tilt p-3">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #dc3545, #bb2d3b);">
-                        <i class="fas fa-user-injured" style="font-size: 22px;"></i>
- </div>
-                    <span class="badge bg-danger bg-opacity-10 text-danger">Lesionados</span>
- </div>
-                <h2 class="fw-bold mt-3 mb-1">{{ meus_atletas_lesionados }}</h2>
-                <p class="text-muted small mb-0">Atletas em Recuperação</p>
- </div>
- </div>
+            <div class="dash-stat fx-3d">
+                <div class="dash-stat-top">
+                    <div class="dash-stat-icon"><i class="fas fa-user-injured"></i></div>
+                    <span class="dash-stat-badge danger">Lesionados</span>
+                </div>
+                <h2 class="dash-stat-number">{{ meus_atletas_lesionados }}</h2>
+                <p class="dash-stat-label">Em recupera&ccedil;&atilde;o</p>
+            </div>
+        </div>
         <div class="col-xl-3 col-md-6">
-            <div class="stat-card card-tilt p-3">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #28a745, #1e7e34);">
-                        <i class="fas fa-check-circle" style="font-size: 22px;"></i>
- </div>
-                    <span class="badge bg-success bg-opacity-10 text-success">Liberados</span>
- </div>
-                <h2 class="fw-bold mt-3 mb-1">{{ atletas_liberados }}</h2>
-                <p class="text-muted small mb-0">Atletas Liberados</p>
- </div>
- </div>
+            <div class="dash-stat fx-3d">
+                <div class="dash-stat-top">
+                    <div class="dash-stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <span class="dash-stat-badge success">Liberados</span>
+                </div>
+                <h2 class="dash-stat-number">{{ atletas_liberados }}</h2>
+                <p class="dash-stat-label">Atletas liberados</p>
+            </div>
+        </div>
         <div class="col-xl-3 col-md-6">
-            <div class="stat-card card-tilt p-3">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #ffc107, #ffca2c);">
-                        <i class="fas fa-chart-line" style="font-size: 22px;"></i>
- </div>
-                    <span class="badge bg-warning bg-opacity-10 text-warning">Média</span>
- </div>
-                <h2 class="fw-bold mt-3 mb-1">{{ desempenho_medio }}</h2>
-                <p class="text-muted small mb-0">Desempenho Médio</p>
- </div>
- </div>
- </div>
+            <div class="dash-stat fx-3d">
+                <div class="dash-stat-top">
+                    <div class="dash-stat-icon"><i class="fas fa-chart-line"></i></div>
+                    <span class="dash-stat-badge warn">M&eacute;dia</span>
+                </div>
+                <h2 class="dash-stat-number">{{ desempenho_medio }}</h2>
+                <p class="dash-stat-label">Desempenho m&eacute;dio</p>
+            </div>
+        </div>
+    </div>
 
-    <!-- Gráficos -->
-<div class="row g-4 mb-4">
-    <div class="col-lg-7">
-        <div class="card-modern p-4 card-tilt">
-            <h5 class="fw-bold mb-3"><i class="fas fa-chart-bar me-2 text-primary"></i>Desempenho por Atleta</h5>
-            <div style="height: 300px;">
-                <canvas id="desempenhoAtletasChart"></canvas>
- </div>
- </div>
- </div>
-    <div class="col-lg-5">
-        <div class="card-modern p-4 card-tilt">
-            <h5 class="fw-bold mb-3"><i class="fas fa-chart-pie me-2 text-info"></i>Status dos Atletas</h5>
-            <div style="height: 300px;">
-                <canvas id="statusChart"></canvas>
- </div>
- </div>
- </div>
-</div>
+    <!-- ACOES RAPIDAS -->
+    <div class="dash-section fx-3d">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title">
+                <i class="fas fa-bolt"></i>
+                A&ccedil;&otilde;es R&aacute;pidas
+            </h5>
+        </div>
 
-<!--  NOVO GRÁFICO: Evolução do Grupo -->
-<div class="card-modern p-4 mb-4 card-tilt">
-    <h5 class="fw-bold mb-3"><i class="fas fa-chart-line me-2 text-success"></i>Evolução Média do Grupo</h5>
-    <div style="height: 280px;">
-        <canvas id="evolucaoGrupoChart"></canvas>
- </div>
-</div>
+        <div class="dash-actions">
+            <a href="{% url 'dashboard:tecnico_atletas' %}" class="dash-action fx-3d">
+                <div class="dash-action-icon"><i class="fas fa-futbol"></i></div>
+                <div class="dash-action-text">
+                    <p class="dash-action-title">Meus Atletas</p>
+                    <p class="dash-action-sub">Lista completa</p>
+                </div>
+                <i class="fas fa-arrow-right dash-action-arrow"></i>
+            </a>
 
-    <!-- Top Atletas e Atenção -->
-    <div class="row g-4 mb-4">
+            <a href="{% url 'dashboard:tecnico_desempenho' %}" class="dash-action fx-3d">
+                <div class="dash-action-icon"><i class="fas fa-chart-simple"></i></div>
+                <div class="dash-action-text">
+                    <p class="dash-action-title">Desempenho</p>
+                    <p class="dash-action-sub">Ranking e m&eacute;tricas</p>
+                </div>
+                <i class="fas fa-arrow-right dash-action-arrow"></i>
+            </a>
+
+            <a href="{% url 'dashboard:tecnico_recuperacao' %}" class="dash-action fx-3d">
+                <div class="dash-action-icon"><i class="fas fa-heartbeat"></i></div>
+                <div class="dash-action-text">
+                    <p class="dash-action-title">Recupera&ccedil;&atilde;o</p>
+                    <p class="dash-action-sub">Atletas em tratamento</p>
+                </div>
+                <i class="fas fa-arrow-right dash-action-arrow"></i>
+            </a>
+
+            <a href="{% url 'prontuario:tecnico_prontuarios_compartilhados' %}" class="dash-action fx-3d">
+                <div class="dash-action-icon"><i class="fas fa-share-nodes"></i></div>
+                <div class="dash-action-text">
+                    <p class="dash-action-title">Compartilhados</p>
+                    <p class="dash-action-sub">Prontu&aacute;rios liberados</p>
+                </div>
+                <i class="fas fa-arrow-right dash-action-arrow"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- GRAFICOS -->
+    <div class="row g-3 mb-4">
+        <div class="col-lg-7">
+            <div class="dash-section fx-3d" style="height: 100%; margin-bottom: 0;">
+                <div class="dash-section-head">
+                    <h5 class="dash-section-title">
+                        <i class="fas fa-chart-bar"></i>
+                        Desempenho por Atleta
+                    </h5>
+                </div>
+                <div class="dash-chart">
+                    <canvas id="desempenhoAtletasChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="dash-section fx-3d" style="height: 100%; margin-bottom: 0;">
+                <div class="dash-section-head">
+                    <h5 class="dash-section-title">
+                        <i class="fas fa-chart-pie"></i>
+                        Status dos Atletas
+                    </h5>
+                </div>
+                <div class="dash-chart">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Evolucao do grupo -->
+    <div class="dash-section fx-3d">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title">
+                <i class="fas fa-chart-line"></i>
+                Evolu&ccedil;&atilde;o M&eacute;dia do Grupo
+            </h5>
+        </div>
+        <div class="dash-chart" style="height: 280px;">
+            <canvas id="evolucaoGrupoChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Top e Atencao -->
+    <div class="row g-3 mb-4">
         <div class="col-lg-6">
-            <div class="card-modern p-4 h-100">
-                <h5 class="fw-bold mb-3"><i class="fas fa-trophy me-2 text-warning"></i>Top 3 Melhores Desempenhos</h5>
+            <div class="dash-section fx-3d" style="height: 100%; margin-bottom: 0;">
+                <div class="dash-section-head">
+                    <h5 class="dash-section-title">
+                        <i class="fas fa-trophy"></i>
+                        Top 3 Melhores Desempenhos
+                    </h5>
+                </div>
+
                 {% for item in top_atletas %}
-                <div class="d-flex align-items-center p-3 mb-2 rounded-4" style="background: linear-gradient(135deg, #fffef0, #fff9db);">
-                    <div class="bg-warning bg-opacity-20 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
-                        <strong class="text-warning">{{ forloop.counter }}º</strong>
- </div>
-                    <div class="flex-grow-1">
-                        <h6 class="fw-bold mb-0">{{ item.atleta.usuario.get_full_name|default:item.atleta.usuario.username }}</h6>
-                        <small class="text-muted">{{ item.atleta.modalidade.nome|default:"-" }}</small>
- </div>
-                    <div class="text-end">
-                        <h5 class="fw-bold mb-0 text-success">{{ item.desempenho }}/10</h5>
-                        <small class="text-muted">Desempenho</small>
- </div>
- </div>
+                <div style="display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 8px;">
+                    <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.18); color: #2BA181; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0;">
+                        {{ forloop.counter }}&ordm;
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <p style="margin: 0; font-weight: 600; font-size: 0.9rem; color: var(--text-primary);">
+                            {{ item.atleta.usuario.get_full_name|default:item.atleta.usuario.username }}
+                        </p>
+                        <p style="margin: 0; font-size: 0.75rem; color: var(--text-tertiary);">
+                            {{ item.atleta.modalidade.nome|default:"Sem modalidade" }}
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="margin: 0; font-weight: 800; font-size: 1.05rem; color: #2BA181;">
+                            {{ item.desempenho }}/10
+                        </p>
+                        <p style="margin: 0; font-size: 0.7rem; color: var(--text-tertiary);">
+                            Desempenho
+                        </p>
+                    </div>
+                </div>
                 {% empty %}
-                <p class="text-muted text-center py-4">Nenhum atleta com dados suficientes.</p>
+                <div class="dash-empty">
+                    <i class="fas fa-trophy"></i>
+                    <p style="margin: 0; font-size: 0.85rem;">Nenhum atleta com dados suficientes.</p>
+                </div>
                 {% endfor %}
- </div>
- </div>
+            </div>
+        </div>
 
         <div class="col-lg-6">
-            <div class="card-modern p-4 h-100">
-                <h5 class="fw-bold mb-3"><i class="fas fa-exclamation-triangle me-2 text-danger"></i>Atletas em Recuperação</h5>
-                {% for item in atletas_atencao %}
-                <div class="d-flex align-items-center p-3 mb-2 rounded-4" style="background: linear-gradient(135deg, #fff5f5, #ffe0e0);">
-                    <div class="bg-danger bg-opacity-20 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-user-injured text-danger"></i>
- </div>
-                    <div class="flex-grow-1">
-                        <h6 class="fw-bold mb-0">{{ item.atleta.usuario.get_full_name|default:item.atleta.usuario.username }}</h6>
-                        <small class="text-muted">{{ item.total_lesoes }} lesão(ões) ativa(s)</small>
- </div>
-                    <div class="text-end">
-                        <h5 class="fw-bold mb-0 text-danger">{{ item.progresso }}%</h5>
-                        <small class="text-muted">Recuperação</small>
- </div>
- </div>
-                {% empty %}
-                <p class="text-muted text-center py-4">
-                    <i class="fas fa-check-circle text-success me-2"></i>
-                    Todos os atletas estão liberados! 
- </p>
-                {% endfor %}
- </div>
- </div>
- </div>
+            <div class="dash-section fx-3d" style="height: 100%; margin-bottom: 0;">
+                <div class="dash-section-head">
+                    <h5 class="dash-section-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Atletas em Recupera&ccedil;&atilde;o
+                    </h5>
+                </div>
 
-    <!-- Lista Detalhada dos Atletas -->
-    <div class="card-modern p-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h5 class="fw-bold mb-0"><i class="fas fa-list me-2 text-primary"></i>Todos os Meus Atletas</h5>
-            <a href="{% url 'dashboard:tecnico_atletas' %}" class="btn btn-sm btn-outline-custom">
-                Ver Completo <i class="fas fa-arrow-right ms-1"></i>
- </a>
- </div>
+                {% for item in atletas_atencao %}
+                <div style="display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--bg-primary); border: 1px solid var(--border-color); border-left: 3px solid #d97706; border-radius: 12px; margin-bottom: 8px;">
+                    <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(217, 119, 6, 0.1); border: 1px solid rgba(217, 119, 6, 0.18); color: #d97706; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="fas fa-user-injured"></i>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <p style="margin: 0; font-weight: 600; font-size: 0.9rem; color: var(--text-primary);">
+                            {{ item.atleta.usuario.get_full_name|default:item.atleta.usuario.username }}
+                        </p>
+                        <p style="margin: 0; font-size: 0.75rem; color: var(--text-tertiary);">
+                            {{ item.total_lesoes }} les&atilde;o(ões) ativa(s)
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="margin: 0; font-weight: 800; font-size: 1.05rem; color: #d97706;">
+                            {{ item.progresso }}%
+                        </p>
+                        <p style="margin: 0; font-size: 0.7rem; color: var(--text-tertiary);">
+                            Recupera&ccedil;&atilde;o
+                        </p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="dash-empty">
+                    <i class="fas fa-check-circle"></i>
+                    <p style="margin: 0; font-size: 0.85rem;">Todos os atletas est&atilde;o liberados.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista detalhada -->
+    <div class="dash-section fx-3d">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title">
+                <i class="fas fa-list"></i>
+                Todos os Meus Atletas
+            </h5>
+            <a href="{% url 'dashboard:tecnico_atletas' %}" class="dash-btn">
+                Ver Completo
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
         <div class="row g-3">
             {% for item in atletas_detalhados %}
             <div class="col-xl-4 col-md-6">
-                <div class="card p-3 border-0 shadow-sm rounded-4 h-100">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="{% if item.status == 'lesionado' %}bg-danger{% else %}bg-success{% endif %} bg-opacity-10 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-user {% if item.status == 'lesionado' %}text-danger{% else %}text-success{% endif %}"></i>
- </div>
-                        <div class="flex-grow-1">
-                            <h6 class="fw-bold mb-0">{{ item.atleta.usuario.get_full_name|default:item.atleta.usuario.username }}</h6>
-                            <small class="text-muted">{{ item.atleta.modalidade.nome|default:"-" }}</small>
- </div>
+                <div class="dash-stat fx-3d">
+                    <div class="dash-stat-top">
+                        <div style="display: flex; align-items: center; gap: 12px; min-width: 0;">
+                            <div class="dash-stat-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div style="min-width: 0;">
+                                <p style="margin: 0; font-weight: 600; font-size: 0.9rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    {{ item.atleta.usuario.get_full_name|default:item.atleta.usuario.username }}
+                                </p>
+                                <p style="margin: 0; font-size: 0.75rem; color: var(--text-tertiary);">
+                                    {{ item.atleta.modalidade.nome|default:"Sem modalidade" }}
+                                </p>
+                            </div>
+                        </div>
                         {% if item.status == 'lesionado' %}
-                        <span class="badge bg-danger bg-opacity-10 text-danger">Lesionado</span>
+                        <span class="dash-stat-badge danger">Lesionado</span>
                         {% else %}
-                        <span class="badge bg-success bg-opacity-10 text-success">Liberado</span>
+                        <span class="dash-stat-badge success">Liberado</span>
                         {% endif %}
- </div>
+                    </div>
 
-                    <a href="{% url 'dashboard:tecnico_detalhes_atleta' item.atleta.id %}" class="btn btn-sm btn-primary-custom w-100 mb-3">
-                        <i class="fas fa-eye me-1"></i> Ver Detalhes do Atleta
- </a>
+                    <a href="{% url 'dashboard:tecnico_detalhes_atleta' item.atleta.id %}" class="dash-btn dash-btn-solid" style="width: 100%; justify-content: center; margin-bottom: 14px;">
+                        <i class="fas fa-eye"></i>
+                        Ver Detalhes do Atleta
+                    </a>
 
-                    <div class="d-flex justify-content-between small mb-2">
-                        <span class="text-muted">Desempenho</span>
-                        <strong>{{ item.desempenho }}/10</strong>
- </div>
-                    <div class="progress mb-3" style="height: 6px; border-radius: 10px;">
-                        <div class="progress-bar bg-primary" style="width: {% widthratio item.desempenho 10 100 %}%"></div>
- </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px;">
+                        <span style="color: var(--text-tertiary);">Desempenho</span>
+                        <strong style="color: var(--text-primary);">{{ item.desempenho }}/10</strong>
+                    </div>
+                    <div class="dash-progress" style="margin-bottom: 14px;">
+                        <div class="dash-progress-fill" style="width: {% widthratio item.desempenho 10 100 %}%"></div>
+                    </div>
 
-                    <div class="d-flex justify-content-between small mb-1">
-                        <span class="text-muted">Recuperação</span>
-                        <strong class="text-success">{{ item.progresso }}%</strong>
- </div>
-                    <div class="progress" style="height: 6px; border-radius: 10px;">
-                        <div class="progress-bar bg-success" style="width: {{ item.progresso }}%"></div>
- </div>
- </div>
- </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px;">
+                        <span style="color: var(--text-tertiary);">Recupera&ccedil;&atilde;o</span>
+                        <strong style="color: #2BA181;">{{ item.progresso }}%</strong>
+                    </div>
+                    <div class="dash-progress">
+                        <div class="dash-progress-fill" style="width: {{ item.progresso }}%"></div>
+                    </div>
+                </div>
+            </div>
             {% empty %}
-            <div class="col-12 text-center py-4">
-                <p class="text-muted">Nenhum atleta vinculado a você ainda.</p>
- </div>
+            <div class="col-12">
+                <div class="dash-empty">
+                    <i class="fas fa-users"></i>
+                    <p style="margin: 0; font-size: 0.85rem;">Nenhum atleta vinculado a voc&ecirc; ainda.</p>
+                </div>
+            </div>
             {% endfor %}
- </div>
- </div>
+        </div>
+    </div>
 
 </div>
 
-<!-- Dados para JS -->
 {{ chart_atletas_labels|json_script:"tec_labels" }}
 {{ chart_atletas_data|json_script:"tec_data" }}
 {{ chart_status_data|json_script:"tec_status" }}
-{{ chart_evo_labels|json_script:"tec_evo_labels" }}    
-{{ chart_evo_data|json_script:"tec_evo_data" }}        
+{{ chart_evo_labels|json_script:"tec_evo_labels" }}
+{{ chart_evo_data|json_script:"tec_evo_data" }}
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -240,120 +340,110 @@
             return el ? JSON.parse(el.textContent) : [];
         }
 
-        // Gráfico 1: Desempenho por Atleta
-        const ctx1 = document.getElementById('desempenhoAtletasChart').getContext('2d');
-        new Chart(ctx1, {
-            type: 'bar',
-            data: {
-                labels: getJSON('tec_labels'),
-                datasets: [{
-                    label: 'Desempenho',
-                    data: getJSON('tec_data'),
-                    backgroundColor: ['#0d6efd', '#2BA181', '#ffc107', '#dc3545', '#6f42c1', '#0dcaf0', '#fd7e14', '#20c997'],
-                    borderRadius: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { beginAtZero: true, max: 10, grid: { color: 'rgba(0,0,0,0.05)' } },
-                    x: { grid: { display: false } }
+        // Desempenho por Atleta
+        const ctx1 = document.getElementById('desempenhoAtletasChart');
+        if (ctx1) {
+            new Chart(ctx1.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: getJSON('tec_labels'),
+                    datasets: [{
+                        label: 'Desempenho',
+                        data: getJSON('tec_data'),
+                        backgroundColor: '#2BA181',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, max: 10, grid: { color: 'rgba(0,0,0,0.05)' } },
+                        x: { grid: { display: false } }
+                    }
                 }
-            }
-        });
+            });
+        }
 
-        // Gráfico 2: Status
-        const ctx2 = document.getElementById('statusChart').getContext('2d');
-        const status = getJSON('tec_status');
-        new Chart(ctx2, {
-            type: 'doughnut',
-            data: {
-                labels: ['Lesionados', 'Liberados'],
-                datasets: [{
-                    data: status,
-                    backgroundColor: ['#dc3545', '#28a745'],
-                    borderWidth: 0,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '70%',
-                plugins: {
-                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 15 } }
-                }
-            },
-                        plugins: [{
-                id: 'textCenter',
-                beforeDraw: function(chart) {
-                    const { width, height, ctx } = chart;
-                    ctx.save();
-                    ctx.font = 'bold 28px Poppins, sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillStyle = '#333';
-                    ctx.fillText(status[0] + status[1], width / 2, height / 2 - 8);
-                    ctx.font = '12px Poppins, sans-serif';
-                    ctx.fillStyle = '#666';
-                    ctx.fillText('Atletas', width / 2, height / 2 + 20);
-                    ctx.restore();
-                }
-            }]
-        });
-
-        //  NOVO GRÁFICO: Evolução Média do Grupo
-        const ctx3 = document.getElementById('evolucaoGrupoChart').getContext('2d');
-        new Chart(ctx3, {
-            type: 'line',
-            data: {
-                labels: getJSON('tec_evo_labels'),
-                datasets: [{
-                    label: 'Desempenho Médio do Grupo',
-                    data: getJSON('tec_evo_data'),
-                    borderColor: '#2BA181',
-                    backgroundColor: 'rgba(43, 161, 129, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#2BA181',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#333',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        padding: 10,
-                        displayColors: false,
-                        callbacks: {
-                            label: function(context) {
-                                return 'Desempenho: ' + context.parsed.y + '/10';
-                            }
-                        }
+        // Status
+        const ctx2 = document.getElementById('statusChart');
+        if (ctx2) {
+            const status = getJSON('tec_status');
+            new Chart(ctx2.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Lesionados', 'Liberados'],
+                    datasets: [{
+                        data: status,
+                        backgroundColor: ['#dc3545', '#2BA181'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { position: 'bottom', labels: { usePointStyle: true, padding: 15 } }
                     }
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 10,
-                        grid: { color: 'rgba(0,0,0,0.05)' },
-                        ticks: { stepSize: 2 }
-                    },
-                    x: {
-                        grid: { display: false }
+                plugins: [{
+                    id: 'textCenter',
+                    beforeDraw: function(chart) {
+                        const { width, height, ctx } = chart;
+                        ctx.save();
+                        ctx.font = 'bold 26px Poppins, sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillStyle = '#2BA181';
+                        ctx.fillText((status[0] || 0) + (status[1] || 0), width / 2, height / 2 - 8);
+                        ctx.font = '12px Poppins, sans-serif';
+                        ctx.fillStyle = '#666';
+                        ctx.fillText('Atletas', width / 2, height / 2 + 18);
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+
+        // Evolução do grupo
+        const ctx3 = document.getElementById('evolucaoGrupoChart');
+        if (ctx3) {
+            new Chart(ctx3.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: getJSON('tec_evo_labels'),
+                    datasets: [{
+                        label: 'Desempenho Médio do Grupo',
+                        data: getJSON('tec_evo_data'),
+                        borderColor: '#2BA181',
+                        backgroundColor: 'rgba(43, 161, 129, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#2BA181',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            ticks: { stepSize: 2 }
+                        },
+                        x: { grid: { display: false } }
                     }
                 }
-            }
-        });
+            });
+        }
     });
 </script>
 {% endblock %}

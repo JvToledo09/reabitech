@@ -1721,103 +1721,6 @@
             animation: none !important;
         }
 
-
-        /* ================================================================
-           KILL SWITCH FINAL — mata qualquer ECG/batimento/pulse decorativo
-           ================================================================ */
-        .card-ecg::after,
-        .card-ecg:hover::after,
-        .card-ecg::before,
-        .card-ecg:hover::before {
-            display: none !important;
-            content: none !important;
-            background-image: none !important;
-            animation: none !important;
-            opacity: 0 !important;
-        }
-
-        .pulse-breathe,
-        .breathing-indicator,
-        .breathing-indicator::before,
-        .breathing-indicator::after,
-        .pulse-dot,
-        .anim-pulse-glow,
-        .badge-premium.pulse,
-        .badge-ping::before,
-        .sidebar-item.active::after,
-        .sidebar-user .avatar::after,
-        /* Escopo: só mata dentro do .main-content (dashboards). Login fica livre. */
-        .main-content [class*="pulse"],
-        .main-content [class*="Pulse"],
-        .main-content [class*="ecg"],
-        .main-content [class*="ECG"],
-        .main-content [class*="heartbeat"],
-        .main-content [class*="breathe"],
-        .main-content [class*="Breath"] {
-            animation: none !important;
-        }
-
-        .sidebar-item.active::after,
-        .sidebar > div[style*="padding: 0 12px 16px"] > div::before,
-        .sidebar-user .avatar::after {
-            display: none !important;
-        }
-
-        /* Hover dos cards: levantar suave, sem 3D exagerado */
-        .stat-card:hover,
-        .card-modern:hover {
-            transform: translateY(-3px) !important;
-        }
-
-        .stat-card:hover .stat-icon,
-        .card-modern:hover .stat-icon,
-        .card-premium:hover .icon-wrapper {
-            transform: translateY(-2px) scale(1.04) !important;
-        }
-
-
-        /* ================================================================
-           SIDEBAR TOGGLE — desktop colapsa e main expande, mobile desliza
-           ================================================================ */
-
-        @media (min-width: 993px) {
-            /* No desktop o toggle usa body.sidebar-collapsed */
-            .sidebar {
-                left: 0 !important;
-                transform: translateX(0);
-                transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            }
-
-            body.sidebar-collapsed .sidebar {
-                transform: translateX(-100%) !important;
-            }
-
-            .main-content:not(.no-sidebar) {
-                transition: margin-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            body.sidebar-collapsed .main-content:not(.no-sidebar) {
-                margin-left: 0 !important;
-            }
-
-            /* Overlay NUNCA aparece no desktop */
-            .sidebar-overlay,
-            .sidebar-overlay.active {
-                display: none !important;
-            }
-
-            /* .active do mobile não afeta o desktop */
-            .sidebar.active {
-                left: 0 !important;
-                transform: translateX(0);
-            }
-        }
-
-        /* Mobile: reset do estado collapsed caso venha do desktop */
-        @media (max-width: 992px) {
-            body.sidebar-collapsed .sidebar { transform: none !important; }
-        }
-
  </style>
 
     {% block extra_css %}{% endblock %}
@@ -1881,7 +1784,7 @@
         <a href="{% url 'dashboard:coordenador_psicologia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_psicologia' %}active{% endif %}"><i class="fas fa-brain"></i><span>Psicologia</span></a>
         <a href="{% url 'dashboard:coordenador_relatorios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_relatorios' %}active{% endif %}"><i class="fas fa-chart-line"></i><span>Relatórios</span></a>
         <a href="{% url 'dashboard:coordenador_membros' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_membros' %}active{% endif %}"><i class="fas fa-user-plus"></i><span>Membros</span></a>
-        <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-folder-open"></i><span>Prontuários</span></a>
+        <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-folder-medical"></i><span>Prontuários</span></a>
         <a href="{% url 'prontuario:timeline_global' %}" class="sidebar-item {% if 'timeline' in request.path %}active{% endif %}"><i class="fas fa-stream"></i><span>Timeline</span></a>
         <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
         <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="fas fa-chart-pie"></i><span>Analytics</span></a>
@@ -1914,7 +1817,7 @@
         <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_atletas' %}active{% endif %}"><i class="fas fa-user-injured"></i><span>Pacientes</span></a>
         <a href="{% url 'dashboard:fisioterapeuta_tratamentos' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_tratamentos' %}active{% endif %}"><i class="fas fa-notes-medical"></i><span>Tratamentos</span></a>
         <a href="{% url 'dashboard:fisioterapeuta_evolucoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_evolucoes' %}active{% endif %}"><i class="fas fa-chart-line"></i><span>Evoluções</span></a>
-        <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-folder-open"></i><span>Prontuários</span></a>
+        <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-folder-medical"></i><span>Prontuários</span></a>
         <a href="{% url 'prontuario:timeline_global' %}" class="sidebar-item {% if 'timeline' in request.path %}active{% endif %}"><i class="fas fa-stream"></i><span>Timeline</span></a>
         <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
         <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="fas fa-chart-pie"></i><span>Analytics</span></a>
@@ -2078,19 +1981,9 @@
         const desktopToggleBtn = document.getElementById('desktopToggleBtn');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-        function isDesktop() {
-            return window.innerWidth > 992;
-        }
-
         function toggleSidebar() {
-            if (isDesktop()) {
-                // Desktop: colapsa via body class, ajusta main-content
-                document.body.classList.toggle('sidebar-collapsed');
-            } else {
-                // Mobile: desliza + overlay
-                if (sidebar) sidebar.classList.toggle('active');
-                if (sidebarOverlay) sidebarOverlay.classList.toggle('active');
-            }
+            if (sidebar) sidebar.classList.toggle('active');
+            if (sidebarOverlay) sidebarOverlay.classList.toggle('active');
         }
 
         function closeSidebar() {
@@ -2109,13 +2002,7 @@
         });
 
         window.addEventListener('resize', function() {
-            if (window.innerWidth > 992) {
-                // Voltando pro desktop: fecha overlay mobile, limpa .active
-                closeSidebar();
-            } else {
-                // Indo pro mobile: garante que o body nao ta "collapsed"
-                document.body.classList.remove('sidebar-collapsed');
-            }
+            if (window.innerWidth > 992) closeSidebar();
         });
 
         // ============================================
@@ -2310,8 +2197,8 @@
                 el.style.setProperty('--my', yPct + '%');
 
                 // tilt sutil (rotação máx ~2.5 graus)
-                const rx = ((yPct - 50) / 50) * -0.8;
-                const ry = ((xPct - 50) / 50) * 0.8;
+                const rx = ((yPct - 50) / 50) * -1.2;
+                const ry = ((xPct - 50) / 50) * 1.2;
 
                 el.style.transform =
                     `perspective(900px) translateY(-6px) scale(1.008) rotateX(${rx}deg) rotateY(${ry}deg)`;
@@ -2338,9 +2225,9 @@
                 const yPct = ((e.clientY - rect.top) / rect.height) * 100;
                 el.style.setProperty('--mx', xPct + '%');
                 el.style.setProperty('--my', yPct + '%');
-                const rx = ((yPct - 50) / 50) * -0.8;
-                const ry = ((xPct - 50) / 50) * 0.8;
-                el.style.transform = `perspective(1600px) translateY(-2px) scale(1.002) rotateX(${rx}deg) rotateY(${ry}deg)`;
+                const rx = ((yPct - 50) / 50) * -1.2;
+                const ry = ((xPct - 50) / 50) * 1.2;
+                el.style.transform = `perspective(1400px) translateY(-3px) scale(1.003) rotateX(${rx}deg) rotateY(${ry}deg)`;
             });
             el.addEventListener('mouseleave', () => {
                 el.style.transform = '';

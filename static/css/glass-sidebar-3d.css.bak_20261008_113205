@@ -123,7 +123,7 @@
     border-radius: 50%;
     background: #34d399;
     box-shadow: 0 0 12px rgba(52, 211, 153, 0.9);
-    animation: none !important;
+    animation: livePulse 2s ease-in-out infinite;
     z-index: 2;
 }
 
@@ -265,7 +265,7 @@
     inset: -4px;
     border-radius: 50%;
     border: 1px solid rgba(52, 211, 153, 0.4);
-    animation: none !important;
+    animation: avatarRing 3s ease-in-out infinite;
     pointer-events: none;
 }
 
@@ -365,11 +365,11 @@
 }
 
 .stat-card:hover .stat-icon {
-    transform: translateY(-2px) scale(1.04) !important;
+    transform: translateZ(60px) translateY(-8px) scale(1.1) !important;
 }
 
 .stat-card:hover .stat-number {
-    transform: none !important;
+    transform: translateZ(40px) !important;
 }
 
 /* ==========================================================================
@@ -391,7 +391,7 @@
     background-repeat: repeat-x;
     background-size: 200px 24px;
     opacity: 0;
-    animation: none !important;
+    animation: ecgSlide 3s linear infinite;
     transition: opacity 0.4s ease;
     pointer-events: none;
 }
@@ -409,7 +409,7 @@
    10. PULSO DE "RESPIRACAO" (indicadores de saude)
    ========================================================================== */
 .pulse-breathe {
-    animation: none !important;
+    animation: breathe 4s ease-in-out infinite;
 }
 
 @keyframes breathe {
@@ -439,7 +439,7 @@
     inset: 0;
     border-radius: 50%;
     border: 2px solid rgba(52, 211, 153, 0.5);
-    animation: none !important;
+    animation: breatheRing 3s ease-out infinite;
 }
 
 .breathing-indicator::after {

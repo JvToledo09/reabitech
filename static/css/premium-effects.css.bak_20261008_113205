@@ -357,7 +357,7 @@
 }
 
 .anim-pulse-glow {
-    animation: none !important;
+    animation: pulseGlow 2.5s ease-in-out infinite;
 }
 
 /* Delay progressivo */
@@ -403,7 +403,7 @@
 }
 
 .badge-premium.pulse {
-    animation: none !important;
+    animation: pulseGlow 2s ease-in-out infinite;
 }
 
 /* ==========================================================================
@@ -471,7 +471,7 @@
     background: #34d399;
     border-radius: 50%;
     box-shadow: 0 0 12px #34d399;
-    animation: none !important;
+    animation: pulseGlow 2s ease-in-out infinite;
 }
 
 /* ==========================================================================
