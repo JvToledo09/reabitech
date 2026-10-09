@@ -1,208 +1,266 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Detalhes da Lesão{% endblock %}
-{% block page_title %}Detalhes da Lesão{% endblock %}
+{% block title %}Detalhes da Les&atilde;o{% endblock %}
+{% block page_title %}Detalhes da Les&atilde;o{% endblock %}
 
 {% block content %}
 <div class="container-fluid p-0">
 
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-        <div class="d-flex align-items-center">
-            <div class="bg-danger bg-opacity-10 rounded-circle p-3 me-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
-                <i class="fas fa-user-injured fa-2x text-danger"></i>
- </div>
-            <div>
-                <h3 class="fw-bold mb-0">{{ lesao.atleta.usuario.get_full_name|default:lesao.atleta.usuario.username }}</h3>
-                <p class="text-muted mb-0">
-                    <span class="badge bg-danger bg-opacity-10 text-danger">{{ lesao.get_tipo_display }}</span>
-                    <span class="badge bg-warning bg-opacity-10 text-warning ms-2">{{ lesao.get_gravidade_display }}</span>
- </p>
- </div>
- </div>
-        <div class="d-flex gap-2">
-            <a href="{% url 'dashboard:fisioterapeuta_criar_tratamento' lesao.id %}" class="btn btn-primary-custom">
-                <i class="fas fa-plus me-2"></i> Novo Tratamento
- </a>
-            <a href="{% url 'dashboard:fisioterapeuta_todos_atletas' %}" class="btn btn-outline-custom">
-                <i class="fas fa-arrow-left me-2"></i> Voltar
- </a>
- </div>
- </div>
+    <!-- HERO -->
+    <div class="dash-hero">
+        <div class="dash-hero-inner">
+            <div style="display: flex; align-items: center; gap: 18px; flex: 1; min-width: 0;">
+                <div style="width: 68px; height: 68px; border-radius: 18px; background: rgba(220, 38, 38, 0.15); border: 1px solid rgba(220, 38, 38, 0.3); display: flex; align-items: center; justify-content: center; color: #fca5a5; font-size: 1.7rem; flex-shrink: 0;">
+                    <i class="fas fa-user-injured"></i>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                    <div class="dash-hero-eyebrow">Les&atilde;o Registrada</div>
+                    <h3>{{ lesao.atleta.usuario.get_full_name|default:lesao.atleta.usuario.username }}</h3>
+                    <p>Registrada em {{ lesao.data_ocorrencia|date:"d/m/Y" }}</p>
+                    <div class="dash-hero-pills" style="margin-top: 10px;">
+                        <span class="dash-pill">
+                            <i class="fas fa-bolt"></i>
+                            {{ lesao.get_tipo_display }}
+                        </span>
+                        <span class="dash-pill">
+                            <i class="fas fa-chart-line"></i>
+                            {{ lesao.get_gravidade_display }}
+                        </span>
+                        {% if lesao.status %}
+                        <span class="dash-pill">
+                            <i class="fas fa-circle-info"></i>
+                            {{ lesao.get_status_display }}
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
 
-    <!-- Info Cards -->
-    <div class="row g-4 mb-4">
-        <div class="col-xl-3 col-md-6">
-            <div class="card-modern p-3">
-                <div class="d-flex align-items-center">
-                    <div class="bg-danger bg-opacity-10 rounded-circle p-2 me-3">
-                        <i class="fas fa-map-marker-alt text-danger"></i>
- </div>
-                    <div>
-                        <small class="text-muted d-block">Local</small>
-                        <strong>{{ lesao.local }}</strong>
- </div>
- </div>
- </div>
- </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card-modern p-3">
-                <div class="d-flex align-items-center">
-                    <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-3">
-                        <i class="fas fa-calendar-alt text-warning"></i>
- </div>
-                    <div>
-                        <small class="text-muted d-block">Ocorrência</small>
-                        <strong>{{ lesao.data_ocorrencia|date:"d/m/Y" }}</strong>
- </div>
- </div>
- </div>
- </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card-modern p-3">
-                <div class="d-flex align-items-center">
-                    <div class="bg-info bg-opacity-10 rounded-circle p-2 me-3">
-                        <i class="fas fa-user-md text-info"></i>
- </div>
-                    <div>
-                        <small class="text-muted d-block">Fisioterapeuta</small>
-                        <strong>{{ lesao.fisioterapeuta_responsavel.get_full_name|default:"-" }}</strong>
- </div>
- </div>
- </div>
- </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card-modern p-3">
-                <div class="d-flex align-items-center">
-                    <div class="bg-success bg-opacity-10 rounded-circle p-2 me-3">
-                        <i class="fas fa-flag-checkered text-success"></i>
- </div>
-                    <div>
-                        <small class="text-muted d-block">Previsão</small>
-                        <strong>{{ lesao.previsao_recuperacao|date:"d/m/Y"|default:"A definir" }}</strong>
- </div>
- </div>
- </div>
- </div>
- </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <a href="{% url 'dashboard:fisioterapeuta_criar_tratamento' lesao.id %}" class="btn-dash-cta">
+                    <i class="fas fa-plus"></i>
+                    Novo Tratamento
+                </a>
+                <a href="{% url 'dashboard:fisioterapeuta_todos_atletas' %}" class="btn-dash-cta" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                    <i class="fas fa-arrow-left"></i>
+                    Voltar
+                </a>
+            </div>
+        </div>
+    </div>
 
-    <!-- Timeline Visual -->
-    <div class="card-modern p-4 mb-4">
-        <h5 class="fw-bold mb-4"><i class="fas fa-timeline me-2 text-success"></i>Timeline de Recuperação</h5>
-        <div class="timeline-horizontal">
-            <div class="row g-3 text-center">
-                <div class="col">
-                    <div class="bg-danger bg-opacity-10 text-danger rounded-circle p-3 mx-auto mb-2" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-exclamation-triangle fa-lg"></i>
- </div>
-                    <strong class="d-block small">Lesão</strong>
-                    <small class="text-muted">{{ lesao.data_ocorrencia|date:"d/m" }}</small>
- </div>
-                <div class="col">
-                    <div class="bg-warning bg-opacity-10 text-warning rounded-circle p-3 mx-auto mb-2" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-notes-medical fa-lg"></i>
- </div>
-                    <strong class="d-block small">Tratamento</strong>
-                    <small class="text-muted">{{ tratamentos.count }} ativo(s)</small>
- </div>
-                <div class="col">
-                    <div class="bg-info bg-opacity-10 text-info rounded-circle p-3 mx-auto mb-2" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-dumbbell fa-lg"></i>
- </div>
-                    <strong class="d-block small">Exercícios</strong>
-                    <small class="text-muted">{{ exercicios.count }} atribuído(s)</small>
- </div>
-                <div class="col">
-                    <div class="bg-success bg-opacity-10 text-success rounded-circle p-3 mx-auto mb-2" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-check-circle fa-lg"></i>
- </div>
-                    <strong class="d-block small">Recuperação</strong>
-                    <small class="text-muted">Em andamento</small>
- </div>
- </div>
- </div>
- </div>
+    <!-- INFO CARDS -->
+    <div class="row g-3 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="dash-stat fx-3d">
+                <div class="dash-stat-top">
+                    <div class="dash-stat-icon" style="background: rgba(220,38,38,0.1); border-color: rgba(220,38,38,0.2); color: #dc2626;">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <span class="dash-stat-badge danger">Local</span>
+                </div>
+                <p style="margin: 0; font-weight: 700; font-size: 1rem; color: var(--text-primary);">{{ lesao.local|default:"N&atilde;o informado" }}</p>
+                <p class="dash-stat-label" style="margin-top: 4px;">Regi&atilde;o afetada</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="dash-stat fx-3d">
+                <div class="dash-stat-top">
+                    <div class="dash-stat-icon" style="background: rgba(217,119,6,0.1); border-color: rgba(217,119,6,0.2); color: #d97706;">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <span class="dash-stat-badge warn">Ocorr&ecirc;ncia</span>
+                </div>
+                <p style="margin: 0; font-weight: 700; font-size: 1rem; color: var(--text-primary);">{{ lesao.data_ocorrencia|date:"d/m/Y" }}</p>
+                <p class="dash-stat-label" style="margin-top: 4px;">Data da les&atilde;o</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="dash-stat fx-3d">
+                <div class="dash-stat-top">
+                    <div class="dash-stat-icon"><i class="fas fa-user-md"></i></div>
+                    <span class="dash-stat-badge info">Respons&aacute;vel</span>
+                </div>
+                <p style="margin: 0; font-weight: 700; font-size: 1rem; color: var(--text-primary);">{{ lesao.fisioterapeuta_responsavel.get_full_name|default:"N&atilde;o atribu&iacute;do" }}</p>
+                <p class="dash-stat-label" style="margin-top: 4px;">Fisioterapeuta</p>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="dash-stat fx-3d">
+                <div class="dash-stat-top">
+                    <div class="dash-stat-icon"><i class="fas fa-flag-checkered"></i></div>
+                    <span class="dash-stat-badge success">Previs&atilde;o</span>
+                </div>
+                <p style="margin: 0; font-weight: 700; font-size: 1rem; color: var(--text-primary);">{{ lesao.previsao_recuperacao|date:"d/m/Y"|default:"A definir" }}</p>
+                <p class="dash-stat-label" style="margin-top: 4px;">Recupera&ccedil;&atilde;o prevista</p>
+            </div>
+        </div>
+    </div>
 
-    <!-- Descrição e Diagnóstico -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-6">
-            <div class="card-modern p-4 h-100">
-                <h6 class="fw-bold mb-3"><i class="fas fa-file-alt me-2 text-primary"></i>Descrição</h6>
-                <p class="mb-0">{{ lesao.descricao }}</p>
- </div>
- </div>
-        <div class="col-md-6">
-            <div class="card-modern p-4 h-100">
-                <h6 class="fw-bold mb-3"><i class="fas fa-stethoscope me-2 text-success"></i>Diagnóstico</h6>
-                <p class="mb-0">{{ lesao.diagnostico|default:"Nenhum diagnóstico registrado." }}</p>
- </div>
- </div>
- </div>
+    <!-- DESCRICAO E DIAGNOSTICO -->
+    <div class="row g-3 mb-4">
+        <div class="col-lg-6">
+            <div class="dash-section fx-3d" style="height: 100%; margin-bottom: 0;">
+                <div class="dash-section-head">
+                    <h5 class="dash-section-title">
+                        <i class="fas fa-file-alt"></i>
+                        Descri&ccedil;&atilde;o
+                    </h5>
+                </div>
+                <p style="margin: 0; font-size: 0.9rem; color: var(--text-primary); line-height: 1.7;">
+                    {{ lesao.descricao|default:"Sem descri&ccedil;&atilde;o registrada." }}
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="dash-section fx-3d" style="height: 100%; margin-bottom: 0;">
+                <div class="dash-section-head">
+                    <h5 class="dash-section-title">
+                        <i class="fas fa-stethoscope"></i>
+                        Diagn&oacute;stico
+                    </h5>
+                </div>
+                <p style="margin: 0; font-size: 0.9rem; color: var(--text-primary); line-height: 1.7;">
+                    {{ lesao.diagnostico|default:"Nenhum diagn&oacute;stico registrado." }}
+                </p>
+            </div>
+        </div>
+    </div>
 
-    <!-- Tratamentos Ativos -->
-    <div class="card-modern p-4 mb-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="fw-bold mb-0"><i class="fas fa-list me-2 text-warning"></i>Tratamentos</h5>
-            <a href="{% url 'dashboard:fisioterapeuta_criar_tratamento' lesao.id %}" class="btn btn-primary-custom btn-sm">
-                <i class="fas fa-plus me-1"></i> Novo
- </a>
- </div>
+    <!-- TIMELINE -->
+    <div class="dash-section fx-3d">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title">
+                <i class="fas fa-stream"></i>
+                Timeline de Recupera&ccedil;&atilde;o
+            </h5>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-3 col-6">
+                <div class="dash-stat fx-3d" style="text-align: center;">
+                    <div class="dash-stat-icon" style="margin: 0 auto 12px; background: rgba(220,38,38,0.1); border-color: rgba(220,38,38,0.2); color: #dc2626;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <p style="margin: 0; font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">Les&atilde;o</p>
+                    <p style="margin: 4px 0 0; font-size: 0.75rem; color: var(--text-tertiary);">{{ lesao.data_ocorrencia|date:"d/m/Y" }}</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="dash-stat fx-3d" style="text-align: center;">
+                    <div class="dash-stat-icon" style="margin: 0 auto 12px; background: rgba(217,119,6,0.1); border-color: rgba(217,119,6,0.2); color: #d97706;">
+                        <i class="fas fa-notes-medical"></i>
+                    </div>
+                    <p style="margin: 0; font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">Tratamento</p>
+                    <p style="margin: 4px 0 0; font-size: 0.75rem; color: var(--text-tertiary);">{{ tratamentos|length }} ativo{{ tratamentos|length|pluralize }}</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="dash-stat fx-3d" style="text-align: center;">
+                    <div class="dash-stat-icon" style="margin: 0 auto 12px;">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <p style="margin: 0; font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">Exerc&iacute;cios</p>
+                    <p style="margin: 4px 0 0; font-size: 0.75rem; color: var(--text-tertiary);">{{ exercicios|length }} atribu&iacute;do{{ exercicios|length|pluralize }}</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="dash-stat fx-3d" style="text-align: center;">
+                    <div class="dash-stat-icon" style="margin: 0 auto 12px;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <p style="margin: 0; font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">Recupera&ccedil;&atilde;o</p>
+                    <p style="margin: 4px 0 0; font-size: 0.75rem; color: var(--text-tertiary);">Em andamento</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRATAMENTOS -->
+    <div class="dash-section fx-3d">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title">
+                <i class="fas fa-list"></i>
+                Tratamentos Ativos
+            </h5>
+            <a href="{% url 'dashboard:fisioterapeuta_criar_tratamento' lesao.id %}" class="dash-btn dash-btn-solid">
+                <i class="fas fa-plus"></i>
+                Novo Tratamento
+            </a>
+        </div>
+
         <div class="row g-3">
             {% for tratamento in tratamentos %}
             <div class="col-md-6">
-                <div class="card p-3 border-0 shadow-sm rounded-4 h-100">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="badge bg-success bg-opacity-10 text-success">Em Andamento</span>
-                        <small class="text-muted">{{ tratamento.data_inicio|date:"d/m/Y" }}</small>
- </div>
-                    <p class="small text-muted mb-2">{{ tratamento.descricao|truncatechars:120 }}</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted">
-                            <i class="fas fa-dumbbell me-1"></i> {{ tratamento.exercicios.count }} exercícios
- </small>
-                        <a href="{% url 'dashboard:fisioterapeuta_adicionar_exercicio' tratamento.id %}" class="btn btn-sm btn-outline-custom">
-                            <i class="fas fa-plus me-1"></i> Exercício
- </a>
- </div>
- </div>
- </div>
+                <div class="dash-stat fx-3d" style="height: 100%;">
+                    <div class="dash-stat-top">
+                        <span class="dash-stat-badge success">Em andamento</span>
+                        <span style="font-size: 0.72rem; color: var(--text-tertiary);">{{ tratamento.data_inicio|date:"d/m/Y" }}</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 8px 0 14px; line-height: 1.5;">{{ tratamento.descricao|truncatechars:140 }}</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <small style="color: var(--text-tertiary); font-size: 0.78rem;">
+                            <i class="fas fa-dumbbell"></i>
+                            {{ tratamento.exercicios.count }} exerc&iacute;cio{{ tratamento.exercicios.count|pluralize }}
+                        </small>
+                        <a href="{% url 'dashboard:fisioterapeuta_adicionar_exercicio' tratamento.id %}" class="dash-btn">
+                            <i class="fas fa-plus"></i>
+                            Exerc&iacute;cio
+                        </a>
+                    </div>
+                </div>
+            </div>
             {% empty %}
-            <div class="col-12 text-center py-4">
-                <p class="text-muted">Nenhum tratamento registrado. Clique em "Novo" para começar.</p>
- </div>
+            <div class="col-12">
+                <div class="dash-empty">
+                    <i class="fas fa-notes-medical"></i>
+                    <p style="margin: 0; font-size: 0.85rem;">Nenhum tratamento registrado. Clique em "Novo Tratamento" para come&ccedil;ar.</p>
+                </div>
+            </div>
             {% endfor %}
- </div>
- </div>
+        </div>
+    </div>
 
-    <!-- Exercícios Atribuídos -->
-    <div class="card-modern p-4">
-        <h5 class="fw-bold mb-3"><i class="fas fa-dumbbell me-2 text-info"></i>Exercícios Atribuídos</h5>
+    <!-- EXERCICIOS -->
+    <div class="dash-section fx-3d">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title">
+                <i class="fas fa-running"></i>
+                Exerc&iacute;cios Atribu&iacute;dos
+            </h5>
+        </div>
+
         <div class="row g-3">
             {% for ex in exercicios %}
             <div class="col-md-4">
-                <div class="card p-3 border-0 shadow-sm rounded-4 h-100">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h6 class="fw-bold mb-0">{{ ex.nome }}</h6>
+                <div class="dash-stat fx-3d" style="height: 100%;">
+                    <div class="dash-stat-top">
+                        <p style="margin: 0; font-weight: 700; font-size: 0.92rem; color: var(--text-primary);">{{ ex.nome }}</p>
                         {% if ex.check_realizado %}
-                        <span class="badge bg-success bg-opacity-10 text-success"></span>
+                        <span class="dash-stat-badge success">Feito</span>
                         {% else %}
-                        <span class="badge bg-warning bg-opacity-10 text-warning">Pendente</span>
+                        <span class="dash-stat-badge warn">Pendente</span>
                         {% endif %}
- </div>
-                    <p class="small text-muted mb-2">{{ ex.series }}x{{ ex.repeticoes }} | {{ ex.frequencia }}</p>
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--text-tertiary); margin: 8px 0 12px;">
+                        {{ ex.series }}x{{ ex.repeticoes }} &middot; {{ ex.frequencia }}
+                    </p>
                     {% if ex.grupo_muscular %}
-                    <small class="text-muted"><i class="fas fa-tag me-1"></i>{{ ex.grupo_muscular }}</small>
+                    <span class="dash-stat-badge neutral" style="text-transform: none;">{{ ex.grupo_muscular }}</span>
                     {% endif %}
- </div>
- </div>
+                </div>
+            </div>
             {% empty %}
-            <div class="col-12 text-center py-4">
-                <p class="text-muted">Nenhum exercício atribuído ainda. Adicione um tratamento primeiro.</p>
- </div>
+            <div class="col-12">
+                <div class="dash-empty">
+                    <i class="fas fa-dumbbell"></i>
+                    <p style="margin: 0; font-size: 0.85rem;">Nenhum exerc&iacute;cio atribu&iacute;do ainda.</p>
+                </div>
+            </div>
             {% endfor %}
- </div>
- </div>
+        </div>
+    </div>
 
 </div>
 {% endblock %}

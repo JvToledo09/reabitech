@@ -2,382 +2,429 @@
 {% load static %}
 
 {% block title %}Meu Dashboard{% endblock %}
-{% block page_title %}Minha Evolução{% endblock %}
+{% block page_title %}Minha Evolu&ccedil;&atilde;o{% endblock %}
 
 {% block content %}
 <div class="container-fluid p-0">
 
-    <!-- Hero de Boas-Vindas -->
-    <div class="card-modern p-4 mb-4 animate-fadeInUp" style="background: linear-gradient(135deg, #2BA181 0%, #5A6461 100%); color: white; border: none; position: relative; overflow: hidden;">
-        <div style="position: absolute; top: -60px; right: -60px; font-size: 16rem; opacity: 0.08;">
-            <i class="fas fa-running"></i>
- </div>
-        <div class="row align-items-center position-relative">
-            <div class="col-md-8">
-                <h2 class="fw-bold mb-2">Olá, {{ atleta.usuario.get_full_name|default:atleta.usuario.username }}! </h2>
-                <p class="mb-3 opacity-75">Continue firme no seu tratamento. Cada exercício é um passo mais próximo da recuperação total!</p>
-                <div class="d-flex gap-3 flex-wrap">
-                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
-                        <i class="fas fa-trophy me-1"></i> {{ progresso_recuperacao }}% Recuperado
- </span>
-                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
-                        <i class="fas fa-dumbbell me-1"></i> {{ exercicios_concluidos }}/{{ total_exercicios }} Exercícios
- </span>
-                    <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill">
-                        <i class="fas fa-medal me-1"></i> {{ adesao }}% Adesão
- </span>
- </div>
- </div>
-            <div class="col-md-4 text-md-end">
-                <div class="bg-white bg-opacity-25 rounded-circle p-4 d-inline-block" style="backdrop-filter: blur(10px);">
-                    <h1 class="fw-bold mb-0 display-3">{{ progresso_recuperacao }}%</h1>
-                    <small class="d-block">Recuperação Total</small>
- </div>
- </div>
- </div>
- </div>
+    <!-- HERO -->
+    <div class="dash-hero">
+        <div class="dash-hero-inner">
+            <div>
+                <div class="dash-hero-eyebrow">Minha Evolu&ccedil;&atilde;o</div>
+                <h3>Ol&aacute;, {{ atleta.usuario.get_full_name|default:atleta.usuario.username }}</h3>
+                <p>Continue firme no seu tratamento. Cada exerc&iacute;cio &eacute; um passo mais perto da recupera&ccedil;&atilde;o total.</p>
+                <div class="dash-hero-pills">
+                    <span class="dash-pill">
+                        <i class="fas fa-trophy"></i>
+                        {{ progresso_recuperacao }}% recuperado
+                    </span>
+                    <span class="dash-pill">
+                        <i class="fas fa-dumbbell"></i>
+                        {{ exercicios_concluidos }}/{{ total_exercicios }} exerc&iacute;cios
+                    </span>
+                    <span class="dash-pill">
+                        <i class="fas fa-medal"></i>
+                        {{ adesao }}% ades&atilde;o
+                    </span>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 50%; width: 130px; height: 130px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.4rem; font-weight: 800; margin: 0; color: #fff; letter-spacing: -0.03em;">{{ progresso_recuperacao }}%</h1>
+                    <span style="font-size: 0.72rem; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px;">Recupera&ccedil;&atilde;o</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Indicadores Principais -->
+    <!-- STATS -->
     <div class="row g-3 mb-4">
         <div class="col-xl-3 col-md-6">
-            <div class="stat-card card-tilt p-3">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #dc3545, #bb2d3b);">
-                        <i class="fas fa-user-injured" style="font-size: 22px;"></i>
- </div>
-                    <span class="badge bg-danger bg-opacity-10 text-danger">Ativas</span>
- </div>
-                <h2 class="fw-bold mt-3 mb-1">{{ lesoes|length }}</h2>
-                <p class="text-muted small mb-0">Lesões em tratamento</p>
- </div>
- </div>
+            <div class="dash-stat fx-3d">
+                <div class="dash-stat-top">
+                    <div class="dash-stat-icon" style="background: rgba(220,38,38,0.1); border-color: rgba(220,38,38,0.2); color: #dc2626;"><i class="fas fa-user-injured"></i></div>
+                    <span class="dash-stat-badge danger">Ativas</span>
+                </div>
+                <h2 class="dash-stat-number">{{ lesoes|length }}</h2>
+                <p class="dash-stat-label">Les&otilde;es em tratamento</p>
+            </div>
+        </div>
         <div class="col-xl-3 col-md-6">
-            <div class="stat-card card-tilt p-3">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #ffc107, #ffca2c);">
-                        <i class="fas fa-notes-medical" style="font-size: 22px;"></i>
- </div>
-                    <span class="badge bg-warning bg-opacity-10 text-warning">Em curso</span>
- </div>
-                <h2 class="fw-bold mt-3 mb-1">{{ tratamentos_ativos }}</h2>
-                <p class="text-muted small mb-0">Tratamentos ativos</p>
- </div>
- </div>
+            <div class="dash-stat fx-3d">
+                <div class="dash-stat-top">
+                    <div class="dash-stat-icon" style="background: rgba(217,119,6,0.1); border-color: rgba(217,119,6,0.2); color: #d97706;"><i class="fas fa-notes-medical"></i></div>
+                    <span class="dash-stat-badge warn">Em curso</span>
+                </div>
+                <h2 class="dash-stat-number">{{ tratamentos_ativos }}</h2>
+                <p class="dash-stat-label">Tratamentos ativos</p>
+            </div>
+        </div>
         <div class="col-xl-3 col-md-6">
-            <div class="stat-card card-tilt p-3">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #0dcaf0, #0aa2c0);">
-                        <i class="fas fa-brain" style="font-size: 22px;"></i>
- </div>
-                    <span class="badge bg-info bg-opacity-10 text-info">{{ status_mental }}</span>
- </div>
-                <h2 class="fw-bold mt-3 mb-1">{{ score_mental }}</h2>
-                <p class="text-muted small mb-0">Saúde Mental (0-10)</p>
- </div>
- </div>
+            <div class="dash-stat fx-3d">
+                <div class="dash-stat-top">
+                    <div class="dash-stat-icon"><i class="fas fa-brain"></i></div>
+                    <span class="dash-stat-badge info">{{ status_mental }}</span>
+                </div>
+                <h2 class="dash-stat-number">{{ score_mental }}</h2>
+                <p class="dash-stat-label">Sa&uacute;de mental (0-10)</p>
+            </div>
+        </div>
         <div class="col-xl-3 col-md-6">
-            <div class="stat-card card-tilt p-3">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div class="stat-icon" style="width: 50px; height: 50px; margin: 0; background: linear-gradient(135deg, #2BA181, #1a7a5f);">
-                        <i class="fas fa-fire" style="font-size: 22px;"></i>
- </div>
-                    <span class="badge bg-success bg-opacity-10 text-success">Ativo</span>
- </div>
-                <h2 class="fw-bold mt-3 mb-1">{{ ultimo_desempenho }}</h2>
-                <p class="text-muted small mb-0">Último Desempenho</p>
- </div>
- </div>
- </div>
+            <div class="dash-stat fx-3d">
+                <div class="dash-stat-top">
+                    <div class="dash-stat-icon"><i class="fas fa-fire"></i></div>
+                    <span class="dash-stat-badge success">Ativo</span>
+                </div>
+                <h2 class="dash-stat-number">{{ ultimo_desempenho }}</h2>
+                <p class="dash-stat-label">&Uacute;ltimo desempenho</p>
+            </div>
+        </div>
+    </div>
 
-    <!-- Barra de Progresso Detalhada -->
-    <div class="card-modern p-4 mb-4">
-        <h5 class="fw-bold mb-4"><i class="fas fa-chart-line me-2 text-success"></i>Progresso de Recuperação</h5>
-        <div class="d-flex justify-content-between mb-2">
-            <span class="fw-bold">Progresso Geral</span>
-            <span class="fw-bold text-success">{{ progresso_recuperacao }}%</span>
- </div>
-        <div class="progress mb-4" style="height: 20px; border-radius: 15px;">
-            <div class="progress-bar bg-success" style="width: {{ progresso_recuperacao }}%; border-radius: 15px;" role="progressbar">
-                {% if progresso_recuperacao >= 20 %}{{ progresso_recuperacao }}%{% endif %}
- </div>
- </div>
+    <!-- PROGRESSO -->
+    <div class="dash-section fx-3d">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title">
+                <i class="fas fa-chart-line"></i>
+                Progresso de Recupera&ccedil;&atilde;o
+            </h5>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary);">Progresso geral</span>
+            <span style="font-weight: 800; font-size: 1.05rem; color: #2BA181;">{{ progresso_recuperacao }}%</span>
+        </div>
+        <div class="dash-progress" style="height: 14px; margin-bottom: 24px;">
+            <div class="dash-progress-fill" style="width: {{ progresso_recuperacao }}%;"></div>
+        </div>
 
         {% if ultima_evolucao %}
         <div class="row g-3">
-            <div class="col-md-3">
-                <div class="text-center p-3 bg-light rounded-4">
-                    <small class="text-muted d-block">Dor</small>
-                    <h4 class="fw-bold mb-0 text-danger">{{ ultima_evolucao.dor }}/10</h4>
- </div>
- </div>
-            <div class="col-md-3">
-                <div class="text-center p-3 bg-light rounded-4">
-                    <small class="text-muted d-block">Mobilidade</small>
-                    <h4 class="fw-bold mb-0 text-info">{{ ultima_evolucao.mobilidade }}/10</h4>
- </div>
- </div>
-            <div class="col-md-3">
-                <div class="text-center p-3 bg-light rounded-4">
-                    <small class="text-muted d-block">Força</small>
-                    <h4 class="fw-bold mb-0 text-warning">{{ ultima_evolucao.forca }}/10</h4>
- </div>
- </div>
-            <div class="col-md-3">
-                <div class="text-center p-3 bg-light rounded-4">
-                    <small class="text-muted d-block">Desempenho</small>
-                    <h4 class="fw-bold mb-0 text-success">{{ ultima_evolucao.desempenho }}/10</h4>
- </div>
- </div>
- </div>
+            <div class="col-md-3 col-6">
+                <div class="dash-stat fx-3d" style="text-align:center; padding: 16px 12px;">
+                    <p class="dash-stat-label" style="margin-bottom: 4px; color: #dc2626;">Dor</p>
+                    <h3 class="dash-stat-number" style="font-size: 1.5rem; color: #dc2626;">{{ ultima_evolucao.dor }}/10</h3>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="dash-stat fx-3d" style="text-align:center; padding: 16px 12px;">
+                    <p class="dash-stat-label" style="margin-bottom: 4px;">Mobilidade</p>
+                    <h3 class="dash-stat-number" style="font-size: 1.5rem;">{{ ultima_evolucao.mobilidade }}/10</h3>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="dash-stat fx-3d" style="text-align:center; padding: 16px 12px;">
+                    <p class="dash-stat-label" style="margin-bottom: 4px; color: #d97706;">For&ccedil;a</p>
+                    <h3 class="dash-stat-number" style="font-size: 1.5rem; color: #d97706;">{{ ultima_evolucao.forca }}/10</h3>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="dash-stat fx-3d" style="text-align:center; padding: 16px 12px;">
+                    <p class="dash-stat-label" style="margin-bottom: 4px;">Desempenho</p>
+                    <h3 class="dash-stat-number" style="font-size: 1.5rem;">{{ ultima_evolucao.desempenho }}/10</h3>
+                </div>
+            </div>
+        </div>
         {% endif %}
- </div>
+    </div>
 
-    <!-- Gráficos de Evolução -->
-    <div class="row g-4 mb-4">
+    <!-- ACOES RAPIDAS -->
+    <div class="dash-section fx-3d">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title">
+                <i class="fas fa-bolt"></i>
+                A&ccedil;&otilde;es R&aacute;pidas
+            </h5>
+        </div>
+        <div class="dash-actions">
+            <a href="{% url 'dashboard:atleta_exercicios' %}" class="dash-action fx-3d">
+                <div class="dash-action-icon"><i class="fas fa-running"></i></div>
+                <div class="dash-action-text">
+                    <p class="dash-action-title">Meus Exerc&iacute;cios</p>
+                    <p class="dash-action-sub">{{ exercicios_concluidos }} conclu&iacute;dos</p>
+                </div>
+                <i class="fas fa-arrow-right dash-action-arrow"></i>
+            </a>
+            <a href="{% url 'dashboard:atleta_recuperacao' %}" class="dash-action fx-3d">
+                <div class="dash-action-icon"><i class="fas fa-heartbeat"></i></div>
+                <div class="dash-action-text">
+                    <p class="dash-action-title">Minha Recupera&ccedil;&atilde;o</p>
+                    <p class="dash-action-sub">Hist&oacute;rico completo</p>
+                </div>
+                <i class="fas fa-arrow-right dash-action-arrow"></i>
+            </a>
+            <a href="{% url 'dashboard:atleta_psicologico' %}" class="dash-action fx-3d">
+                <div class="dash-action-icon"><i class="fas fa-brain"></i></div>
+                <div class="dash-action-text">
+                    <p class="dash-action-title">Sa&uacute;de Mental</p>
+                    <p class="dash-action-sub">Avalia&ccedil;&otilde;es</p>
+                </div>
+                <i class="fas fa-arrow-right dash-action-arrow"></i>
+            </a>
+            <a href="{% url 'dashboard:atleta_minha_timeline' %}" class="dash-action fx-3d">
+                <div class="dash-action-icon"><i class="fas fa-stream"></i></div>
+                <div class="dash-action-text">
+                    <p class="dash-action-title">Minha Timeline</p>
+                    <p class="dash-action-sub">Hist&oacute;rico cl&iacute;nico</p>
+                </div>
+                <i class="fas fa-arrow-right dash-action-arrow"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- GRAFICOS -->
+    <div class="row g-3 mb-4">
         <div class="col-lg-8">
-            <div class="card-modern p-4 card-tilt">
-                <h5 class="fw-bold mb-3"><i class="fas fa-chart-area me-2 text-primary"></i>Evolução dos Indicadores</h5>
-                <div style="height: 320px;">
+            <div class="dash-section fx-3d" style="height: 100%; margin-bottom: 0;">
+                <div class="dash-section-head">
+                    <h5 class="dash-section-title">
+                        <i class="fas fa-chart-area"></i>
+                        Evolu&ccedil;&atilde;o dos Indicadores
+                    </h5>
+                </div>
+                <div class="dash-chart-lg">
                     <canvas id="evolucaoAtletaChart"></canvas>
- </div>
- </div>
- </div>
+                </div>
+            </div>
+        </div>
         <div class="col-lg-4">
-            <div class="card-modern p-4 card-tilt">
-                <h5 class="fw-bold mb-3"><i class="fas fa-heartbeat me-2 text-success"></i>Nível de Recuperação</h5>
-                <div style="height: 320px;">
+            <div class="dash-section fx-3d" style="height: 100%; margin-bottom: 0;">
+                <div class="dash-section-head">
+                    <h5 class="dash-section-title">
+                        <i class="fas fa-heartbeat"></i>
+                        N&iacute;vel Atual
+                    </h5>
+                </div>
+                <div class="dash-chart-lg">
                     <canvas id="recuperacaoAtletaChart"></canvas>
- </div>
- </div>
- </div>
- </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Exercícios Pendentes -->
-    <div class="row g-4 mb-4">
+    <!-- EXERCICIOS E ADESAO -->
+    <div class="row g-3 mb-4">
         <div class="col-lg-7">
-            <div class="card-modern p-4 h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-bold mb-0"><i class="fas fa-dumbbell me-2 text-info"></i>Meus Exercícios Pendentes</h5>
-                    <a href="{% url 'dashboard:atleta_exercicios' %}" class="btn btn-sm btn-outline-custom">Ver Todos</a>
- </div>
+            <div class="dash-section fx-3d" style="height: 100%; margin-bottom: 0;">
+                <div class="dash-section-head">
+                    <h5 class="dash-section-title">
+                        <i class="fas fa-dumbbell"></i>
+                        Exerc&iacute;cios Pendentes
+                    </h5>
+                    <a href="{% url 'dashboard:atleta_exercicios' %}" class="dash-btn">
+                        Ver todos
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
                 {% for ex in exercicios %}
-                <div class="d-flex align-items-center p-3 mb-2 bg-light rounded-4">
-                    <div class="bg-info bg-opacity-10 rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-running text-info"></i>
- </div>
-                    <div class="flex-grow-1">
-                        <h6 class="fw-bold mb-0">{{ ex.nome }}</h6>
-                        <small class="text-muted">{{ ex.series }}x{{ ex.repeticoes }} | {{ ex.frequencia }}</small>
- </div>
-                    <span class="badge bg-warning bg-opacity-10 text-warning">Pendente</span>
- </div>
+                <div style="display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 8px;">
+                    <div class="dash-stat-icon" style="width: 40px; height: 40px; font-size: 0.9rem; flex-shrink: 0;">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <p style="margin: 0; font-weight: 600; font-size: 0.88rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ ex.nome }}</p>
+                        <p style="margin: 0; font-size: 0.75rem; color: var(--text-tertiary);">{{ ex.series }}x{{ ex.repeticoes }} &middot; {{ ex.frequencia }}</p>
+                    </div>
+                    <span class="dash-stat-badge warn">Pendente</span>
+                </div>
                 {% empty %}
-                <div class="text-center py-4">
-                    <i class="fas fa-check-circle fs-1 text-success d-block mb-2 opacity-50"></i>
-                    <p class="text-muted mb-0">Você concluiu todos os exercícios! </p>
- </div>
+                <div class="dash-empty">
+                    <i class="fas fa-check-circle"></i>
+                    <p style="margin: 0; font-size: 0.85rem;">Voc&ecirc; concluiu todos os exerc&iacute;cios.</p>
+                </div>
                 {% endfor %}
- </div>
- </div>
+            </div>
+        </div>
 
-        <!-- Card de Adesão -->
         <div class="col-lg-5">
-            <div class="card-modern p-4 h-100 d-flex flex-column justify-content-center text-center">
-                <div class="bg-success bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-medal fa-3x text-success"></i>
- </div>
-                <h2 class="fw-bold mb-1">{{ adesao }}%</h2>
-                <p class="text-muted">Taxa de Adesão aos Exercícios</p>
-                <div class="progress mt-3" style="height: 10px; border-radius: 10px;">
-                    <div class="progress-bar bg-success" style="width: {{ adesao }}%; border-radius: 10px;"></div>
- </div>
-                <small class="text-muted mt-2">{{ exercicios_concluidos }} de {{ total_exercicios }} concluídos</small>
- </div>
- </div>
- </div>
+            <div class="dash-section fx-3d" style="height: 100%; margin-bottom: 0; text-align: center;">
+                <div class="dash-stat-icon" style="width: 80px; height: 80px; margin: 0 auto 16px; font-size: 2rem;">
+                    <i class="fas fa-medal"></i>
+                </div>
+                <h2 class="dash-stat-number" style="font-size: 2.4rem;">{{ adesao }}%</h2>
+                <p class="dash-stat-label" style="margin-bottom: 20px;">Taxa de ades&atilde;o aos exerc&iacute;cios</p>
+                <div class="dash-progress" style="height: 10px;">
+                    <div class="dash-progress-fill" style="width: {{ adesao }}%;"></div>
+                </div>
+                <p style="margin: 12px 0 0; font-size: 0.78rem; color: var(--text-tertiary);">
+                    {{ exercicios_concluidos }} de {{ total_exercicios }} conclu&iacute;dos
+                </p>
+            </div>
+        </div>
+    </div>
 
-    <!-- Timeline Pessoal -->
-    <div class="card-modern p-4 mb-4">
-        <h5 class="fw-bold mb-4"><i class="fas fa-history me-2 text-primary"></i>Minha Timeline</h5>
+    <!-- OBJETIVOS -->
+    {% if prontuario and objetivos_atleta %}
+    <div class="dash-section fx-3d">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title">
+                <i class="fas fa-bullseye"></i>
+                Meus Objetivos
+            </h5>
+            <span class="dash-stat-badge success">{{ objetivos_alcancados }}/{{ total_objetivos }} alcan&ccedil;ados</span>
+        </div>
+
+        <div class="row g-3">
+            {% for obj in objetivos_atleta %}
+            <div class="col-md-6">
+                <div class="dash-stat fx-3d" style="height: 100%;">
+                    <div class="dash-stat-top">
+                        <div style="min-width: 0;">
+                            <p style="margin: 0; font-weight: 600; font-size: 0.9rem; color: var(--text-primary);">{{ obj.titulo }}</p>
+                            {% if obj.descricao %}
+                            <p style="margin: 4px 0 0; font-size: 0.78rem; color: var(--text-tertiary); line-height: 1.4;">{{ obj.descricao|truncatechars:100 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 6px;">
+                        <span style="color: var(--text-tertiary);">{{ obj.get_prazo_display }}</span>
+                        <strong style="color: #2BA181;">{{ obj.percentual_alcancado }}%</strong>
+                    </div>
+                    <div class="dash-progress">
+                        <div class="dash-progress-fill" style="width: {{ obj.percentual_alcancado }}%;"></div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- ULTIMAS SESSOES -->
+    {% if prontuario and ultimas_sessoes %}
+    <div class="dash-section fx-3d">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title">
+                <i class="fas fa-clipboard-check"></i>
+                Minhas &Uacute;ltimas Sess&otilde;es
+            </h5>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table class="dash-table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Dura&ccedil;&atilde;o</th>
+                        <th>Procedimentos</th>
+                        <th>Dor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in ultimas_sessoes %}
+                    <tr>
+                        <td data-label="Data"><strong>{{ s.data_sessao|date:"d/m/Y" }}</strong></td>
+                        <td data-label="Dura&ccedil;&atilde;o">{{ s.horario_inicio|time:"H:i" }} - {{ s.horario_fim|time:"H:i" }}</td>
+                        <td data-label="Procedimentos"><span style="font-size: 0.85rem;">{{ s.procedimentos|truncatechars:80 }}</span></td>
+                        <td data-label="Dor">
+                            <span class="dash-stat-badge {% if s.dor_fim <= 3 %}success{% elif s.dor_fim <= 6 %}warn{% else %}danger{% endif %}">
+                                {{ s.dor_inicio }} &rarr; {{ s.dor_fim }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if dor_media > 0 %}
+        <div style="margin-top: 16px; padding: 14px; background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.18); border-radius: 12px; display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-chart-line" style="color: #2BA181;"></i>
+            <span style="font-size: 0.82rem; color: var(--text-secondary);">
+                Sua m&eacute;dia de dor nas &uacute;ltimas {{ ultimas_sessoes|length }} sess&otilde;es &eacute;
+                <strong style="color: var(--text-primary);">{{ dor_media }}/10</strong>.
+                {% if dor_media <= 3 %}Continue assim!{% endif %}
+            </span>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- TIMELINE -->
+    <div class="dash-section fx-3d">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title">
+                <i class="fas fa-history"></i>
+                Minha Timeline
+            </h5>
+        </div>
+
         {% for evento in timeline %}
-        <div class="d-flex mb-3">
-            <div class="bg-{{ evento.cor }} bg-opacity-10 text-{{ evento.cor }} rounded-circle p-2 me-3" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <div style="display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border-color);">
+            <div class="dash-stat-icon" style="flex-shrink: 0;">
                 <i class="fas {{ evento.icone }}"></i>
- </div>
-            <div class="flex-grow-1 border-bottom pb-3">
-                <div class="d-flex justify-content-between">
-                    <h6 class="fw-bold mb-1">{{ evento.titulo }}</h6>
-                    <small class="text-muted">{{ evento.data|date:"d/m/Y" }}</small>
- </div>
-                <p class="text-muted small mb-0">{{ evento.descricao }}</p>
- </div>
- </div>
+            </div>
+            <div style="flex: 1; min-width: 0;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 4px;">
+                    <p style="margin: 0; font-weight: 600; font-size: 0.9rem; color: var(--text-primary);">{{ evento.titulo }}</p>
+                    <span style="font-size: 0.72rem; color: var(--text-tertiary); flex-shrink: 0;">{{ evento.data|date:"d/m/Y" }}</span>
+                </div>
+                <p style="margin: 0; font-size: 0.8rem; color: var(--text-tertiary); line-height: 1.4;">{{ evento.descricao }}</p>
+            </div>
+        </div>
         {% empty %}
-        <div class="text-center py-4">
-            <i class="fas fa-history fs-1 d-block mb-2 opacity-25 text-muted"></i>
-            <p class="text-muted mb-0">Nenhuma atividade registrada ainda.</p>
- </div>
+        <div class="dash-empty">
+            <i class="fas fa-history"></i>
+            <p style="margin: 0; font-size: 0.85rem;">Nenhuma atividade registrada ainda.</p>
+        </div>
         {% endfor %}
- </div>
+    </div>
 
-    <!-- Últimas Avaliações Psicológicas -->
+    <!-- AVALIACOES PSICOLOGICAS -->
     {% if avaliacoes %}
-    <div class="card-modern p-4">
-        <h5 class="fw-bold mb-3"><i class="fas fa-brain me-2 text-info"></i>Últimas Avaliações Psicológicas</h5>
+    <div class="dash-section fx-3d">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title">
+                <i class="fas fa-brain"></i>
+                &Uacute;ltimas Avalia&ccedil;&otilde;es Psicol&oacute;gicas
+            </h5>
+        </div>
+
         <div class="row g-3">
             {% for av in avaliacoes %}
             <div class="col-md-4">
-                <div class="card p-3 border-0 shadow-sm rounded-4">
-                    <div class="d-flex justify-content-between mb-2">
-                        <small class="text-muted">{{ av.data|date:"d/m/Y" }}</small>
-                        <span class="badge
-                            {% if av.score_total >= 7 %}bg-success bg-opacity-10 text-success
-                            {% elif av.score_total >= 4 %}bg-warning bg-opacity-10 text-warning
-                            {% else %}bg-danger bg-opacity-10 text-danger{% endif %}">
+                <div class="dash-stat fx-3d">
+                    <div class="dash-stat-top">
+                        <span style="font-size: 0.75rem; color: var(--text-tertiary);">{{ av.data|date:"d/m/Y" }}</span>
+                        <span class="dash-stat-badge {% if av.score_total >= 7 %}success{% elif av.score_total >= 4 %}warn{% else %}danger{% endif %}">
                             {{ av.status_emocional }}
- </span>
- </div>
-                    <h4 class="fw-bold mb-0">{{ av.score_total }}/10</h4>
-                    <small class="text-muted">Score Total</small>
- </div>
- </div>
+                        </span>
+                    </div>
+                    <h3 class="dash-stat-number" style="font-size: 1.7rem;">{{ av.score_total }}/10</h3>
+                    <p class="dash-stat-label">Score total</p>
+                </div>
+            </div>
             {% endfor %}
- </div>
- </div>
+        </div>
+    </div>
     {% endif %}
 
-<!-- Progresso dos Objetivos -->
-{% if prontuario and objetivos_atleta %}
-<div class="card-modern p-4 mb-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h5 class="fw-bold mb-0">
-            <i class="fas fa-bullseye me-2 text-success"></i>Meus Objetivos
- </h5>
-        <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">
-            {{ objetivos_alcancados }}/{{ total_objetivos }} alcançados
- </span>
- </div>
-
-    <div class="row g-3">
-        {% for obj in objetivos_atleta %}
-        <div class="col-md-6">
-            <div class="card p-3 border-0 shadow-sm rounded-4 h-100">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <span class="badge 
-                        {% if obj.prazo == 'curto' %}bg-success
-                        {% elif obj.prazo == 'medio' %}bg-warning
-                        {% else %}bg-info{% endif %} bg-opacity-10 
-                        {% if obj.prazo == 'curto' %}text-success
-                        {% elif obj.prazo == 'medio' %}text-warning
-                        {% else %}text-info{% endif %} rounded-pill">
-                        {{ obj.get_prazo_display }}
- </span>
-                    <span class="badge 
-                        {% if obj.status == 'alcancado' %}bg-success
-                        {% elif obj.status == 'em_andamento' %}bg-warning
-                        {% else %}bg-secondary{% endif %} bg-opacity-10 
-                        {% if obj.status == 'alcancado' %}text-success
-                        {% elif obj.status == 'em_andamento' %}text-warning
-                        {% else %}text-secondary{% endif %} rounded-pill">
-                        {{ obj.get_status_display }}
- </span>
- </div>
-                <h6 class="fw-bold mb-2">{{ obj.titulo }}</h6>
-                {% if obj.descricao %}
-                <p class="small text-muted mb-3">{{ obj.descricao|truncatechars:100 }}</p>
-                {% endif %}
-                <div class="d-flex justify-content-between small mb-1">
-                    <span class="text-muted">Progresso</span>
-                    <strong class="text-success">{{ obj.percentual_alcancado }}%</strong>
- </div>
-                <div class="progress" style="height: 8px; border-radius: 10px;">
-                    <div class="progress-bar bg-success" style="width: {{ obj.percentual_alcancado }}%"></div>
- </div>
- </div>
- </div>
-        {% endfor %}
- </div>
-</div>
-{% endif %}
-
-<!-- Últimas Sessões -->
-{% if prontuario and ultimas_sessoes %}
-<div class="card-modern p-4 mb-4">
-    <h5 class="fw-bold mb-4">
-        <i class="fas fa-clipboard-check me-2 text-primary"></i>Minhas Últimas Sessões
- </h5>
-
-    <div class="table-responsive">
-        <table class="table table-hover align-middle">
-            <thead class="bg-light text-muted small fw-bold">
-                <tr>
-                    <th>Data</th>
-                    <th>Duração</th>
-                    <th>Procedimentos</th>
-                    <th>Dor</th>
- </tr>
- </thead>
-            <tbody>
-                {% for s in ultimas_sessoes %}
-                <tr>
-                    <td data-label="Data"><strong>{{ s.data_sessao|date:"d/m/Y" }}</strong></td>
-                    <td data-label="Duração">
-                        {{ s.horario_inicio|time:"H:i" }} - {{ s.horario_fim|time:"H:i" }}
- </td>
-                    <td data-label="Procedimentos">
-                        <span class="small">{{ s.procedimentos|truncatechars:80 }}</span>
- </td>
-                    <td data-label="Dor">
-                        <span class="badge 
-                            {% if s.dor_fim <= 3 %}bg-success bg-opacity-10 text-success
-                            {% elif s.dor_fim <= 6 %}bg-warning bg-opacity-10 text-warning
-                            {% else %}bg-danger bg-opacity-10 text-danger{% endif %} rounded-pill">
-                            {{ s.dor_inicio }}  {{ s.dor_fim }}
- </span>
- </td>
- </tr>
-                {% endfor %}
- </tbody>
- </table>
- </div>
-
-    {% if dor_media > 0 %}
-    <div class="alert alert-info mt-3 mb-0 rounded-4 d-flex align-items-center gap-2">
-        <i class="fas fa-chart-line"></i>
-        <span>
-            Sua média de dor nas últimas {{ ultimas_sessoes|length }} sessões é 
-            <strong>{{ dor_media }}/10</strong>. 
-            {% if dor_media <= 3 %} Continue assim! {% endif %}
- </span>
- </div>
+    <!-- PRONTUARIO -->
+    {% if prontuario %}
+    <div class="dash-section fx-3d" style="background: linear-gradient(135deg, #0d3a2b 0%, #14523d 50%, #0a2a20 100%); color: #fff; border: none;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">
+                    <i class="fas fa-folder-open"></i>
+                </div>
+                <div>
+                    <h5 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; margin: 0 0 4px; color: #fff;">Meu Prontu&aacute;rio Cl&iacute;nico</h5>
+                    <small style="color: rgba(255,255,255,0.65); font-size: 0.78rem;">N&ordm; {{ prontuario.numero_prontuario }}</small>
+                </div>
+            </div>
+            <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" class="btn-dash-cta">
+                Ver detalhes
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
     {% endif %}
-</div>
-{% endif %}
-
-<!-- Prontuário -->
-{% if prontuario %}
-<div class="card-modern p-4 mb-4" style="background: linear-gradient(135deg, #2BA181 0%, #5A6461 100%); color: white;">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-        <div class="d-flex align-items-center gap-3">
-            <div class="bg-white bg-opacity-25 rounded-circle p-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
-                <i class="fas fa-folder-medical fa-xl"></i>
- </div>
-            <div>
-                <h5 class="fw-bold mb-0">Meu Prontuário Clínico</h5>
-                <small class="opacity-75">Nº {{ prontuario.numero_prontuario }}</small>
- </div>
- </div>
-        <a href="{% url 'prontuario:dashboard_prontuario' prontuario.id %}" 
-           class="btn btn-light fw-bold">
-            Ver detalhes <i class="fas fa-arrow-right ms-1"></i>
- </a>
- </div>
-</div>
-{% endif %}
 
 </div>
 
-<!-- Dados para JavaScript -->
 {{ chart_labels|json_script:"atleta_labels" }}
 {{ chart_dor|json_script:"atleta_dor" }}
 {{ chart_mobilidade|json_script:"atleta_mob" }}
@@ -390,102 +437,76 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         function getJSON(id) {
-            const el = document.getElementById(id);
+            var el = document.getElementById(id);
             return el ? JSON.parse(el.textContent) : [];
         }
 
-        // Gráfico 1: Evolução dos Indicadores
-        const ctx1 = document.getElementById('evolucaoAtletaChart').getContext('2d');
-        new Chart(ctx1, {
-            type: 'line',
-            data: {
-                labels: getJSON('atleta_labels'),
-                datasets: [
-                    {
-                        label: 'Dor',
-                        data: getJSON('atleta_dor'),
-                        borderColor: '#dc3545',
-                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Mobilidade',
-                        data: getJSON('atleta_mob'),
-                        borderColor: '#0dcaf0',
-                        backgroundColor: 'rgba(13, 202, 240, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Força',
-                        data: getJSON('atleta_for'),
-                        borderColor: '#ffc107',
-                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Desempenho',
-                        data: getJSON('atleta_des'),
-                        borderColor: '#2BA181',
-                        backgroundColor: 'rgba(43, 161, 129, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'top', labels: { usePointStyle: true, padding: 15 } }
+        var ctx1 = document.getElementById('evolucaoAtletaChart');
+        if (ctx1) {
+            new Chart(ctx1.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: getJSON('atleta_labels'),
+                    datasets: [
+                        { label: 'Dor', data: getJSON('atleta_dor'), borderColor: '#dc2626', backgroundColor: 'rgba(220,38,38,0.08)', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 3 },
+                        { label: 'Mobilidade', data: getJSON('atleta_mob'), borderColor: '#0ea5e9', backgroundColor: 'rgba(14,165,233,0.08)', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 3 },
+                        { label: 'Força', data: getJSON('atleta_for'), borderColor: '#d97706', backgroundColor: 'rgba(217,119,6,0.08)', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 3 },
+                        { label: 'Desempenho', data: getJSON('atleta_des'), borderColor: '#2BA181', backgroundColor: 'rgba(43,161,129,0.08)', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 3 }
+                    ]
                 },
-                scales: {
-                    y: { beginAtZero: true, max: 10, grid: { color: 'rgba(0,0,0,0.05)' } },
-                    x: { grid: { display: false } }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { usePointStyle: true, padding: 15 } }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, max: 10, grid: { color: 'rgba(0,0,0,0.05)' } },
+                        x: { grid: { display: false } }
+                    }
                 }
-            }
-        });
+            });
+        }
 
-        // Gráfico 2: Nível de Recuperação
-        const ctx2 = document.getElementById('recuperacaoAtletaChart').getContext('2d');
-        const perc = getJSON('atleta_perc');
-        const ultimoPerc = perc.length > 0 ? perc[perc.length - 1] : 0;
-        new Chart(ctx2, {
-            type: 'doughnut',
-            data: {
-                labels: ['Recuperado', 'Restante'],
-                datasets: [{
-                    data: [ultimoPerc, 100 - ultimoPerc],
-                    backgroundColor: ['#2BA181', '#e9ecef'],
-                    borderWidth: 0,
-                    hoverOffset: 10
+        var ctx2 = document.getElementById('recuperacaoAtletaChart');
+        if (ctx2) {
+            var perc = getJSON('atleta_perc');
+            var ultimoPerc = perc.length > 0 ? perc[perc.length - 1] : 0;
+            new Chart(ctx2.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Recuperado', 'Restante'],
+                    datasets: [{
+                        data: [ultimoPerc, 100 - ultimoPerc],
+                        backgroundColor: ['#2BA181', 'rgba(43,161,129,0.08)'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: { legend: { display: false } }
+                },
+                plugins: [{
+                    id: 'textCenter',
+                    beforeDraw: function(chart) {
+                        var w = chart.width, h = chart.height, ctx = chart.ctx;
+                        ctx.save();
+                        ctx.font = 'bold 32px Poppins, sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillStyle = '#2BA181';
+                        ctx.fillText(ultimoPerc + '%', w / 2, h / 2 - 8);
+                        ctx.font = '12px Poppins, sans-serif';
+                        ctx.fillStyle = '#666';
+                        ctx.fillText('Recuperado', w / 2, h / 2 + 20);
+                        ctx.restore();
+                    }
                 }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '75%',
-                plugins: { legend: { display: false } }
-            },
-            plugins: [{
-                id: 'textCenter',
-                beforeDraw: function(chart) {
-                    const { width, height, ctx } = chart;
-                    ctx.save();
-                    ctx.font = 'bold 32px Poppins, sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillStyle = '#2BA181';
-                    ctx.fillText(ultimoPerc + '%', width / 2, height / 2 - 8);
-                    ctx.font = '13px Poppins, sans-serif';
-                    ctx.fillStyle = '#666';
-                    ctx.fillText('Recuperado', width / 2, height / 2 + 20);
-                    ctx.restore();
-                }
-            }]
-        });
+            });
+        }
     });
 </script>
 {% endblock %}
