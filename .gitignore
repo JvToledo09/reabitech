@@ -20,6 +20,8 @@ db_backup_*.sqlite3
 *.log
 .env
 .env.*
+!.env.example
+.env.prod
 
 # Media e Static gerados
 media/
@@ -32,29 +34,20 @@ staticfiles/
 .DS_Store
 Thumbs.db
 
-# Arquivos temporários do TCC
-codigo_deepseek_parte_*.txt
-auditoria.txt
-arquivos_*.txt
-atletas_completo.txt
-mapa_arquitetura_reabitech.txt
-lista_atletas.py
-prepara_codigo_deepseek.py
-
-# Pasta duplicada do projeto (não versionar)
-reabitech/
-# Pasta antiga duplicada do projeto
-reabitech/
-reabitech_old_backup/
+# Testes / Coverage
 htmlcov/
 .pytest_cache/
 .coverage
-.env.prod
-.env.prod
+coverage.xml
+
+# Snapshots pessoais
+snapshot_reabitech.txt
+
+# Backups
 *.bak
 conftest.py.bak
 settings.py.bak
 
-# Snapshot pessoal (não versionar)
-snapshot_reabitech.txt
-
+# Pasta duplicada antiga do projeto (histórico)
+reabitech/
+reabitech_old_backup/
