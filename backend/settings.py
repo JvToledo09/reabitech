@@ -167,9 +167,13 @@ INTERNAL_IPS = ['127.0.0.1']
 # ==============================================================================
 # Banco de dados (SQLite em dev, PostgreSQL via DATABASE_URL em prod)
 # ==============================================================================
-DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
+# Defesa contra DATABASE_URL vazia ou invalida: so chama parse() se a URL
+# comecar com postgres:// ou postgresql://. Qualquer outro valor cai em SQLite.
+# (Evita bug conhecido do dj-database-url 2.x que faz fallback para os.environ
+#  durante o build do Render, quando a env var ainda nao esta disponivel.)
+DATABASE_URL = (os.environ.get('DATABASE_URL') or '').strip()
 
-if DATABASE_URL:
+if DATABASE_URL.startswith(('postgres://', 'postgresql://')):
     import dj_database_url
     DATABASES = {
         'default': dj_database_url.parse(
@@ -185,6 +189,3 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
-FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
