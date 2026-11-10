@@ -40,6 +40,10 @@ def llms_txt(request):
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
+def health_check(request):
+    return HttpResponse("OK", status=200)
+
+
 urlpatterns = [
     path('favicon.ico', RedirectView.as_view(url='/static/images/projetos/esportetec.png', permanent=True)),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
@@ -47,6 +51,7 @@ urlpatterns = [
     path('llms.txt', llms_txt, name='llms_txt'),
     path('admin/', admin.site.urls),
     path('dashboard/', include('dashboard.urls', namespace='dashboard')),
+     path('health/', health_check, name='health_check'),
 
     path('login/', dashboard_views.login_view, name='login'),
     path('logout/', dashboard_views.logout_view, name='logout'),
