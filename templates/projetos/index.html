@@ -8,7 +8,7 @@
 
     <!-- HERO -->
     <div style="background: linear-gradient(135deg, #000000, #1a1a2e); padding: 60px 40px; text-align: center; border-radius: 24px; margin-bottom: 40px; color: white;">
-        <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="width: 120px; height: 120px; object-fit: contain; margin-bottom: 15px;" onerror="this.style.display='none'">
+        <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="width: 120px; height: 120px; object-fit: contain; margin-bottom: 15px;" onerror="this.style.display='none'" loading="lazy">
         <h1 style="font-size: 3rem; font-weight: 700; margin: 0;">REABITECH</h1>
         <p style="font-size: 1.2rem; opacity: 0.8; margin: 10px 0;">Plataforma SaaS para reabilitação esportiva</p>
         <p style="font-size: 1rem; opacity: 0.7;">Gerencie clubes, equipes e atletas em um só lugar</p>
@@ -23,7 +23,7 @@
         <a href="{% url 'login_projeto' projeto.id %}" style="text-decoration: none; flex: 1; min-width: 250px; max-width: 300px;">
             <div style="background: white; border-radius: 20px; padding: 30px 25px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid #eee; transition: all 0.3s ease; cursor: pointer; height: 100%;">
                 {% load static %}
-<img src="{% static 'images/projetos/esportetec.png' %}" alt="EsporteTec" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 15px;">
+<img src="{% static 'images/projetos/esportetec.png' %}" alt="EsporteTec" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 15px;" loading="lazy">
                 <h4 style="color: #000; margin: 0;">{{ projeto.nome }}</h4>
                 <p style="color: #888; font-size: 0.9rem; margin: 10px 0;">{{ projeto.descricao|truncatechars:60 }}</p>
                 <div style="display: flex; justify-content: center; gap: 15px; font-size: 0.85rem; color: #888;">

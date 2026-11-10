@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br" data-theme="light">
 <head>
@@ -32,7 +33,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    {% load static %}
+    
     <link rel="stylesheet" href="{% static 'css/design-system.css' %}">
     <link rel="stylesheet" href="{% static 'css/theme.css' %}">
     <link rel="stylesheet" href="{% static 'css/internal-effects.css' %}">
@@ -2310,6 +2311,34 @@
     })(window, document, "clarity", "script", "{{ MICROSOFT_CLARITY_ID }}");
 </script>
 {% endif %}
+
+    <!-- JSON-LD Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "REABITECH",
+          "url": "https://reabitech.onrender.com/",
+          "description": "Plataforma de gestão de reabilitação física e emocional para projetos esportivos.",
+          "inLanguage": "pt-BR"
+        },
+        {
+          "@type": "EducationalOrganization",
+          "name": "ESPORETEC - Etec Prefeito Alberto Feres",
+          "url": "https://reabitech.onrender.com/",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Araras",
+            "addressRegion": "SP",
+            "addressCountry": "BR"
+          }
+        }
+      ]
+    }
+    </script>
+
 </head>
 <body>
 
@@ -2331,8 +2360,8 @@
 {% if user.is_authenticated %}
 <div class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-        {% load static %}
-        <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.src='https://via.placeholder.com/140x140?text=REABITECH'">
+        
+        <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.src='https://via.placeholder.com/140x140?text=REABITECH'" loading="lazy">
         <h3>REABITECH</h3>
         <p>Soluções em Reabilitação</p>
  </div>
@@ -2344,7 +2373,7 @@
             {% if projeto_ativo_global.logo %}
             <img src="{{ projeto_ativo_global.logo.url }}"
                  alt="{{ projeto_ativo_global.nome }}"
-                 style="width: 42px; height: 42px; object-fit: cover; border-radius: 10px; flex-shrink: 0;">
+                 style="width: 42px; height: 42px; object-fit: cover; border-radius: 10px; flex-shrink: 0;" loading="lazy">
             {% else %}
             <div style="width: 42px; height: 42px; border-radius: 10px; background: linear-gradient(135deg, #34d399, #2BA181); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 1rem; flex-shrink: 0;">
                 {{ projeto_ativo_global.nome|first|upper }}
@@ -2431,7 +2460,7 @@
     <div class="sidebar-user">
         {% if user.perfil.foto %}
         <div class="avatar">
-            <img src="{{ user.perfil.foto.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+            <img alt="" src="{{ user.perfil.foto.url }}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
  </div>
         {% else %}
         <div class="avatar"><i class="fas fa-user"></i></div>

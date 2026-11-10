@@ -480,7 +480,7 @@
                         {% if msg.anexo %}
                             {% if msg.is_imagem %}
                             <a href="{{ msg.anexo.url }}" target="_blank">
-                                <img src="{{ msg.anexo.url }}" alt="anexo" class="msg-anexo-img">
+                                <img src="{{ msg.anexo.url }}" alt="anexo" class="msg-anexo-img" loading="lazy">
  </a>
                             {% elif msg.is_pdf %}
                             <a href="{{ msg.anexo.url }}" target="_blank" class="msg-anexo-pdf">
@@ -570,7 +570,7 @@
         let anexoHtml = '';
         if (m.tem_anexo) {
             if (m.is_imagem) {
-                anexoHtml = `<a href="${m.anexo_url}" target="_blank"><img src="${m.anexo_url}" class="msg-anexo-img"></a>`;
+                anexoHtml = `<a href="${m.anexo_url}" target="_blank"><img alt="" src="${m.anexo_url}" class="msg-anexo-img" loading="lazy"></a>`;
             } else if (m.is_pdf) {
                 anexoHtml = `<a href="${m.anexo_url}" target="_blank" class="msg-anexo-pdf"><i class="fas fa-file-pdf"></i> Abrir PDF</a>`;
             } else {

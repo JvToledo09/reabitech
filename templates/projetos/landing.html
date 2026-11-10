@@ -1967,7 +1967,7 @@
         <div class="lp-nav-inner">
             <a href="/" class="lp-logo">
                 <div class="lp-logo-img-wrapper">
-                    <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'">
+                    <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'" loading="lazy">
  </div>
                 <span>REABITECH</span>
  </a>
@@ -1994,19 +1994,7 @@
         <!--  VÍDEO DE FUNDO (com fallback automático) -->
         <div class="hero-video-wrapper">
             <div class="hero-video-fallback"></div>
-            <video
-                autoplay
-                muted
-                loop
-                playsinline
-                preload="auto"
-                poster="{% static 'images/hero-poster.jpg' %}"
-                id="heroVideo"
-            >
-                <!-- Substitua por um vídeo real em static/videos/hero.mp4 -->
-                <source src="{% static 'videos/hero.mp4' %}" type="video/mp4">
-                <!-- Fallback: se não tiver vídeo, o gradiente aparece -->
- </video>
+            <!-- Video quebrado removido para otimizacao -->
             <div class="hero-video-overlay"></div>
  </div>
 
@@ -2019,7 +2007,7 @@
                     <!--  LOGO GRANDE DESTACADA -->
                     <div class="hero-logo-display reveal visible">
                         <div class="hero-logo-icon">
-                            <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'">
+                            <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'" loading="lazy">
  </div>
                         <div class="hero-logo-text">
                             <span class="hero-logo-name">REABITECH</span>
@@ -2161,7 +2149,7 @@
                 <img src="{{ projeto.logo.url }}"
                      alt="{{ projeto.nome }}"
                      style="width: 100px; height: 100px; object-fit: contain; border-radius: 20px; background: var(--bg-secondary); padding: 12px; transition: transform 0.4s ease;"
-                     class="projeto-logo">
+                     class="projeto-logo" loading="lazy">
                 {% else %}
                 <div class="projeto-logo"
                      style="width: 100px; height: 100px; border-radius: 20px; background: linear-gradient(135deg, #34d399, #2BA181); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 2.5rem; transition: transform 0.4s ease;">
@@ -2761,7 +2749,7 @@
             <div class="footer-brand">
                 <a href="/" class="lp-logo">
                     <div class="lp-logo-img-wrapper">
-                        <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'">
+                        <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'" loading="lazy">
  </div>
                     <span>REABITECH</span>
  </a>

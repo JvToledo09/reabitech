@@ -14,7 +14,7 @@
                 <div class="position-relative d-inline-block mx-auto mb-3">
                     {% if perfil.foto %}
                     <img src="{{ perfil.foto.url }}" alt="Foto de perfil"
-                         class="rounded-circle" style="width: 130px; height: 130px; object-fit: cover; border: 4px solid white; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                         class="rounded-circle" style="width: 130px; height: 130px; object-fit: cover; border: 4px solid white; box-shadow: 0 4px 20px rgba(0,0,0,0.1);" loading="lazy">
                     {% else %}
                     <div class="bg-gradient-custom rounded-circle d-flex align-items-center justify-content-center mx-auto"
                          style="width: 130px; height: 130px; background: var(--gradient);">

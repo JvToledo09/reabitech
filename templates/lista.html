@@ -26,7 +26,7 @@ Novo atleta
 <div class="avatar">
 
 {% if atleta.foto %}
-<img src="{{ atleta.foto.url }}">
+<img alt="" src="{{ atleta.foto.url }}" loading="lazy">
 {% else %}
 {{ atleta.nome|first }}
 {% endif %}
