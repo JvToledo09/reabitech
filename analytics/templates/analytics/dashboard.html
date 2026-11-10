@@ -44,6 +44,7 @@
         color: var(--text-tertiary); font-weight: 600; margin: 0 0 3px 0;
     }
     .kpi-titulo {
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin: 0;
     }
     .kpi-valor {
@@ -151,7 +152,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid px-4 py-3"> 
+<div class="container-fluid py-3" style="padding-right: 2rem; padding-left: 2rem;"> 
     
     <div class="periodo-bar">
         <div class="periodo-pills">
@@ -169,7 +170,7 @@
     </div>
 
     <div class="row g-3 mb-4">
-        <div class="col-6 col-lg-4 col-xl-2">
+        <div class="col-6 col-lg-4 col-xl-2 col-md-4">
             <div class="kpi-card">
                 <div class="kpi-header">
                     <div><p class="kpi-label">Evoluções</p><p class="kpi-titulo">Registradas</p></div>
@@ -182,7 +183,7 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-6 col-lg-4 col-xl-2">
+        <div class="col-6 col-lg-4 col-xl-2 col-md-4">
             <div class="kpi-card">
                 <div class="kpi-header">
                     <div><p class="kpi-label">Consultas</p><p class="kpi-titulo">Agendadas</p></div>
@@ -195,7 +196,7 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-6 col-lg-4 col-xl-2">
+        <div class="col-6 col-lg-4 col-xl-2 col-md-4">
             <div class="kpi-card">
                 <div class="kpi-header">
                     <div><p class="kpi-label">Recuperação</p><p class="kpi-titulo">Média geral</p></div>
@@ -208,7 +209,7 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-6 col-lg-4 col-xl-2">
+        <div class="col-6 col-lg-4 col-xl-2 col-md-4">
             <div class="kpi-card">
                 <div class="kpi-header">
                     <div><p class="kpi-label">Dor</p><p class="kpi-titulo">Média (0-10)</p></div>
@@ -221,7 +222,7 @@
                 <p class="kpi-extra">dor é bom</p>
             </div>
         </div>
-        <div class="col-6 col-lg-4 col-xl-2">
+        <div class="col-6 col-lg-4 col-xl-2 col-md-4">
             <div class="kpi-card">
                 <div class="kpi-header">
                     <div><p class="kpi-label">Lesões</p><p class="kpi-titulo">Registradas</p></div>
@@ -234,7 +235,7 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-6 col-lg-4 col-xl-2">
+        <div class="col-6 col-lg-4 col-xl-2 col-md-4">
             <div class="kpi-card">
                 <div class="kpi-header">
                     <div><p class="kpi-label">Adesão</p><p class="kpi-titulo">Exercícios</p></div>
