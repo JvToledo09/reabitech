@@ -37,6 +37,7 @@
         color: white; font-size: 1.15rem; flex-shrink: 0;
     }
     .kpi-header {
+        flex-wrap: wrap;
         display: flex; justify-content: space-between; align-items: flex-start;
         margin-bottom: 14px; gap: 10px;
     }
@@ -149,6 +150,35 @@
         .heat-cell { padding: 10px 4px; }
         .heat-cell .valor { font-size: 1.1rem; }
     }
+
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    .kpi-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 0; /* Impede o vazamento */
+    }
+    .kpi-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .kpi-header > div:first-child {
+        flex: 1;
+        min-width: 0; /* O segredo para o ícone não vazar */
+    }
+    .kpi-titulo {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
 </style>
 {% endblock %}
 
@@ -170,11 +200,11 @@
         </div>
     </div>
 
-    <div class="row g-3 mb-4">
-        <div class="col-6 col-lg-4 col-xl-2 col-md-4">
+    <div class="kpi-grid">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2 col-md-4">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div><p class="kpi-label">Evoluções</p><p class="kpi-titulo">Registradas</p></div>
+                    <div style="flex: 1; min-width: 0;"><p class="kpi-label">Evoluções</p><p class="kpi-titulo">Registradas</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #34d399, #2BA181);"><i class="fas fa-chart-line"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_evolucoes.valor|floatformat:0 }}</p>
@@ -184,10 +214,10 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-6 col-lg-4 col-xl-2 col-md-4">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2 col-md-4">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div><p class="kpi-label">Consultas</p><p class="kpi-titulo">Agendadas</p></div>
+                    <div style="flex: 1; min-width: 0;"><p class="kpi-label">Consultas</p><p class="kpi-titulo">Agendadas</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #60a5fa, #3b82f6);"><i class="fas fa-calendar-check"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_consultas.valor|floatformat:0 }}</p>
@@ -197,10 +227,10 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-6 col-lg-4 col-xl-2 col-md-4">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2 col-md-4">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div><p class="kpi-label">Recuperação</p><p class="kpi-titulo">Média geral</p></div>
+                    <div style="flex: 1; min-width: 0;"><p class="kpi-label">Recuperação</p><p class="kpi-titulo">Média geral</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-heart-pulse"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_recuperacao.valor|floatformat:1 }}<span class="kpi-unidade">%</span></p>
@@ -210,10 +240,10 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-6 col-lg-4 col-xl-2 col-md-4">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2 col-md-4">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div><p class="kpi-label">Dor</p><p class="kpi-titulo">Média (0-10)</p></div>
+                    <div style="flex: 1; min-width: 0;"><p class="kpi-label">Dor</p><p class="kpi-titulo">Média (0-10)</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #f87171, #dc2626);"><i class="fas fa-fire"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_dor.valor|floatformat:1 }}</p>
@@ -223,10 +253,10 @@
                 <p class="kpi-extra">dor é bom</p>
             </div>
         </div>
-        <div class="col-6 col-lg-4 col-xl-2 col-md-4">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2 col-md-4">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div><p class="kpi-label">Lesões</p><p class="kpi-titulo">Registradas</p></div>
+                    <div style="flex: 1; min-width: 0;"><p class="kpi-label">Lesões</p><p class="kpi-titulo">Registradas</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);"><i class="fas fa-bone"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_lesoes.valor|floatformat:0 }}</p>
@@ -236,10 +266,10 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-6 col-lg-4 col-xl-2 col-md-4">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2 col-md-4">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div><p class="kpi-label">Adesão</p><p class="kpi-titulo">Exercícios</p></div>
+                    <div style="flex: 1; min-width: 0;"><p class="kpi-label">Adesão</p><p class="kpi-titulo">Exercícios</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6);"><i class="fas fa-dumbbell"></i></div>
                 </div>
                 <p class="kpi-valor">{{ adesao_geral }}<span class="kpi-unidade">%</span></p>
