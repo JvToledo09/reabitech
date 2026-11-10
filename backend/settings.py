@@ -86,6 +86,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'dashboard.context_processors.notificacoes_context',
+                'dashboard.context_processors.analytics_context',
                 'dashboard.context_processors.projeto_ativo_context',
                 'mensageria.context_processors.mensageria_context',
             ],
@@ -189,3 +190,7 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+
+# Integracoes e Monitoramento
+GA4_MEASUREMENT_ID = os.environ.get('GA4_MEASUREMENT_ID', '')
+MICROSOFT_CLARITY_ID = os.environ.get('MICROSOFT_CLARITY_ID', '')

@@ -4,13 +4,45 @@
 
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.sitemaps.views import sitemap
+from django.http import HttpResponse
+from backend.sitemaps import StaticViewSitemap
 from django.conf import settings
 from django.conf.urls.static import static
 
 from dashboard import views as dashboard_views
 from projetos import views as projetos_views
 
+
+sitemaps = { 'static': StaticViewSitemap }
+
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Disallow: /admin/",
+        "Disallow: /dashboard/",
+        "Disallow: /prontuario/",
+        "Disallow: /mensageria/",
+        "Allow: /",
+        "Sitemap: https://reabitech.onrender.com/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
+def llms_txt(request):
+    lines = [
+        "# REABITECH - Plataforma de Reabilitacao",
+        "> Sistema SaaS para gestao de reabilitacao fisica e emocional.",
+        "",
+        "## Paginas Publicas",
+        "- [Home](/)",
+        "- [Login](/login/)",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
 urlpatterns = [
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', robots_txt, name='robots_txt'),
+    path('llms.txt', llms_txt, name='llms_txt'),
     path('admin/', admin.site.urls),
     path('dashboard/', include('dashboard.urls', namespace='dashboard')),
 

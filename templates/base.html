@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="pt-br" data-theme="light">
 <head>
+<!-- SEO Básico -->
+<meta name="description" content="REABITECH - Plataforma de gestão de reabilitação física e emocional.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:title" content="REABITECH - Soluções em Reabilitação">
+<meta property="og:description" content="Plataforma web multi-tenant SaaS para gestão de reabilitação física e emocional.">
+<meta property="og:image" content="{% static 'images/projetos/esportetec.png' %}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="REABITECH - Soluções em Reabilitação">
+<meta name="twitter:description" content="Plataforma web multi-tenant SaaS para gestão de reabilitação física e emocional.">
+<meta name="twitter:image" content="{% static 'images/projetos/esportetec.png' %}">
+<link rel="icon" type="image/png" href="{% static 'images/projetos/esportetec.png' %}">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>REABITECH - {% block title %}Plataforma de Reabilitação{% endblock %}</title>
@@ -2277,6 +2292,24 @@
  </style>
 
     {% block extra_css %}{% endblock %}
+{% if GA4_MEASUREMENT_ID %}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ GA4_MEASUREMENT_ID }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ GA4_MEASUREMENT_ID }}');
+</script>
+{% endif %}
+{% if MICROSOFT_CLARITY_ID %}
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "{{ MICROSOFT_CLARITY_ID }}");
+</script>
+{% endif %}
 </head>
 <body>
 

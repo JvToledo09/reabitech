@@ -48,3 +48,10 @@ def projeto_ativo_context(request):
         pass
 
     return {'projeto_ativo_global': None}
+
+def analytics_context(request):
+    from django.conf import settings
+    return {
+        'GA4_MEASUREMENT_ID': getattr(settings, 'GA4_MEASUREMENT_ID', ''),
+        'MICROSOFT_CLARITY_ID': getattr(settings, 'MICROSOFT_CLARITY_ID', ''),
+    }
