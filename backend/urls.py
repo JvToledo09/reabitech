@@ -40,11 +40,17 @@ def llms_txt(request):
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
+
+def google_verification(request):
+    return HttpResponse("google-site-verification: google8081bb22bba32339.html", content_type="text/html")
+
 def health_check(request):
     return HttpResponse("OK", status=200)
 
 
 urlpatterns = [
+    path('google8081bb22bba32339.html', google_verification, name='google_verification'),
+
     path('favicon.ico', RedirectView.as_view(url='/static/images/projetos/esportetec.png', permanent=True)),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', robots_txt, name='robots_txt'),
