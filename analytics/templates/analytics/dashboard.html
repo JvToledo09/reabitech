@@ -49,7 +49,7 @@
     }
     .kpi-titulo {
         font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin: 0;
-        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        white-space: normal; word-break: break-word;
     }
     .kpi-valor {
         font-family: 'Plus Jakarta Sans', sans-serif;
@@ -119,7 +119,7 @@
     .rank-pos.prata  { background: linear-gradient(135deg, #cbd5e1, #94a3b8); }
     .rank-pos.bronze { background: linear-gradient(135deg, #d97706, #b45309); }
     .rank-info { flex: 1; min-width: 0; }
-    .rank-nome { font-weight: 600; font-size: 0.88rem; color: var(--text-primary); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rank-nome { font-weight: 600; font-size: 0.88rem; color: var(--text-primary); margin: 0; white-space: normal; word-break: break-word; }
     .rank-sub { font-size: 0.72rem; color: var(--text-tertiary); margin: 0; }
     .rank-valor { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.1rem; color: #2BA181; }
     .empty-mini { text-align: center; padding: 40px 20px; color: var(--text-tertiary); }
@@ -151,10 +151,10 @@
     </div>
 
     <div class="row g-3 mb-4">
-        <div class="col-12 col-sm-6 col-md-4 col-xl-2">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div class="kpi-text"><p class="kpi-label">Evoluções</p><p class="kpi-titulo">Registradas</p></div>
+                    <div class="kpi-text" style="flex: 1; min-width: 100px;"><p class="kpi-label">Evoluções</p><p class="kpi-titulo">Registradas</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #34d399, #2BA181);"><i class="fas fa-chart-line"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_evolucoes.valor|floatformat:0 }}</p>
@@ -164,10 +164,10 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-4 col-xl-2">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div class="kpi-text"><p class="kpi-label">Consultas</p><p class="kpi-titulo">Agendadas</p></div>
+                    <div class="kpi-text" style="flex: 1; min-width: 100px;"><p class="kpi-label">Consultas</p><p class="kpi-titulo">Agendadas</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #60a5fa, #3b82f6);"><i class="fas fa-calendar-check"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_consultas.valor|floatformat:0 }}</p>
@@ -177,10 +177,10 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-4 col-xl-2">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div class="kpi-text"><p class="kpi-label">Recuperação</p><p class="kpi-titulo">Média geral</p></div>
+                    <div class="kpi-text" style="flex: 1; min-width: 100px;"><p class="kpi-label">Recuperação</p><p class="kpi-titulo">Média geral</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-heart-pulse"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_recuperacao.valor|floatformat:1 }}<span class="kpi-unidade">%</span></p>
@@ -190,10 +190,10 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-4 col-xl-2">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div class="kpi-text"><p class="kpi-label">Dor</p><p class="kpi-titulo">Média (0-10)</p></div>
+                    <div class="kpi-text" style="flex: 1; min-width: 100px;"><p class="kpi-label">Dor</p><p class="kpi-titulo">Média (0-10)</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #f87171, #dc2626);"><i class="fas fa-fire"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_dor.valor|floatformat:1 }}</p>
@@ -203,10 +203,10 @@
                 <p class="kpi-extra">dor é bom</p>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-4 col-xl-2">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div class="kpi-text"><p class="kpi-label">Lesões</p><p class="kpi-titulo">Registradas</p></div>
+                    <div class="kpi-text" style="flex: 1; min-width: 100px;"><p class="kpi-label">Lesões</p><p class="kpi-titulo">Registradas</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);"><i class="fas fa-bone"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_lesoes.valor|floatformat:0 }}</p>
@@ -216,10 +216,10 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-4 col-xl-2">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div class="kpi-text"><p class="kpi-label">Adesão</p><p class="kpi-titulo">Exercícios</p></div>
+                    <div class="kpi-text" style="flex: 1; min-width: 100px;"><p class="kpi-label">Adesão</p><p class="kpi-titulo">Exercícios</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6);"><i class="fas fa-dumbbell"></i></div>
                 </div>
                 <p class="kpi-valor">{{ adesao_geral }}<span class="kpi-unidade">%</span></p>
