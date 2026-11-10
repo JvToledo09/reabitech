@@ -8,7 +8,6 @@
 {% block extra_css %}
 <style>
     .kpi-card {
-        min-width: 0;
         background: var(--bg-elevated);
         border: 1px solid var(--border-color);
         border-radius: 18px;
@@ -18,6 +17,7 @@
         overflow: hidden;
         box-shadow: var(--shadow-sm);
         height: 100%;
+        min-width: 0;
     }
     .kpi-card::before {
         content: '';
@@ -37,17 +37,19 @@
         color: white; font-size: 1.15rem; flex-shrink: 0;
     }
     .kpi-header {
-        flex-wrap: wrap;
         display: flex; justify-content: space-between; align-items: flex-start;
         margin-bottom: 14px; gap: 10px;
+    }
+    .kpi-text {
+        flex: 1; min-width: 0;
     }
     .kpi-label {
         font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
         color: var(--text-tertiary); font-weight: 600; margin: 0 0 3px 0;
     }
     .kpi-titulo {
-        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin: 0;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .kpi-valor {
         font-family: 'Plus Jakarta Sans', sans-serif;
@@ -68,8 +70,7 @@
     .kpi-extra { font-size: 0.7rem; color: var(--text-tertiary); margin-top: 6px; }
     
     .periodo-bar {
-        background: var(--bg-elevated);
-        border: 1px solid var(--border-color);
+        background: var(--bg-elevated); border: 1px solid var(--border-color);
         border-radius: 16px; padding: 10px 14px; margin-bottom: 20px;
         display: flex; justify-content: space-between; align-items: center;
         flex-wrap: wrap; gap: 12px; box-shadow: var(--shadow-sm);
@@ -80,17 +81,14 @@
         color: var(--text-secondary); text-decoration: none; transition: all 0.2s ease;
         background: var(--bg-primary); border: 1px solid var(--border-color);
     }
-    .periodo-pill:hover {
-        color: var(--text-primary); border-color: #2BA181; transform: translateY(-1px);
-    }
+    .periodo-pill:hover { color: var(--text-primary); border-color: #2BA181; transform: translateY(-1px); }
     .periodo-pill.ativo {
         background: linear-gradient(135deg, #2BA181, #1f8768);
         color: white; border-color: transparent; box-shadow: 0 3px 10px rgba(43, 161, 129, 0.3);
     }
     
     .chart-card {
-        background: var(--bg-elevated);
-        border: 1px solid var(--border-color);
+        background: var(--bg-elevated); border: 1px solid var(--border-color);
         border-radius: 18px; padding: 22px; box-shadow: var(--shadow-sm); height: 100%;
     }
     .chart-titulo {
@@ -104,18 +102,11 @@
     .heat-bars { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
     .heat-cell {
         text-align: center; padding: 14px 6px; border-radius: 12px;
-        background: var(--bg-primary); border: 1px solid var(--border-color);
-        transition: all 0.2s ease;
+        background: var(--bg-primary); border: 1px solid var(--border-color); transition: all 0.2s ease;
     }
     .heat-cell:hover { transform: translateY(-2px); }
-    .heat-cell .dia {
-        font-size: 0.75rem; font-weight: 700; color: var(--text-tertiary);
-        margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 0.05em;
-    }
-    .heat-cell .valor {
-        font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.4rem;
-        font-weight: 800; color: #2BA181; margin: 0; line-height: 1;
-    }
+    .heat-cell .dia { font-size: 0.75rem; font-weight: 700; color: var(--text-tertiary); margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 0.05em; }
+    .heat-cell .valor { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.4rem; font-weight: 800; color: #2BA181; margin: 0; line-height: 1; }
     
     .rank-item {
         display: flex; align-items: center; gap: 12px; padding: 12px 14px;
@@ -123,25 +114,14 @@
         border: 1px solid var(--border-color); transition: all 0.2s ease;
     }
     .rank-item:hover { transform: translateX(4px); border-color: #2BA181; }
-    .rank-pos {
-        width: 28px; height: 28px; border-radius: 8px;
-        background: linear-gradient(135deg, #34d399, #2BA181);
-        color: white; display: flex; align-items: center; justify-content: center;
-        font-weight: 800; font-size: 0.82rem; flex-shrink: 0;
-    }
+    .rank-pos { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #34d399, #2BA181); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.82rem; flex-shrink: 0; }
     .rank-pos.ouro   { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
     .rank-pos.prata  { background: linear-gradient(135deg, #cbd5e1, #94a3b8); }
     .rank-pos.bronze { background: linear-gradient(135deg, #d97706, #b45309); }
     .rank-info { flex: 1; min-width: 0; }
-    .rank-nome {
-        font-weight: 600; font-size: 0.88rem; color: var(--text-primary);
-        margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
+    .rank-nome { font-weight: 600; font-size: 0.88rem; color: var(--text-primary); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .rank-sub { font-size: 0.72rem; color: var(--text-tertiary); margin: 0; }
-    .rank-valor {
-        font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
-        font-size: 1.1rem; color: #2BA181;
-    }
+    .rank-valor { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.1rem; color: #2BA181; }
     .empty-mini { text-align: center; padding: 40px 20px; color: var(--text-tertiary); }
     .empty-mini i { font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 10px; }
     
@@ -150,41 +130,11 @@
         .heat-cell { padding: 10px 4px; }
         .heat-cell .valor { font-size: 1.1rem; }
     }
-
-    .kpi-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 16px;
-        margin-bottom: 24px;
-    }
-    .kpi-card {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        min-width: 0; /* Impede o vazamento */
-    }
-    .kpi-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    .kpi-header > div:first-child {
-        flex: 1;
-        min-width: 0; /* O segredo para o ícone não vazar */
-    }
-    .kpi-titulo {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid py-3" style="padding-right: 2rem; padding-left: 2rem;"> 
-    
+<div class="container-fluid py-3 px-4"> 
     <div class="periodo-bar">
         <div class="periodo-pills">
             {% for key, info in periodos.items %}
@@ -200,11 +150,11 @@
         </div>
     </div>
 
-    <div class="kpi-grid">
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2 col-md-4">
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-sm-6 col-md-4 col-xl-2">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div style="flex: 1; min-width: 0;"><p class="kpi-label">Evoluções</p><p class="kpi-titulo">Registradas</p></div>
+                    <div class="kpi-text"><p class="kpi-label">Evoluções</p><p class="kpi-titulo">Registradas</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #34d399, #2BA181);"><i class="fas fa-chart-line"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_evolucoes.valor|floatformat:0 }}</p>
@@ -214,10 +164,10 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2 col-md-4">
+        <div class="col-12 col-sm-6 col-md-4 col-xl-2">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div style="flex: 1; min-width: 0;"><p class="kpi-label">Consultas</p><p class="kpi-titulo">Agendadas</p></div>
+                    <div class="kpi-text"><p class="kpi-label">Consultas</p><p class="kpi-titulo">Agendadas</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #60a5fa, #3b82f6);"><i class="fas fa-calendar-check"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_consultas.valor|floatformat:0 }}</p>
@@ -227,10 +177,10 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2 col-md-4">
+        <div class="col-12 col-sm-6 col-md-4 col-xl-2">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div style="flex: 1; min-width: 0;"><p class="kpi-label">Recuperação</p><p class="kpi-titulo">Média geral</p></div>
+                    <div class="kpi-text"><p class="kpi-label">Recuperação</p><p class="kpi-titulo">Média geral</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-heart-pulse"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_recuperacao.valor|floatformat:1 }}<span class="kpi-unidade">%</span></p>
@@ -240,10 +190,10 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2 col-md-4">
+        <div class="col-12 col-sm-6 col-md-4 col-xl-2">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div style="flex: 1; min-width: 0;"><p class="kpi-label">Dor</p><p class="kpi-titulo">Média (0-10)</p></div>
+                    <div class="kpi-text"><p class="kpi-label">Dor</p><p class="kpi-titulo">Média (0-10)</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #f87171, #dc2626);"><i class="fas fa-fire"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_dor.valor|floatformat:1 }}</p>
@@ -253,10 +203,10 @@
                 <p class="kpi-extra">dor é bom</p>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2 col-md-4">
+        <div class="col-12 col-sm-6 col-md-4 col-xl-2">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div style="flex: 1; min-width: 0;"><p class="kpi-label">Lesões</p><p class="kpi-titulo">Registradas</p></div>
+                    <div class="kpi-text"><p class="kpi-label">Lesões</p><p class="kpi-titulo">Registradas</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);"><i class="fas fa-bone"></i></div>
                 </div>
                 <p class="kpi-valor">{{ kpi_lesoes.valor|floatformat:0 }}</p>
@@ -266,10 +216,10 @@
                 <p class="kpi-extra">vs período anterior</p>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xxl-2 col-md-4">
+        <div class="col-12 col-sm-6 col-md-4 col-xl-2">
             <div class="kpi-card">
                 <div class="kpi-header">
-                    <div style="flex: 1; min-width: 0;"><p class="kpi-label">Adesão</p><p class="kpi-titulo">Exercícios</p></div>
+                    <div class="kpi-text"><p class="kpi-label">Adesão</p><p class="kpi-titulo">Exercícios</p></div>
                     <div class="kpi-icon" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6);"><i class="fas fa-dumbbell"></i></div>
                 </div>
                 <p class="kpi-valor">{{ adesao_geral }}<span class="kpi-unidade">%</span></p>
@@ -416,7 +366,6 @@
             </div>
         </div>
     </div>
-
 </div> 
 {% endblock %}
 
@@ -431,7 +380,6 @@
     const evLabels = {{ ev_labels|safe }};
     const evValores = {{ ev_valores|safe }};
     const dorValores = {{ dor_valores|safe }};
-
     if (evLabels.length > 0) {
         new Chart(document.getElementById('chartSerieTemporal'), {
             type: 'line',
