@@ -99,13 +99,13 @@
     .chart-wrapper { position: relative; height: 280px; }
     .chart-wrapper.tall { height: 340px; }
     
-    .heat-bars { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+    .heat-bars { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; margin-top: 10px; }
     .heat-cell {
-        text-align: center; padding: 14px 6px; border-radius: 12px;
+        text-align: center; padding: 8px 2px; border-radius: 8px;
         background: var(--bg-primary); border: 1px solid var(--border-color); transition: all 0.2s ease;
     }
     .heat-cell:hover { transform: translateY(-2px); }
-    .heat-cell .dia { font-size: 0.75rem; font-weight: 700; color: var(--text-tertiary); margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 0.05em; }
+    .heat-cell .dia { font-size: 0.65rem; font-weight: 700; color: var(--text-tertiary); margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 0.05em; }
     .heat-cell .valor { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.4rem; font-weight: 800; color: #2BA181; margin: 0; line-height: 1; }
     
     .rank-item {
@@ -324,7 +324,7 @@
             <div class="chart-card">
                 <h6 class="chart-titulo"><i class="fas fa-fire-flame-curved" style="color: #f59e0b;"></i> Atividade por Dia</h6>
                 <p class="chart-sub">Evoluções + consultas por dia da semana</p>
-                <div class="heat-bars mt-4">
+                <div class="heat-bars">
                     {% for dia in heatmap_labels %}
                     <div class="heat-cell">
                         <p class="dia">{{ dia }}</p>
