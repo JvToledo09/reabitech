@@ -113,7 +113,8 @@
         border-radius: 12px; background: var(--bg-primary); margin-bottom: 8px;
         border: 1px solid var(--border-color); transition: all 0.2s ease;
     }
-    .rank-item:hover { transform: translateX(4px); border-color: #2BA181; }
+    .rank-item:hover { transform: translateX(4px); border-color: #2BA181; background: rgba(43, 161, 129, 0.05); }
+    [data-theme="dark"] .rank-item:hover { background: rgba(43, 161, 129, 0.1); }
     .rank-pos { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #34d399, #2BA181); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.82rem; flex-shrink: 0; }
     .rank-pos.ouro   { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
     .rank-pos.prata  { background: linear-gradient(135deg, #cbd5e1, #94a3b8); }
@@ -200,7 +201,7 @@
                 <span class="kpi-trend trend-{{ kpi_dor.cor }}">
                     <i class="fas fa-arrow-{% if kpi_dor.direcao == 'up' %}up{% elif kpi_dor.direcao == 'down' %}down{% else %}right{% endif %}"></i> {{ kpi_dor.variacao_pct }}%
                 </span>
-                <p class="kpi-extra">dor é bom</p>
+                <p class="kpi-extra">↓ é bom</p>
             </div>
         </div>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
@@ -432,9 +433,9 @@
     const psiData = {{ psi_status_data|safe }};
     if (psiData.length > 0 && psiData.some(v => v > 0)) {
         new Chart(document.getElementById('chartPsiStatus'), {
-            type: 'pie',
+            type: 'doughnut',
             data: { labels: psiLabels, datasets: [{ data: psiData, backgroundColor: ['#22c55e', '#f59e0b', '#ef4444'], borderWidth: 0 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: corTexto(), font: { family: 'Inter', size: 11 }, boxWidth: 12, padding: 8 } } } },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { position: 'bottom', labels: { color: corTexto(), font: { family: 'Inter', size: 11 }, boxWidth: 12, padding: 8 } } } },
         });
     } else {
         document.getElementById('chartPsiStatus').outerHTML = '<div class="empty-mini"><i class="fas fa-face-meh"></i><p class="small mb-0">Sem avaliações</p></div>';
@@ -446,7 +447,7 @@
         new Chart(document.getElementById('chartModalidades'), {
             type: 'bar',
             data: { labels: modalLabels, datasets: [{ data: modalData, backgroundColor: PALETA, borderRadius: 6 }] },
-            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { color: corTexto(), precision: 0 }, grid: { color: corGrid() } }, y: { ticks: { color: corTexto() }, grid: { display: false } } } },
+            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { color: corTexto(), precision: 0 }, grid: { color: corGrid() } }, y: { ticks: { color: corTexto(), font: { size: 10 } }, grid: { display: false } } } },
         });
     } else {
         document.getElementById('chartModalidades').outerHTML = '<div class="empty-mini"><i class="fas fa-trophy"></i><p class="small mb-0">Sem modalidades</p></div>';

@@ -1,50 +1,434 @@
 {% extends 'base.html' %}
 {% block title %}Meus Exercícios{% endblock %}
-{% block content %}
-<div class="animate-fadeInUp">
-    <h2><i class="fas fa-running me-2" style="color: var(--cor-secundaria);"></i> Meus Exercícios</h2>
-    <p class="text-muted">Exercícios de recuperação recomendados para você</p>
+{% block page_title %}Meus Exercícios{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ================================================================
+       TOPO E FILTROS
+       ================================================================ */
+    .top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
     
-    <div class="row g-4 mt-2">
+    .filter-tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px; }
+    .filter-tab {
+        padding: 8px 20px; border-radius: 999px; background: var(--bg-secondary);
+        border: 1px solid var(--border-color); color: var(--text-secondary);
+        font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .filter-tab:hover { background: var(--bg-tertiary); }
+    .filter-tab.active { background: #10b981; color: #fff; border-color: #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+
+    /* Botão Modo Profissional */
+    .btn-pro-toggle {
+        padding: 10px 18px; border-radius: 10px; background: var(--bg-elevated);
+        border: 1px solid var(--border-color); color: var(--text-primary);
+        font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 8px;
+        transition: 0.2s;
+    }
+    .btn-pro-toggle.active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+
+    /* ================================================================
+       CALENDÁRIO
+       ================================================================ */
+    .calendar-container {
+        background: var(--bg-elevated); border: 1px solid var(--border-color);
+        border-radius: 20px; padding: 24px; margin-bottom: 24px;
+    }
+    .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .cal-title { font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0; }
+    
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+    .cal-weekday { text-align: center; font-size: 0.75rem; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 8px; }
+    
+    .cal-day {
+        aspect-ratio: 1; border-radius: 12px; background: var(--bg-secondary);
+        border: 1px solid var(--border-color); display: flex; flex-direction: column;
+        align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;
+        position: relative; color: var(--text-primary); font-weight: 600;
+    }
+    .cal-day:hover { transform: scale(1.05); border-color: #10b981; }
+    .cal-day.empty { background: transparent; border: none; cursor: default; }
+    .cal-day.empty:hover { transform: none; }
+    
+    /* Status do Dia */
+    .cal-day.done { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3); color: #10b981; }
+    .cal-day.done::after { content: '\f00c'; font-family: 'Font Awesome 5 Free'; font-weight: 900; font-size: 0.7rem; position: absolute; bottom: 4px; }
+    
+    .cal-day.missed { background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
+    .cal-day.missed::after { content: '\f00d'; font-family: 'Font Awesome 5 Free'; font-weight: 900; font-size: 0.7rem; position: absolute; bottom: 4px; }
+    
+    .cal-day.today { border: 2px solid #3b82f6; background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+    
+    /* Dias bloqueados para o atleta */
+    .cal-day.blocked { opacity: 0.5; cursor: not-allowed; }
+    .cal-day.blocked:hover { transform: none; border-color: var(--border-color); }
+
+    /* ================================================================
+       CARDS DE EXERCÍCIOS
+       ================================================================ */
+    .exercicio-card {
+        background: var(--bg-elevated); border: 1px solid var(--border-color);
+        border-radius: 20px; padding: 24px; display: flex; flex-direction: column;
+        transition: all 0.3s ease; height: 100%; position: relative;
+    }
+    .exercicio-card:hover { transform: translateY(-6px); border-color: rgba(52, 211, 153, 0.4); box-shadow: 0 16px 40px rgba(0,0,0,0.15); }
+    
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+    .icon-box { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; transition: transform 0.3s; }
+    .exercicio-card:hover .icon-box { transform: scale(1.1) rotate(-5deg); }
+    .icon-forca { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+    .icon-mobilidade { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); }
+    .icon-alongamento { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+    
+    .badge-categoria { padding: 4px 10px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
+    .cat-academia { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+    .cat-casa { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+    .cat-alongamento { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+    
+    .card-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 8px 0; line-height: 1.3; }
+    .card-desc { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 20px; flex: 1; }
+    .info-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .info-tag { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 0.75rem; font-weight: 600; }
+    
+    .btn-registrar { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 10px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-size: 0.85rem; font-weight: 700; border: none; cursor: pointer; transition: 0.2s; }
+    .btn-registrar:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4); }
+
+    /* ================================================================
+       MODO PROFISSIONAL (Bloqueado para Atletas via Django)
+       ================================================================ */
+    .pro-controls { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border-color); gap: 8px; }
+    body.pro-mode .pro-controls { display: flex; }
+    .btn-edit-pro { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid #3b82f6; background: rgba(59, 130, 246, 0.1); color: #3b82f6; font-weight: 600; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    
+    .pro-add-card { display: none; border: 2px dashed #3b82f6; background: rgba(59, 130, 246, 0.05); border-radius: 20px; padding: 24px; text-align: center; cursor: pointer; transition: 0.2s; height: 100%; min-height: 300px; align-items: center; justify-content: center; flex-direction: column; }
+    body.pro-mode .pro-add-card { display: flex; }
+
+    /* ================================================================
+       MODAL
+       ================================================================ */
+    .modal-custom { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 9999; }
+    .modal-custom.active { display: flex; }
+    .modal-box { background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 24px; width: 100%; max-width: 500px; padding: 32px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); transform: translateY(20px); transition: transform 0.3s; }
+    .modal-custom.active .modal-box { transform: translateY(0); }
+    .dor-range { width: 100%; accent-color: #10b981; height: 8px; border-radius: 4px; }
+    .dor-value { font-size: 2rem; font-weight: 800; color: var(--text-primary); text-align: center; margin-bottom: 10px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+
+    <!-- Cabeçalho -->
+    <div class="dash-section mb-4" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent); border-color: rgba(16, 185, 129, 0.2);">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="dash-stat-icon" style="width: 60px; height: 60px; font-size: 1.5rem; background: #10b981; color: #fff; border: none; box-shadow: 0 8px 24px rgba(16,185,129,0.4);">
+                    <i class="fas fa-heart-pulse"></i>
+                </div>
+                <div>
+                    <h4 class="dash-section-title mb-1" style="font-size: 1.4rem;">Meu Plano de Reabilitação</h4>
+                    <p class="dash-stat-label mb-0">Siga as orientações e registre seu progresso diário.</p>
+                </div>
+            </div>
+            
+            <!-- REGRA DE NEGÓCIO: Só mostra o botão se NÃO for atleta -->
+            {% if user.perfil.tipo != 'atleta' %}
+            <button class="btn-pro-toggle" onclick="toggleProMode(this)">
+                <i class="fas fa-user-md"></i> Modo Profissional
+            </button>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- CALENDÁRIO DINÂMICO -->
+    <div class="calendar-container">
+        <div class="cal-header">
+            <h5 class="cal-title" id="cal-month-year"><i class="far fa-calendar-alt me-2"></i> Carregando...</h5>
+            <div class="d-flex gap-3 align-items-center" style="font-size: 0.8rem; color: var(--text-secondary);">
+                <span><i class="fas fa-circle" style="color: #10b981; font-size: 0.6rem;"></i> Concluído</span>
+                <span><i class="fas fa-circle" style="color: #ef4444; font-size: 0.6rem;"></i> Perdido</span>
+                <span><i class="fas fa-circle" style="color: #3b82f6; font-size: 0.6rem;"></i> Hoje</span>
+            </div>
+        </div>
+        
+        <div class="cal-grid" id="calendar-grid">
+            <div class="cal-weekday">Dom</div>
+            <div class="cal-weekday">Seg</div>
+            <div class="cal-weekday">Ter</div>
+            <div class="cal-weekday">Qua</div>
+            <div class="cal-weekday">Qui</div>
+            <div class="cal-weekday">Sex</div>
+            <div class="cal-weekday">Sáb</div>
+            <!-- O JS vai popular os dias aqui -->
+        </div>
+    </div>
+
+    <!-- Ações e Filtros -->
+    <div class="top-actions">
+        <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterCategory('todos', this)"><i class="fas fa-list me-2"></i> Todos</button>
+            <button class="filter-tab" onclick="filterCategory('academia', this)"><i class="fas fa-dumbbell me-2"></i> Academia</button>
+            <button class="filter-tab" onclick="filterCategory('casa', this)"><i class="fas fa-house-chimney me-2"></i> Em Casa</button>
+            <button class="filter-tab" onclick="filterCategory('alongamento', this)"><i class="fas fa-person-walking me-2"></i> Alongamento</button>
+        </div>
+    </div>
+
+    <!-- Grid de Cards -->
+    {% if exercicios %}
+    <div class="row g-4" id="exercicios-grid">
         {% for exercicio in exercicios %}
-        <div class="col-md-6">
-            <div class="card-modern">
-                <div class="card-header-custom">
-                    <i class="fas fa-dumbbell me-2"></i> {{ exercicio.nome }}
- </div>
-                <div class="card-body">
-                    <p>{{ exercicio.descricao }}</p>
-                    <div class="row mt-3">
-                        <div class="col-4">
-                            <small class="text-muted">Séries</small>
-                            <h5 class="mb-0">{{ exercicio.series }}</h5>
- </div>
-                        <div class="col-4">
-                            <small class="text-muted">Repetições</small>
-                            <h5 class="mb-0">{{ exercicio.repeticoes }}</h5>
- </div>
-                        <div class="col-4">
-                            <small class="text-muted">Frequência</small>
-                            <h5 class="mb-0">{{ exercicio.frequencia }}</h5>
- </div>
- </div>
-                    {% if exercicio.video_url %}
-                    <a href="{{ exercicio.video_url }}" target="_blank" class="btn btn-outline-custom mt-3 w-100">
-                        <i class="fab fa-youtube me-2"></i> Ver vídeo demonstrativo
- </a>
-                    {% endif %}
- </div>
- </div>
- </div>
-        {% empty %}
-        <div class="col-12">
-            <div class="card-modern text-center p-5">
-                <i class="fas fa-dumbbell fa-4x text-muted mb-3"></i>
-                <p class="text-muted">Nenhum exercício atribuído ainda.</p>
-                <p class="small text-muted">Seu fisioterapeuta irá recomendar exercícios para sua recuperação.</p>
- </div>
- </div>
+        <div class="col-md-6 col-xl-4 exercise-item" data-category="{% if 'alongamento' in exercicio.nome|lower or 'mobilidade' in exercicio.nome|lower %}alongamento{% elif 'força' in exercicio.nome|lower or 'peso' in exercicio.nome|lower or 'agachamento' in exercicio.nome|lower or 'supino' in exercicio.nome|lower or 'rosca' in exercicio.nome|lower %}academia{% else %}casa{% endif %}">
+            <div class="exercicio-card">
+                
+                <div class="card-top">
+                    <div class="icon-box {% if 'alongamento' in exercicio.nome|lower %}icon-alongamento{% elif 'força' in exercicio.nome|lower or 'peso' in exercicio.nome|lower %}icon-forca{% else %}icon-mobilidade{% endif %}">
+                        <i class="fas {% if 'alongamento' in exercicio.nome|lower %}fa-person-walking{% elif 'força' in exercicio.nome|lower or 'peso' in exercicio.nome|lower %}fa-dumbbell{% else %}fa-house-medical{% endif %}"></i>
+                    </div>
+                    <span class="badge-categoria {% if 'alongamento' in exercicio.nome|lower %}cat-alongamento{% elif 'força' in exercicio.nome|lower or 'peso' in exercicio.nome|lower %}cat-academia{% else %}cat-casa{% endif %}">
+                        {% if 'alongamento' in exercicio.nome|lower %}Alongamento{% elif 'força' in exercicio.nome|lower or 'peso' in exercicio.nome|lower %}Academia{% else %}Em Casa{% endif %}
+                    </span>
+                </div>
+
+                <h4 class="card-title">{{ exercicio.nome }}</h4>
+                <p class="card-desc">{{ exercicio.descricao|default:"Execute o movimento de forma lenta e controlada." }}</p>
+
+                <div class="info-tags">
+                    {% if exercicio.series %}<span class="info-tag"><i class="fas fa-layer-group"></i> {{ exercicio.series }}x</span>{% endif %}
+                    {% if exercicio.repeticoes %}<span class="info-tag"><i class="fas fa-redo"></i> {{ exercicio.repeticoes }}</span>{% endif %}
+                    {% if exercicio.frequencia %}<span class="info-tag"><i class="fas fa-calendar-alt"></i> {{ exercicio.frequencia }}</span>{% endif %}
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn-registrar" onclick="abrirModalHoje('{{ exercicio.nome }}')">
+                        <i class="fas fa-clipboard-check"></i> Registrar no Dia de Hoje
+                    </button>
+                </div>
+
+                <!-- Controles do Modo Pro (Só aparecem se o body tiver a classe pro-mode) -->
+                <div class="pro-controls">
+                    <button class="btn-edit-pro"><i class="fas fa-pen"></i> Editar Exercício</button>
+                </div>
+
+            </div>
+        </div>
         {% endfor %}
- </div>
+
+        <!-- Card Fantasma (Só aparece no modo pro) -->
+        <div class="col-md-6 col-xl-4">
+            <div class="pro-add-card" onclick="alert('Abre o formulário de cadastro de exercício do fisioterapeuta')">
+                <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(59,130,246,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #3b82f6; margin-bottom: 16px;">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <h5 style="color: #3b82f6; font-weight: 700;">Adicionar Exercício</h5>
+                <p style="color: var(--text-tertiary); font-size: 0.85rem;">Prescreva um novo exercício.</p>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Estado Vazio -->
+    <div class="dash-section text-center py-5">
+        <div class="d-flex flex-column align-items-center justify-content-center">
+            <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: var(--text-tertiary); margin-bottom: 20px;">
+                <i class="fas fa-clipboard-list"></i>
+            </div>
+            <h4 style="color: var(--text-primary); font-weight: 700;">Nenhum exercício prescrito ainda</h4>
+            <p style="color: var(--text-secondary); max-width: 400px; margin: 0 auto;">Seu fisioterapeuta ainda não cadastrou exercícios para o seu plano.</p>
+        </div>
+    </div>
+    {% endif %}
+
 </div>
+
+<!-- MODAL DE REGISTRO -->
+<div class="modal-custom" id="modalRegistro">
+    <div class="modal-box">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 style="color: var(--text-primary); font-weight: 700; margin: 0;">Registrar Execução (Hoje)</h4>
+            <button onclick="closeModal()" style="background: none; border: none; color: var(--text-tertiary); font-size: 1.2rem; cursor: pointer;"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <div style="background: var(--bg-secondary); padding: 12px 16px; border-radius: 12px; margin-bottom: 20px;">
+            <p style="margin: 0; color: var(--text-secondary); font-size: 0.85rem;">Exercício:</p>
+            <strong id="modal-exercicio-nome" style="color: #10b981; font-size: 1.1rem;">...</strong>
+        </div>
+
+        <div class="mb-4">
+            <label style="display: flex; justify-content: space-between; color: var(--text-primary); font-weight: 600; margin-bottom: 10px;">
+                <span>Nível de Dor / Desconforto</span>
+                <span id="dor-label" style="color: #10b981;">0 (Nenhuma)</span>
+            </label>
+            <div class="dor-value" id="dor-value-display">0</div>
+            <input type="range" class="dor-range" min="0" max="10" value="0" oninput="updateDor(this.value)">
+        </div>
+
+        <div class="mb-4">
+            <label style="display: block; color: var(--text-primary); font-weight: 600; margin-bottom: 8px;">Observações (Como foi?)</label>
+            <textarea class="form-control" id="modal-obs" rows="3" placeholder="Ex: Senti um leve incômodo, mas consegui completar..." style="background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 12px; padding: 12px;"></textarea>
+        </div>
+
+        <button class="btn-registrar w-100" onclick="confirmarRegistro(this)">
+            <i class="fas fa-save"></i> Salvar Registro de Hoje
+        </button>
+    </div>
+</div>
+
+<script>
+    // ================================================================
+    // MODO PROFISSIONAL
+    // ================================================================
+    function toggleProMode(btn) {
+        document.body.classList.toggle('pro-mode');
+        btn.classList.toggle('active');
+        btn.innerHTML = document.body.classList.contains('pro-mode') 
+            ? '<i class="fas fa-user"></i> Ver como Atleta' 
+            : '<i class="fas fa-user-md"></i> Modo Profissional';
+    }
+
+    // ================================================================
+    // FILTROS
+    // ================================================================
+    function filterCategory(category, btn) {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+
+        document.querySelectorAll('.exercise-item').forEach(card => {
+            if (category === 'todos' || card.getAttribute('data-category') === category) {
+                card.style.display = 'block';
+                setTimeout(() => card.style.opacity = '1', 50);
+            } else {
+                card.style.opacity = '0';
+                setTimeout(() => card.style.display = 'none', 200);
+            }
+        });
+    }
+
+    // ================================================================
+    // CALENDÁRIO DINÂMICO E REGRAS DE DATA
+    // ================================================================
+    const hoje = new Date();
+    let mesAtual = hoje.getMonth();
+    let anoAtual = hoje.getFullYear();
+
+    function renderCalendar() {
+        const grid = document.getElementById('calendar-grid');
+        const title = document.getElementById('cal-month-year');
+        
+        // Remove dias antigos (mantém os headers da semana)
+        while (grid.children.length > 7) {
+            grid.removeChild(grid.lastChild);
+        }
+
+        const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+        title.innerHTML = `<i class="far fa-calendar-alt me-2"></i> ${meses[mesAtual]} ${anoAtual}`;
+
+        const primeiroDia = new Date(anoAtual, mesAtual, 1).getDay();
+        const diasNoMes = new Date(anoAtual, mesAtual + 1, 0).getDate();
+
+        // Dias vazios antes do dia 1
+        for (let i = 0; i < primeiroDia; i++) {
+            const div = document.createElement('div');
+            div.className = 'cal-day empty';
+            grid.appendChild(div);
+        }
+
+        // Dias do mês
+        for (let dia = 1; dia <= diasNoMes; dia++) {
+            const div = document.createElement('div');
+            div.className = 'cal-day';
+            div.innerText = dia;
+
+            const dataDoLoop = new Date(anoAtual, mesAtual, dia);
+            const isHoje = dataDoLoop.toDateString() === hoje.toDateString();
+            const isPassado = dataDoLoop < hoje && !isHoje;
+
+            // MOCK: Simular dias passados como "missed" e hoje como "today"
+            if (isHoje) {
+                div.classList.add('today');
+            } else if (isPassado) {
+                // Se fosse um sistema real, checaria no banco se o cara fez o exercício
+                // Para mock, vamos pintar dias alternados de verde e vermelho
+                if (dia % 3 === 0) div.classList.add('done');
+                else if (dia % 3 === 1) div.classList.add('missed');
+            }
+
+            // REGRA DE NEGÓCIO: Atleta só clica hoje
+            {% if user.perfil.tipo == 'atleta' %}
+                if (!isHoje) {
+                    div.classList.add('blocked');
+                    div.setAttribute('title', 'Você só pode registrar no dia atual.');
+                }
+            {% endif %}
+
+            // Evento de clique
+            div.onclick = () => {
+                {% if user.perfil.tipo == 'atleta' %}
+                    if (!isHoje) {
+                        alert('Atenção: Você só pode registrar a execução do exercício no dia de hoje (' + hoje.toLocaleDateString('pt-BR') + ').');
+                        return;
+                    }
+                {% endif %}
+                
+                // Se chegou aqui, é o dia atual (ou é um profissional)
+                if (isHoje) {
+                    alert('Você pode registrar os exercícios clicando no botão verde de cada card abaixo!');
+                }
+            };
+
+            grid.appendChild(div);
+        }
+    }
+
+    // ================================================================
+    // MODAL DE REGISTRO
+    // ================================================================
+    function abrirModalHoje(nomeExercicio) {
+        document.getElementById('modal-exercicio-nome').innerText = nomeExercicio;
+        document.getElementById('modalRegistro').classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('modalRegistro').classList.remove('active');
+    }
+
+    function updateDor(value) {
+        document.getElementById('dor-value-display').innerText = value;
+        const label = document.getElementById('dor-label');
+        const display = document.getElementById('dor-value-display');
+        
+        if (value == 0) { label.innerText = '0 (Nenhuma)'; display.style.color = '#10b981'; }
+        else if (value <= 3) { label.innerText = value + ' (Leve)'; display.style.color = '#f59e0b'; }
+        else if (value <= 7) { label.innerText = value + ' (Moderada)'; display.style.color = '#f97316'; }
+        else { label.innerText = value + ' (Forte)'; display.style.color = '#ef4444'; }
+    }
+
+    function confirmarRegistro(btn) {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+        btn.disabled = true;
+
+        // Aqui no futuro entra o AJAX para salvar no Django
+        setTimeout(() => {
+            btn.innerHTML = '<i class="fas fa-check"></i> Salvo com Sucesso!';
+            btn.style.background = '#059669';
+            
+            setTimeout(() => {
+                closeModal();
+                btn.innerHTML = originalText;
+                btn.style.background = '';
+                btn.disabled = false;
+                // Marca o dia de hoje como verde no calendário visualmente
+                const todayElement = document.querySelector('.cal-day.today');
+                if(todayElement) {
+                    todayElement.classList.remove('today');
+                    todayElement.classList.add('done');
+                    todayElement.style.border = 'none';
+                }
+            }, 1500);
+        }, 1000);
+    }
+
+    // Inicializa o Calendário no Load
+    document.addEventListener('DOMContentLoaded', renderCalendar);
+</script>
 {% endblock %}

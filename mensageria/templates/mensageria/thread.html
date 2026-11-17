@@ -644,11 +644,13 @@
 
     // Enter envia (Shift+Enter quebra linha)
     const txt = document.getElementById('id_conteudo');
+    const form = document.getElementById('chatForm');
+    
     if (txt) {
         txt.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                document.getElementById('chatForm').submit();
+                form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
             }
         });
         // Auto-grow
@@ -658,6 +660,68 @@
         });
         txt.focus();
     }
+
+    // ============================================
+    // ENVIO VIA AJAX (SEM RECARREGAR A PÁGINA)
+    // ============================================
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Desabilita o botão enquanto envia
+            const btn = form.querySelector('.chat-send-btn');
+            const btnHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            btn.disabled = true;
+
+            try {
+                const formData = new FormData(form);
+                const resp = await fetch(form.action || window.location.href, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                if (resp.ok) {
+                    const data = await resp.json();
+                    if (data.status === 'ok') {
+                        // Remove empty-chat
+                        const empty = chatBox.querySelector('.empty-chat');
+                        if (empty) empty.remove();
+
+                        // Cria a bolha da mensagem nova e adiciona
+                        const m = data.mensagem;
+                        m.autor_id = USER_ID; // Própria
+                        chatBox.appendChild(criarBubble(m));
+                        
+                        // Atualiza o último ID
+                        if (m.id > ultimoId) ultimoId = m.id;
+
+                        // Limpa o form
+                        form.reset();
+                        window.limparAnexo();
+                        txt.focus();
+                        scrollParaFim();
+                    } else if (data.erros) {
+                        alert('Erro: ' + JSON.stringify(data.erros));
+                    }
+                } else {
+                    alert('Erro ao enviar mensagem. Verifique a conexão.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro ao enviar mensagem.');
+            } finally {
+                // Restaura o botão
+                btn.innerHTML = btnHtml;
+                btn.disabled = false;
+            }
+        });
+    }
+
 })();
 </script>
 

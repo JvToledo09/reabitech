@@ -1,0 +1,75 @@
+/* ============================================================================
+   REABITECH — LANDING CYBER PREMIUM (Ajustes de Layout)
+   ========================================================================== */
+
+/* Canvas de Partículas Full Screen */
+#landing-particles-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* O Card 3D do Herói (João Silva) */
+.lp-hero-card {
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease !important;
+    transform-style: preserve-3d;
+    will-change: transform;
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    animation: none !important; /* Remove a flutuação nativa para o mouse assumir */
+}
+
+/* Ajustes no Dark Mode */
+[data-theme="dark"] .lp-hero-card {
+    background: rgba(15, 23, 42, 0.75) !important;
+    border-color: rgba(52, 211, 153, 0.3) !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(16, 185, 129, 0.15) !important;
+}
+
+[data-theme="dark"] .lp-hero-card .lp-hero-card-name,
+[data-theme="dark"] .lp-hero-card .hero-stat-value {
+    color: #ffffff !important;
+}
+[data-theme="dark"] .lp-hero-card .lp-hero-card-sub,
+[data-theme="dark"] .lp-hero-card .hero-stat-label {
+    color: #94a3b8 !important;
+}
+[data-theme="dark"] .lp-hero-card .hero-progress {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Ajustes no Light Mode */
+[data-theme="light"] .lp-hero-card {
+    background: rgba(255, 255, 255, 0.85) !important;
+    border-color: rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 24px 48px rgba(15, 23, 42, 0.1) !important;
+}
+
+/* ============================================================================
+   CORREÇÃO DE ESPAÇAMENTO (GAPS)
+   ========================================================================== */
+
+/* 1. Reduz o padding da seção de Projetos Parceiros */
+#projetos {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+}
+
+/* 2. Reduz a margem do título das seções para não criar buracos */
+.section-title {
+    margin-bottom: 40px !important;
+}
+
+/* 3. Ajusta o vão entre o Marquee e a seção de Projetos */
+.rv-marquee {
+    margin-bottom: 0 !important;
+}
+
+/* 4. Reduz o gap gigante da seção de Recursos (Features) */
+.lp-features {
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+}

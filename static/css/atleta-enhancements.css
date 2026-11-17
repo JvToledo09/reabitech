@@ -1,0 +1,164 @@
+/* ============================================================================
+   REABITECH — CARDS DE EXERCÍCIOS (Estilo 2D Animado)
+   ========================================================================== */
+
+.exercise-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+    gap: 24px !important;
+    margin-top: 20px !important;
+}
+
+.exercise-card {
+    background: var(--bg-elevated) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    position: relative !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+}
+
+.exercise-card:hover {
+    transform: translateY(-6px) !important;
+    border-color: rgba(52, 211, 153, 0.4) !important;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15) !important;
+}
+
+/* Área do "Vídeo" 2D (Fundo Escuro com Grid) */
+.exercise-visual {
+    width: 100% !important;
+    height: 160px !important;
+    background: #0f172a !important; /* Fundo escuro */
+    background-image: 
+        linear-gradient(rgba(52, 211, 153, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(52, 211, 153, 0.05) 1px, transparent 1px) !important;
+    background-size: 20px 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    overflow: hidden !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+/* O Bonequinho 2D (SVG) */
+.exercise-svg {
+    width: 80px !important;
+    height: 80px !important;
+    color: #34d399 !important; /* Verde Neon */
+    filter: drop-shadow(0 0 15px rgba(52, 211, 153, 0.5)) !important;
+    /* Animação de Loop (Respiração) */
+    animation: floatExercise 3s ease-in-out infinite !important;
+    z-index: 2 !important;
+}
+
+@keyframes floatExercise {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-10px) scale(1.05); }
+}
+
+/* Círculo de Fundo Animado */
+.exercise-visual::before {
+    content: '' !important;
+    position: absolute !important;
+    width: 100px !important;
+    height: 100px !important;
+    background: radial-gradient(circle, rgba(52, 211, 153, 0.2) 0%, transparent 70%) !important;
+    border-radius: 50% !important;
+    animation: pulseGlow 3s ease-in-out infinite !important;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.5); opacity: 1; }
+}
+
+/* Corpo do Card */
+.exercise-body {
+    padding: 24px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+}
+
+.exercise-title {
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    margin: 0 0 8px 0 !important;
+    color: var(--text-primary) !important;
+}
+
+.exercise-desc {
+    font-size: 0.85rem !important;
+    color: var(--text-secondary) !important;
+    line-height: 1.5 !important;
+    margin-bottom: 20px !important;
+    flex: 1 !important;
+}
+
+/* Grid de Estatísticas */
+.exercise-stats {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+    margin-bottom: 20px !important;
+}
+
+.exercise-stat-box {
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color) !important;
+    padding: 10px 8px !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.exercise-stat-box strong {
+    font-size: 1.1rem !important;
+    color: var(--text-primary) !important;
+    font-weight: 800 !important;
+}
+
+.exercise-stat-box span {
+    font-size: 0.65rem !important;
+    text-transform: uppercase !important;
+    color: var(--text-tertiary) !important;
+    letter-spacing: 0.05em !important;
+    margin-top: 2px !important;
+}
+
+/* Botões */
+.btn-concluir {
+    width: 100% !important;
+    padding: 12px !important;
+    border-radius: 12px !important;
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    border: none !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    transition: all 0.2s ease !important;
+}
+.btn-concluir:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4) !important;
+}
+.btn-video {
+    background: transparent !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    margin-bottom: 8px !important;
+}
+.btn-video:hover {
+    background: var(--bg-secondary) !important;
+    box-shadow: none !important;
+}

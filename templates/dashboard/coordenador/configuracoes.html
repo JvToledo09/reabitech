@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Configurações{% endblock %}
+{% block page_title %}Configurações do Projeto{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="dash-section mb-4">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title"><i class="fas fa-cog"></i> Dados do Projeto</h5>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label" style="color: var(--text-secondary);">Nome do Projeto</label>
+                <input type="text" class="form-control" value="{{ projeto_ativo.nome }}" style="background: var(--bg-secondary); color: var(--text-primary); border-color: var(--border-color);">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" style="color: var(--text-secondary);">Tipo de Instituição</label>
+                <input type="text" class="form-control" value="{{ projeto_ativo.get_tipo_display }}" disabled style="background: var(--bg-tertiary); color: var(--text-tertiary); border-color: var(--border-color);">
+            </div>
+            <div class="col-12 mt-4">
+                <button class="btn btn-primary" style="background: #10b981; border: none;"><i class="fas fa-save me-2"></i> Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="dash-section" style="border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05);">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title" style="color: #ef4444;"><i class="fas fa-exclamation-triangle"></i> Zona de Perigo</h5>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">Ao excluir o projeto, todos os dados de atletas, prontuários e membros serão permanentemente apagados.</p>
+        <button class="btn btn-danger mt-2" onclick="alert('Ação bloqueada para segurança. Entre em contato com o suporte.')"><i class="fas fa-trash me-2"></i> Excluir Projeto</button>
+    </div>
+</div>
+{% endblock %}

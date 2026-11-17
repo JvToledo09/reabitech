@@ -1,280 +1,301 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Mensagens - REABITECH{% endblock %}
+{% block title %}Mensagens{% endblock %}
 {% block page_title %}Mensagens{% endblock %}
 
 {% block extra_css %}
 <style>
-    .msg-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-bottom: 20px;
+    /* Estilos Premium para a Central de Mensagens */
+    .msg-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+    }
+    @media (max-width: 992px) {
+        .msg-layout { grid-template-columns: 1fr; }
     }
 
-    .msg-titulo {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: var(--text-primary);
-        margin: 0;
+    /* Lista de Conversas */
+    .conversa-card {
         display: flex;
         align-items: center;
-        gap: 12px;
-    }
-
-    .msg-badge-total {
-        background: linear-gradient(135deg, #2BA181, #1f8768);
-        color: white;
-        padding: 4px 14px;
-        border-radius: 999px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        letter-spacing: 0.03em;
-    }
-
-    .conv-card {
+        gap: 16px;
+        padding: 20px;
         background: var(--bg-elevated);
         border: 1px solid var(--border-color);
         border-radius: 16px;
-        padding: 16px 18px;
-        display: flex;
-        align-items: center;
-        gap: 14px;
+        margin-bottom: 12px;
         text-decoration: none;
-        color: var(--text-primary);
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        margin-bottom: 10px;
-        position: relative;
+        color: inherit;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.02);
     }
-
-    .conv-card:hover {
-        transform: translateX(4px);
-        box-shadow: var(--shadow-lg);
-        border-color: var(--green-soft-2);
-        color: var(--text-primary);
+    [data-theme="dark"] .conversa-card {
+        background: rgba(30, 41, 59, 0.6);
+        border-color: rgba(255,255,255,0.05);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-
-    .conv-card.tem-nao-lida {
-        border-left: 4px solid #2BA181;
-        background: linear-gradient(90deg, rgba(43,161,129,0.06), var(--bg-elevated) 40%);
+    .conversa-card:hover {
+        transform: translateY(-3px);
+        border-color: #10b981;
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
     }
 
     .conv-avatar {
-        width: 52px;
-        height: 52px;
-        border-radius: 14px;
-        background: linear-gradient(135deg, #34d399, #2BA181);
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
         font-weight: 800;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         flex-shrink: 0;
         position: relative;
     }
-
     .conv-avatar.grupo {
-        background: linear-gradient(135deg, #60a5fa, #3b82f6);
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        border-radius: 14px;
     }
-
     .conv-avatar img {
         width: 100%;
         height: 100%;
+        border-radius: inherit;
         object-fit: cover;
-        border-radius: 14px;
     }
 
     .conv-info {
         flex: 1;
         min-width: 0;
     }
-
-    .conv-nome {
+    .conv-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+    }
+    .conv-name {
+        font-family: 'Plus Jakarta Sans', sans-serif;
         font-weight: 700;
-        font-size: 0.95rem;
+        font-size: 1.05rem;
         color: var(--text-primary);
-        margin: 0 0 3px 0;
+        margin: 0;
         display: flex;
         align-items: center;
         gap: 8px;
     }
-
-    .conv-tipo-chip {
+    .badge-tipo {
         font-size: 0.6rem;
-        padding: 2px 8px;
-        border-radius: 999px;
-        font-weight: 700;
+        background: rgba(16,185,129,0.15);
+        color: #10b981;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-weight: 800;
         letter-spacing: 0.05em;
-        text-transform: uppercase;
     }
-
-    .chip-dm {
-        background: rgba(52, 211, 153, 0.15);
-        color: #059669;
+    .badge-tipo.grupo {
+        background: rgba(59,130,246,0.15);
+        color: #3b82f6;
     }
-
-    .chip-grupo {
-        background: rgba(59, 130, 246, 0.15);
-        color: #2563eb;
-    }
-
-    .conv-ultima {
-        font-size: 0.82rem;
+    .conv-time {
+        font-size: 0.75rem;
         color: var(--text-tertiary);
-        margin: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-weight: 600;
         white-space: nowrap;
     }
-
-    .conv-meta {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 6px;
-        flex-shrink: 0;
+    .conv-preview {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .conv-preview strong {
+        color: var(--text-primary);
+        font-weight: 600;
     }
 
-    .conv-hora {
-        font-size: 0.7rem;
-        color: var(--text-tertiary);
-    }
-
-    .conv-badge {
-        background: linear-gradient(135deg, #2BA181, #1f8768);
+    .badge-unread {
+        background: #10b981;
         color: white;
-        border-radius: 999px;
-        min-width: 22px;
-        height: 22px;
-        padding: 0 7px;
+        font-size: 0.75rem;
+        font-weight: 800;
+        min-width: 24px;
+        height: 24px;
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.7rem;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        margin-left: 12px;
+    }
+
+    /* Card da Equipe */
+    .equipe-card {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 24px;
+        position: sticky;
+        top: 24px;
+    }
+    [data-theme="dark"] .equipe-card {
+        background: rgba(30, 41, 59, 0.6);
+        border-color: rgba(255,255,255,0.05);
+    }
+    .membro-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px dashed var(--border-color);
+    }
+    .membro-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    .membro-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--bg-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-weight: 700;
-        box-shadow: 0 2px 8px rgba(43,161,129,0.4);
+        color: var(--text-secondary);
+        flex-shrink: 0;
+        position: relative;
     }
-
-    .empty-state {
-        text-align: center;
-        padding: 60px 20px;
+    .status-online {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 10px;
+        height: 10px;
+        background: #10b981;
+        border: 2px solid var(--bg-elevated);
+        border-radius: 50%;
+    }
+    .membro-info p {
+        margin: 0;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+    .membro-info span {
+        font-size: 0.75rem;
         color: var(--text-tertiary);
-    }
-
-    .empty-state i {
-        font-size: 4rem;
-        opacity: 0.25;
-        margin-bottom: 20px;
-        display: block;
     }
 </style>
 {% endblock %}
 
 {% block content %}
+<div class="container-fluid p-0">
+    
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h1 class="page-header-title m-0"><i class="fas fa-comments text-success me-2"></i> Minhas Conversas</h1>
+            <p class="text-muted mt-1 mb-0">Converse com a equipe do projeto <strong>{{ projeto.nome }}</strong></p>
+        </div>
+        <a href="{% url 'mensageria:nova_conversa' %}" class="btn-primary-custom" style="background:#10b981; border-radius:10px; padding: 12px 24px; font-weight:700; text-decoration:none; color:white;">
+            <i class="fas fa-plus me-2"></i> Nova Conversa
+        </a>
+    </div>
 
-<div class="msg-header">
-    <div>
-        <h2 class="msg-titulo">
-            <i class="fas fa-comments" style="color: #2BA181;"></i>
-            Minhas Conversas
-            {% if total_nao_lidas > 0 %}
-            <span class="msg-badge-total">{{ total_nao_lidas }} não lida{{ total_nao_lidas|pluralize:"s" }}</span>
-            {% endif %}
- </h2>
-        <p class="text-muted small mb-0" style="color: var(--text-tertiary);">
-            Converse com a equipe do projeto <strong>{{ projeto.nome }}</strong>
- </p>
- </div>
-    <a href="{% url 'mensageria:nova_conversa' %}" class="btn-primary-custom">
-        <i class="fas fa-plus"></i> Nova Conversa
- </a>
-</div>
+    <!-- Alertas de mensagens -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
 
-<div class="row g-4">
-    <div class="col-lg-8">
-        {% if conversas_data %}
-            {% for item in conversas_data %}
-            <a href="{% url 'mensageria:ver_conversa' conversa_id=item.conversa.id %}"
-               class="conv-card {% if item.nao_lidas > 0 %}tem-nao-lida{% endif %}">
-                <div class="conv-avatar {% if item.is_grupo %}grupo{% endif %}">
-                    {% if item.is_grupo %}
-                        <i class="fas fa-users"></i>
+    <div class="msg-layout">
+        <!-- Coluna Esquerda: Lista de Conversas -->
+        <div>
+            {% for data in conversas_data %}
+            <a href="{% url 'mensageria:ver_conversa' data.conversa.id %}" class="conversa-card">
+                <!-- Avatar -->
+                <div class="conv-avatar {% if data.is_grupo %}grupo{% endif %}">
+                    {% if data.is_grupo %}
+                        <i class="fas fa-users" style="font-size: 1.1rem;"></i>
                     {% else %}
-                        {{ item.titulo|first|upper }}
-                    {% endif %}
- </div>
-                <div class="conv-info">
-                    <p class="conv-nome">
-                        {{ item.titulo }}
-                        <span class="conv-tipo-chip {% if item.is_grupo %}chip-grupo{% else %}chip-dm{% endif %}">
-                            {% if item.is_grupo %}Grupo{% else %}DM{% endif %}
- </span>
- </p>
-                    <p class="conv-ultima">
-                        {% if item.ultima %}
-                            <strong>{{ item.ultima.autor.get_full_name|default:item.ultima.autor.username|truncatechars:20 }}:</strong>
-                            {{ item.ultima.conteudo|default:" anexo"|truncatechars:70 }}
+                        {% if data.conversa.outro_participante.usuario.perfil.foto %}
+                            <img src="{{ data.conversa.outro_participante.usuario.perfil.foto.url }}" alt="">
                         {% else %}
-                            <em>Sem mensagens ainda</em>
+                            {{ data.titulo|first|upper }}
                         {% endif %}
- </p>
- </div>
-                <div class="conv-meta">
-                    {% if item.ultima %}
-                    <span class="conv-hora">{{ item.ultima.criada_em|date:"d/m H:i" }}</span>
                     {% endif %}
-                    {% if item.nao_lidas > 0 %}
-                    <span class="conv-badge">{{ item.nao_lidas }}</span>
-                    {% endif %}
- </div>
- </a>
+                </div>
+                
+                <!-- Informações -->
+                <div class="conv-info">
+                    <div class="conv-header">
+                        <div class="conv-name">
+                            {{ data.titulo }}
+                            <span class="badge-tipo {% if data.is_grupo %}grupo{% endif %}">
+                                {% if data.is_grupo %}GRUPO{% else %}DM{% endif %}
+                            </span>
+                        </div>
+                        <span class="conv-time">{{ data.ultima.criada_em|date:"d/m H:i"|default:"" }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="conv-preview">
+                            {% if data.ultima %}
+                                <strong>{{ data.ultima.autor.first_name|default:data.ultima.autor.username }}:</strong> {{ data.ultima.conteudo|default:"[Anexo]" }}
+                            {% else %}
+                                <em>Nenhuma mensagem ainda.</em>
+                            {% endif %}
+                        </p>
+                        {% if data.nao_lidas > 0 %}
+                            <div class="badge-unread">{{ data.nao_lidas }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+            {% empty %}
+            <div class="card-premium text-center py-5">
+                <i class="fas fa-comments-slash" style="font-size: 3rem; color: var(--border-color); margin-bottom: 16px;"></i>
+                <h4 style="color: var(--text-primary);">Nenhuma conversa iniciada</h4>
+                <p style="color: var(--text-tertiary);">Clique em "Nova Conversa" para começar a interagir com a equipe.</p>
+            </div>
             {% endfor %}
-        {% else %}
-        <div class="card-modern">
-            <div class="empty-state">
-                <i class="fas fa-comment-slash"></i>
-                <h5 style="color: var(--text-secondary);">Nenhuma conversa ainda</h5>
-                <p class="mb-4">Comece uma conversa com alguém da equipe</p>
-                <a href="{% url 'mensageria:nova_conversa' %}" class="btn-primary-custom">
-                    <i class="fas fa-plus"></i> Criar Primeira Conversa
- </a>
- </div>
- </div>
-        {% endif %}
- </div>
+        </div>
 
-    <div class="col-lg-4">
-        <div class="card-modern p-4">
-            <h6 style="font-weight: 700; color: var(--text-primary); margin-bottom: 16px;">
-                <i class="fas fa-user-friends me-2" style="color: #2BA181;"></i>
-                Equipe disponível
- </h6>
-            {% if membros_disponiveis %}
-                {% for m in membros_disponiveis %}
-                <div class="d-flex align-items-center gap-3 py-2" style="border-bottom: 1px solid var(--border-color);">
-                    <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #34d399, #2BA181); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">
-                        {{ m.usuario.first_name|first|default:m.usuario.username|first|upper }}
- </div>
-                    <div style="min-width: 0; flex: 1;">
-                        <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                            {{ m.usuario.get_full_name|default:m.usuario.username }}
- </div>
-                        <div style="font-size: 0.72rem; color: var(--text-tertiary);">
-                            {{ m.get_tipo_display }}
- </div>
- </div>
- </div>
+        <!-- Coluna Direita: Equipe -->
+        <div>
+            <div class="equipe-card">
+                <h5 class="fw-bold mb-4" style="color: var(--text-primary); font-family: 'Plus Jakarta Sans', sans-serif;">
+                    <i class="fas fa-users text-success me-2"></i> Equipe disponível
+                </h5>
+                {% for membro in membros_disponiveis %}
+                <div class="membro-item">
+                    <div class="membro-avatar">
+                        {% if membro.usuario.perfil.foto %}
+                            <img src="{{ membro.usuario.perfil.foto.url }}" alt="" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                        {% else %}
+                            {{ membro.usuario.first_name|first|upper|default:membro.usuario.username|first|upper }}
+                        {% endif %}
+                        <div class="status-online"></div>
+                    </div>
+                    <div class="membro-info">
+                        <p>{{ membro.usuario.get_full_name|default:membro.usuario.username }}</p>
+                        <span>{{ membro.get_tipo_display }}</span>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted small">Nenhum outro profissional neste projeto.</p>
                 {% endfor %}
-            {% else %}
-                <p class="text-muted small mb-0">Só você na equipe por enquanto.</p>
-            {% endif %}
- </div>
- </div>
+            </div>
+        </div>
+    </div>
 </div>
-
 {% endblock %}

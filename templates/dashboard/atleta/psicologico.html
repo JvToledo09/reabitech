@@ -1,30 +1,70 @@
 {% extends 'base.html' %}
 {% block title %}Saúde Mental{% endblock %}
+{% block page_title %}Saúde Mental{% endblock %}
+
 {% block content %}
-<div class="animate-fadeInUp">
-    <h2><i class="fas fa-brain me-2" style="color: var(--cor-secundaria);"></i> Saúde Mental</h2>
-    <p class="text-muted">Acompanhamento psicológico</p>
-    
-    <div class="card-modern mt-4">
-        <div class="card-header-custom">Histórico de Avaliações</div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-custom mb-0">
-                    <thead><tr><th>Data</th><th>Score</th><th>Status</th></tr></thead>
-                    <tbody>
-                        {% for avaliacao in avaliacoes %}
-                        <tr>
-                            <td>{{ avaliacao.data|date:"d/m/Y" }}</td>
-                            <td>{{ avaliacao.score_total }}/10</td>
-                            <td><span class="badge-success">{{ avaliacao.status_emocional }}</span></td>
- </tr>
-                        {% empty %}
-                        <tr><td colspan="3" class="text-center">Nenhuma avaliação registrada</td></tr>
-                        {% endfor %}
- </tbody>
- </table>
- </div>
- </div>
- </div>
+<div class="container-fluid p-0">
+
+    <div class="dash-section mb-4" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent); border-color: rgba(16, 185, 129, 0.2);">
+        <div class="d-flex align-items-center gap-3">
+            <div class="dash-stat-icon" style="width: 60px; height: 60px; font-size: 1.5rem; background: #10b981; color: #fff; border: none;">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div>
+                <h4 class="dash-section-title mb-1" style="font-size: 1.3rem;">Acompanhamento Psicológico</h4>
+                <p class="dash-stat-label mb-0">Seu progresso emocional é tão importante quanto o físico.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="dash-section">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title">
+                <i class="fas fa-history"></i> Histórico de Avaliações
+            </h5>
+        </div>
+
+        {% if avaliacoes %}
+            <div class="mental-grid">
+            {% for avaliacao in avaliacoes %}
+                <div class="mental-card">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="mental-date"><i class="far fa-calendar-alt me-1"></i> {{ avaliacao.data|date:"d/m/Y" }}</span>
+                        <span class="dash-stat-badge {% if avaliacao.score_total >= 7 %}success{% elif avaliacao.score_total >= 4 %}warn{% else %}danger{% endif %}">
+                            {{ avaliacao.status_emocional }}
+                        </span>
+                    </div>
+                    
+                    <div class="mental-score">
+                        <h2 style="color: {% if avaliacao.score_total >= 7 %}#10b981{% elif avaliacao.score_total >= 4 %}#f59e0b{% else %}#ef4444{% endif %};">
+                            {{ avaliacao.score_total|floatformat:1 }}
+                        </h2>
+                        <span>/10</span>
+                    </div>
+                    
+                    <div class="mental-progress">
+                        <div class="mental-progress-fill" style="width: {{ avaliacao.score_total }}0%; background: {% if avaliacao.score_total >= 7 %}#10b981{% elif avaliacao.score_total >= 4 %}#f59e0b{% else %}#ef4444{% endif %};"></div>
+                    </div>
+
+                    <div class="mental-msg" style="background: {% if avaliacao.score_total >= 7 %}#10b98115{% elif avaliacao.score_total >= 4 %}#f59e0b15{% else %}#ef444415{% endif %}; color: {% if avaliacao.score_total >= 7 %}#10b981{% elif avaliacao.score_total >= 4 %}#f59e0b{% else %}#ef4444{% endif %};">
+                        {% if avaliacao.score_total >= 7 %}
+                            <i class="fas fa-smile me-1"></i> Excelente! Continue assim.
+                        {% elif avaliacao.score_total >= 4 %}
+                            <i class="fas fa-meh me-1"></i> Regular. Você consegue melhorar!
+                        {% else %}
+                            <i class="fas fa-frown me-1"></i> Atenção: procure seu psicólogo.
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        {% else %}
+            <div class="dash-empty">
+                <i class="fas fa-brain"></i>
+                <p>Nenhuma avaliação registrada ainda.</p>
+            </div>
+        {% endif %}
+    </div>
+
 </div>
 {% endblock %}

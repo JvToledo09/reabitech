@@ -1,0 +1,108 @@
+/* ============================================================================
+   REABITECH — SIGNUP CYBER PREMIUM
+   ========================================================================== */
+
+/* Remove o fundo verde e deixa transparente para as partículas aparecerem */
+body {
+    background: #050b14 !important;
+    transition: background 0.4s ease;
+}
+[data-theme="light"] body {
+    background: #f8fafc !important;
+}
+
+/* Canvas de Partículas */
+#signup-particles-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Ajuste do Container Principal (Card grande) */
+.container, main, .card, .signup-wrapper {
+    background: rgba(15, 23, 42, 0.75) !important;
+    backdrop-filter: blur(24px) saturate(1.5) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(1.5) !important;
+    border: 1px solid rgba(52, 211, 153, 0.3) !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(16, 185, 129, 0.15) !important;
+    color: #ffffff !important;
+    border-radius: 24px !important;
+    transition: all 0.3s ease;
+}
+
+/* Modo Claro: Card branco */
+[data-theme="light"] .container, 
+[data-theme="light"] main, 
+[data-theme="light"] .card, 
+[data-theme="light"] .signup-wrapper {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(15, 23, 42, 0.1) !important;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08) !important;
+    color: #0f172a !important;
+}
+
+/* Blindagem dos Textos no Modo Escuro */
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, 
+[data-theme="dark"] p, [data-theme="dark"] label, [data-theme="dark"] span {
+    color: #ffffff !important;
+}
+[data-theme="dark"] .text-muted {
+    color: #94a3b8 !important;
+}
+
+/* Inputs e Selects */
+input, select {
+    background: rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(148, 163, 184, 0.3) !important;
+    color: #ffffff !important;
+    border-radius: 10px !important;
+    transition: all 0.3s ease;
+}
+input:focus, select:focus {
+    border-color: #34d399 !important;
+    box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.2) !important;
+    background: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Modo Claro: Inputs */
+[data-theme="light"] input, [data-theme="light"] select {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #0f172a !important;
+}
+[data-theme="light"] input:focus, [data-theme="light"] select:focus {
+    border-color: #10b981 !important;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15) !important;
+}
+
+/* Cards de Planos (Trial, Profissional, Empresarial) */
+.plano-card, .price-card, .card-plan {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    transition: all 0.3s ease !important;
+}
+.plano-card:hover, .price-card:hover, .card-plan:hover {
+    transform: translateY(-4px);
+    border-color: #34d399 !important;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2) !important;
+}
+[data-theme="light"] .plano-card, [data-theme="light"] .price-card, [data-theme="light"] .card-plan {
+    background: rgba(255, 255, 255, 0.6) !important;
+    border: 1px solid rgba(15, 23, 42, 0.1) !important;
+}
+
+/* Botão Principal */
+button[type="submit"], .btn-primary {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+button[type="submit"]:hover, .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(16, 185, 129, 0.5) !important;
+}

@@ -152,6 +152,11 @@
  </a>
  </div>
 
+    
+        <div class="mb-3">
+            <input type="text" id="searchConsulta" class="form-control" placeholder="🔍 Buscar por nome do atleta, RM ou profissional..." style="background: var(--bg-elevated); color: var(--text-primary); border: 1px solid var(--border-color); padding: 14px 20px; border-radius: 12px; font-size: 0.95rem;">
+        </div>
+
     <!-- Filtros -->
     <form method="GET" class="filtros-bar">
         <div class="campo">
@@ -276,4 +281,16 @@
     {% endif %}
 
 </div>
+
+<script>
+    document.getElementById('searchConsulta').addEventListener('keyup', function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll('.consulta-table tbody tr');
+        rows.forEach(row => {
+            let text = row.textContent.toLowerCase();
+            row.style.display = text.includes(filter) ? '' : 'none';
+        });
+    });
+</script>
+
 {% endblock %}

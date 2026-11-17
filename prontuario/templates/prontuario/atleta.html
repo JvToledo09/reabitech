@@ -296,17 +296,13 @@
             <i class="fas fa-layer-group"></i> Todos
  </a>
         {% for tipo, meta in tipos_evento.items %}
-            {% if contagens|default_if_none:'' %}
-                {% with qtd=contagens|default_if_none:'' %}
-                    {# Django não acessa dict por chave variável direto — usamos o filtro de lookup #}
-                {% endwith %}
-            {% endif %}
             <a href="?tipos={{ tipo }}"
                class="tl-chip {% if tipo in tipos_ativos %}active{% endif %}">
                 <i class="fas {{ meta.icone }}"></i>
                 {{ meta.label }}
- </a>
-        {% endfor %}
+                <span class="count">({{ contagens|get_item:tipo }})</span>
+            </a>
+            {% endfor %}
  </div>
 
     <!-- Timeline -->

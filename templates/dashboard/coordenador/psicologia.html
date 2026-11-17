@@ -1,33 +1,32 @@
 {% extends 'base.html' %}
 {% block title %}Psicologia - Coordenador{% endblock %}
+{% block page_title %}Visão de Psicologia{% endblock %}
+
 {% block content %}
-<div class="animate-fadeInUp">
-    <h2><i class="fas fa-brain me-2" style="color: var(--cor-secundaria);"></i> Psicologia</h2>
-    <p class="text-muted">Acompanhamento psicológico dos atletas</p>
-    
-    <div class="card-modern mt-4">
-        <div class="card-header-custom">
-            <i class="fas fa-chart-line me-2"></i> Avaliações Realizadas
- </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-custom mb-0">
-                    <thead><tr><th>Atleta</th><th>Data</th><th>Score</th><th>Status</th></tr></thead>
-                    <tbody>
-                        {% for avaliacao in avaliacoes %}
-                        <tr>
-                            <td>{{ avaliacao.atleta.usuario.get_full_name }}</td>
-                            <td>{{ avaliacao.data|date:"d/m/Y" }}</td>
-                            <td>{{ avaliacao.score_total }}/10</td>
-                            <td><span class="badge-success">{{ avaliacao.status_emocional }}</span></td>
- </tr>
-                        {% empty %}
-                        <tr><td colspan="4" class="text-center">Nenhuma avaliação registrada</td></tr>
-                        {% endfor %}
- </tbody>
- </table>
- </div>
- </div>
- </div>
+<div class="container-fluid p-0">
+    <div class="dash-section">
+        <div class="dash-section-head">
+            <h5 class="dash-section-title"><i class="fas fa-brain"></i> Avaliações Recentes</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table" style="color: var(--text-primary);">
+                <thead style="background: var(--bg-secondary); color: var(--text-secondary);">
+                    <tr><th>Atleta</th><th>Data</th><th>Score</th><th>Status Emocional</th></tr>
+                </thead>
+                <tbody>
+                    {% for avaliacao in avaliacoes %}
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td class="align-middle"><strong>{{ avaliacao.atleta.usuario.get_full_name }}</strong></td>
+                        <td class="align-middle">{{ avaliacao.data|date:"d/m/Y" }}</td>
+                        <td class="align-middle"><strong>{{ avaliacao.score_total }}/10</strong></td>
+                        <td class="align-middle"><span class="badge" style="background: rgba(16,185,129,0.1); color: #10b981;">{{ avaliacao.status_emocional }}</span></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="text-center py-4">Nenhuma avaliação registrada.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock %}

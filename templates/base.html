@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pt-br" data-theme="light">
+<html lang="pt-br" data-theme="light" style="background-color: #0b1120;">
 <head>
 <!-- SEO Básico -->
 <meta name="description" content="REABITECH - Plataforma de gestão de reabilitação física e emocional.">
@@ -25,6 +25,10 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Phosphor Icons (Design Premium) -->
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2290,7 +2294,148 @@
 
         /* ---------- FIM GLOBAL-UPGRADE-REABITECH ---------- */
 
- </style>
+ 
+/* ==========================================================================
+   SPLASH SCREEN DESATIVADO
+   ========================================================================== */
+#reabitech-splash, .loading, #loading {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* ==========================================================================
+   SIDEBAR PREMIUM — CORREÇÕES E PADRONIZAÇÃO
+   ========================================================================== */
+.sidebar, .sidebar-modern, .nav-sidebar {
+    background: var(--bg-elevated, #ffffff) !important;
+    border-right: 1px solid var(--border-color, #e2e8f0) !important;
+}
+[data-theme="dark"] .sidebar,
+[data-theme="dark"] .sidebar-modern,
+[data-theme="dark"] .nav-sidebar {
+    background: #0f172a !important;
+    border-right-color: rgba(255,255,255,0.05) !important;
+}
+
+/* Links do menu — alinhamento e padding */
+.sidebar .nav-link, .sidebar-modern .nav-link, .nav-sidebar .nav-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 12px 16px !important;
+    margin: 4px 12px !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    font-size: 0.92rem !important;
+    color: var(--text-secondary, #64748b) !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+    border-left: 3px solid transparent !important;
+}
+[data-theme="dark"] .sidebar .nav-link,
+[data-theme="dark"] .sidebar-modern .nav-link,
+[data-theme="dark"] .nav-sidebar .nav-link {
+    color: #cbd5e1 !important;
+}
+
+/* Ícones — largura fixa para alinhar todos os textos verticalmente */
+.sidebar .nav-link i, .sidebar-modern .nav-link i, .nav-sidebar .nav-link i {
+    width: 20px !important;
+    text-align: center !important;
+    font-size: 1rem !important;
+    flex-shrink: 0 !important;
+}
+
+/* Hover dos links */
+.sidebar .nav-link:hover, .sidebar-modern .nav-link:hover, .nav-sidebar .nav-link:hover {
+    background: rgba(16, 185, 129, 0.08) !important;
+    color: #10b981 !important;
+}
+[data-theme="dark"] .sidebar .nav-link:hover,
+[data-theme="dark"] .sidebar-modern .nav-link:hover,
+[data-theme="dark"] .nav-sidebar .nav-link:hover {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #34d399 !important;
+}
+
+/* Link ATIVO — borda verde + fundo */
+.sidebar .nav-link.active, .sidebar-modern .nav-link.active, .nav-sidebar .nav-link.active {
+    background: rgba(16, 185, 129, 0.12) !important;
+    color: #10b981 !important;
+    border-left: 3px solid #10b981 !important;
+    font-weight: 700 !important;
+}
+[data-theme="dark"] .sidebar .nav-link.active,
+[data-theme="dark"] .sidebar-modern .nav-link.active,
+[data-theme="dark"] .nav-sidebar .nav-link.active {
+    background: rgba(16, 185, 129, 0.2) !important;
+    color: #34d399 !important;
+}
+
+/* Rodapé do usuário (foto + nome) */
+.sidebar-user, .sidebar-footer, .user-card-sidebar {
+    padding: 16px !important;
+    margin: 12px !important;
+    border-radius: 12px !important;
+    background: var(--bg-secondary, #f8fafc) !important;
+    border: 1px solid var(--border-color, #e2e8f0) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+[data-theme="dark"] .sidebar-user,
+[data-theme="dark"] .sidebar-footer,
+[data-theme="dark"] .user-card-sidebar {
+    background: rgba(30, 41, 59, 0.6) !important;
+    border-color: rgba(255,255,255,0.05) !important;
+}
+
+.sidebar-user .user-info, .sidebar-footer .user-info, .user-card-sidebar .user-info {
+    flex: 1 !important;
+    min-width: 0 !important;
+}
+
+.sidebar-user .user-info .user-name,
+.sidebar-footer .user-info .user-name,
+.user-card-sidebar .user-info .user-name {
+    font-weight: 700 !important;
+    color: var(--text-primary, #1e293b) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+[data-theme="dark"] .sidebar-user .user-info .user-name,
+[data-theme="dark"] .sidebar-footer .user-info .user-name,
+[data-theme="dark"] .user-card-sidebar .user-info .user-name {
+    color: #f8fafc !important;
+}
+
+.sidebar-user .user-info .user-role,
+.sidebar-footer .user-info .user-role,
+.user-card-sidebar .user-info .user-role {
+    font-size: 0.72rem !important;
+    color: #10b981 !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+/* Título de grupo no menu (ex: PROJETO ATIVO) */
+.sidebar .nav-section-title,
+.sidebar-modern .nav-section-title,
+.nav-sidebar .nav-section-title {
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    color: var(--text-tertiary, #94a3b8) !important;
+    padding: 16px 16px 8px 16px !important;
+    margin: 0 !important;
+}
+
+</style>
 
     {% block extra_css %}{% endblock %}
 {% if GA4_MEASUREMENT_ID %}
@@ -2341,13 +2486,31 @@
 
     <link rel="stylesheet" href="{% static 'css/splash.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom-premium.css' %}">
+
+<link rel="stylesheet" href="{% static 'css/internal-cyber.css' %}">
+
+<link rel="stylesheet" href="{% static 'css/dash-cyber.css' %}">
+
+<link rel="stylesheet" href="{% static 'css/sidebar-modern.css' %}">
+
+<link rel="stylesheet" href="{% static 'css/atleta-enhancements.css' %}">
+
+<style>
+    /* Empurra o botão Membros e Configurações para a base do menu */
+    .sidebar-menu { display: flex; flex-direction: column; }
+    .sidebar-item[href*="membros"] { margin-top: auto !important; }
+</style>
 </head>
 <body>
+<!-- Barra de Progresso Premium no Topo -->
+<div id="progress-bar" style="position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #10b981, #34d399); width: 0%; z-index: 999999; transition: width 0.2s ease, opacity 0.3s ease; box-shadow: 0 0 10px rgba(16, 185, 129, 0.6); pointer-events: none;"></div>
 
-<div id="reabitech-splash">
-    <div class="splash-logo-wrap">
-        <img src="{% static 'images/logo.png' %}" alt="REABITECH">
-    </div>
+
+
+
+
+
+<!-- Splash removido para melhor UX -->
     <h1 class="splash-title">REABITECH</h1>
 </div>
 
@@ -2399,71 +2562,72 @@
  </div>
     {% endif %}
 
-    <div class="sidebar-menu">
+        <div class="sidebar-menu">
         {% if user.perfil.tipo == 'coordenador' %}
-        <a href="{% url 'dashboard:dashboard_coordenador' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_coordenador' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-        <a href="{% url 'dashboard:coordenador_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_atletas' %}active{% endif %}"><i class="fas fa-users"></i><span>Atletas</span></a>
-        <a href="{% url 'dashboard:coordenador_fisioterapia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_fisioterapia' %}active{% endif %}"><i class="fas fa-dumbbell"></i><span>Fisioterapia</span></a>
-        <a href="{% url 'dashboard:coordenador_psicologia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_psicologia' %}active{% endif %}"><i class="fas fa-brain"></i><span>Psicologia</span></a>
-        <a href="{% url 'dashboard:coordenador_relatorios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_relatorios' %}active{% endif %}"><i class="fas fa-chart-line"></i><span>Relatórios</span></a>
-        <a href="{% url 'dashboard:coordenador_membros' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_membros' %}active{% endif %}"><i class="fas fa-user-plus"></i><span>Membros</span></a>
-        <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-folder-open"></i><span>Prontuários</span></a>
-        <a href="{% url 'prontuario:timeline_global' %}" class="sidebar-item {% if 'timeline' in request.path %}active{% endif %}"><i class="fas fa-stream"></i><span>Timeline</span></a>
-        <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
-        <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="fas fa-chart-pie"></i><span>Analytics</span></a>
+        <a href="{% url 'dashboard:dashboard_coordenador' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_coordenador' %}active{% endif %}"><i class="ph ph-squares-four"></i><span>Dashboard</span></a>
+        <a href="{% url 'dashboard:coordenador_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_atletas' %}active{% endif %}"><i class="ph ph-users-three"></i><span>Atletas</span></a>
+        <a href="{% url 'dashboard:coordenador_fisioterapia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_fisioterapia' %}active{% endif %}"><i class="ph ph-barbell"></i><span>Fisioterapia</span></a>
+        <a href="{% url 'dashboard:coordenador_psicologia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_psicologia' %}active{% endif %}"><i class="ph ph-brain"></i><span>Psicologia</span></a>
+        <a href="{% url 'dashboard:coordenador_relatorios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_relatorios' %}active{% endif %}"><i class="ph ph-chart-line-up"></i><span>Relatórios</span></a>
+        <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="ph ph-folder-notch-open"></i><span>Prontuários</span></a>
+        <a href="{% url 'prontuario:timeline_global' %}" class="sidebar-item {% if 'timeline' in request.path %}active{% endif %}"><i class="ph ph-git-commit"></i><span>Timeline</span></a>
+        <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="ph ph-calendar-check"></i><span>Agenda</span></a>
+        <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="ph ph-chart-pie-slice"></i><span>Analytics</span></a>
         <a href="{% url 'mensageria:lista_conversas' %}" class="sidebar-item {% if 'mensageria' in request.path %}active{% endif %}">
-            <i class="fas fa-comments"></i><span>Mensagens</span>
+            <i class="ph ph-chats-circle"></i><span>Mensagens</span>
             <span class="badge-msg-sidebar" id="badgeMensagensSidebar" {% if not total_mensagens_nao_lidas %}style="display:none;"{% endif %}>{% if total_mensagens_nao_lidas %}{{ total_mensagens_nao_lidas }}{% endif %}</span>
- </a>
+        </a>
+        <a href="{% url 'dashboard:coordenador_membros' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_membros' %}active{% endif %}"><i class="ph ph-user-plus"></i><span>Membros</span></a>
 
         {% elif user.perfil.tipo == 'tecnico' %}
-        <a href="{% url 'dashboard:dashboard_tecnico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_tecnico' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-        <a href="{% url 'dashboard:tecnico_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_atletas' %}active{% endif %}"><i class="fas fa-futbol"></i><span>Meus Atletas</span></a>
-        <a href="{% url 'dashboard:tecnico_desempenho' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_desempenho' %}active{% endif %}"><i class="fas fa-chart-simple"></i><span>Desempenho</span></a>
-        <a href="{% url 'dashboard:tecnico_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_recuperacao' %}active{% endif %}"><i class="fas fa-heartbeat"></i><span>Recuperação</span></a>
-        <a href="{% url 'prontuario:tecnico_prontuarios_compartilhados' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-share-nodes"></i><span>Compartilhados</span></a>
+        <a href="{% url 'dashboard:dashboard_tecnico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_tecnico' %}active{% endif %}"><i class="ph ph-squares-four"></i><span>Dashboard</span></a>
+        <a href="{% url 'dashboard:tecnico_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_atletas' %}active{% endif %}"><i class="ph ph-soccer-ball"></i><span>Meus Atletas</span></a>
+        <a href="{% url 'dashboard:tecnico_desempenho' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_desempenho' %}active{% endif %}"><i class="ph ph-chart-bar"></i><span>Desempenho</span></a>
+        <a href="{% url 'dashboard:tecnico_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_recuperacao' %}active{% endif %}"><i class="ph ph-heartbeat"></i><span>Recuperação</span></a>
+        <a href="{% url 'prontuario:tecnico_prontuarios_compartilhados' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="ph ph-share-network"></i><span>Compartilhados</span></a>
         <a href="{% url 'mensageria:lista_conversas' %}" class="sidebar-item {% if 'mensageria' in request.path %}active{% endif %}">
-            <i class="fas fa-comments"></i><span>Mensagens</span>
+            <i class="ph ph-chats-circle"></i><span>Mensagens</span>
             <span class="badge-msg-sidebar" id="badgeMensagensSidebar" {% if not total_mensagens_nao_lidas %}style="display:none;"{% endif %}>{% if total_mensagens_nao_lidas %}{{ total_mensagens_nao_lidas }}{% endif %}</span>
- </a>
+        </a>
 
         {% elif user.perfil.tipo == 'atleta' %}
-        <a href="{% url 'dashboard:dashboard_atleta' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_atleta' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-        <a href="{% url 'dashboard:atleta_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_recuperacao' %}active{% endif %}"><i class="fas fa-heartbeat"></i><span>Minha Recuperação</span></a>
-        <a href="{% url 'dashboard:atleta_psicologico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_psicologico' %}active{% endif %}"><i class="fas fa-brain"></i><span>Saúde Mental</span></a>
-        <a href="{% url 'dashboard:atleta_exercicios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_exercicios' %}active{% endif %}"><i class="fas fa-running"></i><span>Exercícios</span></a>
-        <a href="{% url 'dashboard:atleta_minha_timeline' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_minha_timeline' %}active{% endif %}"><i class="fas fa-stream"></i><span>Minha Timeline</span></a>
-        <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Minha Agenda</span></a>
+        <a href="{% url 'dashboard:dashboard_atleta' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_atleta' %}active{% endif %}"><i class="ph ph-squares-four"></i><span>Dashboard</span></a>
+        <a href="{% url 'dashboard:atleta_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_recuperacao' %}active{% endif %}"><i class="ph ph-heartbeat"></i><span>Minha Recuperação</span></a>
+        <a href="{% url 'dashboard:atleta_psicologico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_psicologico' %}active{% endif %}"><i class="ph ph-brain"></i><span>Saúde Mental</span></a>
+        <a href="{% url 'dashboard:atleta_exercicios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_exercicios' %}active{% endif %}"><i class="ph ph-person-simple-run"></i><span>Exercícios</span></a>
+        <a href="{% url 'dashboard:atleta_minha_timeline' %}" class="sidebar-item {% if request.resolver_match.url_name == 'atleta_minha_timeline' %}active{% endif %}"><i class="ph ph-git-commit"></i><span>Minha Timeline</span></a>
+        <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="ph ph-calendar-check"></i><span>Minha Agenda</span></a>
 
         {% elif user.perfil.tipo == 'fisioterapeuta' %}
-        <a href="{% url 'dashboard:dashboard_fisioterapeuta' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_fisioterapeuta' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-        <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_atletas' %}active{% endif %}"><i class="fas fa-user-injured"></i><span>Pacientes</span></a>
-        <a href="{% url 'dashboard:fisioterapeuta_tratamentos' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_tratamentos' %}active{% endif %}"><i class="fas fa-notes-medical"></i><span>Tratamentos</span></a>
-        <a href="{% url 'dashboard:fisioterapeuta_evolucoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_evolucoes' %}active{% endif %}"><i class="fas fa-chart-line"></i><span>Evoluções</span></a>
-        <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="fas fa-folder-open"></i><span>Prontuários</span></a>
-        <a href="{% url 'prontuario:timeline_global' %}" class="sidebar-item {% if 'timeline' in request.path %}active{% endif %}"><i class="fas fa-stream"></i><span>Timeline</span></a>
-        <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
-        <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="fas fa-chart-pie"></i><span>Analytics</span></a>
+        <a href="{% url 'dashboard:dashboard_fisioterapeuta' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_fisioterapeuta' %}active{% endif %}"><i class="ph ph-squares-four"></i><span>Dashboard</span></a>
+        <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_atletas' %}active{% endif %}"><i class="ph ph-user-focus"></i><span>Pacientes</span></a>
+        <a href="{% url 'dashboard:fisioterapeuta_tratamentos' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_tratamentos' %}active{% endif %}"><i class="ph ph-clipboard-text"></i><span>Tratamentos</span></a>
+        <a href="{% url 'dashboard:fisioterapeuta_evolucoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_evolucoes' %}active{% endif %}"><i class="ph ph-chart-line-up"></i><span>Evoluções</span></a>
+        <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="ph ph-folder-notch-open"></i><span>Prontuários</span></a>
+        <a href="{% url 'prontuario:timeline_global' %}" class="sidebar-item {% if 'timeline' in request.path %}active{% endif %}"><i class="ph ph-git-commit"></i><span>Timeline</span></a>
+        <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="ph ph-calendar-check"></i><span>Agenda</span></a>
+        <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="ph ph-chart-pie-slice"></i><span>Analytics</span></a>
         <a href="{% url 'mensageria:lista_conversas' %}" class="sidebar-item {% if 'mensageria' in request.path %}active{% endif %}">
-            <i class="fas fa-comments"></i><span>Mensagens</span>
+            <i class="ph ph-chats-circle"></i><span>Mensagens</span>
             <span class="badge-msg-sidebar" id="badgeMensagensSidebar" {% if not total_mensagens_nao_lidas %}style="display:none;"{% endif %}>{% if total_mensagens_nao_lidas %}{{ total_mensagens_nao_lidas }}{% endif %}</span>
- </a>
+        </a>
 
         {% elif user.perfil.tipo == 'psicologo' %}
-        <a href="{% url 'dashboard:dashboard_psicologo' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_psicologo' %}active{% endif %}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-        <a href="{% url 'dashboard:psicologo_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_atletas' %}active{% endif %}"><i class="fas fa-users"></i><span>Atendimentos</span></a>
-        <a href="{% url 'dashboard:psicologo_avaliacoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_avaliacoes' %}active{% endif %}"><i class="fas fa-clipboard-list"></i><span>Avaliações</span></a>
-        <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="fas fa-calendar-check"></i><span>Agenda</span></a>
-        <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="fas fa-chart-pie"></i><span>Analytics</span></a>
+        <a href="{% url 'dashboard:dashboard_psicologo' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_psicologo' %}active{% endif %}"><i class="ph ph-squares-four"></i><span>Dashboard</span></a>
+        <a href="{% url 'dashboard:psicologo_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_atletas' %}active{% endif %}"><i class="ph ph-users-three"></i><span>Atendimentos</span></a>
+        <a href="{% url 'dashboard:psicologo_avaliacoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_avaliacoes' %}active{% endif %}"><i class="ph ph-list-checks"></i><span>Avaliações</span></a>
+        <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="ph ph-calendar-check"></i><span>Agenda</span></a>
+        <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="ph ph-chart-pie-slice"></i><span>Analytics</span></a>
         <a href="{% url 'mensageria:lista_conversas' %}" class="sidebar-item {% if 'mensageria' in request.path %}active{% endif %}">
-            <i class="fas fa-comments"></i><span>Mensagens</span>
+            <i class="ph ph-chats-circle"></i><span>Mensagens</span>
             <span class="badge-msg-sidebar" id="badgeMensagensSidebar" {% if not total_mensagens_nao_lidas %}style="display:none;"{% endif %}>{% if total_mensagens_nao_lidas %}{{ total_mensagens_nao_lidas }}{% endif %}</span>
- </a>
+        </a>
         {% endif %}
 
         <div style="height: 1px; background: rgba(255,255,255,0.08); margin: 15px 8px;"></div>
-        <a href="{% url 'logout' %}" class="sidebar-item"><i class="fas fa-sign-out-alt"></i><span>Sair</span></a>
- </div>
+        <a href="{% url 'dashboard:coordenador_configuracoes' %}" class="sidebar-item"><i class="ph ph-gear-six"></i><span>Configurações</span></a>
+        <a href="{% url 'logout' %}" class="sidebar-item"><i class="ph ph-sign-out"></i><span>Sair</span></a>
+    </div>
 
     <div class="sidebar-user">
         {% if user.perfil.foto %}
@@ -2879,5 +3043,229 @@
 
     {% block extra_js %}{% endblock %}
     <script src="{% static 'js/splash.js' %}"></script>
+
+<script src="{% static 'js/internal-cyber.js' %}"></script>
+
+
+
+<script src="{% static 'js/chart-cyber.js' %}"></script>
+
+<script src="{% static 'js/atleta-enhancements.js' %}"></script>
+
+<script>
+    // Controle da Barra de Progresso Global
+    const progressBar = document.getElementById('progress-bar');
+    
+    function startProgress() {
+        if(!progressBar) return;
+        progressBar.style.opacity = '1';
+        progressBar.style.width = '10%';
+        setTimeout(() => { progressBar.style.width = '40%'; }, 100);
+        setTimeout(() => { progressBar.style.width = '70%'; }, 400);
+        setTimeout(() => { progressBar.style.width = '90%'; }, 800);
+    }
+
+    function finishProgress() {
+        if(!progressBar) return;
+        progressBar.style.width = '100%';
+        setTimeout(() => {
+            progressBar.style.opacity = '0';
+            setTimeout(() => { progressBar.style.width = '0%'; }, 400);
+        }, 200);
+    }
+
+    // Inicia a barra quando a página começa a carregar (ou é recarregada)
+    startProgress();
+
+    // Finaliza a barra quando a página termina de carregar
+    window.addEventListener('load', finishProgress);
+
+    // Intercepta cliques em links e submits de formulários para iniciar a barra
+    document.addEventListener('DOMContentLoaded', () => {
+        // Links normais
+        document.body.addEventListener('click', (e) => {
+            const link = e.target.closest('a');
+            if (link && link.href && !link.target && link.hostname === window.location.hostname && !link.getAttribute('href').startsWith('#')) {
+                startProgress();
+            }
+        });
+
+        // Formulários normais (que não são AJAX)
+        document.body.addEventListener('submit', (e) => {
+            if (!e.defaultPrevented) {
+                startProgress();
+            }
+        });
+    });
+</script>
+
+
+
+
+
+<script>
+    (function() {
+        const progressBar = document.getElementById('progress-bar');
+        let progressInterval;
+
+        function startProgress() {
+            if (!progressBar) return;
+            clearInterval(progressInterval);
+            progressBar.style.opacity = '1';
+            progressBar.style.width = '10%';
+            
+            // Simula o carregamento (vai até 90% e espera)
+            let width = 10;
+            progressInterval = setInterval(() => {
+                width += Math.random() * 10;
+                if (width > 90) width = 90;
+                progressBar.style.width = width + '%';
+            }, 150);
+        }
+
+        function finishProgress() {
+            if (!progressBar) return;
+            clearInterval(progressInterval);
+            progressBar.style.width = '100%';
+            
+            // Esconde a barra suavemente
+            setTimeout(() => {
+                progressBar.style.opacity = '0';
+                setTimeout(() => { progressBar.style.width = '0%'; }, 300);
+            }, 200);
+        }
+
+        // Inicia ao carregar a página (se não estiver em cache)
+        window.addEventListener('load', finishProgress);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Intercepta cliques em links
+            document.body.addEventListener('click', (e) => {
+                const link = e.target.closest('a');
+                if (link && link.href && !link.target && link.hostname === window.location.hostname && !link.getAttribute('href').startsWith('#')) {
+                    if (link.href !== window.location.href) startProgress();
+                }
+            });
+
+            // Intercepta submits normais
+            document.body.addEventListener('submit', (e) => {
+                if (!e.defaultPrevented) startProgress();
+            });
+
+            // Lida com o botão "Voltar" do navegador
+            window.addEventListener('pageshow', (event) => {
+                if (event.persisted) finishProgress();
+            });
+        });
+    })();
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Mapeamento de FontAwesome para Phosphor Icons
+    const iconMap = {
+        'fa-tachometer-alt': 'ph-squares-four',
+        'fa-users': 'ph-users-three',
+        'fa-dumbbell': 'ph-barbell',
+        'fa-brain': 'ph-brain',
+        'fa-chart-line': 'ph-chart-line-up',
+        'fa-folder-open': 'ph-folder-notch-open',
+        'fa-stream': 'ph-git-commit',
+        'fa-calendar-check': 'ph-calendar-check',
+        'fa-chart-pie': 'ph-chart-pie-slice',
+        'fa-comments': 'ph-chats-circle',
+        'fa-user-plus': 'ph-user-plus',
+        'fa-cog': 'ph-gear-six',
+        'fa-sign-out-alt': 'ph-sign-out',
+        'fa-heartbeat': 'ph-heartbeat',
+        'fa-running': 'ph-person-simple-run',
+        'fa-user-injured': 'ph-user-focus',
+        'fa-notes-medical': 'ph-clipboard-text',
+        'fa-futbol': 'ph-soccer-ball',
+        'fa-chart-simple': 'ph-chart-bar',
+        'fa-share-nodes': 'ph-share-network',
+        'fa-clipboard-list': 'ph-list-checks',
+        
+        // Comuns em botões
+        'fa-plus': 'ph-plus',
+        'fa-edit': 'ph-pencil-simple',
+        'fa-trash': 'ph-trash',
+        'fa-trash-alt': 'ph-trash',
+        'fa-search': 'ph-magnifying-glass',
+        'fa-eye': 'ph-eye',
+        'fa-save': 'ph-floppy-disk',
+        'fa-check': 'ph-check',
+        'fa-check-circle': 'ph-check-circle',
+        'fa-times': 'ph-x',
+        'fa-times-circle': 'ph-x-circle',
+        'fa-arrow-left': 'ph-arrow-left',
+        'fa-arrow-right': 'ph-arrow-right',
+        'fa-download': 'ph-download-simple',
+        'fa-print': 'ph-printer',
+        'fa-file-pdf': 'ph-file-pdf',
+        'fa-paperclip': 'ph-paperclip',
+        'fa-paper-plane': 'ph-paper-plane-right',
+        'fa-envelope': 'ph-envelope',
+        'fa-phone': 'ph-phone',
+        'fa-calendar': 'ph-calendar-blank',
+        'fa-clock': 'ph-clock',
+        'fa-filter': 'ph-funnel',
+        'fa-list': 'ph-list',
+        'fa-info-circle': 'ph-info',
+        'fa-exclamation-triangle': 'ph-warning',
+        'fa-exclamation-circle': 'ph-warning-circle',
+        'fa-lock': 'ph-lock-key',
+        'fa-unlock': 'ph-lock-key-open',
+        'fa-shield-alt': 'ph-shield-check',
+        'fa-camera': 'ph-camera',
+        'fa-image': 'ph-image',
+        'fa-upload': 'ph-upload-simple',
+        'fa-medal': 'ph-medal',
+        'fa-trophy': 'ph-trophy',
+        'fa-fire': 'ph-fire',
+        'fa-bone': 'ph-bone',
+        'fa-pills': 'ph-pill',
+        'fa-microscope': 'ph-microscope',
+        'fa-clipboard-check': 'ph-clipboard-text',
+        'fa-comment-medical': 'ph-chat-teardrop-text',
+        'fa-forward': 'ph-skip-forward',
+        'fa-home': 'ph-house',
+        'fa-stethoscope': 'ph-stethoscope',
+        'fa-smoking': 'ph-cigarette',
+        'fa-lungs': 'ph-lungs',
+        'fa-gauge-high': 'ph-gauge',
+        'fa-bullseye': 'ph-target',
+        'fa-folder-plus': 'ph-folder-plus',
+        'fa-user-check': 'ph-user-check',
+        'fa-user': 'ph-user',
+        'fa-layer-group': 'ph-stack',
+        'fa-rotate': 'ph-arrows-clockwise',
+        'fa-arrows-rotate': 'ph-arrows-clockwise'
+    };
+
+    // Procura todos os <i> que tenham classes fas, far, fab
+    const elements = document.querySelectorAll('i[class*="fa-"]');
+    
+    elements.forEach(el => {
+        // Encontra qual classe fa- está no elemento
+        let faClass = null;
+        el.classList.forEach(c => {
+            if (c.startsWith('fa-') && iconMap[c]) {
+                faClass = c;
+            }
+        });
+
+        if (faClass) {
+            const phClass = iconMap[faClass];
+            // Remove as classes antigas do FontAwesome
+            el.classList.remove(faClass, 'fas', 'far', 'fab');
+            // Adiciona a classe do Phosphor
+            el.classList.add('ph', phClass);
+        }
+    });
+});
+</script>
+
 </body>
 </html>
