@@ -2510,9 +2510,7 @@
 
 
 
-<!-- Splash removido para melhor UX -->
-    <h1 class="splash-title">REABITECH</h1>
-</div>
+<!-- Splash screen removido: estrutura órfã corrigida -->
 
 
     <!-- Fundo animado global -->
@@ -2562,7 +2560,7 @@
  </div>
     {% endif %}
 
-        <div class="sidebar-menu">
+        <div class="sidebar-menu" data-lenis-prevent>
         {% if user.perfil.tipo == 'coordenador' %}
         <a href="{% url 'dashboard:dashboard_coordenador' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_coordenador' %}active{% endif %}"><i class="ph ph-squares-four"></i><span>Dashboard</span></a>
         <a href="{% url 'dashboard:coordenador_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_atletas' %}active{% endif %}"><i class="ph ph-users-three"></i><span>Atletas</span></a>
@@ -3266,6 +3264,212 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    /* KILL SWITCH - PARA TUDO */
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+</style>
+
+
+<script>
+    // KILL SWITCH GLOBAL: Remove a classe fx-3d de qualquer elemento do sistema
+    // Isso impede o script premium-effects.js de tentar girar os cards e travar o mouse.
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.fx-3d, .tilt-3d').forEach(function(el) {
+            el.classList.remove('fx-3d', 'tilt-3d', 'tilt-glow', 'tilt-3d-shadow');
+            el.style.transform = ''; // Limpa qualquer transformação que tenha ficado presa
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+<style>
+    /* ==========================================================
+       HOVER PREMIUM AVANÇADO (100% CSS - SEM TREMOR E SEM LAG)
+       ========================================================== */
+    
+    /* 1. Base: Preparação de todos os cards */
+    .fisio-stat, .fisio-action, .fisio-atleta, .fisio-pront,
+    .dash-stat, .dash-action, .card-modern, .card-premium, .stat-card {
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                    box-shadow 0.4s ease, 
+                    border-color 0.4s ease !important;
+        will-change: transform, box-shadow;
+        transform: perspective(1000px) translateZ(0); 
+        position: relative;
+        overflow: hidden; /* Necessário para o efeito de brilho */
+    }
+
+    /* 2. O Efeito Hover (Subir, Zoom, Inclinação 3D leve, Sombra forte) */
+    .fisio-stat:hover, .fisio-action:hover, .fisio-atleta:hover, .fisio-pront:hover,
+    .dash-stat:hover, .dash-action:hover, .card-modern:hover, .card-premium:hover, .stat-card:hover {
+        /* Inclinação fixa de 3 graus - não treme */
+        transform: perspective(1000px) translateY(-8px) scale(1.02) rotateX(3deg) rotateY(-3deg) !important;
+        box-shadow: 0 20px 40px rgba(16, 185, 129, 0.15), 0 0 15px rgba(16, 185, 129, 0.1) !important;
+        border-color: rgba(16, 185, 129, 0.5) !important;
+        z-index: 10 !important;
+    }
+
+    /* 3. Efeito de Brilho Passando (Shine Sweep) */
+    .fisio-stat::after, .fisio-action::after, .fisio-atleta::after, .dash-stat::after {
+        content: '';
+        position: absolute;
+        top: 0; 
+        left: -100%;
+        width: 50%; 
+        height: 100%;
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.08), transparent);
+        transform: skewX(-25deg);
+        transition: left 0.6s ease-in-out;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .fisio-stat:hover::after, .fisio-action:hover::after, .fisio-atleta:hover::after, .dash-stat:hover::after {
+        left: 150%;
+    }
+
+    /* 4. Efeito nos Ícones (Pulinho mais alto e giro) */
+    .fisio-stat-icon, .fisio-action-icon, .dash-stat-icon, .dash-action-icon {
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    }
+    
+    .fisio-stat:hover .fisio-stat-icon, 
+    .fisio-action:hover .fisio-action-icon,
+    .dash-stat:hover .dash-stat-icon,
+    .dash-action:hover .dash-action-icon {
+        transform: scale(1.15) translateY(-5px) rotate(-5deg) !important;
+        background: #10b981 !important; /* Fica verde neon no hover */
+        color: white !important;
+        box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4) !important;
+    }
+
+    /* 5. Efeito na Seta (Desliza mais para a direita) */
+    .fisio-action-arrow, .dash-action-arrow {
+        transition: transform 0.3s ease, color 0.3s ease !important;
+    }
+    
+    .fisio-action:hover .fisio-action-arrow, 
+    .dash-action:hover .dash-action-arrow {
+        transform: translateX(8px) scale(1.1) !important;
+        color: #10b981 !important;
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const allElements = document.querySelectorAll('h1, h2, h3, p, span');
+    allElements.forEach(el => {
+        if (el.textContent.trim() === 'REABITECH' && !el.closest('.sidebar') && !el.closest('.top-navbar')) {
+            el.style.display = 'none';
+            el.style.opacity = '0';
+        }
+    });
+});
+</script>
+
+
+<style>
+    /* ==========================================================
+       SUPER UPGRADE GLOBAL (3D, TABELAS E ANTI-FANTASMA)
+       ========================================================== */
+    /* Extermina qualquer texto REABITECH ou imagem quebrada */
+    .splash-title, .splash-logo-wrap { display: none !important; }
+    img { font-size: 0 !important; color: transparent !important; }
+
+    /* Efeito 3D Premium Global (Subir + Sombra Verde) */
+    .card, .card-modern, .card-premium, .dash-stat, .dash-action, 
+    .fisio-stat, .fisio-action, .fisio-atleta, .fisio-section, 
+    .kpi-card, .chart-card, .stat-card, .tratamento-card, 
+    .chat-side-item, .consulta-row, .prontuario-card {
+        transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.35s ease, border-color 0.35s ease !important;
+        will-change: transform, box-shadow;
+        transform: translateZ(0); /* Aceleração de Hardware */
+        position: relative;
+    }
+    
+    .card:hover, .card-modern:hover, .card-premium:hover, .dash-stat:hover, .dash-action:hover, 
+    .fisio-stat:hover, .fisio-action:hover, .fisio-atleta:hover, .fisio-section:hover, 
+    .kpi-card:hover, .chart-card:hover, .stat-card:hover, .tratamento-card:hover, 
+    .chat-side-item:hover, .consulta-row:hover, .prontuario-card:hover {
+        transform: translateY(-5px) scale(1.01) !important;
+        box-shadow: 0 15px 35px rgba(16, 185, 129, 0.12), 0 0 0 1px rgba(16, 185, 129, 0.2) !important;
+        border-color: rgba(16, 185, 129, 0.4) !important;
+        z-index: 10 !important;
+    }
+
+    /* Upgrade de Tabelas (Transformar linhas em blocos flutuantes) */
+    .table { border-collapse: separate !important; border-spacing: 0 8px !important; }
+    .table thead th { 
+        border: none !important; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; 
+        text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; 
+        color: var(--text-tertiary) !important; padding-bottom: 12px !important; 
+    }
+    .table tbody tr { 
+        background: var(--bg-elevated) !important; border-radius: 12px; 
+        transition: all 0.3s ease !important; box-shadow: 0 2px 5px rgba(0,0,0,0.02); 
+    }
+    .table tbody tr:hover { 
+        background: var(--bg-elevated) !important; transform: translateY(-2px) scale(1.005) !important; 
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.1) !important; z-index: 5; 
+    }
+    .table tbody td { 
+        border: none !important; border-top: 1px solid var(--border-color) !important; 
+        border-bottom: 1px solid var(--border-color) !important; 
+        vertical-align: middle !important; padding: 16px !important; 
+    }
+    .table tbody td:first-child { 
+        border-left: 1px solid var(--border-color) !important; 
+        border-top-left-radius: 12px; border-bottom-left-radius: 12px; 
+    }
+    .table tbody td:last-child { 
+        border-right: 1px solid var(--border-color) !important; 
+        border-top-right-radius: 12px; border-bottom-right-radius: 12px; 
+    }
+    
+    /* Ajuste das Tabelas no Dark Mode */
+    [data-theme="dark"] .table tbody tr { background: rgba(30, 41, 59, 0.4) !important; border-color: rgba(255, 255, 255, 0.05) !important; }
+    [data-theme="dark"] .table tbody tr:hover { background: rgba(30, 41, 59, 0.8) !important; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(16, 185, 129, 0.2) !important; }
+    [data-theme="dark"] .table tbody td { border-color: rgba(255, 255, 255, 0.05) !important; }
+</style>
 
 </body>
 </html>

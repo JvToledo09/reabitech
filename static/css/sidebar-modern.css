@@ -46,6 +46,7 @@
 /* Menu (Área com Scroll) */
 .sidebar-menu {
     flex: 1 !important;
+    min-height: 0 !important;
     overflow-y: auto !important;
     padding: 8px 20px !important;
     display: flex !important;

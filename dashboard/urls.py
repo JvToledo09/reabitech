@@ -79,4 +79,5 @@ urlpatterns = [
     path('notificacoes/<int:notificacao_id>/lida/', views.marcar_notificacao_lida, name='marcar_notificacao_lida'),
     path('notificacoes/marcar-todas/', views.marcar_todas_lidas, name='marcar_todas_lidas'),
     path('alertas/<int:alerta_id>/resolver/', views.resolver_alerta, name='resolver_alerta'),
+    path('coordenador/configuracoes/', views.coordenador_configuracoes, name='coordenador_configuracoes'),
 ]

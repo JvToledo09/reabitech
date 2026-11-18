@@ -1,97 +1,202 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Tratamentos{% endblock %}
+{% block title %}Tratamentos Ativos{% endblock %}
 {% block page_title %}Tratamentos Ativos{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* 1. MATA O REABITECH GIGANTE DEFINITIVAMENTE NESTA TELA */
+    body > h1, body > h2, body > span.text-brand, .auth-brand-name {
+        display: none !important;
+    }
+
+    /* 2. ESTILOS PREMIUM DA TELA */
+    .tratamento-card {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 20px 24px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+        will-change: transform, box-shadow;
+        transform: translateZ(0); /* Força aceleração de GPU */
+    }
+    
+    [data-theme="dark"] .tratamento-card {
+        background: rgba(30, 41, 59, 0.4);
+        border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Efeito Hover Suave (CSS Puro, sem JS, sem tremor) */
+    .tratamento-card:hover {
+        transform: translateY(-4px) scale(1.01) !important;
+        box-shadow: 0 12px 30px rgba(16, 185, 129, 0.12), 0 0 0 1px rgba(16, 185, 129, 0.2) !important;
+        border-color: rgba(16, 185, 129, 0.4) !important;
+        background: var(--bg-elevated);
+    }
+    [data-theme="dark"] .tratamento-card:hover {
+        background: rgba(30, 41, 59, 0.8);
+    }
+
+    /* Avatar */
+    .trat-avatar {
+        width: 50px; height: 50px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(6,182,212,0.15));
+        border: 1px solid rgba(16,185,129,0.2);
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 800; font-size: 1.1rem; color: #10b981;
+        flex-shrink: 0;
+    }
+
+    /* Informações Principais */
+    .trat-info { flex: 1; min-width: 0; }
+    .trat-nome {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800; font-size: 1.05rem;
+        color: var(--text-primary); margin: 0 0 4px 0;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .trat-rm {
+        font-size: 0.75rem; color: var(--text-tertiary); font-weight: 600;
+        display: flex; align-items: center; gap: 6px;
+    }
+
+    /* Badges e Datas */
+    .trat-badge {
+        padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700;
+        display: inline-flex; align-items: center; gap: 6px;
+    }
+    .trat-badge.lesao {
+        background: rgba(239, 68, 68, 0.1); color: #ef4444;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    .trat-badge.status {
+        background: rgba(16, 185, 129, 0.1); color: #10b981;
+        border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    .trat-badge.exercicios {
+        background: rgba(59, 130, 246, 0.1); color: #3b82f6;
+        border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .trat-datas {
+        display: flex; flex-direction: column; gap: 4px;
+        font-size: 0.8rem; color: var(--text-secondary);
+        min-width: 140px;
+    }
+    .trat-data-item { display: flex; justify-content: space-between; gap: 10px; }
+    .trat-data-item span { color: var(--text-tertiary); }
+
+    /* Botões de Ação */
+    .trat-acoes { display: flex; gap: 8px; flex-shrink: 0; }
+    .btn-trat {
+        width: 40px; height: 40px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        background: var(--bg-secondary); border: 1px solid var(--border-color);
+        color: var(--text-secondary); transition: all 0.2s; text-decoration: none;
+    }
+    .btn-trat:hover {
+        background: #10b981; color: white; border-color: #10b981;
+        transform: scale(1.05);
+    }
+
+    /* Responsividade */
+    @media (max-width: 992px) {
+        .tratamento-card { flex-direction: column; align-items: flex-start; gap: 16px; }
+        .trat-datas { width: 100%; flex-direction: row; justify-content: space-between; }
+        .trat-acoes { width: 100%; justify-content: flex-end; }
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="container-fluid p-0">
 
+    <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <div>
-            <h4 class="fw-bold mb-1"><i class="fas fa-notes-medical me-2 text-warning"></i>Tratamentos em Andamento</h4>
-            <p class="text-muted mb-0">Lista de todos os tratamentos ativos no projeto <strong>{{ projeto.nome }}</strong>.</p>
- </div>
-        <a href="{% url 'dashboard:dashboard_fisioterapeuta' %}" class="btn btn-outline-custom">
-            <i class="fas fa-arrow-left me-2"></i> Voltar
- </a>
- </div>
+            <h1 class="page-header-title m-0" style="font-family: 'Plus Jakarta Sans'; font-weight: 800;">
+                <i class="ph ph-clipboard-text text-success me-2"></i> Tratamentos Ativos
+            </h1>
+            <p class="text-muted mt-1 mb-0">Gerencie os tratamentos em andamento no projeto <strong>{{ projeto.nome }}</strong>.</p>
+        </div>
+        <a href="{% url 'dashboard:dashboard_fisioterapeuta' %}" class="btn-outline-custom" style="border-radius: 10px;">
+            <i class="ph ph-arrow-left"></i> Voltar ao Dashboard
+        </a>
+    </div>
 
-    <div class="card-modern p-0">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="bg-light text-muted small fw-bold" style="border-bottom: 1px solid var(--border-color);">
-                    <tr>
-                        <th class="ps-4 py-3">Atleta</th>
-                        <th>Lesão</th>
-                        <th>Início</th>
-                        <th>Previsão</th>
-                        <th>Exercícios</th>
-                        <th>Status</th>
-                        <th class="text-end pe-4">Ações</th>
- </tr>
- </thead>
-                <tbody>
-                    {% for tratamento in tratamentos %}
-                    <tr>
-                        <td data-label="Atleta" class="ps-4">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-warning bg-opacity-10 text-warning rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                    <i class="fas fa-user-injured fs-6"></i>
- </div>
-                                <div>
-                                    <h6 class="mb-0 fw-bold">{{ tratamento.lesao.atleta.usuario.get_full_name|default:tratamento.lesao.atleta.usuario.username }}</h6>
-                                    <small class="text-muted">RM: {{ tratamento.lesao.atleta.rm }}</small>
- </div>
- </div>
- </td>
-                        <td data-label="Lesão">
-                            <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">
-                                {{ tratamento.lesao.get_tipo_display }}
- </span>
- </td>
-                        <td data-label="Início">{{ tratamento.data_inicio|date:"d/m/Y" }}</td>
-                        <td data-label="Previsão">
-                            {% if tratamento.data_previsao_termino %}
-                                {{ tratamento.data_previsao_termino|date:"d/m/Y" }}
-                            {% else %}
-                                <span class="text-muted">-</span>
-                            {% endif %}
- </td>
-                        <td data-label="Exercícios">
-                            <span class="badge bg-info bg-opacity-10 text-info rounded-pill px-3 py-2">
-                                {{ tratamento.exercicios.count }} exercício(s)
- </span>
- </td>
-                        <td data-label="Status">
-                            {% if tratamento.ativo %}
-                                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">Em Andamento</span>
-                            {% else %}
-                                <span class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-3 py-2">Encerrado</span>
-                            {% endif %}
- </td>
-                        <td data-label="Ações" class="text-end pe-4">
-                            <a href="{% url 'dashboard:fisioterapeuta_detalhes_lesao' tratamento.lesao.id %}" class="btn btn-sm btn-outline-secondary rounded-circle" title="Ver detalhes">
-                                <i class="fas fa-eye"></i>
- </a>
-                            <a href="{% url 'dashboard:fisioterapeuta_adicionar_exercicio' tratamento.id %}" class="btn btn-sm btn-outline-success rounded-circle" title="Adicionar Exercício">
-                                <i class="fas fa-plus"></i>
- </a>
- </td>
- </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="7" class="text-center py-5 text-muted">
-                            <i class="fas fa-clipboard-list fs-1 d-block mb-3 opacity-25"></i>
-                            <h5>Nenhum tratamento ativo</h5>
-                            <p class="mb-0">Os tratamentos aparecerão aqui quando forem criados.</p>
- </td>
- </tr>
-                    {% endfor %}
- </tbody>
- </table>
- </div>
- </div>
+    <!-- Lista de Tratamentos -->
+    <div class="row">
+        <div class="col-12">
+            {% for trat in tratamentos %}
+            <div class="tratamento-card">
+                
+                <!-- Avatar -->
+                <div class="trat-avatar">
+                    {{ trat.lesao.atleta.usuario.first_name|first|upper }}
+                </div>
+
+                <!-- Info do Atleta -->
+                <div class="trat-info">
+                    <h4 class="trat-nome">{{ trat.lesao.atleta.usuario.get_full_name|default:trat.lesao.atleta.usuario.username }}</h4>
+                    <div class="trat-rm">
+                        <i class="ph ph-identification-card"></i> RM: {{ trat.lesao.atleta.rm|default:"—" }}
+                    </div>
+                </div>
+
+                <!-- Badges de Detalhes -->
+                <div class="d-flex gap-2 flex-wrap" style="flex: 1;">
+                    <span class="trat-badge lesao">
+                        <i class="ph ph-bandaids"></i> {{ trat.lesao.get_tipo_display }}
+                    </span>
+                    <span class="trat-badge exercicios">
+                        <i class="ph ph-dumbbell"></i> {{ trat.exercicios.count }} exercício(s)
+                    </span>
+                    <span class="trat-badge status">
+                        <i class="ph ph-pulse"></i> {{ trat.lesao.get_status_display }}
+                    </span>
+                </div>
+
+                <!-- Datas -->
+                <div class="trat-datas">
+                    <div class="trat-data-item">
+                        <span>Início:</span>
+                        <strong>{{ trat.data_inicio|date:"d/m/Y" }}</strong>
+                    </div>
+                    <div class="trat-data-item">
+                        <span>Previsão:</span>
+                        <strong>{{ trat.data_previsao_termino|date:"d/m/Y"|default:"Em aberto" }}</strong>
+                    </div>
+                </div>
+
+                <!-- Ações -->
+                <div class="trat-acoes">
+                    <a href="{% url 'dashboard:fisioterapeuta_detalhes_lesao' trat.lesao.id %}" class="btn-trat" title="Ver Detalhes da Lesão">
+                        <i class="ph ph-eye"></i>
+                    </a>
+                    <a href="{% url 'dashboard:fisioterapeuta_adicionar_exercicio' trat.id %}" class="btn-trat" title="Adicionar Exercício">
+                        <i class="ph ph-plus"></i>
+                    </a>
+                </div>
+
+            </div>
+            {% empty %}
+            
+            <!-- Estado Vazio -->
+            <div class="card-premium text-center py-5">
+                <i class="ph ph-check-circle" style="font-size: 3rem; color: var(--border-color); margin-bottom: 16px;"></i>
+                <h4 style="color: var(--text-primary);">Nenhum tratamento ativo</h4>
+                <p style="color: var(--text-tertiary);">Todos os pacientes estão liberados ou sem tratamentos cadastrados.</p>
+            </div>
+            
+            {% endfor %}
+        </div>
+    </div>
 
 </div>
 {% endblock %}

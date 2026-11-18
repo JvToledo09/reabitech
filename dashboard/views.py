@@ -2033,3 +2033,19 @@ def erro_500(request):
 
 def erro_403(request, exception):
     return render(request, '403.html', status=403)
+
+# ==============================================================================
+# CONFIGURAÇÕES DO PROJETO (COORDENADOR)
+# ==============================================================================
+@login_required
+def coordenador_configuracoes(request):
+    """Tela para o coordenador editar dados do projeto."""
+    from projetos.models import Projeto
+    projeto_id = request.session.get('projeto_id')
+    projeto_ativo = Projeto.objects.filter(id=projeto_id).first()
+    
+    if not projeto_ativo:
+        messages.warning(request, 'Nenhum projeto ativo selecionado.')
+        return redirect('dashboard:dashboard_coordenador')
+        
+    return render(request, 'dashboard/coordenador/configuracoes.html', {'projeto_ativo': projeto_ativo})
