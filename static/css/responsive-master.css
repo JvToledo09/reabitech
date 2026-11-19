@@ -16,7 +16,7 @@
     }
     
     /* Remove a centralizacao vertical que corta o login */
-    .vh-100, .min-vh-100, .h-100, .login-wrapper, .auth-container, .d-flex.align-items-center {
+    .vh-100, .min-vh-100, .login-wrapper, .auth-container {
         align-items: flex-start !important; /* Joga pro topo */
         justify-content: flex-start !important;
         height: auto !important;
@@ -262,4 +262,97 @@
     /* Força os grids e cards a ficarem um embaixo do outro */
     .row { display: flex !important; flex-wrap: wrap !important; margin: 0 !important; }
     [class*="col-"] { flex: 0 0 100% !important; max-width: 100% !important; width: 100% !important; margin-bottom: 16px !important; }
+}
+
+/* REABITECH-FIX: um unico botao de menu no mobile */
+@media (max-width: 991.98px) {
+    #mobileToggleBtn { display: none !important; }
+}
+
+/* REABITECH-FIX: composicao completa da navbar mobile */
+@media (max-width: 991.98px) {
+    body .top-navbar {
+        position: relative !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        flex-wrap: nowrap !important;
+        gap: 10px !important;
+        margin: 10px 15px 14px 75px !important;
+        padding: 10px 12px !important;
+        width: auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+    }
+    body .top-navbar .page-title {
+        position: static !important;
+        order: 1 !important;
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        float: none !important;
+    }
+    body .top-navbar .page-title > div {
+        min-width: 0 !important;
+        overflow: hidden !important;
+    }
+    body .top-navbar .page-title h2 {
+        font-size: 1rem !important;
+        line-height: 1.2 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+    body .top-navbar .page-title p { display: none !important; }
+    body .top-navbar .d-flex.align-items-center.gap-3 {
+        position: static !important;
+        order: 2 !important;
+        flex: 0 0 auto !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 8px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        float: none !important;
+    }
+    body .top-navbar .dropdown {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        order: initial !important;
+        margin: 0 !important;
+        flex: 0 0 auto !important;
+        float: none !important;
+    }
+    body .top-navbar .dropdown-toggle {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+    }
+    body .top-navbar .btn-outline-custom {
+        width: 38px !important;
+        height: 38px !important;
+        padding: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    body .top-navbar .btn-outline-custom span { display: none !important; }
+    body .top-navbar .dropdown-toggle::after { display: none !important; }
 }

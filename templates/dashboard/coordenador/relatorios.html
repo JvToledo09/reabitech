@@ -88,3 +88,62 @@
     });
 </script>
 {% endblock %}
+
+
+
+<style id="efeitos-3d-nuclear">
+    /* SELETOR AGRESSIVO: PEGA TODOS OS CARDS, PAINEIS E BOTÕES */
+    .row > [class*="col-"] > div,
+    .row > [class*="col-"] > a,
+    [class*="card"],
+    [class*="panel"],
+    [class*="box"],
+    .action-card,
+    .quick-action,
+    .stat-card {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        transform-style: preserve-3d;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* EFEITO DE FLUTUAR/3D AO PASSAR O MOUSE */
+    .row > [class*="col-"] > div:hover,
+    .row > [class*="col-"] > a:hover,
+    [class*="card"]:hover,
+    [class*="panel"]:hover,
+    [class*="box"]:hover,
+    .action-card:hover,
+    .quick-action:hover,
+    .stat-card:hover {
+        transform: translateY(-8px) scale(1.03) !important;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(43, 161, 129, 0.2) !important;
+        z-index: 10;
+        border-color: rgba(43, 161, 129, 0.4) !important;
+    }
+
+    /* EFEITO DE BRILHO PASSANDO (SHINE) */
+    .row > [class*="col-"] > div::after,
+    .row > [class*="col-"] > a::after,
+    [class*="card"]::after,
+    [class*="panel"]::after,
+    .stat-card::after {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 50%; height: 100%;
+        background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0) 100%);
+        transform: skewX(-25deg);
+        transition: all 0.7s ease;
+        pointer-events: none;
+        border-radius: inherit;
+    }
+
+    .row > [class*="col-"] > div:hover::after,
+    .row > [class*="col-"] > a:hover::after,
+    [class*="card"]:hover::after,
+    [class*="panel"]:hover::after,
+    .stat-card:hover::after {
+        left: 200%;
+    }
+</style>

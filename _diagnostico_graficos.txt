@@ -1,0 +1,137 @@
+--- TRECHO DO HTML (Linhas 27 a 76) ---
+0027:             <div class="dash-stat text-center p-3">
+0028:                 <h3 class="dash-stat-number" style="color: #10b981;">{{ taxa_recuperacao }}%</h3>
+0029:                 <p class="dash-stat-label">Taxa de Recuperação</p>
+0030:             </div>
+0031:         </div>
+0032:     </div>
+0033: 
+0034:     <div class="row g-4">
+0035:         <div class="col-md-8">
+0036:             <div class="dash-section">
+0037:                 <h5 class="dash-section-title mb-4"><i class="fas fa-chart-line text-success me-2"></i> Evolução de Recuperação (Últimos 6 meses)</h5>
+0038:                 <div style="height: 300px;"><canvas id="chartEvolucao"></canvas></div>
+0039:             </div>
+0040:         </div>
+0041:         <div class="col-md-4">
+0042:             <div class="dash-section">
+0043:                 <h5 class="dash-section-title mb-4"><i class="fas fa-chart-pie text-warning me-2"></i> Status dos Atletas</h5>
+0044:                 <div style="height: 300px;"><canvas id="chartStatus"></canvas></div>
+0045:             </div>
+0046:         </div>
+0047:     </div>
+0048: </div>
+0049: {% endblock %}
+0050: 
+0051: {% block extra_js %}
+0052: <script>
+0053:     const evoData = {{ chart_evo_data|safe }};
+0054:     const evoLabels = {{ chart_evo_labels|safe }};
+0055: 
+0056:     // Gráfico de Linha
+0057:     new Chart(document.getElementById('chartEvolucao'), {
+0058:         type: 'line',
+0059:         data: {
+0060:             labels: evoLabels,
+0061:             datasets: [{
+0062:                 label: '% Recuperação Média',
+0063:                 data: evoData,
+0064:                 borderColor: '#10b981',
+0065:                 backgroundColor: 'rgba(16, 185, 129, 0.1)',
+0066:                 fill: true,
+0067:                 tension: 0.4,
+0068:                 borderWidth: 3,
+0069:                 pointBackgroundColor: '#10b981'
+0070:             }]
+0071:         },
+0072:         options: { responsive: true, maintainAspectRatio: false }
+0073:     });
+0074: 
+0075:     // Gráfico de Pizza
+0076:     new Chart(document.getElementById('chartStatus'), {
+
+
+--- TRECHO DO HTML (Linhas 33 a 82) ---
+0033: 
+0034:     <div class="row g-4">
+0035:         <div class="col-md-8">
+0036:             <div class="dash-section">
+0037:                 <h5 class="dash-section-title mb-4"><i class="fas fa-chart-line text-success me-2"></i> Evolução de Recuperação (Últimos 6 meses)</h5>
+0038:                 <div style="height: 300px;"><canvas id="chartEvolucao"></canvas></div>
+0039:             </div>
+0040:         </div>
+0041:         <div class="col-md-4">
+0042:             <div class="dash-section">
+0043:                 <h5 class="dash-section-title mb-4"><i class="fas fa-chart-pie text-warning me-2"></i> Status dos Atletas</h5>
+0044:                 <div style="height: 300px;"><canvas id="chartStatus"></canvas></div>
+0045:             </div>
+0046:         </div>
+0047:     </div>
+0048: </div>
+0049: {% endblock %}
+0050: 
+0051: {% block extra_js %}
+0052: <script>
+0053:     const evoData = {{ chart_evo_data|safe }};
+0054:     const evoLabels = {{ chart_evo_labels|safe }};
+0055: 
+0056:     // Gráfico de Linha
+0057:     new Chart(document.getElementById('chartEvolucao'), {
+0058:         type: 'line',
+0059:         data: {
+0060:             labels: evoLabels,
+0061:             datasets: [{
+0062:                 label: '% Recuperação Média',
+0063:                 data: evoData,
+0064:                 borderColor: '#10b981',
+0065:                 backgroundColor: 'rgba(16, 185, 129, 0.1)',
+0066:                 fill: true,
+0067:                 tension: 0.4,
+0068:                 borderWidth: 3,
+0069:                 pointBackgroundColor: '#10b981'
+0070:             }]
+0071:         },
+0072:         options: { responsive: true, maintainAspectRatio: false }
+0073:     });
+0074: 
+0075:     // Gráfico de Pizza
+0076:     new Chart(document.getElementById('chartStatus'), {
+0077:         type: 'doughnut',
+0078:         data: {
+0079:             labels: {{ chart_status_labels|safe }},
+0080:             datasets: [{
+0081:                 data: {{ chart_status_data|safe }},
+0082:                 backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+
+
+--- SCRIPTS ENCONTRADOS NA PÁGINA ---
+const evoData = {{ chart_evo_data|safe }};
+    const evoLabels = {{ chart_evo_labels|safe }};
+    
+    // Gráfico de Linha
+    new Chart(document.getElementById('chartEvolucao'), {
+        type: 'line',
+        data: {
+            labels: evoLabels,
+            datasets: [{
+                label: '% Recuperação Média',
+                data: evoData,
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+                pointBackgroundColor: '#10b981'
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // Gráfico de Pizza
+    new Chart(document.getElementById('chartStatus'), {
+        type: 'doughnut',
+        data: {
+            labels: {{ chart_status_labels|safe }},
+            datasets: [{
+                data: {{ chart_status_data|safe }},
+                backgroundColor: ['#10b981', '#f59e0b', '#

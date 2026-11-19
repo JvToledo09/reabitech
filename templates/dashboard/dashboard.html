@@ -380,3 +380,31 @@
     }
 </style>
 {% endblock %}
+<style id="hover-efeito-analytics">
+    /* MÁGICA DO HOVER: BORDA VERDE E BRILHO (IGUAL ANALYTICS) */
+    
+    /* 1. Define a transição suave para TODOS os cards do sistema */
+    .card, .stat-card, .glass-card, .chart-card, .dashboard-card, [class*="card"] {
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important; /* Borda invisível por padrão */
+    }
+
+    /* 2. O Efeito ao passar o mouse */
+    .card:hover, 
+    .stat-card:hover, 
+    .glass-card:hover, 
+    .chart-card:hover, 
+    .dashboard-card:hover, 
+    [class*="card"]:hover {
+        border-color: #2BA181 !important; /* Borda verde igual do print */
+        box-shadow: 0 0 25px rgba(43, 161, 129, 0.25), 0 10px 30px rgba(0, 0, 0, 0.4) !important; /* Brilho verde */
+        transform: translateY(-5px) scale(1.01) !important; /* Sobe e cresce de leve */
+        z-index: 10 !important;
+        background: linear-gradient(180deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+    }
+
+    /* 3. Caso o card tenha links ou botões dentro, não queremos que o texto mude de cor sem querer */
+    .card:hover a, .stat-card:hover a {
+        text-decoration: none;
+    }
+</style>

@@ -1314,6 +1314,7 @@ document.addEventListener('DOMContentLoaded', function() { try {
             </div>
         `;
     }
+} catch (e) { console.error('[Dashboard] Falha ao inicializar graficos:', e); }
 });
 
 function hideOnboarding() {
@@ -1334,6 +1335,7 @@ document.addEventListener('DOMContentLoaded', function() { try {
         const card = document.getElementById('onboardingCard');
         if (card) card.style.display = 'none';
     }
+} catch (e) { console.error('[Onboarding] Falha ao restaurar estado:', e); }
 });
 
 window.showToast = function(title, message, type = 'success') {
@@ -1388,3 +1390,9 @@ window.showToast = function(title, message, type = 'success') {
         .card, .glass-card, .header-card, .stat-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; overflow: hidden !important; }
     }
 </style>
+
+
+
+
+
+

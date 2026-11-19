@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Relatórios - Coordenador{% endblock %}
+{% block page_title %}Relatórios e Analytics{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="dash-stat text-center p-3">
+                <h3 class="dash-stat-number">{{ total_atletas }}</h3>
+                <p class="dash-stat-label">Total de Atletas</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dash-stat text-center p-3">
+                <h3 class="dash-stat-number">{{ total_lesoes }}</h3>
+                <p class="dash-stat-label">Total de Lesões</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dash-stat text-center p-3">
+                <h3 class="dash-stat-number">{{ total_avaliacoes }}</h3>
+                <p class="dash-stat-label">Avaliações Psicológicas</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dash-stat text-center p-3">
+                <h3 class="dash-stat-number" style="color: #10b981;">{{ taxa_recuperacao }}%</h3>
+                <p class="dash-stat-label">Taxa de Recuperação</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-8">
+            <div class="dash-section">
+                <h5 class="dash-section-title mb-4"><i class="fas fa-chart-line text-success me-2"></i> Evolução de Recuperação (Últimos 6 meses)</h5>
+                <div style="height: 300px;"><canvas id="chartEvolucao"></canvas></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="dash-section">
+                <h5 class="dash-section-title mb-4"><i class="fas fa-chart-pie text-warning me-2"></i> Status dos Atletas</h5>
+                <div style="height: 300px;"><canvas id="chartStatus"></canvas></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const evoData = {{ chart_evo_data|safe }};
+    const evoLabels = {{ chart_evo_labels|safe }};
+    
+    // Gráfico de Linha
+    new Chart(document.getElementById('chartEvolucao'), {
+        type: 'line',
+        data: {
+            labels: evoLabels,
+            datasets: [{
+                label: '% Recuperação Média',
+                data: evoData,
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+                pointBackgroundColor: '#10b981'
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // Gráfico de Pizza
+    new Chart(document.getElementById('chartStatus'), {
+        type: 'doughnut',
+        data: {
+            labels: {{ chart_status_labels|safe }},
+            datasets: [{
+                data: {{ chart_status_data|safe }},
+                backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                borderWidth: 0,
+                cutout: '75%'
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Triagens — {{ prontuario.numero_prontuario }}{% endblock %}
+{% block page_title %}Histórico de Triagens{% endblock %}
+
+{% block extra_css %}
+<style>
+    .triagens-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 16px;
+        margin-top: 20px;
+    }
+
+    .triagem-card {
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-color);
+        border-radius: 18px;
+        padding: 22px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .triagem-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--green-soft-2);
+    }
+
+    .triagem-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, #0dcaf0, #0891b2);
+    }
+
+    .triagem-data {
+        font-size: 0.8rem;
+        color: var(--text-tertiary);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .triagem-titulo {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: var(--text-primary);
+        margin: 0 0 8px 0;
+        line-height: 1.3;
+    }
+
+    .triagem-desc {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        margin-bottom: 16px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .triagem-footer {
+        margin-top: auto;
+        padding-top: 16px;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-nova-triagem {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-nova-triagem:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        color: #fff;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: var(--bg-elevated);
+        border-radius: 18px;
+        border: 1px dashed var(--border-strong);
+        margin-top: 20px;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        color: var(--text-tertiary);
+        margin-bottom: 16px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    
+    <!-- Header da página -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <div class="text-muted mb-1" style="font-size: 0.9rem;">
+                <span class="badge bg-secondary">PRONTUÁRIO · {{ prontuario.numero_prontuario }}</span>
+            </div>
+            <h2 class="fw-bold mb-0">Triagens do Paciente</h2>
+            <p class="text-muted mb-0">Histórico de queixas, sinais vitais e exames físicos iniciais.</p>
+        </div>
+        
+        <div class="d-flex gap-2">
+            <a href="/prontuario/{{ prontuario.id }}/" class="btn btn-outline-secondary" style="border-radius: 12px;">
+                <i class="fas fa-arrow-left"></i> Voltar ao prontuário
+            </a>
+            <!-- O link abaixo pode precisar de ajuste dependendo do nome exato da sua URL de criação -->
+            <a href="/prontuario/{{ prontuario.id }}/triagem/nova/" class="btn-nova-triagem">
+                <i class="fas fa-plus"></i> Nova Triagem
+            </a>
+        </div>
+    </div>
+
+    <!-- Lista de Triagens -->
+    <div class="triagens-grid">
+        {% for triagem in triagens %}
+            <div class="triagem-card">
+                <div class="triagem-data">
+                    <i class="far fa-calendar-alt"></i> {{ triagem.data_triagem|date:"d/m/Y \à\s H:i"|default:"Data não registrada" }}
+                </div>
+                
+                <div class="triagem-titulo">
+                    {% if triagem.queixa_principal %}
+                        {{ triagem.queixa_principal }}
+                    {% elif triagem.descricao %}
+                        {{ triagem.descricao }}
+                    {% else %}
+                        Triagem #{{ triagem.id }}
+                    {% endif %}
+                </div>
+                
+                <div class="triagem-desc">
+                    {% if triagem.observacoes %}
+                        {{ triagem.observacoes }}
+                    {% elif triagem.exame_fisico %}
+                        {{ triagem.exame_fisico }}
+                    {% else %}
+                        Nenhuma observação detalhada registrada nesta triagem.
+                    {% endif %}
+                </div>
+                
+                <div class="triagem-footer">
+                    <span class="text-muted" style="font-size: 0.8rem;">
+                        <i class="fas fa-heartbeat"></i> 
+                        {% if triagem.frequencia_cardiaca %}{{ triagem.frequencia_cardiaca }} bpm{% else %}S/ dados vitais{% endif %}
+                    </span>
+                    <a href="/prontuario/{{ prontuario.id }}/triagem/{{ triagem.id }}/" class="btn btn-sm btn-outline-success" style="border-radius: 8px;">
+                        Detalhes
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <div class="empty-state" style="grid-column: 1 / -1;">
+                <i class="fas fa-clipboard-list"></i>
+                <h4 class="fw-bold">Nenhuma triagem registrada ainda</h4>
+                <p class="text-muted mb-4">Faça a primeira triagem para começar a acompanhar a evolução do paciente.</p>
+                <a href="/prontuario/{{ prontuario.id }}/triagem/nova/" class="btn-nova-triagem">
+                    <i class="fas fa-plus"></i> Fazer primeira triagem
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
