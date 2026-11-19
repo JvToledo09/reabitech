@@ -1,0 +1,34 @@
+COORDENADOR (Acesso Total)
+Login: jose.calixto
+
+(José Calixto)
+
+🏋️‍♂️ TÉCNICOS (Acesso ao esportivo e atletas da sua modalidade)
+Login: felipe.gamarra (Felipe - Futsal e Handebol)
+
+Login: malu (Malu - Basquete)
+
+Login: marcos.souza (Marcos - Tênis de Mesa)
+
+(Lembrete: O José Calixto também atua como técnico de Vôlei e Vôlei de Praia)
+
+🩺 FISIOTERAPEUTA (Prontuários, lesões e evoluções)
+Login: ana.fisio (Ana)
+
+🧠 PSICÓLOGO (Avaliações e questionários)
+Login: carla.psico (Carla)
+
+🏃‍♂️ ATLETAS (Acesso restrito aos próprios dados)
+Você pode logar de duas formas: usando o Username ou o RM.
+
+Username: lucas.almeida0 (ou joao.silva1, pedro.santos2, etc...)
+RM: RM202600, RM202601, RM202602...
+
+Exemplo de teste de Atleta:
+
+Usuário: lucas.almeida0
+
+Ou RM: RM202600
+
+Senha: senha123
+

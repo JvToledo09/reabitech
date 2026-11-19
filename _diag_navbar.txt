@@ -1,0 +1,37 @@
+### HTML <nav> em templates/projetos/landing.html ###
+<nav class="lp-nav" id="lpNav">
+        <div class="lp-nav-inner">
+            <a href="/" class="lp-logo">
+                <div class="lp-logo-img-wrapper">
+                    <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'" loading="lazy">
+ </div>
+                <span>REABITECH</span>
+ </a>
+            <ul class="lp-nav-links">
+                <li><a href="#recursos">Recursos</a></li>
+                <li><a href="#planos">Planos</a></li>
+                <li><a href="#depoimentos">Depoimentos</a></li>
+                <li><a href="#faq">FAQ</a></li>
+ </ul>
+            <div class="lp-nav-actions">
+                <a href="{% url 'login' %}" class="hero-btn hero-btn-outline" style="padding: 10px 22px; font-size: 0.9rem;">
+                    Entrar
+ </a>
+                <a href="{% url 'signup' %}" class="hero-btn hero-btn-primary" style="padding: 10px 22px; font-size: 0.9rem;">
+                    Começar <i class="fas fa-arrow-right"></i>
+ </a>
+ </div>
+ </div>
+ </nav>
+
+### CSS em custom-premium.css ###
+.main-content .nav-tabs .nav-link{border:none!important;color:var(--text-tertiary)!important;font-weight:600!important;font-size:.85rem!important;padding:10px 16px!important;border-radius:8px 8px 0 0!important;transition:all .2s ease}
+.main-content .nav-tabs .nav-link:hover{color:var(--text-primary)!important;background:var(--green-soft)!important}
+.main-content .nav-tabs .nav-link.active{color:var(--green-deep)!important;background:transparent!important;border-bottom:2px solid var(--green)!important}
+
+### CSS em responsive-master.css ###
+/* Icones da direita nao encolhem */ .top-navbar .d-flex, .top-navbar .nav-actions { flex-shrink: 0 !important; gap: 8px !important; }
+
+### CSS em signup-premium.css ###
+.signup-header a .logo-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; }
+[data-theme="light"] .signup-header, [data-theme="light"] .signup-header a, [data-theme="light"] .signup-header a .logo-text { color: #0f172a; }

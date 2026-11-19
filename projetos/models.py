@@ -474,3 +474,19 @@ class ConviteProjeto(models.Model):
     def link(self):
         """Retorna o link de aceite (relativo)."""
         return f'/projetos/aceitar-convite/{self.token}/'
+
+class ProntuarioArquivado(models.Model):
+    prontuario = models.OneToOneField('prontuario.Prontuario', on_delete=models.CASCADE, related_name='arquivamento_frio')
+    arquivo_pdf = models.FileField(upload_to='prontuarios_arquivados/%Y/%m/', verbose_name='Arquivo PDF')
+    hash_sha256 = models.CharField(max_length=64, help_text="Prova de integridade do arquivo (Hash SHA-256)")
+    data_encerramento = models.DateField(auto_now_add=True, verbose_name='Data de Encerramento')
+    data_expiracao = models.DateField(help_text="Data de exclusão (20 anos após encerramento)", verbose_name='Data de Expiração')
+
+    class Meta:
+        verbose_name = "Prontuário Arquivado"
+        verbose_name_plural = "Prontuários Arquivados"
+
+    def save(self, *args, **kwargs):
+        if not self.data_expiracao:
+            self.data_expiracao = timezone.now().date() + timedelta(days=365*20)
+        super().save(*args, **kwargs)

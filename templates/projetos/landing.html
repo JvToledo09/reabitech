@@ -1946,7 +1946,56 @@
             }
             .reveal { opacity: 1; transform: none; }
         }
- </style>
+ 
+        /* ===== NAVBAR MOBILE FIX ===== */
+        .lp-nav-toggle {
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            gap: 5px; width: 44px; height: 44px;
+            background: transparent; border: 1px solid var(--border-strong);
+            border-radius: 12px; cursor: pointer; padding: 0;
+        }
+        .lp-nav-toggle span {
+            display: block; width: 22px; height: 2px;
+            background: var(--text-primary); border-radius: 2px;
+            transition: transform .3s ease, opacity .3s ease;
+        }
+        .lp-nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .lp-nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+        .lp-nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .lp-nav-mobile-actions { display: none; }
+
+        @media (max-width: 992px) {
+            .lp-nav { padding: 10px 0; }
+            .lp-nav-inner { padding: 0 16px; gap: 12px; }
+            .lp-logo { gap: 8px; font-size: 1rem; }
+            .lp-logo-img-wrapper { width: 44px; height: 44px; }
+            .lp-logo-img-wrapper::before { inset: -4px; }
+            .lp-logo-img-wrapper img {
+                width: 56px; height: 56px; transform: none;
+                filter: drop-shadow(0 2px 8px rgba(43,161,129,.35));
+            }
+            .lp-nav-actions { display: none; }
+            .lp-nav-toggle { display: flex; }
+            .lp-nav-links {
+                display: none; position: absolute; top: 100%; left: 0; right: 0;
+                background: var(--bg-elevated);
+                border-top: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: var(--shadow-lg);
+                flex-direction: column; gap: 0; padding: 16px 20px; transform: none;
+            }
+            .lp-nav-links.is-open { display: flex; }
+            .lp-nav-links li { border-bottom: 1px solid var(--border-color); }
+            .lp-nav-links li:last-child { border-bottom: none; }
+            .lp-nav-links a { display: block; padding: 14px 0; font-size: 1rem; }
+            .lp-nav-links a::after { display: none; }
+            .lp-nav-mobile-actions {
+                display: flex; gap: 10px; padding: 16px 0 4px;
+                flex-direction: column; border-bottom: none !important;
+            }
+            .lp-nav-mobile-actions .hero-btn { width: 100%; text-align: center; padding: 12px; }
+        }
+</style>
 
 
 <link rel="stylesheet" href="{% static 'css/landing-cyber.css' %}">
@@ -2109,25 +2158,46 @@
             <a href="/" class="lp-logo">
                 <div class="lp-logo-img-wrapper">
                     <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'" loading="lazy">
- </div>
+                </div>
                 <span>REABITECH</span>
- </a>
-            <ul class="lp-nav-links">
+            </a>
+            <button class="lp-nav-toggle" id="lpNavToggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="lp-nav-links" id="lpNavLinks">
                 <li><a href="#recursos">Recursos</a></li>
                 <li><a href="#planos">Planos</a></li>
                 <li><a href="#depoimentos">Depoimentos</a></li>
                 <li><a href="#faq">FAQ</a></li>
- </ul>
+                <li class="lp-nav-mobile-actions">
+                    <a href="{% url 'login' %}" class="hero-btn hero-btn-outline">Entrar</a>
+                    <a href="{% url 'signup' %}" class="hero-btn hero-btn-primary">Comecar <i class="fas fa-arrow-right"></i></a>
+                </li>
+            </ul>
             <div class="lp-nav-actions">
-                <a href="{% url 'login' %}" class="hero-btn hero-btn-outline" style="padding: 10px 22px; font-size: 0.9rem;">
-                    Entrar
- </a>
-                <a href="{% url 'signup' %}" class="hero-btn hero-btn-primary" style="padding: 10px 22px; font-size: 0.9rem;">
-                    Começar <i class="fas fa-arrow-right"></i>
- </a>
- </div>
- </div>
- </nav>
+                <a href="{% url 'login' %}" class="hero-btn hero-btn-outline" style="padding: 10px 22px; font-size: 0.9rem;">Entrar</a>
+                <a href="{% url 'signup' %}" class="hero-btn hero-btn-primary" style="padding: 10px 22px; font-size: 0.9rem;">Comecar <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+    (function() {
+        var btn = document.getElementById('lpNavToggle');
+        var menu = document.getElementById('lpNavLinks');
+        if (!btn || !menu) return;
+        btn.addEventListener('click', function() {
+            var aberto = menu.classList.toggle('is-open');
+            btn.setAttribute('aria-expanded', aberto ? 'true' : 'false');
+        });
+        menu.querySelectorAll('a').forEach(function(a) {
+            a.addEventListener('click', function() {
+                menu.classList.remove('is-open');
+                btn.setAttribute('aria-expanded', 'false');
+            });
+        });
+    })();
+    </script>
 
     <!-- HERO -->
     <section class="lp-hero">

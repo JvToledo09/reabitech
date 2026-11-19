@@ -2500,8 +2500,45 @@
     .sidebar-menu { display: flex; flex-direction: column; }
     .sidebar-item[href*="membros"] { margin-top: auto !important; }
 </style>
+    <link rel="stylesheet" href="/static/css/responsive-master.css">
 </head>
 <body>
+
+<!-- BOTAO HAMBURGER MOBILE -->
+<button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menu">
+    <i class="fas fa-bars"></i>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const btn = document.getElementById('mobileMenuBtn');
+        const overlay = document.getElementById('sidebarOverlay');
+        const sidebar = document.querySelector('.sidebar');
+        const icon = btn.querySelector('i');
+
+        function toggleMenu() {
+            if (sidebar) {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+                
+                if (sidebar.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                    document.body.style.overflow = 'hidden'; // Trava o scroll do fundo
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                    document.body.style.overflow = ''; // Libera o scroll
+                }
+            }
+        }
+
+        if (btn) btn.addEventListener('click', toggleMenu);
+        if (overlay) overlay.addEventListener('click', toggleMenu);
+    });
+</script>
+
 <!-- Barra de Progresso Premium no Topo -->
 <div id="progress-bar" style="position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #10b981, #34d399); width: 0%; z-index: 999999; transition: width 0.2s ease, opacity 0.3s ease; box-shadow: 0 0 10px rgba(16, 185, 129, 0.6); pointer-events: none;"></div>
 
@@ -3471,5 +3508,109 @@ document.addEventListener('DOMContentLoaded', function() {
     [data-theme="dark"] .table tbody td { border-color: rgba(255, 255, 255, 0.05) !important; }
 </style>
 
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    /* ==========================================================
+       MEGA EFFECTS 3D (Fluid/Bounce/Neon)
+       ========================================================== */
+    
+    /* Base dos elementos */
+    .mega-tilt {
+        position: relative;
+        will-change: transform, box-shadow;
+        transform-style: preserve-3d;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    /* Hover geral dos cards (Sombra Dupla Profunda + Borda Neon) */
+    .mega-tilt.is-tilting {
+        box-shadow: 
+            0 30px 60px -10px rgba(0, 0, 0, 0.5), 
+            0 0 40px rgba(16, 185, 129, 0.3),
+            inset 0 0 0 1px rgba(16, 185, 129, 0.4) !important;
+        border-color: #10b981 !important;
+        z-index: 50 !important;
+    }
+
+    /* Efeito de Brilho Circulando (Glare) */
+    .mega-tilt::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: radial-gradient(
+            circle 300px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+            rgba(16, 185, 129, 0.15),
+            transparent 80%
+        );
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    .mega-tilt.is-tilting::before {
+        opacity: 1;
+    }
+
+    /* Efeito Shine (Luz passando no fundo do card) */
+    .mega-tilt::after {
+        content: '';
+        position: absolute;
+        top: 0; left: -150%;
+        width: 50%; height: 100%;
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transform: skewX(-25deg);
+        transition: left 0.6s ease-in-out;
+        pointer-events: none;
+        z-index: 3;
+    }
+
+    .mega-tilt:hover::after {
+        left: 150%;
+    }
+
+    /* Faz os textos e icones internos flutuarem no 3D */
+    .mega-tilt > * {
+        transform: translateZ(20px);
+        transition: transform 0.4s ease;
+        position: relative;
+        z-index: 4;
+    }
+
+    /* MEGA BOTOES */
+    .btn, .btn-primary-custom, .btn-outline-custom {
+        will-change: transform, box-shadow;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background 0.3s ease !important;
+    }
+
+    /* Efeito ao passar o mouse no botao */
+    .btn.is-tilting, .btn-primary-custom.is-tilting, .btn-outline-custom.is-tilting {
+        box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4) !important;
+        filter: brightness(1.1);
+    }
+
+    /* Icones dos cards girando e brilhando */
+    .mega-tilt.is-tilting i, 
+    .mega-tilt.is-tilting .dash-stat-icon,
+    .mega-tilt.is-tilting .fisio-stat-icon {
+        transform: translateZ(40px) scale(1.15) rotate(-5deg) !important;
+        color: #10b981 !important;
+        text-shadow: 0 0 15px rgba(16, 185, 129, 0.6) !important;
+    }
+</style>
+
+<script src="/static/js/mega-effects.js"></script>
 </body>
 </html>

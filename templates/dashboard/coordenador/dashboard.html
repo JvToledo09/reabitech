@@ -1092,11 +1092,12 @@
 {{ chart_perf_data|json_script:"perf_data" }}
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() { try {
 
     function getJSON(id) {
         const element = document.getElementById(id);
-        return element ? JSON.parse(element.textContent) : [];
+        if (!element) return [];
+        try { return JSON.parse(element.textContent); } catch(e) { return []; }
     }
 
     // ==========================================
@@ -1211,7 +1212,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ==========================================
     // GRÁFICO 5: Taxa de Recuperação
     // ==========================================
-    const recuperacao = {{ taxa_recuperacao_media|default:0 }};
+    const recuperacao = parseFloat("{{ taxa_recuperacao_media|default:0|stringformat:'s' }}".replace(',', '.')) || 0;
     new Chart(document.getElementById('recuperacaoChart').getContext('2d'), {
         type: 'doughnut',
         data: {
@@ -1328,7 +1329,7 @@ function hideOnboarding() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() { try {
     if (localStorage.getItem('onboarding_hidden') === 'true') {
         const card = document.getElementById('onboardingCard');
         if (card) card.style.display = 'none';
@@ -1367,3 +1368,23 @@ window.showToast = function(title, message, type = 'success') {
 };
 </script>
 {% endblock %}
+
+<style>
+    /* CORRIGE O LAYOUT VAZANDO NO MOBILE */
+    @media (max-width: 992px) {
+        .main-content { margin-left: 0 !important; padding: 16px !important; width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; }
+        .row { margin-left: 0 !important; margin-right: 0 !important; }
+        .col-lg-3, .col-lg-4, .col-lg-6, .col-md-3, .col-md-4, .col-md-6 { width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important; margin-bottom: 16px !important; }
+        .card, .header-card, .welcome-card, .stat-card, .glass-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; overflow-x: hidden !important; word-wrap: break-word !important; }
+        .d-flex.justify-content-between { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+    }
+</style>
+
+<style id="fix-dash-mobile">
+    @media (max-width: 992px) {
+        .main-content { margin-left: 0 !important; width: 100vw !important; max-width: 100vw !important; padding: 70px 16px 16px 16px !important; overflow-x: hidden !important; box-sizing: border-box !important; }
+        .row { margin: 0 !important; }
+        .col-lg-3, .col-lg-4, .col-lg-6, .col-md-3, .col-md-4, .col-md-6, .col-12 { width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important; margin-bottom: 16px !important; }
+        .card, .glass-card, .header-card, .stat-card { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; overflow: hidden !important; }
+    }
+</style>

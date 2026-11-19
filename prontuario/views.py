@@ -1479,3 +1479,53 @@ def timeline_global(request):
         'atleta_filtro': atleta_filtro,
     }
     return render(request, 'prontuario/timeline/global.html', context)
+
+
+# ==============================================================================
+# ARQUIVAMENTO COFFITO (Recriado para consertar o NoReverseMatch)
+# ==============================================================================
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect
+from django.utils import timezone
+from datetime import timedelta
+import hashlib
+from io import BytesIO
+
+@login_required
+def arquivar_prontuario_coffito(request, prontuario_id):
+    """
+    View para gerar o PDF selado (Hash) e arquivar o prontuário por 20 anos.
+    """
+    prontuario = get_object_or_404(Prontuario, id=prontuario_id)
+    
+    if request.method == 'POST':
+        try:
+            # Tenta importar a função do arquivo arquivamento.py
+            from .arquivamento import gerar_pdf_e_hash
+            pdf_bytes, hash_sha256 = gerar_pdf_e_hash(prontuario)
+            
+            # Salva o arquivo PDF no modelo ProntuarioArquivado
+            from projetos.models import ProntuarioArquivado
+            
+            # Cria o registro no banco
+            arquivado, created = ProntuarioArquivado.objects.get_or_create(prontuario=prontuario)
+            
+            # Salva o arquivo físico (se for BytesIO, transforma em File)
+            if pdf_bytes:
+                from django.core.files.base import ContentFile
+                nome_arquivo = f"prontuario_{prontuario.numero_prontuario}_{timezone.now().strftime('%Y%m%d')}.pdf"
+                arquivado.arquivo_pdf.save(nome_arquivo, ContentFile(pdf_bytes), save=False)
+            
+            arquivado.hash_sha256 = hash_sha256
+            # Define a expiração para 20 anos no futuro
+            arquivado.data_expiracao = timezone.now().date() + timedelta(days=365*20)
+            arquivado.save()
+            
+            messages.success(request, 'Prontuário arquivado com sucesso e selado com Hash SHA-256!')
+        except ImportError:
+            messages.error(request, 'Arquivo arquivamento.py não encontrado. Verifique o sistema.')
+        except Exception as e:
+            messages.error(request, f'Erro ao arquivar: {str(e)}')
+            
+    return redirect('prontuario:dashboard_prontuario', prontuario_id=prontuario.id)
+

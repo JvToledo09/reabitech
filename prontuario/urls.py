@@ -21,6 +21,7 @@ urlpatterns = [
 
     # ----- Prontuário individual -----
     path('<int:prontuario_id>/', views.dashboard_prontuario, name='dashboard_prontuario'),
+    path('<int:prontuario_id>/arquivar/', views.arquivar_prontuario_coffito, name='arquivar_prontuario_coffito'),
     path('<int:prontuario_id>/imprimir/', views.imprimir_prontuario, name='imprimir_prontuario'),
     path('<int:prontuario_id>/pdf/', views.exportar_pdf_prontuario, name='exportar_pdf_prontuario'),
 
