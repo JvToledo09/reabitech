@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Entrar - REABITECH{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login-v2.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-page">
+
+    <aside class="auth-brand">
+      <header class="auth-brand-header">
+        <div class="auth-brand-logo">
+          <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'">
+        </div>
+        <div class="auth-brand-name">
+          <span class="auth-brand-wordmark">REABITECH</span>
+          <span class="auth-brand-tagline">Soluções em Reabilitação</span>
+        </div>
+      </header>
+
+      <div class="auth-brand-main">
+        <div class="auth-brand-eyebrow">
+          <span class="auth-brand-eyebrow-line"></span>
+          Plataforma Clínica
+        </div>
+        <h1 class="auth-brand-headline">
+          Reabilitação<br>
+          <span class="auth-brand-headline-accent">em movimento.</span>
+        </h1>
+        <p class="auth-brand-description">
+          Fisioterapia, psicologia e performance integradas em uma única plataforma multi-tenant.
+        </p>
+      </div>
+
+      <footer class="auth-brand-footer">
+        <div class="auth-brand-status">
+          <span class="auth-brand-status-dot"></span>
+          Sinal ativo
+        </div>
+        <div class="auth-brand-meta">v8.0 · 2026</div>
+      </footer>
+
+      <div class="auth-brand-glow" aria-hidden="true"></div>
+    </aside>
+
+    <main class="auth-form-area">
+      <div class="auth-form-card">
+
+        <header class="auth-form-header">
+          <div class="auth-form-eyebrow">Acesso à plataforma</div>
+          <h2 class="auth-form-title">Bem-vindo de volta.</h2>
+          <p class="auth-form-subtitle">Entre com suas credenciais para continuar.</p>
+        </header>
+
+        {% if messages %}
+          {% for message in messages %}
+            {% if 'error' in message.tags or 'danger' in message.tags %}
+            <div class="auth-alert" role="alert">
+              <i class="fas fa-exclamation-circle"></i>
+              <span>{{ message }}</span>
+            </div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        <form method="post" autocomplete="on" class="auth-form">
+          {% csrf_token %}
+
+          <div class="auth-field">
+            <label for="id_username" class="auth-field-label">Usuário, e-mail ou RM</label>
+            <input
+              type="text"
+              name="username"
+              id="id_username"
+              class="auth-field-input"
+              placeholder="seu@email.com"
+              required
+              autofocus
+              autocomplete="username">
+          </div>
+
+          <div class="auth-field">
+            <label for="id_password" class="auth-field-label">Senha</label>
+            <div class="auth-field-wrap">
+              <input
+                type="password"
+                name="password"
+                id="id_password"
+                class="auth-field-input"
+                placeholder="••••••••"
+                required
+                autocomplete="current-password">
+              <button
+                type="button"
+                class="auth-field-action"
+                onclick="togglePassword()"
+                aria-label="Mostrar senha"
+                tabindex="-1">
+                <i class="fas fa-eye" id="togglePassIcon"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="auth-field-meta">
+            <label class="auth-checkbox">
+              <input type="checkbox" name="remember_me" id="id_remember_me" value="1">
+              <span>Lembrar de mim</span>
+            </label>
+            <a href="#" class="auth-link-muted">Esqueceu a senha?</a>
+          </div>
+
+          <button type="submit" class="auth-submit">
+            <span>Entrar na plataforma</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </form>
+
+        <footer class="auth-form-footer">
+          <a href="/" class="auth-link-back">
+            <i class="fas fa-arrow-left"></i>
+            Voltar ao início
+          </a>
+        </footer>
+
+      </div>
+    </main>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePassword() {
+  var input = document.getElementById('id_password');
+  var icon = document.getElementById('togglePassIcon');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.remove('fa-eye-slash');
+    icon.classList.add('fa-eye');
+  }
+}
+</script>
+{% endblock %}

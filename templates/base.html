@@ -57,7 +57,7 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        html { scroll-behavior: smooth; }
+        html {  }
 
         body {
             font-family: 'Inter', -apple-system, sans-serif;
@@ -2504,6 +2504,22 @@
     <link rel="stylesheet" href="/static/css/glass-premium-v2.css">
 
 <link rel="stylesheet" href="{% static 'css/global-super-effects.css' %}?v=1.0">
+
+    <style id="hide-menu-fix">
+        /* Esconde o botão de menu branco no Desktop */
+        @media (min-width: 992px) {
+            .mobile-menu-btn, 
+            .menu-toggle, 
+            .hamburger, 
+            #mobileMenuBtn, 
+            .navbar-toggler, 
+            .lp-nav-toggle,
+            .btn-mobile-menu {
+                display: none !important;
+            }
+        }
+    </style>
+    
 </head>
 <body>
 
@@ -3007,8 +3023,8 @@
  </script>
     {% endif %}
 
-    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
-    <script src="{% static 'js/lenis-init.js' %}"></script>
+    
+    
     <script src="{% static 'js/premium-effects.js' %}"></script>
 
     <script>

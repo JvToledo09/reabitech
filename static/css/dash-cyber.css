@@ -9,8 +9,8 @@
     background: linear-gradient(135deg, rgba(10, 20, 30, 0.95) 0%, rgba(15, 41, 55, 0.85) 100%) !important;
     border: 1px solid rgba(52, 211, 153, 0.2) !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     color: #fff !important;
 }
 
@@ -20,8 +20,8 @@
     background: rgba(15, 23, 42, 0.65) !important;
     border: 1px solid rgba(52, 211, 153, 0.15) !important;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     color: #fff !important;
 }
 
@@ -31,8 +31,8 @@
     background: rgba(15, 23, 42, 0.6) !important;
     border: 1px solid rgba(52, 211, 153, 0.15) !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 
 [data-theme="dark"] .coord-action, 

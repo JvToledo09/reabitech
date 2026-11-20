@@ -17,8 +17,8 @@
     transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease !important;
     transform-style: preserve-3d;
     will-change: transform;
-    backdrop-filter: blur(24px) saturate(1.5);
-    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     animation: none !important; /* Remove a flutuação nativa para o mouse assumir */
 }
 

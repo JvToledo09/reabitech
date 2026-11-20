@@ -24,8 +24,8 @@ body {
 /* Ajuste do Container Principal (Card grande) */
 .container, main, .card, .signup-wrapper {
     background: rgba(15, 23, 42, 0.75) !important;
-    backdrop-filter: blur(24px) saturate(1.5) !important;
-    -webkit-backdrop-filter: blur(24px) saturate(1.5) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     border: 1px solid rgba(52, 211, 153, 0.3) !important;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(16, 185, 129, 0.15) !important;
     color: #ffffff !important;

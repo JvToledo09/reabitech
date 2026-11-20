@@ -1,0 +1,622 @@
+/* ==============================================================================
+   REABITECH - PREMIUM PAGES
+   Reestiliza TODAS as telas internas automaticamente
+   ============================================================================== */
+
+/* ==========================================================================
+   1. FUNDO GERAL INTERNO
+   ========================================================================== */
+body {
+    background-image:
+        radial-gradient(circle at 15% 10%, rgba(52, 211, 153, 0.04), transparent 40%),
+        radial-gradient(circle at 85% 90%, rgba(43, 161, 129, 0.03), transparent 45%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+[data-theme="dark"] body {
+    background-image:
+        radial-gradient(circle at 15% 10%, rgba(52, 211, 153, 0.06), transparent 40%),
+        radial-gradient(circle at 85% 90%, rgba(43, 161, 129, 0.04), transparent 45%);
+}
+
+/* ==========================================================================
+   2. TOP NAVBAR (glass + glow)
+   ========================================================================== */
+.top-navbar {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.92) 0%,
+        rgba(255, 255, 255, 0.78) 100%) !important;
+    backdrop-filter: blur(24px) saturate(1.5) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(1.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.7) !important;
+    box-shadow:
+        0 8px 32px rgba(10, 31, 24, 0.06),
+        0 1px 0 rgba(255, 255, 255, 0.9) inset !important;
+}
+
+[data-theme="dark"] .top-navbar {
+    background: linear-gradient(135deg,
+        rgba(15, 41, 55, 0.85) 0%,
+        rgba(10, 25, 41, 0.75) 100%) !important;
+    border: 1px solid rgba(52, 211, 153, 0.15) !important;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 1px 0 rgba(255, 255, 255, 0.05) inset !important;
+}
+
+/* ==========================================================================
+   3. CARDS MODERN
+   ========================================================================== */
+.card-modern {
+    background: linear-gradient(135deg,
+        var(--bg-elevated) 0%,
+        rgba(52, 211, 153, 0.03) 100%) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 20px !important;
+    box-shadow:
+        0 2px 8px rgba(10, 31, 24, 0.04),
+        0 1px 0 rgba(255, 255, 255, 0.5) inset !important;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(52, 211, 153, 0.4) 50%,
+        transparent 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.card-modern:hover::before {
+    opacity: 1;
+}
+
+.card-modern:hover {
+    border-color: rgba(52, 211, 153, 0.25) !important;
+    box-shadow:
+        0 20px 60px rgba(10, 31, 24, 0.1),
+        0 1px 0 rgba(255, 255, 255, 0.6) inset !important;
+}
+
+/* ==========================================================================
+   4. STAT CARD
+   ========================================================================== */
+.stat-card {
+    background: linear-gradient(135deg,
+        var(--bg-elevated) 0%,
+        rgba(52, 211, 153, 0.025) 100%) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 20px !important;
+    box-shadow:
+        0 4px 16px rgba(10, 31, 24, 0.04),
+        0 1px 0 rgba(255, 255, 255, 0.5) inset !important;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(52, 211, 153, 0.08) 0%,
+        transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.stat-card:hover::after {
+    opacity: 1;
+}
+
+.stat-card:hover {
+    transform: translateY(-6px) !important;
+    border-color: rgba(52, 211, 153, 0.3) !important;
+    box-shadow:
+        0 24px 60px rgba(10, 31, 24, 0.12),
+        0 0 0 1px rgba(52, 211, 153, 0.15),
+        0 1px 0 rgba(255, 255, 255, 0.6) inset !important;
+}
+
+.stat-icon {
+    background: linear-gradient(135deg, #34d399, #2BA181) !important;
+    box-shadow:
+        0 8px 24px rgba(52, 211, 153, 0.35),
+        0 1px 0 rgba(255, 255, 255, 0.3) inset !important;
+}
+
+.stat-number {
+    background: linear-gradient(135deg, #2BA181 0%, #34d399 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-weight: 800 !important;
+}
+
+/* ==========================================================================
+   5. TABELAS (sticky header + linhas tipo pilulas)
+   ========================================================================== */
+.table {
+    border-collapse: separate !important;
+    border-spacing: 0 6px !important;
+    background: transparent !important;
+}
+
+.table thead th {
+    background: linear-gradient(135deg,
+        rgba(52, 211, 153, 0.08),
+        rgba(43, 161, 129, 0.04)) !important;
+    color: var(--text-tertiary) !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    border: none !important;
+    padding: 14px 18px !important;
+}
+
+.table thead th:first-child {
+    border-radius: 12px 0 0 12px !important;
+}
+
+.table thead th:last-child {
+    border-radius: 0 12px 12px 0 !important;
+}
+
+.table tbody tr {
+    background: var(--bg-elevated) !important;
+    transition: all 0.25s ease !important;
+    box-shadow: 0 1px 3px rgba(10, 31, 24, 0.04);
+}
+
+.table tbody tr:hover {
+    transform: translateX(2px) !important;
+    box-shadow:
+        0 4px 16px rgba(10, 31, 24, 0.08),
+        0 0 0 1px rgba(52, 211, 153, 0.15) !important;
+}
+
+.table tbody td {
+    padding: 14px 18px !important;
+    border: none !important;
+    color: var(--text-secondary) !important;
+    vertical-align: middle;
+}
+
+.table tbody td:first-child {
+    border-radius: 12px 0 0 12px !important;
+}
+
+.table tbody td:last-child {
+    border-radius: 0 12px 12px 0 !important;
+}
+
+/* ==========================================================================
+   6. BADGES
+   ========================================================================== */
+.badge,
+.status-badge,
+.badge-status {
+    padding: 5px 12px !important;
+    border-radius: 999px !important;
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.03em !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    border: 1px solid transparent;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.25s ease;
+}
+
+.badge.bg-success,
+.badge-success {
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(43, 161, 129, 0.1)) !important;
+    color: #059669 !important;
+    border-color: rgba(52, 211, 153, 0.3) !important;
+}
+
+.badge.bg-danger,
+.badge-danger {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1)) !important;
+    color: #dc2626 !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+.badge.bg-warning,
+.badge-warning {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.1)) !important;
+    color: #d97706 !important;
+    border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+.badge.bg-info,
+.badge-info {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.1)) !important;
+    color: #2563eb !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+.badge.bg-primary,
+.badge-primary {
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(43, 161, 129, 0.1)) !important;
+    color: #2BA181 !important;
+    border-color: rgba(52, 211, 153, 0.3) !important;
+}
+
+/* ==========================================================================
+   7. ALERTAS
+   ========================================================================== */
+.alert {
+    border-radius: 14px !important;
+    border: none !important;
+    padding: 14px 20px !important;
+    font-size: 0.88rem !important;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 16px rgba(10, 31, 24, 0.06);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.alert::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: currentColor;
+    opacity: 0.8;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.12), rgba(43, 161, 129, 0.06)) !important;
+    color: #047857 !important;
+}
+
+.alert-danger,
+.alert-error {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(220, 38, 38, 0.06)) !important;
+    color: #b91c1c !important;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(217, 119, 6, 0.06)) !important;
+    color: #b45309 !important;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(37, 99, 235, 0.06)) !important;
+    color: #1d4ed8 !important;
+}
+
+/* ==========================================================================
+   8. FORMULARIOS
+   ========================================================================== */
+.form-control,
+.form-select,
+input[type="text"]:not(.login-field input):not(.field-editorial input),
+input[type="email"],
+input[type="password"]:not(.field-editorial input),
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="tel"],
+textarea,
+select {
+    background: var(--bg-elevated) !important;
+    border: 1.5px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    font-size: 0.9rem !important;
+    color: var(--text-primary) !important;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    outline: none !important;
+}
+
+.form-control:focus,
+.form-select:focus,
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: rgba(52, 211, 153, 0.6) !important;
+    box-shadow:
+        0 0 0 4px rgba(52, 211, 153, 0.12),
+        0 4px 12px rgba(52, 211, 153, 0.08) !important;
+}
+
+.form-label,
+.form-label-custom,
+label {
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    color: var(--text-primary) !important;
+    margin-bottom: 8px !important;
+}
+
+/* ==========================================================================
+   9. TIMELINE
+   ========================================================================== */
+.timeline-item,
+.timeline-entry {
+    position: relative;
+}
+
+/* ==========================================================================
+   10. CHAT
+   ========================================================================== */
+.msg-bubble {
+    border-radius: 18px 18px 18px 4px !important;
+    box-shadow: 0 2px 8px rgba(10, 31, 24, 0.05) !important;
+    transition: all 0.25s ease;
+}
+
+.msg-bubble:hover {
+    box-shadow: 0 4px 16px rgba(10, 31, 24, 0.08) !important;
+}
+
+.msg-row.propria .msg-bubble {
+    border-radius: 18px 18px 4px 18px !important;
+    background: linear-gradient(135deg, #2BA181, #1f8768) !important;
+    box-shadow:
+        0 4px 16px rgba(43, 161, 129, 0.25),
+        0 1px 0 rgba(255, 255, 255, 0.15) inset !important;
+}
+
+/* ==========================================================================
+   11. SIDEBAR
+   ========================================================================== */
+.sidebar {
+    background: linear-gradient(180deg, #0a3d2e 0%, #0f2937 55%, #0a1929 100%) !important;
+    box-shadow:
+        4px 0 40px rgba(10, 61, 46, 0.35),
+        1px 0 0 rgba(52, 211, 153, 0.08) inset !important;
+}
+
+.sidebar-item:hover {
+    background: linear-gradient(135deg,
+        rgba(52, 211, 153, 0.12) 0%,
+        rgba(43, 161, 129, 0.08) 100%) !important;
+}
+
+.sidebar-item.active {
+    background: linear-gradient(135deg,
+        rgba(52, 211, 153, 0.28) 0%,
+        rgba(43, 161, 129, 0.18) 100%) !important;
+    box-shadow:
+        0 6px 20px rgba(52, 211, 153, 0.2),
+        0 1px 0 rgba(255, 255, 255, 0.08) inset !important;
+}
+
+/* ==========================================================================
+   12. BOTOES BOOTSTRAP
+   ========================================================================== */
+.btn-primary,
+.btn-success {
+    background: linear-gradient(135deg, #34d399, #2BA181) !important;
+    border: none !important;
+    color: white !important;
+    box-shadow:
+        0 4px 14px rgba(43, 161, 129, 0.3),
+        0 1px 0 rgba(255, 255, 255, 0.2) inset !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.btn-primary:hover,
+.btn-success:hover {
+    transform: translateY(-2px) !important;
+    box-shadow:
+        0 10px 30px rgba(43, 161, 129, 0.5),
+        0 1px 0 rgba(255, 255, 255, 0.3) inset !important;
+}
+
+/* ==========================================================================
+   13. MODAIS
+   ========================================================================== */
+.modal-content {
+    border-radius: 20px !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow:
+        0 40px 100px rgba(10, 31, 24, 0.25),
+        0 1px 0 rgba(255, 255, 255, 0.5) inset !important;
+    overflow: hidden;
+}
+
+.modal-header {
+    background: linear-gradient(135deg,
+        rgba(52, 211, 153, 0.06),
+        rgba(43, 161, 129, 0.03)) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 20px 28px !important;
+}
+
+.modal-title {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 700 !important;
+}
+
+.modal-body {
+    padding: 28px !important;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--border-color) !important;
+    padding: 16px 28px !important;
+    background: var(--bg-primary) !important;
+}
+
+/* ==========================================================================
+   14. SCROLL INTERNO
+   ========================================================================== */
+[style*="overflow"]::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+[style*="overflow"]::-webkit-scrollbar-thumb {
+    background: rgba(52, 211, 153, 0.3);
+    border-radius: 999px;
+}
+
+[style*="overflow"]::-webkit-scrollbar-thumb:hover {
+    background: rgba(52, 211, 153, 0.5);
+}
+
+/* ==========================================================================
+   15. PAGINACAO
+   ========================================================================== */
+.pagination .page-link {
+    border-radius: 10px !important;
+    margin: 0 2px !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-secondary) !important;
+    background: var(--bg-elevated) !important;
+    transition: all 0.25s ease !important;
+    font-weight: 600;
+}
+
+.pagination .page-link:hover {
+    background: rgba(52, 211, 153, 0.1) !important;
+    border-color: rgba(52, 211, 153, 0.3) !important;
+    color: #2BA181 !important;
+    transform: translateY(-2px);
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #34d399, #2BA181) !important;
+    border-color: transparent !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(43, 161, 129, 0.3);
+}
+
+/* ==========================================================================
+   16. SECTION HEADER
+   ========================================================================== */
+.section-header,
+.page-header {
+    position: relative;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+}
+
+.section-header::after,
+.page-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #34d399, #2BA181);
+    border-radius: 999px;
+}
+
+/* ==========================================================================
+   17. EMPTY STATES
+   ========================================================================== */
+.empty-state i,
+.text-center.py-5 > i {
+    font-size: 3.5rem !important;
+    color: rgba(52, 211, 153, 0.4) !important;
+    margin-bottom: 16px;
+}
+
+/* ==========================================================================
+   18. AVATARES
+   ========================================================================== */
+.avatar:not(.sidebar-user .avatar) {
+    border-radius: 50%;
+    padding: 3px;
+    background: linear-gradient(135deg, #34d399, #2BA181);
+    box-shadow: 0 4px 12px rgba(52, 211, 153, 0.3);
+}
+
+.avatar img {
+    border-radius: 50%;
+    display: block;
+}
+
+/* ==========================================================================
+   19. RESPONSIVO
+   ========================================================================== */
+@media (max-width: 768px) {
+    .stat-card {
+        padding: 16px 12px !important;
+    }
+
+    .stat-number {
+        font-size: 1.6rem !important;
+    }
+
+    .table {
+        font-size: 0.8rem !important;
+    }
+
+    .table thead th,
+    .table tbody td {
+        padding: 10px 12px !important;
+    }
+
+    .alert {
+        padding: 12px 16px !important;
+        font-size: 0.82rem !important;
+    }
+
+    .modal-body {
+        padding: 20px !important;
+    }
+}
+
+/* ==========================================================================
+   20. DARK MODE OVERRIDES
+   ========================================================================== */
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select,
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+    background: rgba(15, 41, 55, 0.6) !important;
+    border-color: rgba(52, 211, 153, 0.15) !important;
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
+    background: rgba(15, 41, 55, 0.8) !important;
+    border-color: rgba(52, 211, 153, 0.5) !important;
+}
+
+[data-theme="dark"] .modal-content {
+    background: #0f2937 !important;
+    border-color: rgba(52, 211, 153, 0.2) !important;
+}
+
+[data-theme="dark"] .modal-footer {
+    background: rgba(10, 25, 41, 0.6) !important;
+}
+
+[data-theme="dark"] .dropdown-menu {
+    background: #0f2937 !important;
+    border-color: rgba(52, 211, 153, 0.2) !important;
+}

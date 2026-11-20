@@ -1,0 +1,558 @@
+/* ============================================================
+   REABITECH DESIGN SYSTEM v2.0
+   Tokens, componentes e utilitários
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. TIPOGRAFIA
+   ------------------------------------------------------------ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* ------------------------------------------------------------
+   2. TOKENS - Variáveis globais
+   ------------------------------------------------------------ */
+:root {
+    /* ---- Cor primária (verde REABITECH) ---- */
+    --primary-50:  #ecfdf5;
+    --primary-100: #d1fae5;
+    --primary-200: #a7f3d0;
+    --primary-300: #6ee7b7;
+    --primary-400: #34d399;
+    --primary-500: #2BA181;
+    --primary-600: #1f8768;
+    --primary-700: #166b52;
+    --primary-800: #11543f;
+    --primary-900: #0a3d2e;
+
+    /* ---- Cor neutra (grafite) ---- */
+    --neutral-50:  #f8fafc;
+    --neutral-100: #f1f5f9;
+    --neutral-200: #e2e8f0;
+    --neutral-300: #cbd5e1;
+    --neutral-400: #94a3b8;
+    --neutral-500: #64748b;
+    --neutral-600: #475569;
+    --neutral-700: #334155;
+    --neutral-800: #1e293b;
+    --neutral-900: #0f172a;
+    --neutral-950: #020617;
+
+    /* ---- Semânticas ---- */
+    --success: #10b981;
+    --success-bg: rgba(16, 185, 129, 0.1);
+    --danger: #ef4444;
+    --danger-bg: rgba(239, 68, 68, 0.1);
+    --warning: #f59e0b;
+    --warning-bg: rgba(245, 158, 11, 0.1);
+    --info: #06b6d4;
+    --info-bg: rgba(6, 182, 212, 0.1);
+
+    /* ---- Gradientes ---- */
+    --gradient-primary: linear-gradient(135deg, #2BA181 0%, #1f8768 100%);
+    --gradient-hero:    linear-gradient(135deg, #0a3d2e 0%, #11543f 40%, #2BA181 100%);
+    --gradient-aurora:  linear-gradient(120deg, #2BA181, #06b6d4, #2BA181);
+    --gradient-mesh:    radial-gradient(at 20% 20%, rgba(43, 161, 129, 0.4) 0px, transparent 50%),
+                        radial-gradient(at 80% 30%, rgba(6, 182, 212, 0.35) 0px, transparent 50%),
+                        radial-gradient(at 50% 80%, rgba(31, 135, 104, 0.4) 0px, transparent 50%);
+
+    /* ---- Sombras em camadas (estilo Bootstrap) ---- */
+    --shadow-xs:  0 1px 2px 0 rgba(15, 23, 42, 0.04);
+    --shadow-sm:  0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+    --shadow-md:  0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+    --shadow-lg:  0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
+    --shadow-xl:  0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+    --shadow-2xl: 0 25px 50px -12px rgba(15, 23, 42, 0.15);
+    --shadow-glow: 0 0 40px rgba(43, 161, 129, 0.35);
+
+    /* ---- Raios ---- */
+    --radius-sm:  6px;
+    --radius-md:  10px;
+    --radius-lg:  14px;
+    --radius-xl:  20px;
+    --radius-2xl: 28px;
+    --radius-full: 9999px;
+
+    /* ---- Transições ---- */
+    --ease-fast:  150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-base:  250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-slow:  400ms cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* ---- Espaçamento (base 4px) ---- */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-20: 80px;
+    --space-24: 96px;
+
+    /* ---- Tipografia ---- */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'Plus Jakarta Sans', 'Inter', sans-serif;
+
+    /* ---- Z-index ---- */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-toast: 1090;
+    --z-tooltip: 1100;
+
+    /* ---- Cores (mapeamento para o CSS legado) ---- */
+    --primary: var(--primary-500);
+    --secondary: #5A6461;
+    --complementar: var(--primary-400);
+    --gradient: var(--gradient-primary);
+    --text-color: var(--neutral-800);
+    --text-muted: var(--neutral-500);
+    --bg-body: var(--neutral-50);
+    --border-color: var(--neutral-200);
+}
+
+/* ------------------------------------------------------------
+   3. DARK MODE
+   ------------------------------------------------------------ */
+[data-bs-theme="dark"] {
+    --text-color: var(--neutral-100);
+    --text-muted: var(--neutral-400);
+    --bg-body: var(--neutral-950);
+    --border-color: var(--neutral-800);
+    --secondary: var(--neutral-400);
+
+    --shadow-xs:  0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-sm:  0 1px 3px 0 rgba(0, 0, 0, 0.4);
+    --shadow-md:  0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --shadow-lg:  0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --shadow-xl:  0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}
+
+/* ------------------------------------------------------------
+   4. RESET E BASE
+   ------------------------------------------------------------ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: var(--bg-body);
+    transition: background var(--ease-base), color var(--ease-base);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+h3 { font-size: clamp(1.25rem, 2vw, 1.75rem); }
+
+p { margin-bottom: 1rem; }
+
+a {
+    text-decoration: none;
+    color: var(--primary);
+    transition: color var(--ease-fast);
+}
+
+a:hover { color: var(--primary-700); }
+
+img { max-width: 100%; height: auto; }
+
+/* ------------------------------------------------------------
+   5. BOTÕES
+   ------------------------------------------------------------ */
+.ds-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1;
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--ease-base);
+    text-decoration: none;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.ds-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+}
+
+/* Variantes */
+.ds-btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+.ds-btn-primary:hover {
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+.ds-btn-primary:active { transform: translateY(0); }
+
+.ds-btn-secondary {
+    background: var(--neutral-800);
+    color: white;
+}
+.ds-btn-secondary:hover {
+    background: var(--neutral-900);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.ds-btn-outline {
+    background: transparent;
+    color: var(--text-color);
+    border: 1.5px solid var(--border-color);
+}
+.ds-btn-outline:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-50);
+}
+
+[data-bs-theme="dark"] .ds-btn-outline:hover {
+    background: rgba(43, 161, 129, 0.1);
+}
+
+.ds-btn-ghost {
+    background: transparent;
+    color: var(--text-color);
+}
+.ds-btn-ghost:hover { background: var(--neutral-100); }
+
+[data-bs-theme="dark"] .ds-btn-ghost:hover { background: var(--neutral-800); }
+
+/* Tamanhos */
+.ds-btn-sm { padding: 8px 16px; font-size: 0.85rem; }
+.ds-btn-lg { padding: 16px 32px; font-size: 1.05rem; }
+
+/* Full width */
+.ds-btn-block { width: 100%; }
+
+/* Ripple effect */
+.ds-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.6s;
+    pointer-events: none;
+}
+.ds-btn:active::after {
+    opacity: 1;
+    transition: opacity 0s;
+}
+
+/* ------------------------------------------------------------
+   6. INPUTS
+   ------------------------------------------------------------ */
+.ds-input,
+.ds-select,
+.ds-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: var(--text-color);
+    background: white;
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    transition: all var(--ease-base);
+    outline: none;
+}
+
+.ds-input:focus,
+.ds-select:focus,
+.ds-textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(43, 161, 129, 0.12);
+}
+
+.ds-input::placeholder { color: var(--neutral-400); }
+
+[data-bs-theme="dark"] .ds-input,
+[data-bs-theme="dark"] .ds-select,
+[data-bs-theme="dark"] .ds-textarea {
+    background: var(--neutral-900);
+    border-color: var(--neutral-800);
+}
+
+/* Floating label */
+.ds-field {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.ds-field-input {
+    width: 100%;
+    padding: 22px 16px 10px;
+    font-size: 0.95rem;
+    background: white;
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    outline: none;
+    transition: all var(--ease-base);
+    color: var(--text-color);
+}
+
+.ds-field-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(43, 161, 129, 0.12);
+}
+
+.ds-field-label {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    font-size: 0.95rem;
+    color: var(--neutral-400);
+    pointer-events: none;
+    transition: all var(--ease-base);
+    background: transparent;
+    padding: 0 4px;
+}
+
+.ds-field-input:focus ~ .ds-field-label,
+.ds-field-input:not(:placeholder-shown) ~ .ds-field-label {
+    top: -8px;
+    left: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary);
+    background: var(--bg-body);
+    padding: 0 8px;
+}
+
+[data-bs-theme="dark"] .ds-field-input {
+    background: var(--neutral-900);
+    border-color: var(--neutral-800);
+}
+
+/* ------------------------------------------------------------
+   7. CARDS
+   ------------------------------------------------------------ */
+.ds-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid transparent;
+    transition: all var(--ease-base);
+}
+
+.ds-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-200);
+}
+
+[data-bs-theme="dark"] .ds-card {
+    background: var(--neutral-900);
+    border-color: var(--neutral-800);
+}
+
+.ds-card-glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: var(--shadow-lg);
+}
+
+[data-bs-theme="dark"] .ds-card-glass {
+    background: rgba(15, 23, 42, 0.6);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ------------------------------------------------------------
+   8. BADGES
+   ------------------------------------------------------------ */
+.ds-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-radius: var(--radius-full);
+    line-height: 1.4;
+}
+
+.ds-badge-primary { background: var(--primary-100); color: var(--primary-700); }
+.ds-badge-success { background: var(--success-bg); color: var(--success); }
+.ds-badge-danger  { background: var(--danger-bg);  color: var(--danger);  }
+.ds-badge-warning { background: var(--warning-bg); color: var(--warning); }
+.ds-badge-info    { background: var(--info-bg);    color: var(--info);    }
+.ds-badge-neutral { background: var(--neutral-100); color: var(--neutral-700); }
+
+[data-bs-theme="dark"] .ds-badge-neutral { background: var(--neutral-800); color: var(--neutral-200); }
+
+/* ------------------------------------------------------------
+   9. UTILITÁRIOS
+   ------------------------------------------------------------ */
+
+/* Gradiente de texto */
+.ds-text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+/* Divisor */
+.ds-divider {
+    height: 1px;
+    background: var(--border-color);
+    border: none;
+    margin: var(--space-6) 0;
+}
+
+/* Círculo de ícone */
+.ds-icon-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    background: var(--primary-100);
+    color: var(--primary-600);
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.ds-icon-circle-lg { width: 64px; height: 64px; font-size: 1.75rem; }
+
+/* Container */
+.ds-container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Section */
+.ds-section {
+    padding: 80px 0;
+}
+
+.ds-section-sm { padding: 48px 0; }
+.ds-section-lg { padding: 120px 0; }
+
+/* ------------------------------------------------------------
+   10. ANIMAÇÕES
+   ------------------------------------------------------------ */
+@keyframes ds-fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ds-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes ds-scale-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes ds-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-12px); }
+}
+
+@keyframes ds-pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(43, 161, 129, 0.4); }
+    50%      { box-shadow: 0 0 40px rgba(43, 161, 129, 0.7); }
+}
+
+@keyframes ds-marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@keyframes ds-aurora {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.ds-animate-fade-up { animation: ds-fade-up 0.7s var(--ease-base) forwards; opacity: 0; }
+.ds-animate-fade-in { animation: ds-fade-in 0.7s var(--ease-base) forwards; opacity: 0; }
+.ds-animate-float   { animation: ds-float 4s ease-in-out infinite; }
+
+/* Scroll reveal (usado com JS) */
+.ds-reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity, transform;
+}
+
+.ds-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Delays */
+.ds-delay-1 { animation-delay: 0.1s; transition-delay: 0.1s; }
+.ds-delay-2 { animation-delay: 0.2s; transition-delay: 0.2s; }
+.ds-delay-3 { animation-delay: 0.3s; transition-delay: 0.3s; }
+.ds-delay-4 { animation-delay: 0.4s; transition-delay: 0.4s; }
+.ds-delay-5 { animation-delay: 0.5s; transition-delay: 0.5s; }
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+    .ds-reveal { opacity: 1; transform: none; }
+}
+
+/* ------------------------------------------------------------
+   11. RESPONSIVO
+   ------------------------------------------------------------ */
+@media (max-width: 768px) {
+    .ds-section { padding: 56px 0; }
+    .ds-section-lg { padding: 80px 0; }
+    .ds-container { padding: 0 20px; }
+    .ds-card { padding: 20px; }
+}

@@ -1,0 +1,611 @@
+/* ==============================================================================
+   REABITECH - GLASS SIDEBAR + 3D AVANCADO
+   Sidebar translucida + camadas de profundidade + efeitos tematicos
+   ============================================================================== */
+
+/* ==========================================================================
+   1. SIDEBAR GLASS (translucida, moderna)
+   ========================================================================== */
+.sidebar {
+    background:
+        linear-gradient(180deg,
+            rgba(10, 61, 46, 0.88) 0%,
+            rgba(15, 41, 55, 0.85) 55%,
+            rgba(10, 25, 41, 0.9) 100%) !important;
+    backdrop-filter: blur(28px) saturate(1.7) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(1.7) !important;
+    border-right: 1px solid rgba(52, 211, 153, 0.12) !important;
+    box-shadow:
+        4px 0 40px rgba(10, 61, 46, 0.35),
+        1px 0 0 rgba(52, 211, 153, 0.06) inset !important;
+}
+
+/* Orbe de luz verde no fundo do sidebar */
+.sidebar::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    left: -80px;
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+        rgba(52, 211, 153, 0.18) 0%,
+        transparent 65%);
+    filter: blur(50px);
+    pointer-events: none;
+    animation: sidebarOrb 12s ease-in-out infinite;
+}
+
+.sidebar::after {
+    content: '';
+    position: absolute;
+    bottom: -100px;
+    right: -60px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+        rgba(43, 161, 129, 0.14) 0%,
+        transparent 65%);
+    filter: blur(50px);
+    pointer-events: none;
+    animation: sidebarOrb 15s ease-in-out infinite reverse;
+}
+
+@keyframes sidebarOrb {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -20px) scale(1.1); }
+    66% { transform: translate(-20px, 30px) scale(0.95); }
+}
+
+/* Conteudo acima dos orbs */
+.sidebar > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* ==========================================================================
+   2. LOGO + WORDMARK (glass frame)
+   ========================================================================== */
+.sidebar-logo {
+    border-bottom: 1px solid rgba(52, 211, 153, 0.1) !important;
+    padding: 22px 20px !important;
+}
+
+.sidebar-logo h3 {
+    text-shadow: 0 0 24px rgba(52, 211, 153, 0.3);
+    letter-spacing: 0.16em !important;
+}
+
+.sidebar-logo p {
+    letter-spacing: 0.22em !important;
+    text-transform: uppercase !important;
+    font-size: 0.58rem !important;
+    color: rgba(167, 243, 208, 0.55) !important;
+}
+
+/* ==========================================================================
+   3. CARD DO PROJETO ATIVO (glass com indicador vivo)
+   ========================================================================== */
+.sidebar > div[style*="padding: 0 12px 16px"] > div {
+    background: rgba(52, 211, 153, 0.08) !important;
+    backdrop-filter: blur(16px) saturate(1.5) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(1.5) !important;
+    border: 1px solid rgba(52, 211, 153, 0.22) !important;
+    border-radius: 16px !important;
+    box-shadow:
+        0 8px 24px rgba(10, 61, 46, 0.25),
+        0 0 0 1px rgba(52, 211, 153, 0.08) inset,
+        0 1px 0 rgba(255, 255, 255, 0.08) inset !important;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar > div[style*="padding: 0 12px 16px"] > div:hover {
+    border-color: rgba(52, 211, 153, 0.4) !important;
+    box-shadow:
+        0 12px 32px rgba(10, 61, 46, 0.35),
+        0 0 24px rgba(52, 211, 153, 0.2),
+        0 1px 0 rgba(255, 255, 255, 0.12) inset !important;
+    transform: translateY(-1px);
+}
+
+/* Ponto pulsante "live" no canto */
+.sidebar > div[style*="padding: 0 12px 16px"] > div::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 12px rgba(52, 211, 153, 0.9);
+    animation: livePulse 2s ease-in-out infinite;
+    z-index: 2;
+}
+
+@keyframes livePulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7),
+                    0 0 12px rgba(52, 211, 153, 0.9);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(52, 211, 153, 0),
+                    0 0 16px rgba(52, 211, 153, 1);
+    }
+}
+
+/* ==========================================================================
+   4. MENU ITEMS (glass hover + 3D depth)
+   ========================================================================== */
+.sidebar-menu {
+    position: relative;
+    z-index: 2;
+    padding: 16px 14px 0 !important;
+}
+
+.sidebar-item {
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    margin: 3px 0 !important;
+    position: relative;
+    overflow: hidden;
+    transition:
+        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        background 0.35s ease,
+        box-shadow 0.4s ease,
+        padding 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    will-change: transform;
+}
+
+/* Linha lateral de destaque */
+.sidebar-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%) scaleY(0);
+    width: 3px;
+    height: 60%;
+    background: linear-gradient(180deg, #34d399, #2BA181);
+    border-radius: 0 3px 3px 0;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 12px rgba(52, 211, 153, 0.6);
+}
+
+/* Brilho que atravessa */
+.sidebar-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(52, 211, 153, 0.15) 50%,
+        transparent 100%);
+    transition: left 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+}
+
+.sidebar-item:hover {
+    background: rgba(52, 211, 153, 0.09) !important;
+    transform: translateX(8px) !important;
+    padding-left: 20px !important;
+    box-shadow:
+        0 8px 24px rgba(10, 61, 46, 0.2),
+        0 0 0 1px rgba(52, 211, 153, 0.12) inset !important;
+}
+
+.sidebar-item:hover::before {
+    transform: translateY(-50%) scaleY(1);
+}
+
+.sidebar-item:hover::after {
+    left: 100%;
+}
+
+.sidebar-item:hover i {
+    transform: scale(1.15) rotate(-4deg);
+    color: #34d399 !important;
+}
+
+.sidebar-item i {
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: center;
+}
+
+/* Item ativo */
+.sidebar-item.active {
+    background: linear-gradient(135deg,
+        rgba(52, 211, 153, 0.28) 0%,
+        rgba(43, 161, 129, 0.15) 100%) !important;
+    box-shadow:
+        0 6px 20px rgba(52, 211, 153, 0.25),
+        0 0 0 1px rgba(52, 211, 153, 0.25) inset,
+        0 1px 0 rgba(255, 255, 255, 0.12) inset !important;
+    color: white !important;
+    transform: translateX(4px) !important;
+}
+
+.sidebar-item.active::before {
+    transform: translateY(-50%) scaleY(1);
+}
+
+.sidebar-item.active i {
+    color: #34d399 !important;
+}
+
+/* ==========================================================================
+   5. USER BADGE (glass + pulse no avatar)
+   ========================================================================== */
+.sidebar-user {
+    border-top: 1px solid rgba(52, 211, 153, 0.1) !important;
+    background: rgba(10, 25, 41, 0.3) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+}
+
+.sidebar-user .avatar {
+    position: relative;
+    border: 2px solid rgba(52, 211, 153, 0.35) !important;
+    box-shadow:
+        0 0 24px rgba(52, 211, 153, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sidebar-user .avatar::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    animation: avatarRing 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes avatarRing {
+    0% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.15); opacity: 0; }
+    100% { transform: scale(1); opacity: 0.6; }
+}
+
+.sidebar-user:hover .avatar {
+    transform: scale(1.1);
+    box-shadow:
+        0 0 40px rgba(52, 211, 153, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.15) inset !important;
+}
+
+/* ==========================================================================
+   6. TILT 3D AVANCADO (camadas de profundidade nos cards)
+   ========================================================================== */
+.tilt-3d {
+    transform-style: preserve-3d;
+    perspective: 1200px;
+    transition:
+        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+    position: relative;
+}
+
+/* Camadas internas que se movem em paralaxe */
+.tilt-layer {
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-style: preserve-3d;
+}
+
+.tilt-layer-1 { transform: translateZ(15px); }
+.tilt-layer-2 { transform: translateZ(30px); }
+.tilt-layer-3 { transform: translateZ(50px); }
+
+/* Brilho radial que segue o cursor */
+.tilt-glow {
+    position: relative;
+}
+
+.tilt-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+        500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(52, 211, 153, 0.18),
+        rgba(52, 211, 153, 0.06) 25%,
+        transparent 55%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.tilt-glow:hover::before {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   7. EFEITO 3D - SHADOW DINAMICA (segue o cursor)
+   ========================================================================== */
+.tilt-3d-shadow {
+    box-shadow:
+        calc(var(--shadow-x, 0px) * -1)
+        calc(var(--shadow-y, 0px) * -1)
+        30px
+        rgba(10, 31, 24, 0.1) !important;
+    transition: box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   8. STAT CARDS COM CAMADAS PARALAXE (icone mais alto que texto)
+   ========================================================================== */
+.stat-card {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.stat-card .stat-icon {
+    transform: translateZ(40px);
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.stat-card .stat-number {
+    transform: translateZ(25px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stat-card:hover .stat-icon {
+    transform: translateZ(60px) translateY(-8px) scale(1.1) !important;
+}
+
+.stat-card:hover .stat-number {
+    transform: translateZ(40px) !important;
+}
+
+/* ==========================================================================
+   9. EFEITO TEMATICO - ECG PULSANTE (borda inferior)
+   ========================================================================== */
+.card-ecg {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-ecg::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 24px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 24' preserveAspectRatio='none'%3E%3Cpath d='M0,12 L40,12 L46,12 L49,4 L52,20 L55,12 L85,12 L91,12 L94,2 L97,22 L100,12 L140,12 L146,12 L149,6 L152,18 L155,12 L200,12' stroke='%2334d399' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 200px 24px;
+    opacity: 0;
+    animation: ecgSlide 3s linear infinite;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.card-ecg:hover::after {
+    opacity: 0.5;
+}
+
+@keyframes ecgSlide {
+    from { background-position-x: 0; }
+    to { background-position-x: -200px; }
+}
+
+/* ==========================================================================
+   10. PULSO DE "RESPIRACAO" (indicadores de saude)
+   ========================================================================== */
+.pulse-breathe {
+    animation: breathe 4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.08);
+        opacity: 0.85;
+    }
+}
+
+/* Indicador com anel de respiracao */
+.breathing-indicator {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #34d399;
+}
+
+.breathing-indicator::before,
+.breathing-indicator::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid rgba(52, 211, 153, 0.5);
+    animation: breatheRing 3s ease-out infinite;
+}
+
+.breathing-indicator::after {
+    animation-delay: 1.5s;
+}
+
+@keyframes breatheRing {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+/* ==========================================================================
+   11. RIPPLE (efeito ao clicar)
+   ========================================================================== */
+.ripple-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+        rgba(52, 211, 153, 0.4),
+        rgba(52, 211, 153, 0.1) 40%,
+        transparent 70%);
+    transform: scale(0);
+    animation: rippleExpand 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+}
+
+@keyframes rippleExpand {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* ==========================================================================
+   12. GLOW VERDE SEGUINDO O CURSOR GLOBAL
+   ========================================================================== */
+.cursor-glow {
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+        rgba(52, 211, 153, 0.08) 0%,
+        rgba(52, 211, 153, 0.03) 30%,
+        transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.5s ease;
+    mix-blend-mode: multiply;
+}
+
+[data-theme="dark"] .cursor-glow {
+    background: radial-gradient(circle,
+        rgba(52, 211, 153, 0.12) 0%,
+        rgba(52, 211, 153, 0.04) 30%,
+        transparent 60%);
+    mix-blend-mode: screen;
+}
+
+/* ==========================================================================
+   13. BOTOES - SHINE REFINADO + RIPPLE
+   ========================================================================== */
+.btn-primary-custom,
+.btn-3d,
+.btn-outline-custom,
+.btn-outline-3d {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+/* Onda de saida no click */
+.btn-primary-custom:active::after,
+.btn-3d:active::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center,
+        rgba(255, 255, 255, 0.3) 0%,
+        transparent 60%);
+    animation: buttonFlash 0.5s ease-out;
+}
+
+@keyframes buttonFlash {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* ==========================================================================
+   14. SCROLLBAR GLASS NO SIDEBAR
+   ========================================================================== */
+.sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(52, 211, 153, 0.2);
+    border-radius: 999px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(52, 211, 153, 0.4);
+}
+
+/* ==========================================================================
+   15. MOBILE (efeitos reduzidos pra performance)
+   ========================================================================== */
+@media (max-width: 992px) {
+    .sidebar {
+        backdrop-filter: blur(24px) !important;
+        -webkit-backdrop-filter: blur(24px) !important;
+        background: linear-gradient(180deg,
+            rgba(10, 61, 46, 0.95) 0%,
+            rgba(15, 41, 55, 0.94) 55%,
+            rgba(10, 25, 41, 0.96) 100%) !important;
+    }
+
+    .sidebar::before,
+    .sidebar::after {
+        animation: none;
+        opacity: 0.5;
+    }
+
+    .cursor-glow {
+        display: none !important;
+    }
+
+    .stat-card .stat-icon,
+    .stat-card .stat-number {
+        transform: none !important;
+    }
+
+    .sidebar-item:hover {
+        transform: none !important;
+        padding-left: 16px !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebar::before,
+    .sidebar::after,
+    .sidebar-item,
+    .sidebar-user .avatar,
+    .sidebar-user .avatar::after,
+    .card-ecg::after,
+    .breathing-indicator::before,
+    .breathing-indicator::after,
+    .cursor-glow,
+    .tilt-3d {
+        animation: none !important;
+        transition: none !important;
+    }
+}

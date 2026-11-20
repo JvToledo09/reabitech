@@ -19,15 +19,15 @@
 
 [data-theme="dark"] .sidebar {
     background: rgba(10, 20, 30, 0.85) !important;
-    backdrop-filter: blur(20px) saturate(1.5) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(1.5) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     border-right: 1px solid rgba(52, 211, 153, 0.15) !important;
 }
 
 [data-theme="dark"] .top-navbar {
     background: rgba(15, 23, 42, 0.7) !important;
-    backdrop-filter: blur(20px) saturate(1.5) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(1.5) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     border: 1px solid rgba(52, 211, 153, 0.2) !important;
     border-radius: 16px !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;

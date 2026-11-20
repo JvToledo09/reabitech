@@ -56,8 +56,8 @@
    ========================================================================== */
 .top-navbar {
     background: var(--glass-bg-light) !important;
-    backdrop-filter: var(--glass-blur) !important;
-    -webkit-backdrop-filter: var(--glass-blur) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     border: 1px solid var(--glass-border-light) !important;
     box-shadow: var(--depth-2) !important;
     position: relative;
@@ -80,8 +80,8 @@
 }
 
 .dropdown-menu {
-    backdrop-filter: var(--glass-blur) !important;
-    -webkit-backdrop-filter: var(--glass-blur) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     background: var(--glass-bg-light) !important;
     border: 1px solid var(--glass-border-light) !important;
     box-shadow: var(--depth-3) !important;
@@ -213,8 +213,8 @@
 /* Botao outline com vidro */
 .btn-outline-custom,
 .btn-outline-3d {
-    backdrop-filter: blur(12px) saturate(1.4) !important;
-    -webkit-backdrop-filter: blur(12px) saturate(1.4) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     background: var(--glass-bg-light) !important;
     border: 1px solid var(--glass-border-light) !important;
     box-shadow: var(--depth-1) !important;
@@ -511,7 +511,7 @@ input.is-valid,
     }
 
     .top-navbar {
-        backdrop-filter: blur(16px) !important;
-        -webkit-backdrop-filter: blur(16px) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
 }
