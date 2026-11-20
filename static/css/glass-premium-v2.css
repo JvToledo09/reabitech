@@ -199,3 +199,20 @@ body.glass-v2 *::-webkit-scrollbar-thumb:hover { background: var(--gv2-green-2);
     body.glass-v2 .coord-section, body.glass-v2 .dash-section { transform: none !important; }
 }
 body.glass-v2 :focus-visible { outline: 2px solid var(--gv2-green-2); outline-offset: 2px; border-radius: 8px; }
+
+/* REABITECH-FIX: rail v2 */
+@media (min-width: 1200px) {
+ body.glass-v2.gv2-rail .sidebar .sidebar-item, body.glass-v2.gv2-rail .sidebar .sidebar-logo, body.glass-v2.gv2-rail .sidebar .sidebar-user { font-size: 0 !important; }
+ body.glass-v2.gv2-rail .sidebar .sidebar-item i { font-size: 1.15rem !important; }
+ body.glass-v2.gv2-rail .sidebar .sidebar-logo img { width: 42px !important; height: 42px !important; }
+ body.glass-v2.gv2-rail .sidebar .sidebar-user .avatar { width: 40px !important; height: 40px !important; font-size: 1rem !important; }
+ body.glass-v2.gv2-rail .sidebar .sidebar-menu { scrollbar-width: none !important; }
+ body.glass-v2.gv2-rail .sidebar .sidebar-menu::-webkit-scrollbar { display: none !important; }
+ body.glass-v2.gv2-rail .sidebar:hover .sidebar-item, body.glass-v2.gv2-rail.gv2-rail-open .sidebar .sidebar-item { font-size: .92rem !important; }
+ body.glass-v2.gv2-rail .sidebar:hover .sidebar-logo, body.glass-v2.gv2-rail.gv2-rail-open .sidebar .sidebar-logo { font-size: 1rem !important; }
+ body.glass-v2.gv2-rail .sidebar:hover .sidebar-user, body.glass-v2.gv2-rail.gv2-rail-open .sidebar .sidebar-user { font-size: .95rem !important; }
+ body.glass-v2.gv2-rail .sidebar:hover .badge-msg-sidebar, body.glass-v2.gv2-rail.gv2-rail-open .sidebar .badge-msg-sidebar { font-size: .7rem !important; }
+}
+@media (min-width: 992px) {
+ body.glass-v2 .mobile-menu-btn { display: none !important; }
+}
