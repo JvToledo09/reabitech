@@ -1,0 +1,201 @@
+/* REABITECH GLASS PREMIUM V2 */
+/* Camada aditiva escopada em body.glass-v2. Cores do proprio REABITECH. */
+body.glass-v2 {
+    --gv2-green: var(--green, #10b981);
+    --gv2-green-2: var(--green-light, #34d399);
+    --gv2-green-3: #2BA181;
+    --gv2-deep: #0a3d2e;
+    --gv2-ink: var(--text-primary, #f1f5f9);
+    --gv2-mut: var(--text-secondary, #94a3b8);
+    --gv2-surface: var(--bg-elevated, #101c2c);
+    --gv2-glass: var(--glass-bg, rgba(16, 28, 44, .55));
+    --gv2-line: var(--border-color, rgba(148, 163, 184, .14));
+    --gv2-amber: #f59e0b;
+    --gv2-red: #ef4444;
+    --gv2-blue: #38bdf8;
+    --gv2-r: 22px;
+}
+body.glass-v2[data-theme="light"] {
+    --gv2-glass: rgba(255, 255, 255, .62);
+    --gv2-surface: #ffffff;
+    --gv2-line: rgba(15, 41, 55, .10);
+    --gv2-ink: #0f2937;
+    --gv2-mut: #52657a;
+}
+
+/* ---------- fundo mesh + grain ---------- */
+body.glass-v2::before {
+    content: ''; position: fixed; inset: 0; z-index: -2; pointer-events: none;
+    background:
+        radial-gradient(52rem 30rem at 12% -6%, rgba(16, 185, 129, .16), transparent 60%),
+        radial-gradient(40rem 26rem at 88% 4%, rgba(56, 189, 248, .10), transparent 62%),
+        radial-gradient(46rem 30rem at 70% 96%, rgba(43, 161, 129, .12), transparent 60%),
+        radial-gradient(30rem 20rem at 30% 80%, rgba(245, 158, 11, .05), transparent 65%),
+        var(--bg-primary, #050b14);
+}
+body.glass-v2::after {
+    content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .05;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='.6'/></svg>");
+}
+body.glass-v2[data-theme="light"]::before {
+    background:
+        radial-gradient(52rem 30rem at 12% -6%, rgba(16, 185, 129, .14), transparent 60%),
+        radial-gradient(40rem 26rem at 88% 4%, rgba(56, 189, 248, .12), transparent 62%),
+        radial-gradient(46rem 30rem at 70% 96%, rgba(43, 161, 129, .10), transparent 60%),
+        #f4f7f6;
+}
+
+/* ---------- cards glass com 3D real ---------- */
+body.glass-v2 .card, body.glass-v2 .glass-card, body.glass-v2 .stat-card,
+body.glass-v2 .coord-section, body.glass-v2 .dash-section, body.glass-v2 .card-modern,
+body.glass-v2 .card-premium, body.glass-v2 .custom-card, body.glass-v2 .header-card {
+    position: relative;
+    background: var(--gv2-glass) !important;
+    border: 1px solid var(--gv2-line) !important;
+    border-radius: var(--gv2-r) !important;
+    box-shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 18px 44px -18px rgba(2, 8, 18, .55) !important;
+    backdrop-filter: blur(18px) saturate(1.35);
+    -webkit-backdrop-filter: blur(18px) saturate(1.35);
+    transform: perspective(1100px) rotateX(var(--gv2-rx, 0deg)) rotateY(var(--gv2-ry, 0deg)) translateY(var(--gv2-lift, 0px));
+    transform-style: preserve-3d;
+    transition: transform .18s ease-out, box-shadow .25s ease, border-color .25s ease;
+    overflow: hidden;
+}
+body.glass-v2 .card::before, body.glass-v2 .glass-card::before, body.glass-v2 .stat-card::before,
+body.glass-v2 .coord-section::before, body.glass-v2 .dash-section::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+    background: radial-gradient(24rem 14rem at var(--gv2-mx, 50%) var(--gv2-my, 0%), rgba(52, 211, 153, .14), transparent 62%);
+    opacity: 0; transition: opacity .25s ease;
+}
+body.glass-v2 .card:hover, body.glass-v2 .glass-card:hover, body.glass-v2 .stat-card:hover,
+body.glass-v2 .coord-section:hover, body.glass-v2 .dash-section:hover {
+    --gv2-lift: -4px;
+    border-color: rgba(52, 211, 153, .35) !important;
+    box-shadow: 0 1px 0 rgba(255,255,255,.08) inset, 0 26px 60px -20px rgba(2, 8, 18, .65), 0 0 0 1px rgba(52,211,153,.12) !important;
+}
+body.glass-v2 .card:hover::before, body.glass-v2 .glass-card:hover::before,
+body.glass-v2 .stat-card:hover::before, body.glass-v2 .coord-section:hover::before,
+body.glass-v2 .dash-section:hover::before { opacity: 1; }
+body.glass-v2 .stat-card i, body.glass-v2 .stat-card .fa, body.glass-v2 .stat-card [class*="ph-"] {
+    transform: translateZ(22px);
+}
+body.glass-v2 .stat-card h3, body.glass-v2 .stat-card h2, body.glass-v2 .stat-card .stat-value {
+    transform: translateZ(14px);
+    letter-spacing: -.02em;
+}
+
+/* ---------- hero / acoes / badges / botoes ---------- */
+body.glass-v2 .coord-hero {
+    border-radius: 26px !important;
+    box-shadow: 0 24px 60px -22px rgba(10, 61, 46, .65) !important;
+    border: 1px solid rgba(52, 211, 153, .25) !important;
+}
+body.glass-v2 .coord-pill, body.glass-v2 .badge {
+    border-radius: 999px !important;
+    backdrop-filter: blur(8px);
+}
+body.glass-v2 .dash-action {
+    border-radius: 18px !important;
+    background: var(--gv2-glass) !important;
+    border: 1px solid var(--gv2-line) !important;
+    transition: transform .18s ease, border-color .2s ease, box-shadow .25s ease;
+}
+body.glass-v2 .dash-action:hover {
+    transform: translateY(-3px);
+    border-color: rgba(52, 211, 153, .4) !important;
+    box-shadow: 0 16px 36px -16px rgba(2, 8, 18, .6);
+}
+body.glass-v2 .btn-hero-cta, body.glass-v2 .btn-primary {
+    border-radius: 14px !important;
+    background: linear-gradient(135deg, var(--gv2-green), var(--gv2-green-3)) !important;
+    color: #04211a !important;
+    border: none !important;
+    box-shadow: 0 10px 26px -10px rgba(16, 185, 129, .55) !important;
+    transition: transform .16s ease, box-shadow .2s ease, filter .2s ease;
+}
+body.glass-v2 .btn-hero-cta:hover, body.glass-v2 .btn-primary:hover {
+    transform: translateY(-2px); filter: brightness(1.06);
+    box-shadow: 0 16px 34px -12px rgba(16, 185, 129, .7) !important;
+}
+
+/* ---------- navbar glass ---------- */
+body.glass-v2 .top-navbar {
+    background: var(--gv2-glass) !important;
+    border: 1px solid var(--gv2-line) !important;
+    border-radius: 18px !important;
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    box-shadow: 0 14px 34px -18px rgba(2, 8, 18, .5) !important;
+}
+
+/* ---------- sidebar rail (estilo V22) so desktop largo ---------- */
+@media (min-width: 1200px) {
+    body.glass-v2.gv2-rail .sidebar {
+        width: 84px !important;
+        border-radius: 0 26px 26px 0;
+        transition: width .28s cubic-bezier(.16, 1, .3, 1);
+        overflow: hidden;
+        z-index: 1050;
+    }
+    body.glass-v2.gv2-rail .main-content:not(.no-sidebar) { margin-left: 100px !important; }
+    body.glass-v2.gv2-rail .sidebar .sidebar-item span,
+    body.glass-v2.gv2-rail .sidebar .sidebar-logo h4,
+    body.glass-v2.gv2-rail .sidebar .sidebar-logo span,
+    body.glass-v2.gv2-rail .sidebar .sidebar-user h6,
+    body.glass-v2.gv2-rail .sidebar .sidebar-user .badge,
+    body.glass-v2.gv2-rail .sidebar .badge-msg-sidebar {
+        opacity: 0; width: 0; margin: 0; padding: 0; overflow: hidden; white-space: nowrap;
+        transition: opacity .18s ease;
+    }
+    body.glass-v2.gv2-rail .sidebar .sidebar-item {
+        justify-content: center; padding: 12px 0 !important; margin: 4px 14px !important;
+        border-radius: 14px !important;
+    }
+    body.glass-v2.gv2-rail .sidebar .sidebar-item i { font-size: 1.15rem; margin: 0 !important; }
+    body.glass-v2.gv2-rail .sidebar .sidebar-item.active {
+        background: linear-gradient(135deg, rgba(16,185,129,.28), rgba(43,161,129,.16)) !important;
+        box-shadow: 0 0 0 1px rgba(52,211,153,.35), 0 8px 20px -8px rgba(16,185,129,.5);
+    }
+    body.glass-v2.gv2-rail .sidebar .sidebar-logo img { width: 42px !important; height: 42px !important; }
+    body.glass-v2.gv2-rail .sidebar .sidebar-user { justify-content: center; padding: 12px 0 !important; }
+    body.glass-v2.gv2-rail .sidebar:hover, body.glass-v2.gv2-rail.gv2-rail-open .sidebar {
+        width: 280px !important;
+        box-shadow: 30px 0 80px -30px rgba(2, 8, 18, .8);
+    }
+    body.glass-v2.gv2-rail .sidebar:hover .sidebar-item span,
+    body.glass-v2.gv2-rail.gv2-rail-open .sidebar .sidebar-item span,
+    body.glass-v2.gv2-rail .sidebar:hover .sidebar-user h6,
+    body.glass-v2.gv2-rail.gv2-rail-open .sidebar .sidebar-user h6,
+    body.glass-v2.gv2-rail .sidebar:hover .sidebar-user .badge,
+    body.glass-v2.gv2-rail.gv2-rail-open .sidebar .sidebar-user .badge {
+        opacity: 1; width: auto;
+    }
+    body.glass-v2.gv2-rail .sidebar:hover .sidebar-item,
+    body.glass-v2.gv2-rail.gv2-rail-open .sidebar .sidebar-item {
+        justify-content: flex-start; padding: 11px 14px !important; margin: 4px 12px !important;
+    }
+    body.glass-v2.gv2-rail.gv2-rail-open .main-content:not(.no-sidebar) { margin-left: 296px !important; }
+}
+
+/* ---------- scrollbars temadas ---------- */
+body.glass-v2 * { scrollbar-width: thin; scrollbar-color: rgba(16,185,129,.55) transparent; }
+body.glass-v2 *::-webkit-scrollbar { width: 9px; height: 9px; }
+body.glass-v2 *::-webkit-scrollbar-track { background: transparent; }
+body.glass-v2 *::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--gv2-green), var(--gv2-green-3));
+    border-radius: 999px; border: 2px solid transparent; background-clip: padding-box;
+}
+body.glass-v2 *::-webkit-scrollbar-thumb:hover { background: var(--gv2-green-2); background-clip: padding-box; }
+
+/* ---------- acessibilidade / touch ---------- */
+@media (prefers-reduced-motion: reduce) {
+    body.glass-v2 .card, body.glass-v2 .glass-card, body.glass-v2 .stat-card,
+    body.glass-v2 .coord-section, body.glass-v2 .dash-section, body.glass-v2 .dash-action {
+        transform: none !important; transition: none !important;
+    }
+}
+@media (hover: none) {
+    body.glass-v2 .card, body.glass-v2 .glass-card, body.glass-v2 .stat-card,
+    body.glass-v2 .coord-section, body.glass-v2 .dash-section { transform: none !important; }
+}
+body.glass-v2 :focus-visible { outline: 2px solid var(--gv2-green-2); outline-offset: 2px; border-radius: 8px; }
