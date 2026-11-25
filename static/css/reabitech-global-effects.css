@@ -1,0 +1,133 @@
+
+/* ==========================================================================
+   REABITECH - EFEITOS PREMIUM CORRIGIDOS (Sem bug de cor e Dark Mode)
+   ========================================================================== */
+
+/* 1. EFEITOS NOS CARDS (Apenas no hover, sem mudar o fundo) */
+body:not(.login-page):not(.landing-page) .card,
+body:not(.login-page):not(.landing-page) .card-modern,
+body:not(.login-page):not(.landing-page) .card-premium,
+body:not(.login-page):not(.landing-page) .dash-stat,
+body:not(.login-page):not(.landing-page) .coord-stat,
+body:not(.login-page):not(.landing-page) .fisio-stat,
+body:not(.login-page):not(.landing-page) .stat-card,
+body:not(.login-page):not(.landing-page) .kpi-card,
+body:not(.login-page):not(.landing-page) .chart-card,
+body:not(.login-page):not(.landing-page) .info-card,
+body:not(.login-page):not(.landing-page) .panel-card,
+body:not(.login-page):not(.landing-page) .fisio-atleta,
+body:not(.login-page):not(.landing-page) .fisio-pront,
+body:not(.login-page):not(.landing-page) .coord-action,
+body:not(.login-page):not(.landing-page) .dash-action,
+body:not(.login-page):not(.landing-page) .fisio-action {
+    position: relative !important;
+    overflow: hidden !important;
+    /* NAO alteramos o fundo, para nao bugar o dark mode */
+    border: 1px solid var(--border-color) !important;
+    border-radius: 16px !important;
+    text-decoration: none !important;
+    color: var(--text-primary) !important;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                border-color 0.4s ease, 
+                box-shadow 0.4s ease !important;
+    box-shadow: 0 1px 2px rgba(10, 31, 24, 0.03) !important;
+    z-index: 1;
+}
+
+/* 2. BORDA VERDE NO TOPO */
+body:not(.login-page):not(.landing-page) .card::before,
+body:not(.login-page):not(.landing-page) .dash-stat::before,
+body:not(.login-page):not(.landing-page) .coord-stat::before,
+body:not(.login-page):not(.landing-page) .fisio-stat::before,
+body:not(.login-page):not(.landing-page) .stat-card::before,
+body:not(.login-page):not(.landing-page) .kpi-card::before,
+body:not(.login-page):not(.landing-page) .chart-card::before,
+body:not(.login-page):not(.landing-page) .info-card::before,
+body:not(.login-page):not(.landing-page) .panel-card::before,
+body:not(.login-page):not(.landing-page) .fisio-atleta::before,
+body:not(.login-page):not(.landing-page) .coord-action::before,
+body:not(.login-page):not(.landing-page) .dash-action::before,
+body:not(.login-page):not(.landing-page) .fisio-action::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important; left: 0 !important; right: 0 !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, #34d399, #2BA181) !important;
+    transform: scaleX(0) !important;
+    transform-origin: left !important;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    z-index: 10 !important;
+}
+
+/* 3. HOVER DO CARD (Apenas levanta, sem mudar fundo) */
+body:not(.login-page):not(.landing-page) .card:hover,
+body:not(.login-page):not(.landing-page) .dash-stat:hover,
+body:not(.login-page):not(.landing-page) .coord-stat:hover,
+body:not(.login-page):not(.landing-page) .fisio-stat:hover,
+body:not(.login-page):not(.landing-page) .stat-card:hover,
+body:not(.login-page):not(.landing-page) .kpi-card:hover,
+body:not(.login-page):not(.landing-page) .chart-card:hover,
+body:not(.login-page):not(.landing-page) .info-card:hover,
+body:not(.login-page):not(.landing-page) .panel-card:hover,
+body:not(.login-page):not(.landing-page) .fisio-atleta:hover,
+body:not(.login-page):not(.landing-page) .coord-action:hover,
+body:not(.login-page):not(.landing-page) .dash-action:hover,
+body:not(.login-page):not(.landing-page) .fisio-action:hover {
+    transform: translateY(-3px) !important;
+    border-color: rgba(52, 211, 153, 0.25) !important;
+    box-shadow: 0 12px 32px rgba(10, 31, 24, 0.08), 0 0 0 1px rgba(52, 211, 153, 0.08) !important;
+    z-index: 10;
+}
+
+body:not(.login-page):not(.landing-page) .card:hover::before,
+body:not(.login-page):not(.landing-page) .dash-stat:hover::before,
+body:not(.login-page):not(.landing-page) .coord-stat:hover::before,
+body:not(.login-page):not(.landing-page) .fisio-stat:hover::before,
+body:not(.login-page):not(.landing-page) .stat-card:hover::before,
+body:not(.login-page):not(.landing-page) .kpi-card:hover::before,
+body:not(.login-page):not(.landing-page) .chart-card:hover::before,
+body:not(.login-page):not(.landing-page) .info-card:hover::before,
+body:not(.login-page):not(.landing-page) .panel-card:hover::before,
+body:not(.login-page):not(.landing-page) .fisio-atleta:hover::before,
+body:not(.login-page):not(.landing-page) .coord-action:hover::before,
+body:not(.login-page):not(.landing-page) .dash-action:hover::before,
+body:not(.login-page):not(.landing-page) .fisio-action:hover::before {
+    transform: scaleX(1) !important;
+}
+
+/* 4. ICONES NO HOVER (Sem fundo, apenas cor e escala) */
+body:not(.login-page):not(.landing-page) .card i,
+body:not(.login-page):not(.landing-page) .dash-stat i,
+body:not(.login-page):not(.landing-page) .coord-stat i,
+body:not(.login-page):not(.landing-page) .fisio-stat i {
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+body:not(.login-page):not(.landing-page) .card:hover i,
+body:not(.login-page):not(.landing-page) .dash-stat:hover i,
+body:not(.login-page):not(.landing-page) .coord-stat:hover i,
+body:not(.login-page):not(.landing-page) .fisio-stat:hover i {
+    transform: scale(1.08) !important;
+    color: #2BA181 !important;
+    background: transparent !important; /* Garante que o fundo do icone nao mude */
+}
+
+/* 5. FIX DE TEXTO NO DARK MODE (Graficos e textos) */
+[data-theme="dark"] .card,
+[data-theme="dark"] .card h1, [data-theme="dark"] .card h2, [data-theme="dark"] .card h3, [data-theme="dark"] .card h4, [data-theme="dark"] .card h5, [data-theme="dark"] .card h6,
+[data-theme="dark"] .card p, [data-theme="dark"] .card span, [data-theme="dark"] .card div,
+[data-theme="dark"] .chart-card text, [data-theme="dark"] canvas {
+    color: var(--text-primary) !important;
+}
+
+/* Correcao especifica para o texto do grafico (51.7%) */
+[data-theme="dark"] .chart-center-text, 
+[data-theme="dark"] .chart-text,
+[data-theme="dark"] #recuperacaoChart + div {
+    color: #ffffff !important;
+}
+
+/* O numero dentro do grafico (se for SVG) */
+[data-theme="dark"] svg text {
+    fill: #ffffff !important;
+}

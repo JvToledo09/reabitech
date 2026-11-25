@@ -1235,14 +1235,22 @@ document.addEventListener('DOMContentLoaded', function() { try {
             beforeDraw: function(chart) {
                 const { width, height, ctx } = chart;
                 ctx.save();
+                
+                // Verifica o tema atual
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                const colorTitle = isDark ? '#ffffff' : '#333333';
+                const colorSubtitle = isDark ? '#94a3b8' : '#666666';
+                
                 ctx.font = 'bold 28px Poppins, sans-serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillStyle = '#333';
+                ctx.fillStyle = colorTitle;
                 ctx.fillText(recuperacao + '%', width / 2, height / 2 - 5);
+                
                 ctx.font = '12px Poppins, sans-serif';
-                ctx.fillStyle = '#666';
+                ctx.fillStyle = colorSubtitle;
                 ctx.fillText('Recuperado', width / 2, height / 2 + 25);
+                
                 ctx.restore();
             }
         }]
