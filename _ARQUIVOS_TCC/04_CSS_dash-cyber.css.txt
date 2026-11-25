@@ -1,0 +1,392 @@
+/* ============================================================================
+   REABITECH — DASHBOARDS (Dark Premium + Light Clean)
+   ========================================================================== */
+
+/* ===== MODO ESCURO (Cyber) ===== */
+[data-theme="dark"] .coord-hero, 
+[data-theme="dark"] .fisio-hero, 
+[data-theme="dark"] .dash-hero {
+    background: linear-gradient(135deg, rgba(10, 20, 30, 0.95) 0%, rgba(15, 41, 55, 0.85) 100%) !important;
+    border: 1px solid rgba(52, 211, 153, 0.2) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    color: #fff !important;
+}
+
+[data-theme="dark"] .coord-stat, 
+[data-theme="dark"] .fisio-stat, 
+[data-theme="dark"] .dash-stat {
+    background: rgba(15, 23, 42, 0.65) !important;
+    border: 1px solid rgba(52, 211, 153, 0.15) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    color: #fff !important;
+}
+
+[data-theme="dark"] .coord-section, 
+[data-theme="dark"] .fisio-section, 
+[data-theme="dark"] .dash-section {
+    background: rgba(15, 23, 42, 0.6) !important;
+    border: 1px solid rgba(52, 211, 153, 0.15) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+[data-theme="dark"] .coord-action, 
+[data-theme="dark"] .fisio-action, 
+[data-theme="dark"] .dash-action {
+    background: rgba(15, 23, 42, 0.5) !important;
+    border: 1px solid rgba(52, 211, 153, 0.15) !important;
+}
+
+[data-theme="dark"] .dash-table thead th {
+    background: rgba(52, 211, 153, 0.1) !important;
+    color: #34d399 !important;
+    border-bottom: 1px solid rgba(52, 211, 153, 0.2) !important;
+}
+[data-theme="dark"] .dash-table tbody td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    color: #cbd5e1 !important;
+}
+[data-theme="dark"] .dash-table tbody tr:hover {
+    background: rgba(52, 211, 153, 0.05) !important;
+}
+[data-theme="dark"] .fisio-pront, 
+[data-theme="dark"] .fisio-atleta {
+    background: rgba(15, 23, 42, 0.4) !important;
+    border: 1px solid rgba(52, 211, 153, 0.1) !important;
+}
+[data-theme="dark"] .onboarding-card {
+    background: linear-gradient(135deg, rgba(10, 20, 30, 0.95) 0%, rgba(15, 41, 55, 0.9) 100%) !important;
+    border: 1px solid rgba(52, 211, 153, 0.3) !important;
+}
+
+/* Força textos brancos no dark mode dentro dos componentes */
+[data-theme="dark"] .coord-stat-number, 
+[data-theme="dark"] .fisio-stat-number, 
+[data-theme="dark"] .dash-stat-number,
+[data-theme="dark"] .coord-section-title, 
+[data-theme="dark"] .fisio-section-title, 
+[data-theme="dark"] .dash-section-title,
+[data-theme="dark"] .coord-action-title, 
+[data-theme="dark"] .fisio-action-title, 
+[data-theme="dark"] .dash-action-title,
+[data-theme="dark"] .fisio-pront-name, 
+[data-theme="dark"] .fisio-atleta-name,
+[data-theme="dark"] .coord-section p, 
+[data-theme="dark"] .fisio-section p, 
+[data-theme="dark"] .dash-section p {
+    color: #fff !important;
+}
+[data-theme="dark"] .coord-action-sub, 
+[data-theme="dark"] .fisio-action-sub, 
+[data-theme="dark"] .dash-action-sub,
+[data-theme="dark"] .fisio-pront-num, 
+[data-theme="dark"] .fisio-atleta-mod {
+    color: #94a3b8 !important;
+}
+
+/* ===== MODO CLARO (Clean Light) ===== */
+[data-theme="light"] .coord-hero, 
+[data-theme="light"] .fisio-hero, 
+[data-theme="light"] .dash-hero {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%) !important;
+    border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04) !important;
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .coord-stat, 
+[data-theme="light"] .fisio-stat, 
+[data-theme="light"] .dash-stat,
+[data-theme="light"] .coord-section, 
+[data-theme="light"] .fisio-section, 
+[data-theme="light"] .dash-section,
+[data-theme="light"] .fisio-pront, 
+[data-theme="light"] .fisio-atleta {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03) !important;
+    color: #0f172a !important;
+    backdrop-filter: none !important;
+}
+
+[data-theme="light"] .coord-action, 
+[data-theme="light"] .fisio-action, 
+[data-theme="light"] .dash-action {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .dash-table thead th {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+[data-theme="light"] .dash-table tbody td {
+    border-bottom: 1px solid #e2e8f0 !important;
+    color: #334155 !important;
+}
+[data-theme="light"] .dash-table tbody tr:hover {
+    background: #f8fafc !important;
+}
+
+[data-theme="light"] .onboarding-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%) !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08) !important;
+    color: #0f172a !important;
+}
+[data-theme="light"] .onboarding-card * { color: #0f172a !important; }
+[data-theme="light"] .onboarding-step { background: #f8fafc; border-color: #e2e8f0; }
+[data-theme="light"] .onboarding-step.done { background: #ecfdf5; border-color: #a7f3d0; }
+[data-theme="light"] .onboarding-step.done .onboarding-step-icon { background: #10b981; color: #fff; }
+
+/* Força textos escuros no light mode */
+[data-theme="light"] .coord-stat-number, 
+[data-theme="light"] .fisio-stat-number, 
+[data-theme="light"] .dash-stat-number,
+[data-theme="light"] .coord-section-title, 
+[data-theme="light"] .fisio-section-title, 
+[data-theme="light"] .dash-section-title,
+[data-theme="light"] .coord-action-title, 
+[data-theme="light"] .fisio-action-title, 
+[data-theme="light"] .dash-action-title,
+[data-theme="light"] .fisio-pront-name, 
+[data-theme="light"] .fisio-atleta-name {
+    color: #0f172a !important;
+}
+[data-theme="light"] .coord-action-sub, 
+[data-theme="light"] .fisio-action-sub, 
+[data-theme="light"] .dash-action-sub,
+[data-theme="light"] .fisio-pront-num, 
+[data-theme="light"] .fisio-atleta-mod {
+    color: #64748b !important;
+}
+
+/* Sidebar no Light Mode */
+[data-theme="light"] .sidebar {
+    background: #ffffff !important;
+    border-right: 1px solid #e2e8f0 !important;
+    box-shadow: 4px 0 24px rgba(15, 23, 42, 0.03) !important;
+}
+[data-theme="light"] .sidebar-logo h3,
+[data-theme="light"] .sidebar-item,
+[data-theme="light"] .sidebar-user h6 {
+    color: #0f172a !important;
+}
+[data-theme="light"] .sidebar-item:hover {
+    background: #f1f5f9 !important;
+    color: #059669 !important;
+}
+[data-theme="light"] .sidebar-item.active {
+    background: #ecfdf5 !important;
+    color: #059669 !important;
+    border-left: 3px solid #10b981 !important;
+}
+
+/* ============================================================================
+   AJUSTES FINOS DE CONTRASTE (LIGHT MODE)
+   ========================================================================== */
+
+/* 1. Textos do HERO no Light Mode */
+[data-theme="light"] .dash-hero h3,
+[data-theme="light"] .coord-hero h3,
+[data-theme="light"] .fisio-hero h3 {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .dash-hero p,
+[data-theme="light"] .coord-hero p,
+[data-theme="light"] .fisio-hero p {
+    color: #475569 !important;
+}
+
+[data-theme="light"] .dash-hero-eyebrow,
+[data-theme="light"] .coord-hero-eyebrow,
+[data-theme="light"] .fisio-hero-eyebrow {
+    color: #059669 !important;
+}
+
+/* 2. Pills (Badges) dentro do Hero no Light Mode */
+[data-theme="light"] .dash-pill,
+[data-theme="light"] .coord-pill,
+[data-theme="light"] .fisio-pill {
+    background: #ecfdf5 !important;
+    border-color: #a7f3d0 !important;
+    color: #047857 !important;
+}
+[data-theme="light"] .dash-pill i,
+[data-theme="light"] .coord-pill i,
+[data-theme="light"] .fisio-pill i {
+    color: #10b981 !important;
+}
+
+/* 3. O Círculo de Recuperação no Hero do Atleta */
+[data-theme="light"] .dash-hero div[style*="border-radius: 50%"] {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05) !important;
+}
+[data-theme="light"] .dash-hero div[style*="border-radius: 50%"] h1 {
+    color: #10b981 !important;
+}
+[data-theme="light"] .dash-hero div[style*="border-radius: 50%"] span {
+    color: #64748b !important;
+}
+
+/* 4. Botões do Hero (Nova Lesão, Novo Membro, etc) no Light Mode */
+[data-theme="light"] .btn-hero-cta,
+[data-theme="light"] .btn-dash-cta {
+    background: #10b981 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25) !important;
+}
+[data-theme="light"] .btn-hero-cta:hover,
+[data-theme="light"] .btn-dash-cta:hover {
+    background: #059669 !important;
+    color: #ffffff !important;
+}
+
+/* 5. Botões na Top Navbar */
+[data-theme="light"] .top-navbar .btn-outline-custom {
+    border-color: #cbd5e1 !important;
+    color: #475569 !important;
+}
+[data-theme="light"] .top-navbar .btn-outline-custom:hover {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+}
+
+/* 6. Cabeçalho da Página (Onde fica o título "Minha Evolução") */
+[data-theme="light"] .page-title h2 {
+    color: #0f172a !important;
+}
+[data-theme="light"] .page-title p {
+    color: #64748b !important;
+}
+
+/* 7. Garantir que os Títulos de Seção no Light Mode fiquem escuros */
+[data-theme="light"] .dash-section-title,
+[data-theme="light"] .coord-section-title,
+[data-theme="light"] .fisio-section-title {
+    color: #0f172a !important;
+}
+
+/* 8. Textos gerais dentro dos Cards no Light Mode */
+[data-theme="light"] .dash-stat-label,
+[data-theme="light"] .coord-stat-label,
+[data-theme="light"] .fisio-stat-label {
+    color: #64748b !important;
+}
+
+/* ============================================================================
+   FIX DEFINITIVO — TEXTOS INVISÍVEIS E SIDEBAR
+   ========================================================================== */
+
+/* 1. SIDEBAR NO LIGHT MODE */
+[data-theme="light"] .sidebar-logo h3 { color: #0f172a !important; }
+[data-theme="light"] .sidebar-logo p { color: #64748b !important; }
+
+/* Card do Projeto Ativo na Sidebar */
+[data-theme="light"] .sidebar > div[style*="padding: 0 12px 16px"] > div {
+    background: #f0fdf4 !important;
+    border: 1px solid #bbf7d0 !important;
+    box-shadow: none !important;
+}
+/* Textos dentro do Card do Projeto */
+[data-theme="light"] .sidebar > div[style*="padding: 0 12px 16px"] > div div:first-child {
+    color: #15803d !important;
+}
+[data-theme="light"] .sidebar > div[style*="padding: 0 12px 16px"] > div div:last-child {
+    color: #166534 !important;
+}
+
+/* Itens do Menu */
+[data-theme="light"] .sidebar-item { color: #475569 !important; }
+[data-theme="light"] .sidebar-item:hover { background: #f1f5f9 !important; color: #059669 !important; }
+[data-theme="light"] .sidebar-item.active { background: #ecfdf5 !important; color: #059669 !important; font-weight: 600 !important; }
+[data-theme="light"] .sidebar-item.active i { color: #059669 !important; }
+[data-theme="light"] .sidebar-user h6 { color: #0f172a !important; }
+[data-theme="light"] .sidebar-user .badge { background: #10b981 !important; color: #fff !important; }
+
+/* 2. O CARD ESCURO (MEU PRONTUÁRIO) NO LIGHT MODE */
+[data-theme="light"] .dash-section[style*="linear-gradient(135deg, #0d3a2b"] {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03) !important;
+}
+/* Força textos e ícones dentro desse card a ficarem escuros */
+[data-theme="light"] .dash-section[style*="linear-gradient(135deg, #0d3a2b"] * {
+    color: #0f172a !important;
+}
+[data-theme="light"] .dash-section[style*="linear-gradient(135deg, #0d3a2b"] div[style*="background: rgba(255,255,255,0.12)"] {
+    background: #f1f5f9 !important;
+    border-color: #e2e8f0 !important;
+}
+[data-theme="light"] .dash-section[style*="linear-gradient(135deg, #0d3a2b"] div[style*="background: rgba(255,255,255,0.12)"] i {
+    color: #10b981 !important;
+}
+
+/* 3. QUALQUER TEXTO BRANCO INLINE (style="color: #fff") NO LIGHT MODE */
+[data-theme="light"] [style*="color: #fff"],
+[data-theme="light"] [style*="color: #ffffff"],
+[data-theme="light"] [style*="color: white"] {
+    color: #0f172a !important;
+}
+
+/* 4. AJUSTES NOS BADGES (Light Mode) */
+[data-theme="light"] .dash-stat-badge { 
+    border-color: #e2e8f0 !important; 
+    color: #475569 !important; 
+    background: #f8fafc !important;
+}
+[data-theme="light"] .dash-stat-badge.success { background: #ecfdf5 !important; color: #047857 !important; border-color: #a7f3d0 !important; }
+[data-theme="light"] .dash-stat-badge.warn { background: #fffbeb !important; color: #b45309 !important; border-color: #fde68a !important; }
+[data-theme="light"] .dash-stat-badge.danger { background: #fef2f2 !important; color: #b91c1c !important; border-color: #fecaca !important; }
+[data-theme="light"] .dash-stat-badge.info { background: #eff6ff !important; color: #1d4ed8 !important; border-color: #bfdbfe !important; }
+
+/* 5. TABELA E TEXTOS GERAIS (Light Mode) */
+[data-theme="light"] .dash-table tbody td { color: #334155 !important; }
+[data-theme="light"] .dash-table thead th { background: #f8fafc !important; color: #64748b !important; }
+[data-theme="light"] .dash-empty { color: #64748b !important; }
+[data-theme="light"] .dash-empty i { color: #cbd5e1 !important; }
+
+/* 6. GARANTIR QUE OS TEXTOS DOS STATS (Números Grandes) APAREÇAM */
+[data-theme="light"] .dash-stat-number { color: #0f172a !important; }
+[data-theme="light"] .dash-stat-label { color: #64748b !important; }
+
+/* 7. BOTÕES NO DASHBOARD */
+[data-theme="light"] .dash-btn { border-color: #cbd5e1 !important; color: #475569 !important; }
+[data-theme="light"] .dash-btn:hover { background: #f1f5f9 !important; color: #0f172a !important; }
+[data-theme="light"] .dash-btn-solid { background: #10b981 !important; color: #fff !important; border-color: #10b981 !important; }
+
+
+/* ================================================================
+   FIX DEFINITIVO: TABELA DE MEMBROS (DARK E LIGHT MODE)
+   ================================================================ */
+[data-theme="dark"] .membros-table,
+[data-theme="dark"] .membros-table thead,
+[data-theme="dark"] .membros-table tbody,
+[data-theme="dark"] .membros-table tr,
+[data-theme="dark"] .membros-table th,
+[data-theme="dark"] .membros-table td {
+    background-color: transparent !important;
+    color: #cbd5e1 !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+}
+[data-theme="dark"] .membros-table thead th {
+    background-color: rgba(52, 211, 153, 0.1) !important;
+    color: #34d399 !important;
+    font-weight: 700 !important;
+}
+[data-theme="dark"] .membros-table tbody tr:hover td {
+    background-color: rgba(52, 211, 153, 0.05) !important;
+}
+
+[data-theme="light"] .membros-table th { background-color: #f8fafc !important; color: #64748b !important; }
+[data-theme="light"] .membros-table td { color: #334155 !important; }

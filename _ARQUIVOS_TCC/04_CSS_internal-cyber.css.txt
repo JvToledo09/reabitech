@@ -1,0 +1,64 @@
+/* ============================================================================
+   REABITECH — INTERNAL GLOBAL (Apenas Dark Mode)
+   ========================================================================== */
+
+[data-theme="dark"] body {
+    background: #050b14 !important;
+    color: #f1f5f9 !important;
+}
+
+#dashboard-particles-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+[data-theme="dark"] .sidebar {
+    background: rgba(10, 20, 30, 0.85) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-right: 1px solid rgba(52, 211, 153, 0.15) !important;
+}
+
+[data-theme="dark"] .top-navbar {
+    background: rgba(15, 23, 42, 0.7) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(52, 211, 153, 0.2) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .main-content {
+    background: transparent !important;
+}
+
+[data-theme="dark"] .table {
+    color: #f1f5f9 !important;
+}
+[data-theme="dark"] .table thead th {
+    background: rgba(52, 211, 153, 0.1) !important;
+    color: #34d399 !important;
+    border-bottom: 1px solid rgba(52, 211, 153, 0.2) !important;
+}
+[data-theme="dark"] .table tbody td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    color: #cbd5e1 !important;
+}
+[data-theme="dark"] .table tbody tr:hover {
+    background: rgba(52, 211, 153, 0.05) !important;
+}
+
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, 
+[data-theme="dark"] h4, [data-theme="dark"] h5, [data-theme="dark"] h6,
+[data-theme="dark"] p, [data-theme="dark"] span, [data-theme="dark"] strong,
+[data-theme="dark"] label {
+    color: #f1f5f9 !important;
+}
+[data-theme="dark"] .text-muted {
+    color: #94a3b8 !important;
+}

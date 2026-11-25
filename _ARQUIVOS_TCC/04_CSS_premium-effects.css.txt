@@ -1,0 +1,127 @@
+
+/* =======================================================
+   REABITECH PREMIUM - EFEITOS OTIMIZADOS (SMOOTH SCROLL)
+   ======================================================= */
+
+/* 1. EFEITOS NOS CARDS (3D, Spotlight e Shine) */
+.premium-3d-card {
+    --mouse-x: 50%;
+    --mouse-y: 50%;
+    position: relative;
+    /* Removemos o will-change global que estava travando a rolagem */
+    transition: transform 0.1s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    /* Aceleração de hardware */
+    
+}
+
+.premium-3d-card::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(43, 161, 129, 0.15), transparent 40%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Brilho passando (Shine) */
+.premium-3d-card::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -150%;
+    width: 50%; height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.08), transparent);
+    transform: skewX(-25deg);
+    transition: left 0.7s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@media (hover: hover) {
+    /* Só ativa o will-change no hover */
+    .premium-3d-card:hover { 
+        will-change: transform; 
+    }
+    
+    .premium-3d-card:hover::before { opacity: 1; }
+    .premium-3d-card:hover::after { left: 150%; }
+    .premium-3d-card:hover {
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(43, 161, 129, 0.2);
+        border-color: rgba(43, 161, 129, 0.4);
+        z-index: 10;
+    }
+}
+
+.premium-3d-card > * {
+    position: relative;
+    z-index: 1;
+    /* A profundidade no conteúdo interno dá a sensação de 3D */
+    
+}
+
+
+/* 2. EFEITOS NOS BOTÕES */
+.btn, button, .nav-link, .dropdown-item {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    position: relative;
+    overflow: hidden; /* Para o ripple */
+}
+
+@media (hover: hover) {
+    .btn:hover, button:hover {
+        transform: translateY(-3px) scale(1.02) !important;
+        box-shadow: 0 8px 20px rgba(43, 161, 129, 0.3) !important;
+        filter: brightness(1.1);
+    }
+    .btn:active, button:active {
+        transform: translateY(1px) scale(0.98) !important;
+    }
+}
+
+/* Efeito Ripple (Onda ao clicar) */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(0);
+    animation: ripple-anim 0.6s linear;
+    pointer-events: none;
+}
+@keyframes ripple-anim {
+    to { transform: scale(4); opacity: 0; }
+}
+
+/* 3. EFEITOS NA SIDEBAR (Menu Lateral) */
+.sidebar-item, .nav-link {
+    transition: all 0.3s ease !important;
+    position: relative;
+}
+
+@media (hover: hover) {
+    .sidebar-item:hover, .nav-link:hover {
+        padding-left: 30px !important; /* Desliza para a direita */
+        background: rgba(43, 161, 129, 0.1) !important;
+        border-left: 3px solid #2BA181 !important;
+        color: #fff !important;
+    }
+}
+
+/* 4. INPUTS E FORMULÁRIOS */
+input:focus, select:focus, textarea:focus {
+    border-color: #2BA181 !important;
+    box-shadow: 0 0 15px rgba(43, 161, 129, 0.3) !important;
+    outline: none !important;
+    transition: all 0.3s ease;
+}
+
+/* 5. TABELAS */
+.table tbody tr {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.table tbody tr:hover {
+    background-color: rgba(43, 161, 129, 0.08) !important;
+    transform: scale(1.005);
+}

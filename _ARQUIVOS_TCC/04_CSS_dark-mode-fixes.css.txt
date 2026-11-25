@@ -1,0 +1,304 @@
+/* ============================================================================
+ * REABITECH — Correções globais de dark mode + light mode
+ * Conserta: backgrounds hardcoded (#fff), cards pastel com cores saturadas,
+ * contraste de texto em cards coloridos, cores de Bootstrap fixas.
+ * Carregar POR ÚLTIMO no <head> pra sobrescrever tudo.
+ * ==========================================================================*/
+
+/* ============================================================================
+   1. BACKGROUNDS HARDCODED (#fff, #ffffff, white) — força variável do tema
+   ==========================================================================*/
+
+[style*="background: #fff"],
+[style*="background:#fff"],
+[style*="background: #ffffff"],
+[style*="background:#ffffff"],
+[style*="background: white"],
+[style*="background:white"],
+[style*="background: #FFF"],
+[style*="background: #FFFFFF"] {
+    background: var(--bg-elevated) !important;
+    color: var(--text-primary);
+}
+
+[style*="background: #f8fafc"],
+[style*="background:#f8fafc"],
+[style*="background: #f1f5f9"],
+[style*="background:#f1f5f9"],
+[style*="background: #f9fafb"],
+[style*="background:#f9fafb"] {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary);
+}
+
+/* ============================================================================
+   2. CARDS PASTEL (Ações Rápidas, etc.) — light + dark coerentes
+   Cores: vermelho, amarelo, verde, azul, roxo (as do print)
+   ==========================================================================*/
+
+/* Vermelho / Danger */
+[style*="background: rgba(239, 68, 68"],
+[style*="background:rgba(239,68,68"],
+[style*="background: #fef2f2"],
+[style*="background:#fef2f2"],
+[style*="background: #fee2e2"],
+[style*="background:#fee2e2"] {
+    background: rgba(239, 68, 68, 0.10) !important;
+    border: 1px solid rgba(239, 68, 68, 0.30) !important;
+    color: var(--text-primary);
+}
+
+/* Amarelo / Warning */
+[style*="background: rgba(245, 158, 11"],
+[style*="background:rgba(245,158,11"],
+[style*="background: #fffbeb"],
+[style*="background:#fffbeb"],
+[style*="background: #fef3c7"],
+[style*="background:#fef3c7"] {
+    background: rgba(245, 158, 11, 0.12) !important;
+    border: 1px solid rgba(245, 158, 11, 0.30) !important;
+    color: var(--text-primary);
+}
+
+/* Verde / Success */
+[style*="background: rgba(16, 185, 129"],
+[style*="background:rgba(16,185,129"],
+[style*="background: #ecfdf5"],
+[style*="background:#ecfdf5"],
+[style*="background: #d1fae5"],
+[style*="background:#d1fae5"] {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border: 1px solid rgba(16, 185, 129, 0.30) !important;
+    color: var(--text-primary);
+}
+
+/* Azul / Info (ciano) */
+[style*="background: rgba(13, 202, 240"],
+[style*="background:rgba(13,202,240"],
+[style*="background: #ecfeff"],
+[style*="background:#ecfeff"],
+[style*="background: #cffafe"],
+[style*="background:#cffafe"] {
+    background: rgba(13, 202, 240, 0.12) !important;
+    border: 1px solid rgba(13, 202, 240, 0.30) !important;
+    color: var(--text-primary);
+}
+
+/* Roxo / Primary */
+[style*="background: rgba(124, 58, 237"],
+[style*="background:rgba(124,58,237"],
+[style*="background: #f5f3ff"],
+[style*="background:#f5f3ff"],
+[style*="background: #ede9fe"],
+[style*="background:#ede9fe"] {
+    background: rgba(124, 58, 237, 0.12) !important;
+    border: 1px solid rgba(124, 58, 237, 0.30) !important;
+    color: var(--text-primary);
+}
+
+/* ============================================================================
+   3. TEXTO PRETO HARDCODED — força cor do tema
+   ==========================================================================*/
+
+[style*="color: #000"],
+[style*="color:#000"],
+[style*="color: #0f172a"],
+[style*="color:#0f172a"],
+[style*="color: #111"],
+[style*="color:#111"],
+[style*="color: black"],
+[style*="color:black"] {
+    color: var(--text-primary) !important;
+}
+
+/* ============================================================================
+   4. GRADIENTES BRANCOS — remove fundo branco em dark
+   ==========================================================================*/
+
+[data-theme="dark"] [style*="linear-gradient"][style*="#fff"],
+[data-theme="dark"] [style*="linear-gradient"][style*="#ffffff"] {
+    background: linear-gradient(135deg, rgba(43, 161, 129, 0.15), rgba(13, 202, 240, 0.10)) !important;
+}
+
+/* ============================================================================
+   5. BOOTSTRAP — overrides específicos
+   ==========================================================================*/
+
+/* bg-white */
+[data-theme="dark"] .bg-white {
+    background: var(--bg-elevated) !important;
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .bg-light {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary);
+}
+
+/* text-dark */
+[data-theme="dark"] .text-dark {
+    color: var(--text-primary) !important;
+}
+
+/* text-black */
+[data-theme="dark"] .text-black {
+    color: var(--text-primary) !important;
+}
+
+/* Dropdowns do Bootstrap */
+[data-theme="dark"] .dropdown-menu {
+    background: var(--bg-elevated);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .dropdown-item {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .dropdown-item:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .dropdown-divider {
+    border-color: var(--border-color);
+}
+
+/* Modais do Bootstrap */
+[data-theme="dark"] .modal-content {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .modal-header,
+[data-theme="dark"] .modal-footer {
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .btn-close {
+    filter: invert(1);
+}
+
+/* Inputs do Bootstrap */
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
+    background: var(--bg-secondary);
+    border-color: var(--green);
+    color: var(--text-primary);
+    box-shadow: 0 0 0 0.25rem var(--green-soft-2);
+}
+
+[data-theme="dark"] .form-control::placeholder {
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .form-label,
+[data-theme="dark"] label {
+    color: var(--text-primary);
+}
+
+/* Alertas do Bootstrap */
+[data-theme="dark"] .alert {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .alert-success {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.35);
+    color: #a7f3d0;
+}
+
+[data-theme="dark"] .alert-danger,
+[data-theme="dark"] .alert-error {
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.35);
+    color: #fca5a5;
+}
+
+[data-theme="dark"] .alert-warning {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.35);
+    color: #fcd34d;
+}
+
+[data-theme="dark"] .alert-info {
+    background: rgba(13, 202, 240, 0.12);
+    border-color: rgba(13, 202, 240, 0.35);
+    color: #a5f3fc;
+}
+
+/* ============================================================================
+   6. CARDS — fallbacks
+   ==========================================================================*/
+
+[data-theme="dark"] .card {
+    background: var(--bg-elevated);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .card-header,
+[data-theme="dark"] .card-footer {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* card-premium */
+[data-theme="dark"] .card-premium {
+    background: var(--bg-elevated);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* ============================================================================
+   7. HEADINGS / PARÁGRAFOS com cores saturadas
+   ==========================================================================*/
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+    color: var(--text-primary);
+}
+
+/* ============================================================================
+   8. FIX ESPECÍFICO — "Ações Rápidas" do fisioterapeuta
+   (cards com <i> círculo colorido + título + subtítulo)
+   ==========================================================================*/
+
+[data-theme="dark"] .card-modern[style*="background"],
+[data-theme="dark"] .card[style*="background"] {
+    background: var(--bg-elevated) !important;
+}
+
+/* Texto dentro de cards pastel */
+[data-theme="dark"] [style*="background: rgba(239, 68, 68"] *,
+[data-theme="dark"] [style*="background: rgba(245, 158, 11"] *,
+[data-theme="dark"] [style*="background: rgba(16, 185, 129"] *,
+[data-theme="dark"] [style*="background: rgba(13, 202, 240"] *,
+[data-theme="dark"] [style*="background: rgba(124, 58, 237"] * {
+    color: inherit;
+}
+
+/* ============================================================================
+   9. TRANSIÇÃO suave ao trocar tema
+   ==========================================================================*/
+
+html, body, .card, .card-modern, .card-premium, .stat-card,
+.sidebar-item, .btn, .form-control, .form-select {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

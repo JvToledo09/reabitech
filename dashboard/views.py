@@ -897,59 +897,6 @@ def coordenador_relatorios(request):
     return render(request, 'dashboard/coordenador/relatorios.html', context)
 
 
-@login_required
-@perfil_required('coordenador')
-def coordenador_membros(request):
-    projeto = get_projeto_ativo(request)
-    if not projeto:
-        messages.warning(request, 'Nenhum projeto ativo.')
-        return redirect('landing')
-
-    todos = MembroProjeto.objects.filter(
-        projeto=projeto, ativo=True
-    ).select_related('usuario', 'modalidade').order_by(
-        'tipo', 'usuario__first_name', 'usuario__last_name'
-    )
-
-    membros_unicos = []
-    ids_ja_vistos = set()
-    for m in todos:
-        if m.usuario_id not in ids_ja_vistos:
-            membros_unicos.append(m)
-            ids_ja_vistos.add(m.usuario_id)
-
-    query = request.GET.get('q', '')
-    filtro_tipo = request.GET.get('tipo', '')
-    filtro_sexo = request.GET.get('sexo', '')
-    filtro_modalidade = request.GET.get('modalidade', '')
-
-    if query:
-        membros_unicos = [m for m in membros_unicos if
-                          query.lower() in m.usuario.get_full_name().lower() or
-                          query.lower() in m.usuario.username.lower() or
-                          query.lower() in (m.usuario.email or '').lower()]
-    if filtro_tipo:
-        membros_unicos = [m for m in membros_unicos if m.tipo == filtro_tipo]
-    if filtro_sexo:
-        membros_unicos = [m for m in membros_unicos if m.sexo == filtro_sexo]
-    if filtro_modalidade:
-        membros_unicos = [m for m in membros_unicos if str(m.modalidade_id) == filtro_modalidade]
-
-    modalidades = ModalidadeEsportiva.objects.all()
-    tipos = MembroProjeto.TIPO_MEMBRO
-    sexos = MembroProjeto.SEXO_CHOICES
-
-    return render(request, 'dashboard/coordenador/membros.html', {
-        'projeto': projeto,
-        'membros': membros_unicos,
-        'modalidades': modalidades,
-        'tipos': tipos,
-        'sexos': sexos,
-        'query': query,
-        'filtro_tipo': filtro_tipo,
-        'filtro_sexo': filtro_sexo,
-        'filtro_modalidade': filtro_modalidade,
-    })
 
 
 @login_required
@@ -967,29 +914,77 @@ def coordenador_adicionar_membro(request):
     if request.method == 'POST':
         if 'membro_id' in request.POST:
             membro_id = request.POST.get('membro_id')
-            nova_funcao = request.POST.get('nova_funcao')
-            novo_sexo = request.POST.get('novo_sexo')
-            nova_modalidade = request.POST.get('nova_modalidade')
-
+            
             try:
                 membro = MembroProjeto.objects.get(id=membro_id, projeto=projeto)
+                
                 if membro.usuario == request.user:
-                    messages.error(request, 'Você não pode alterar a sua própria função de Coordenador!')
-                    return redirect('dashboard:coordenador_adicionar_membro')
-
-                membro.tipo = nova_funcao
-                membro.sexo = novo_sexo if novo_sexo else membro.sexo
-                membro.modalidade_id = nova_modalidade if nova_modalidade else None
+                    messages.error(request, 'Voce nao pode alterar a sua propria funcao de Coordenador!')
+                    return redirect('dashboard:coordenador_membros')
+                
+                # --- Dados do User ---
+                novo_nome = request.POST.get('edit_nome', '').strip()
+                novo_sobrenome = request.POST.get('edit_sobrenome', '').strip()
+                novo_email = request.POST.get('edit_email', '').strip().lower()
+                novo_username = request.POST.get('edit_username', '').strip()
+                
+                # Validacoes do User
+                if not novo_username:
+                    messages.error(request, 'O username nao pode ficar vazio.')
+                    return redirect(f'/dashboard/coordenador/membros/adicionar/?membro_id={membro.id}')
+                
+                if User.objects.filter(username=novo_username).exclude(id=membro.usuario.id).exists():
+                    messages.error(request, 'Este username ja esta em uso por outro usuario.')
+                    return redirect(f'/dashboard/coordenador/membros/adicionar/?membro_id={membro.id}')
+                
+                if novo_email and User.objects.filter(email=novo_email).exclude(id=membro.usuario.id).exists():
+                    messages.error(request, 'Este e-mail ja esta em uso por outro usuario.')
+                    return redirect(f'/dashboard/coordenador/membros/adicionar/?membro_id={membro.id}')
+                
+                # Atualiza o User
+                membro.usuario.first_name = novo_nome
+                membro.usuario.last_name = novo_sobrenome
+                membro.usuario.email = novo_email
+                membro.usuario.username = novo_username
+                membro.usuario.save()
+                
+                # --- Dados do MembroProjeto ---
+                nova_funcao = request.POST.get('nova_funcao')
+                novo_sexo = request.POST.get('novo_sexo')
+                nova_modalidade = request.POST.get('nova_modalidade')
+                novo_status = request.POST.get('novo_status') == 'on'
+                
+                if nova_funcao:
+                    membro.tipo = nova_funcao
+                
+                if novo_sexo:
+                    membro.sexo = novo_sexo
+                
+                if nova_modalidade:
+                    membro.modalidade_id = nova_modalidade
+                elif nova_funcao == 'atleta' or nova_funcao == 'tecnico':
+                    pass
+                else:
+                    membro.modalidade_id = None
+                
+                membro.ativo = novo_status
+                
+                # Foto
+                if request.FILES.get('foto_membro'):
+                    perfil = membro.usuario.perfil
+                    perfil.foto = request.FILES.get('foto_membro')
+                    perfil.save()
+                
                 membro.save()
-                messages.success(request, 'Dados do membro atualizados com sucesso!')
+                messages.success(request, f'Dados de {membro.usuario.get_full_name()} atualizados com sucesso!')
                 return redirect('dashboard:coordenador_membros')
-
+                
             except MembroProjeto.DoesNotExist:
-                messages.error(request, 'Membro não encontrado.')
+                messages.error(request, 'Membro nao encontrado.')
 
         elif 'novo_username' in request.POST:
             novo_username = request.POST.get('novo_username')
-            novo_email = request.POST.get('novo_email')
+            novo_email = request.POST.get('novo_email', '').strip().lower()
             novo_nome = request.POST.get('novo_nome')
             novo_sobrenome = request.POST.get('novo_sobrenome')
             novo_senha = request.POST.get('novo_senha')
@@ -998,18 +993,23 @@ def coordenador_adicionar_membro(request):
             nova_modalidade = request.POST.get('nova_modalidade')
 
             if not novo_username or not nova_funcao:
-                messages.error(request, 'Preencha os campos obrigatórios.')
+                messages.error(request, 'Preencha os campos obrigatorios (username e funcao).')
             elif User.objects.filter(username=novo_username).exists():
-                messages.error(request, 'Usuário já existe.')
+                messages.error(request, 'Este username ja existe.')
+            elif novo_email and User.objects.filter(email=novo_email).exists():
+                messages.error(request, 'Este e-mail ja esta cadastrado.')
             else:
                 senha_definida = novo_senha if novo_senha else secrets.token_urlsafe(8)
-
                 novo_user = User.objects.create_user(
                     username=novo_username, email=novo_email, password=senha_definida,
                     first_name=novo_nome, last_name=novo_sobrenome
                 )
-
-                Perfil.objects.create(usuario=novo_user, tipo=nova_funcao, senha_temporaria=True)
+                perfil_novo = Perfil.objects.create(usuario=novo_user, tipo=nova_funcao, senha_temporaria=True)
+                
+                if request.FILES.get('foto_novo_membro'):
+                    perfil_novo.foto = request.FILES.get('foto_novo_membro')
+                    perfil_novo.save()
+                    
                 MembroProjeto.objects.update_or_create(
                     projeto=projeto, usuario=novo_user,
                     defaults={
@@ -1018,34 +1018,38 @@ def coordenador_adicionar_membro(request):
                         'ativo': True
                     }
                 )
-
                 try:
                     send_mail(
-                        'Bem-vindo ao REABITECH - Senha Temporária',
-                        f'Olá {novo_nome},\n\nSua conta foi criada!\n\nLogin: {novo_username}\nSenha: {senha_definida}\n\nAltere após o primeiro acesso.',
-                        settings.DEFAULT_FROM_EMAIL,
-                        [novo_email],
-                        fail_silently=False,
+                        'Bem-vindo ao REABITECH - Senha Temporaria',
+                        f'Ola {novo_nome},\n\nSua conta foi criada!\n\nLogin: {novo_username}\nSenha: {senha_definida}\n\nAltere apos o primeiro acesso.',
+                        settings.DEFAULT_FROM_EMAIL, [novo_email], fail_silently=False,
                     )
-                    messages.success(request, f'Usuário criado! Senha enviada para {novo_email}.')
+                    messages.success(request, f'Usuario criado! Senha enviada para {novo_email}.')
                 except Exception:
-                    messages.success(request, f'Usuário criado! Senha temporária: {senha_definida}')
-
+                    messages.success(request, f'Usuario criado! Senha temporaria: {senha_definida}')
                 return redirect('dashboard:coordenador_membros')
 
     membros_ativos = MembroProjeto.objects.filter(
         projeto=projeto, ativo=True
-    ).select_related('usuario')
+    ).select_related('usuario').order_by('usuario__first_name')
+    
+    todos_membros = MembroProjeto.objects.filter(
+        projeto=projeto
+    ).select_related('usuario').order_by('usuario__first_name')
+
+    membro_selecionado = request.GET.get('membro_id', '')
+    membro_edit = MembroProjeto.objects.filter(id=membro_selecionado, projeto=projeto).first() if membro_selecionado else None
 
     return render(request, 'dashboard/coordenador/adicionar_membro.html', {
         'projeto': projeto,
         'membros_ativos': membros_ativos,
+        'todos_membros': todos_membros,
         'funcoes': funcoes,
         'modalidades': modalidades,
         'sexos': sexos,
+        'membro_selecionado': membro_selecionado,
+        'membro_edit': membro_edit,
     })
-
-
 @login_required
 @perfil_required('coordenador')
 def coordenador_detalhes_membro(request, membro_id):
@@ -2049,3 +2053,68 @@ def coordenador_configuracoes(request):
         return redirect('dashboard:dashboard_coordenador')
         
     return render(request, 'dashboard/coordenador/configuracoes.html', {'projeto_ativo': projeto_ativo})
+
+
+
+@login_required
+@perfil_required('coordenador')
+def coordenador_membros(request):
+    projeto = get_projeto_ativo(request)
+    if not projeto:
+        messages.warning(request, 'Nenhum projeto ativo.')
+        return redirect('landing')
+
+    todos = MembroProjeto.objects.filter(
+        projeto=projeto, ativo=True
+    ).select_related('usuario', 'modalidade').order_by(
+        'tipo', 'usuario__first_name', 'usuario__last_name'
+    )
+
+    membros_unicos = []
+    ids_ja_vistos = set()
+    for m in todos:
+        if m.usuario_id not in ids_ja_vistos:
+            membros_unicos.append(m)
+            ids_ja_vistos.add(m.usuario_id)
+
+    query = request.GET.get('q', '')
+    filtro_tipo = request.GET.get('tipo', '')
+    filtro_sexo = request.GET.get('sexo', '')
+    filtro_modalidade = request.GET.get('modalidade', '')
+
+    if query:
+        membros_unicos = [m for m in membros_unicos if
+                          query.lower() in m.usuario.get_full_name().lower() or
+                          query.lower() in m.usuario.username.lower() or
+                          query.lower() in (m.usuario.email or '').lower()]
+    if filtro_tipo:
+        membros_unicos = [m for m in membros_unicos if m.tipo == filtro_tipo]
+    if filtro_sexo:
+        membros_unicos = [m for m in membros_unicos if m.sexo == filtro_sexo]
+    if filtro_modalidade:
+        membros_unicos = [m for m in membros_unicos if str(m.modalidade_id) == filtro_modalidade]
+
+    modalidades = ModalidadeEsportiva.objects.all()
+    tipos = MembroProjeto.TIPO_MEMBRO
+    sexos = MembroProjeto.SEXO_CHOICES
+
+    # Calculo dos totais para os cards
+    total_membros_geral = todos.count()
+    total_pacientes_geral = todos.filter(tipo='atleta').count()
+    total_profissionais_geral = todos.exclude(tipo='atleta').count()
+
+    return render(request, 'dashboard/coordenador/membros.html', {
+        'projeto': projeto,
+        'projeto_ativo': projeto,
+        'membros': membros_unicos,
+        'modalidades': modalidades,
+        'tipos': tipos,
+        'sexos': sexos,
+        'query': query,
+        'filtro_tipo': filtro_tipo,
+        'filtro_sexo': filtro_sexo,
+        'filtro_modalidade': filtro_modalidade,
+        'total_membros': total_membros_geral,
+        'total_pacientes': total_pacientes_geral,
+        'total_profissionais': total_profissionais_geral,
+    })

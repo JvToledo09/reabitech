@@ -1,0 +1,190 @@
+
+/* ==========================================================================
+   EFEITO PREMIUM GLOBAL (TODAS AS TELAS INTERNAS)
+   ========================================================================== */
+
+/* 1. TODOS OS CARDS DO SISTEMA */
+body:not(.login-page):not(.landing-page) .card,
+body:not(.login-page):not(.landing-page) .card-modern,
+body:not(.login-page):not(.landing-page) .card-premium,
+body:not(.login-page):not(.landing-page) .dash-stat,
+body:not(.login-page):not(.landing-page) .dash-action,
+body:not(.login-page):not(.landing-page) .stat-card,
+body:not(.login-page):not(.landing-page) .stat-premium,
+body:not(.login-page):not(.landing-page) .coord-stat,
+body:not(.login-page):not(.landing-page) .coord-action,
+body:not(.login-page):not(.landing-page) .kpi-card,
+body:not(.login-page):not(.landing-page) .chart-card,
+body:not(.login-page):not(.landing-page) .tratamento-card,
+body:not(.login-page):not(.landing-page) .consulta-row,
+body:not(.login-page):not(.landing-page) .prontuario-card,
+body:not(.login-page):not(.landing-page) .info-card,
+body:not(.login-page):not(.landing-page) .atleta-card-premium,
+body:not(.login-page):not(.landing-page) .member-card,
+body:not(.login-page):not(.landing-page) .fisio-atleta,
+body:not(.login-page):not(.landing-page) .fisio-pront,
+body:not(.login-page):not(.landing-page) .fisio-action {
+    position: relative !important;
+    overflow: hidden !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 16px !important;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease !important;
+    box-shadow: 0 1px 2px rgba(10, 31, 24, 0.03) !important;
+    z-index: 1;
+    animation: none !important; 
+}
+
+/* 2. A LINHA VERDE NO TOPO */
+body:not(.login-page):not(.landing-page) .card::before,
+body:not(.login-page):not(.landing-page) .card-modern::before,
+body:not(.login-page):not(.landing-page) .dash-stat::before,
+body:not(.login-page):not(.landing-page) .dash-action::before,
+body:not(.login-page):not(.landing-page) .stat-card::before,
+body:not(.login-page):not(.landing-page) .stat-premium::before,
+body:not(.login-page):not(.landing-page) .coord-stat::before,
+body:not(.login-page):not(.landing-page) .coord-action::before,
+body:not(.login-page):not(.landing-page) .kpi-card::before,
+body:not(.login-page):not(.landing-page) .chart-card::before,
+body:not(.login-page):not(.landing-page) .tratamento-card::before,
+body:not(.login-page):not(.landing-page) .atleta-card-premium::before,
+body:not(.login-page):not(.landing-page) .fisio-atleta::before,
+body:not(.login-page):not(.landing-page) .fisio-action::before,
+body:not(.login-page):not(.landing-page) .prontuario-card::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important; left: 0 !important; right: 0 !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, #34d399, #2BA181) !important;
+    transform: scaleX(0) !important;
+    transform-origin: left !important;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    z-index: 10 !important;
+    display: block !important;
+}
+
+/* 3. O HOVER DO CARD (Subida suave) */
+body:not(.login-page):not(.landing-page) .card:hover,
+body:not(.login-page):not(.landing-page) .card-modern:hover,
+body:not(.login-page):not(.landing-page) .card-premium:hover,
+body:not(.login-page):not(.landing-page) .dash-stat:hover,
+body:not(.login-page):not(.landing-page) .dash-action:hover,
+body:not(.login-page):not(.landing-page) .stat-card:hover,
+body:not(.login-page):not(.landing-page) .stat-premium:hover,
+body:not(.login-page):not(.landing-page) .coord-stat:hover,
+body:not(.login-page):not(.landing-page) .coord-action:hover,
+body:not(.login-page):not(.landing-page) .kpi-card:hover,
+body:not(.login-page):not(.landing-page) .chart-card:hover,
+body:not(.login-page):not(.landing-page) .tratamento-card:hover,
+body:not(.login-page):not(.landing-page) .consulta-row:hover,
+body:not(.login-page):not(.landing-page) .prontuario-card:hover,
+body:not(.login-page):not(.landing-page) .info-card:hover,
+body:not(.login-page):not(.landing-page) .atleta-card-premium:hover,
+body:not(.login-page):not(.landing-page) .member-card:hover,
+body:not(.login-page):not(.landing-page) .fisio-atleta:hover,
+body:not(.login-page):not(.landing-page) .fisio-pront:hover,
+body:not(.login-page):not(.landing-page) .fisio-action:hover {
+    transform: translateY(-3px) !important;
+    border-color: rgba(52, 211, 153, 0.25) !important;
+    box-shadow: 0 12px 32px rgba(10, 31, 24, 0.08), 0 0 0 1px rgba(52, 211, 153, 0.08) !important;
+    z-index: 10 !important;
+}
+
+body:not(.login-page):not(.landing-page) .card:hover::before,
+body:not(.login-page):not(.landing-page) .card-modern:hover::before,
+body:not(.login-page):not(.landing-page) .dash-stat:hover::before,
+body:not(.login-page):not(.landing-page) .dash-action:hover::before,
+body:not(.login-page):not(.landing-page) .stat-card:hover::before,
+body:not(.login-page):not(.landing-page) .stat-premium:hover::before,
+body:not(.login-page):not(.landing-page) .coord-stat:hover::before,
+body:not(.login-page):not(.landing-page) .coord-action:hover::before,
+body:not(.login-page):not(.landing-page) .kpi-card:hover::before,
+body:not(.login-page):not(.landing-page) .chart-card:hover::before,
+body:not(.login-page):not(.landing-page) .tratamento-card:hover::before,
+body:not(.login-page):not(.landing-page) .atleta-card-premium:hover::before,
+body:not(.login-page):not(.landing-page) .fisio-atleta:hover::before,
+body:not(.login-page):not(.landing-page) .fisio-action:hover::before,
+body:not(.login-page):not(.landing-page) .prontuario-card:hover::before {
+    transform: scaleX(1) !important;
+}
+
+/* 4. TODOS OS ÍCONES DO SISTEMA (Pulo Torto + Cores) */
+body:not(.login-page):not(.landing-page) .dash-stat-icon,
+body:not(.login-page):not(.landing-page) .dash-action-icon,
+body:not(.login-page):not(.landing-page) .stat-icon,
+body:not(.login-page):not(.landing-page) .stat-premium-icon,
+body:not(.login-page):not(.landing-page) .coord-stat-icon,
+body:not(.login-page):not(.landing-page) .coord-action-icon,
+body:not(.login-page):not(.landing-page) .icon-wrapper,
+body:not(.login-page):not(.landing-page) .atleta-avatar,
+body:not(.login-page):not(.landing-page) .avatar-circle,
+body:not(.login-page):not(.landing-page) .prontuario-avatar,
+body:not(.login-page):not(.landing-page) .fisio-atleta-avatar,
+body:not(.login-page):not(.landing-page) .fisio-pront-avatar,
+body:not(.login-page):not(.landing-page) .fisio-action-icon {
+    background: rgba(52, 211, 153, 0.1) !important;
+    border: 1px solid rgba(52, 211, 153, 0.2) !important;
+    color: #2BA181 !important;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* Efeito no hover dos Ícones */
+body:not(.login-page):not(.landing-page) .dash-stat:hover .dash-stat-icon,
+body:not(.login-page):not(.landing-page) .dash-action:hover .dash-action-icon,
+body:not(.login-page):not(.landing-page) .stat-card:hover .stat-icon,
+body:not(.login-page):not(.landing-page) .stat-premium:hover .stat-premium-icon,
+body:not(.login-page):not(.landing-page) .coord-stat:hover .coord-stat-icon,
+body:not(.login-page):not(.landing-page) .coord-action:hover .coord-action-icon,
+body:not(.login-page):not(.landing-page) .card:hover .icon-wrapper,
+body:not(.login-page):not(.landing-page) .atleta-card-premium:hover .atleta-avatar,
+body:not(.login-page):not(.landing-page) .atleta-card-premium:hover .avatar-circle,
+body:not(.login-page):not(.landing-page) .prontuario-card:hover .prontuario-avatar,
+body:not(.login-page):not(.landing-page) .fisio-atleta:hover .fisio-atleta-avatar,
+body:not(.login-page):not(.landing-page) .fisio-pront:hover .fisio-pront-avatar,
+body:not(.login-page):not(.landing-page) .fisio-action:hover .fisio-action-icon {
+    background: #1a6b4f !important;      
+    border-color: #1a6b4f !important;
+    color: #ffffff !important;           
+    transform: scale(1.1) rotate(-6deg) translateY(-4px) !important; 
+    box-shadow: 0 8px 16px rgba(16, 185, 129, 0.2) !important;
+}
+
+/* 5. SETAS DESLIZANTES */
+body:not(.login-page):not(.landing-page) .dash-action-arrow,
+body:not(.login-page):not(.landing-page) .fisio-action-arrow,
+body:not(.login-page):not(.landing-page) .fa-arrow-right {
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s ease !important;
+}
+
+body:not(.login-page):not(.landing-page) .dash-action:hover .dash-action-arrow,
+body:not(.login-page):not(.landing-page) .fisio-action:hover .fisio-action-arrow,
+body:not(.login-page):not(.landing-page) .card:hover .fa-arrow-right,
+body:not(.login-page):not(.landing-page) .atleta-card-premium:hover .fa-arrow-right,
+body:not(.login-page):not(.landing-page) .prontuario-card:hover .fa-arrow-right {
+    color: #2BA181 !important;
+    transform: translateX(4px) !important;
+}
+
+/* 6. BOTÕES (Efeito mola) */
+body:not(.login-page):not(.landing-page) .btn,
+body:not(.login-page):not(.landing-page) .btn-primary-custom,
+body:not(.login-page):not(.landing-page) .btn-outline-custom {
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease !important;
+}
+
+body:not(.login-page):not(.landing-page) .btn:hover,
+body:not(.login-page):not(.landing-page) .btn-primary-custom:hover,
+body:not(.login-page):not(.landing-page) .btn-outline-custom:hover {
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 8px 20px rgba(43, 161, 129, 0.25) !important;
+}
+
+/* 7. TABELAS (Timeline, Agenda, Evoluções) */
+body:not(.login-page):not(.landing-page) .table tbody tr {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease !important;
+}
+
+body:not(.login-page):not(.landing-page) .table tbody tr:hover {
+    transform: translateX(4px) !important;
+    box-shadow: -4px 0 0 0 #10b981, 0 4px 12px rgba(0,0,0,0.05) !important;
+    background: var(--bg-secondary) !important;
+}

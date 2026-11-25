@@ -1,0 +1,319 @@
+/* ============================================================================
+   REABITECH — FLOATING SIDEBAR (V2 - Respirada e Elegante)
+   ========================================================================== */
+
+/* Container Principal (Card Flutuante) */
+.sidebar {
+    width: 290px !important;
+    height: calc(100vh - 32px) !important;
+    top: 16px !important;
+    left: 16px !important;
+    border-radius: 24px !important;
+    padding: 24px 0 0 0 !important;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important; /* Impede que o fundo saia do card */
+    z-index: 1000 !important;
+}
+
+/* Ajusta o Main Content para não ficar embaixo da Sidebar */
+.main-content:not(.no-sidebar) {
+    margin-left: 322px !important; /* 290 sidebar + 16 esq + 16 gap */
+}
+
+/* Topo: Logo */
+.sidebar-logo {
+    flex-shrink: 0 !important;
+    margin-bottom: 24px !important;
+    padding: 0 24px 16px !important;
+    border-bottom: none !important;
+}
+.sidebar-logo img { max-width: 150px !important; }
+.sidebar-logo h3 { font-size: 1.3rem !important; margin-top: 8px !important; }
+
+/* Card do Projeto Ativo */
+.sidebar > div[style*="padding: 0 12px 16px"] {
+    flex-shrink: 0 !important;
+    padding: 0 20px 16px !important;
+}
+.sidebar > div[style*="padding: 0 12px 16px"] > div {
+    border-radius: 16px !important;
+    padding: 12px 14px !important;
+    margin: 0 !important;
+}
+
+/* Menu (Área com Scroll) */
+.sidebar-menu {
+    flex: 1 !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    padding: 8px 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important; /* Espaçamento entre os botões */
+}
+
+/* Esconde a barra de rolagem padrão */
+.sidebar-menu::-webkit-scrollbar { width: 4px; }
+.sidebar-menu::-webkit-scrollbar-thumb { background: rgba(52, 211, 153, 0.2); border-radius: 4px; }
+
+/* Itens do Menu (Pills) */
+.sidebar-item {
+    flex-shrink: 0 !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    border: 1px solid transparent !important;
+    transition: all 0.25s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    font-size: 0.92rem !important;
+    margin: 0 !important;
+}
+.sidebar-item i {
+    font-size: 1.1rem !important;
+    width: 24px !important;
+    text-align: center !important;
+    transition: transform 0.3s ease !important;
+}
+.sidebar-item::before, .sidebar-item::after { display: none !important; }
+
+/* Perfil do Usuário (Cravado na Base) */
+.sidebar-user {
+    flex-shrink: 0 !important;
+    margin: 16px 20px 20px !important;
+    padding: 20px 16px !important;
+    border-radius: 16px !important;
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+.sidebar-user .avatar {
+    width: 56px !important;
+    height: 56px !important;
+    margin-bottom: 12px !important;
+    border-radius: 50% !important;
+    border: 2px solid #10b981 !important;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3) !important;
+}
+.sidebar-user h6 { font-size: 1rem !important; margin-bottom: 8px !important; }
+
+/* Botão de Sair */
+.sidebar-item[href*="logout"] {
+    margin-top: auto !important;
+    margin-bottom: 16px !important;
+}
+
+/* ================================================================
+   DARK MODE (Cyber Glass Neon)
+   ================================================================ */
+[data-theme="dark"] .sidebar {
+    background: rgba(10, 15, 30, 0.75) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(52, 211, 153, 0.15) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+[data-theme="dark"] .sidebar-item { color: #94a3b8 !important; }
+[data-theme="dark"] .sidebar-item:hover {
+    background: rgba(52, 211, 153, 0.08) !important;
+    color: #fff !important;
+    border-color: rgba(52, 211, 153, 0.15) !important;
+}
+[data-theme="dark"] .sidebar-item:hover i { color: #34d399 !important; }
+[data-theme="dark"] .sidebar-item.active {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1)) !important;
+    border-color: rgba(52, 211, 153, 0.3) !important;
+    color: #34d399 !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1) !important;
+}
+[data-theme="dark"] .sidebar-item.active i { color: #34d399 !important; }
+[data-theme="dark"] .sidebar-item[href*="logout"] { color: #f87171 !important; }
+[data-theme="dark"] .sidebar-item[href*="logout"]:hover {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #fca5a5 !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+}
+[data-theme="dark"] .sidebar-user {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+[data-theme="dark"] .sidebar-user h6 { color: #fff !important; }
+
+/* ================================================================
+   LIGHT MODE (Clean Apple White)
+   ================================================================ */
+[data-theme="light"] .sidebar {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(15, 23, 42, 0.06) !important;
+    box-shadow: 0 10px 40px rgba(15, 23, 42, 0.06) !important;
+}
+[data-theme="light"] .sidebar-logo h3 { color: #0f172a !important; }
+[data-theme="light"] .sidebar-logo p { color: #64748b !important; }
+[data-theme="light"] .sidebar-item { color: #475569 !important; }
+[data-theme="light"] .sidebar-item:hover {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+}
+[data-theme="light"] .sidebar-item:hover i { color: #10b981 !important; }
+[data-theme="light"] .sidebar-item.active {
+    background: #ecfdf5 !important;
+    color: #059669 !important;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1) !important;
+}
+[data-theme="light"] .sidebar-item.active i { color: #10b981 !important; }
+[data-theme="light"] .sidebar-item[href*="logout"] { color: #dc2626 !important; }
+[data-theme="light"] .sidebar-item[href*="logout"]:hover {
+    background: #fef2f2 !important;
+    color: #b91c1c !important;
+    border-color: #fecaca !important;
+}
+[data-theme="light"] .sidebar-user {
+    background: #f8fafc !important;
+    border-top: 1px solid #e2e8f0 !important;
+}
+[data-theme="light"] .sidebar-user h6 { color: #0f172a !important; }
+
+/* ================================================================
+   RESPONSIVO MOBILE e COLLAPSE
+   ================================================================ */
+@media (max-width: 992px) {
+    .sidebar {
+        height: 100vh !important;
+        top: 0 !important;
+        left: 0 !important;
+        border-radius: 0 24px 24px 0 !important;
+        width: 300px !important;
+        transform: translateX(-100%) !important;
+        z-index: 9999 !important;
+        padding-top: 24px !important;
+    }
+    .sidebar.active { transform: translateX(0) !important; }
+    .main-content:not(.no-sidebar) { margin-left: 0 !important; }
+}
+
+@media (min-width: 993px) {
+    body.sidebar-collapsed .sidebar { transform: translateX(-350px) !important; }
+    body.sidebar-collapsed .main-content:not(.no-sidebar) { margin-left: 16px !important; }
+}
+
+/* ============================================================================
+   FIX FINAL: LAYOUT COMPACTO E PERFIL ESTILO "PROJETO"
+   ========================================================================== */
+
+/* 1. Reduz o espaçamento do topo */
+.sidebar {
+    padding-top: 20px !important; /* Antes era 24px */
+}
+
+.sidebar-logo {
+    margin-top: 0 !important;
+    margin-bottom: 10px !important;
+    padding: 0 20px 10px !important;
+}
+.sidebar-logo img {
+    max-width: 110px !important; /* Logo um pouco menor para não empurrar */
+}
+
+/* 2. Aproxima o card do projeto do topo */
+.sidebar > div[style*="padding: 0 12px 16px"] {
+    padding: 0 20px 16px !important;
+    margin: 0 !important;
+}
+
+/* 3. PERFIL DO USUÁRIO (Estilo idêntico ao Projeto) */
+.sidebar-user {
+    margin: 0 20px 20px !important;
+    padding: 12px 14px !important;
+    background: rgba(52, 211, 153, 0.08) !important;
+    border: 1px solid rgba(52, 211, 153, 0.18) !important;
+    border-radius: 14px !important;
+    box-shadow: none !important; /* Remove sombras antigas */
+    
+    /* Usa Grid para alinhar a foto na esquerda e o texto na direita */
+    display: grid !important;
+    grid-template-columns: 38px 1fr !important;
+    grid-template-rows: auto auto !important;
+    align-items: center !important;
+    gap: 0 12px !important;
+    text-align: left !important;
+}
+
+/* Foto do usuário menor e alinhada */
+.sidebar-user .avatar {
+    grid-row: 1 / 3 !important; /* Ocupa as duas linhas de texto */
+    width: 38px !important;
+    height: 38px !important;
+    margin: 0 !important;
+    border: 1px solid rgba(52, 211, 153, 0.4) !important;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.2) !important;
+}
+
+/* Nome do usuário */
+.sidebar-user h6 {
+    grid-column: 2 !important;
+    align-self: end !important;
+    margin: 0 0 2px 0 !important;
+    font-size: 0.85rem !important;
+    line-height: 1 !important;
+}
+
+/* Badge "Atleta" */
+.sidebar-user .badge {
+    grid-column: 2 !important;
+    align-self: start !important;
+    justify-self: start !important;
+    margin: 0 !important;
+    font-size: 0.6rem !important;
+    padding: 2px 8px !important;
+    background: #10b981 !important;
+    color: #fff !important;
+    border-radius: 6px !important;
+}
+
+/* 4. Ajustes para Light Mode */
+[data-theme="light"] .sidebar-user {
+    background: #ecfdf5 !important;
+    border-color: #a7f3d0 !important;
+}
+[data-theme="light"] .sidebar-user .avatar {
+    border-color: #10b981 !important;
+}
+[data-theme="light"] .sidebar-user h6 {
+    color: #0f172a !important;
+}
+
+/* 5. O Menu não precisa de padding extra no topo */
+.sidebar-menu {
+    padding-top: 0 !important;
+}
+
+/* ============================================================================
+   AJUSTE FINO: LOGO MAIOR E TEXTO MAIS ALTO
+   ========================================================================== */
+
+/* Aumenta a logo em 1.5x sem empurrar o layout */
+.sidebar-logo img {
+    transform: scale(1.5) !important;
+    transform-origin: center !important;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+    /* Mantém o espaço original dela no layout para não bagunçar */
+    z-index: 10;
+    position: relative;
+}
+
+/* Sobe o texto "REABITECH" */
+.sidebar-logo h3 {
+    margin-top: -5px !important; /* Puxa o texto para cima */
+    margin-bottom: 2px !important;
+}
+
+/* Se o "Soluções em Reabilitação" também precisar subir um tiquinho */
+.sidebar-logo p {
+    margin-top: 0 !important;
+}
