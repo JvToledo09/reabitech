@@ -1,0 +1,62 @@
+{% extends 'base.html' %}{% load static %}{% block content %}
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1"><i class="ph ph-cube text-success me-2"></i> Planos e Assinaturas</h2>
+            <p class="text-muted mb-0">Gerencie os valores e limites dos planos.</p>
+        </div>
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="ph ph-check-circle me-2"></i> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card border-0 shadow-sm" style="background: var(--bg-elevated); border-radius: 16px;">
+        <div class="card-body p-4">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Nome do Plano</th>
+                            <th>Preço Mensal</th>
+                            <th>Limite de Usuários</th>
+                            <th>Limite de Projetos</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in planos %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="rounded-circle {% if p.destaque %}bg-warning text-dark{% else %}bg-success text-white{% endif %} d-flex justify-content-center align-items-center" style="width:40px; height:40px;">
+                                        <i class="ph {% if p.tipo == 'trial' %}ph-gift{% elif p.tipo == 'empresarial' %}ph-buildings{% else %}ph-briefcase{% endif %} fs-5"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">{{ p.nome }}</div>
+                                        <small class="text-muted text-uppercase">{{ p.tipo }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="fw-bold text-success fs-5">R$ {{ p.preco_mensal|floatformat:2 }}</td>
+                            <td><span class="badge bg-secondary">{{ p.max_usuarios }}</span></td>
+                            <td><span class="badge bg-secondary">{{ p.max_projetos }}</span></td>
+                            <td>
+                                <a href="{% url 'dashboard:superadmin_editar_plano' p.id %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="ph ph-pencil-simple"></i> Editar
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

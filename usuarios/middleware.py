@@ -67,3 +67,27 @@ def registrar_auditoria(request, acao, modelo='', objeto_id=None, objeto_repr=''
         projeto=projeto,
     )
     
+
+# ==============================================
+# MIDDLEWARE DE MANUTENÇÃO
+# ==============================================
+from django.shortcuts import render
+
+class MaintenanceModeMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Permite acesso ao admin do Django, arquivos estáticos e login
+        if not request.path.startswith('/admin/') and not request.path.startswith('/static/') and not request.path.startswith('/media/'):
+            try:
+                from usuarios.models import ConfiguracaoGlobal
+                config = ConfiguracaoGlobal.load()
+                if config.modo_manutencao:
+                    # Se estiver em manutenção, só o superadmin passa
+                    if not request.user.is_authenticated or getattr(request.user.perfil, 'tipo', '') != 'superadmin':
+                        return render(request, 'manutencao.html', status=503)
+            except Exception:
+                pass # Se der erro ao buscar, ignora para não travar o site
+
+        return self.get_response(request)

@@ -68,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'usuarios.middleware.MaintenanceModeMiddleware',
     'usuarios.middleware.AuditoriaMiddleware',
 ]
 
@@ -194,3 +195,15 @@ else:
 # Integracoes e Monitoramento
 GA4_MEASUREMENT_ID = os.environ.get('GA4_MEASUREMENT_ID', '')
 MICROSOFT_CLARITY_ID = os.environ.get('MICROSOFT_CLARITY_ID', '')
+
+
+# ==============================================================================
+# CONFIGURAÇÃO DE E-MAIL DO REABITECH
+# ==============================================================================
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'reabitech.sistema@gmail.com' 
+EMAIL_HOST_PASSWORD = 'dqwj lalq vjyn zyzi' 
+DEFAULT_FROM_EMAIL = 'REABITECH <reabitech.sistema@gmail.com>'

@@ -1,0 +1,375 @@
+
+===== ARQUIVO COMPLETO: usuarios/models.py =====
+from django.db import models
+from django.contrib.auth.models import User
+from datetime import date
+
+class Perfil(models.Model):
+    TIPO_USUARIO = [
+        ('coordenador', 'Coordenador'),
+        ('tecnico', 'Técnico'),
+        ('fisioterapeuta', 'Fisioterapeuta'),
+        ('psicologo', 'Psicólogo'),
+        ('atleta', 'Atleta'),
+    ]
+
+    SEXO_CHOICES = [
+        ('masculino', 'Masculino'),
+        ('feminino', 'Feminino'),
+        ('outro', 'Outro'),
+    ]
+    
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil')
+    tipo = models.CharField(max_length=20, choices=TIPO_USUARIO)
+    telefone = models.CharField(max_length=15, blank=True)
+    foto = models.ImageField(upload_to='perfil_fotos/', null=True, blank=True)
+    senha_temporaria = models.BooleanField(default=False)
+    
+    # 🔥 Campos extras para enriquecer o perfil
+    data_nascimento = models.DateField(null=True, blank=True)
+    sexo = models.CharField(max_length=20, choices=SEXO_CHOICES, blank=True, null=True)
+    
+    @property
+    def idade(self):
+        if self.data_nascimento:
+            hoje = date.today()
+            return hoje.year - self.data_nascimento.year - ((hoje.month, hoje.day) < (self.data_nascimento.month, self.data_nascimento.day))
+        return None
+
+    def __str__(self):
+        return f"{self.usuario.get_full_name()} - {self.get_tipo_display()}"
+    
+class ModalidadeEsportiva(models.Model):
+    nome = models.CharField(max_length=100)
+    descricao = models.TextField(blank=True)
+    
+    def __str__(self):
+        return self.nome
+
+class Atleta(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='atleta')
+    rm = models.CharField(max_length=20, unique=True)
+    modalidade = models.ForeignKey(ModalidadeEsportiva, on_delete=models.SET_NULL, null=True, blank=True)
+    tecnico_responsavel = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True, 
+        related_name='atletas_orientados'
+    )
+    data_ingresso = models.DateField(auto_now_add=True)
+    altura = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    peso = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    
+    def __str__(self):
+        return f"{self.usuario.get_full_name()} - RM: {self.rm}"
+    
+    @property
+    def imc(self):
+        if self.altura and self.peso:
+            altura_m = float(self.altura) / 100
+            return round(float(self.peso) / (altura_m ** 2), 2)
+        return None
+
+# ==============================================
+# 🔥 NOVOS MODELOS DE GESTÃO (AUDITORIA, ALERTAS e NOTIFICAÇÃO MELHORADA)
+# ==============================================
+
+class Notificacao(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notificacoes')
+    titulo = models.CharField(max_length=200)
+    mensagem = models.TextField()
+    criada_em = models.DateTimeField(auto_now_add=True)
+    lida = models.B
+
+===== ARQUIVO COMPLETO: projetos/models.py =====
+# ==============================================================================
+# REABITECH — APP PROJETOS
+# Models: Plano, Projeto, MembroProjeto, ConviteProjeto
+# Plataforma SaaS multi-tenant para reabilitação
+# ==============================================================================
+
+from django.db import models
+from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
+from django.utils import timezone
+from datetime import timedelta
+import uuid
+
+
+# ==============================================================================
+# 1. PLANO (Trial, Profissional, Empresarial)
+# ==============================================================================
+class Plano(models.Model):
+    """
+    Plano de assinatura SaaS.
+    Define limite de usuários, projetos e módulos disponíveis.
+    """
+    TIPO_CHOICES = [
+        ('trial', 'Trial Grátis (30 dias)'),
+        ('profissional', 'Profissional'),
+        ('empresarial', 'Empresarial'),
+    ]
+
+    # ----- Identificação -----
+    tipo = models.CharField(
+        max_length=20,
+        choices=TIPO_CHOICES,
+        default='trial',
+        verbose_name='Tipo do Plano'
+    )
+    nome = models.CharField(
+        max_length=100,
+        verbose_name='Nome do Plano'
+    )
+    descricao = models.TextField(
+        blank=True,
+        default='',
+        verbose_name='Descrição'
+    )
+
+    # ----- Preço -----
+    preco_mensal = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        validators=[MinValueValidator(0)],
+        verbose_name='Preço Mensal (R$)'
+    )
+
+    # ----- Limites -----
+    max_usuarios = models.IntegerField(
+        default=10,
+        validators=[MinValueValidator(1)],
+        help_text='Número máximo de membros (0 = ilimitado)',
+        verbose_name='Máximo de Usuários'
+    )
+    max_projetos = models.IntegerField(
+        default=1,
+        validators=[MinValueValidator(1)],
+        help_text='Quantos projetos o coordenador pode ter (0 = ilimitado)',
+        verbose_name='Máximo de Projetos'
+    )
+
+    # ----- Módulos incluídos -----
+    modulos_inclusos = models.JSONField(
+        default=list,
+        help_text="Lista de módulos: ['fisioterapia', 'psicologia', 'tecnico']",
+        verbose_name='Módulos Inclusos'
+    )
+
+    # ----- Exibição -----
+    destaque = models.BooleanField(
+        default=False,
+        help_text='Destacar na landing page (recomendado)',
+        verbose_name='Destacado'
+    )
+    ordem = models.IntegerField(
+        default=0,
+        help_text='Ordem de exibição (menor primeiro)',
+        verbose_name='Ordem'
+    )
+    ativo = models.BooleanField(
+        default=True,
+        verbose_name='Ativo'
+    )
+
+    class Meta:
+        ordering = ['ordem', 'preco_mensal']
+        verbose_name = 'Plano'
+        verbose_name_plural = 'Planos'
+
+    def __str__(self):
+        if self.preco_mensal == 0:
+            return f"{self.nome} (Grátis)"
+        return f"{self.nome} (R$ {self.p
+
+===== ARQUIVO COMPLETO: projetos/views.py =====
+# ==============================================================================
+# REABITECH — APP PROJETOS
+# Views: landing, signup, criar_projeto, entrar_projeto, convites
+# ==============================================================================
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.utils import timezone
+from datetime import timedelta
+import uuid
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django.db import transaction
+
+from .models import Projeto, Plano, MembroProjeto, ConviteProjeto
+from usuarios.models import Perfil, Atleta
+from usuarios.decorators import perfil_required
+
+
+# ==============================================================================
+# LANDING PAGE PÚBLICA
+# ==============================================================================
+def landing_page(request):
+    """Página inicial pública com números reais do sistema."""
+    if request.user.is_authenticated:
+        return redirect('dashboard:dashboard')
+
+    from usuarios.models import Atleta
+    from fisioterapia.models import EvolucaoFisica, Lesao
+
+    projetos_parceiros = Projeto.objects.filter(
+        ativo=True, publico=True
+    ).order_by('-criado_em')[:6]
+
+    # 🔥 NOVO: Números reais
+    total_projetos = Projeto.objects.filter(ativo=True).count()
+
+    # Todos os atletas de todos os projetos ativos
+    from projetos.models import MembroProjeto
+    membros_ids = MembroProjeto.objects.filter(
+        ativo=True, projeto__ativo=True, tipo='atleta'
+    ).values_list('usuario_id', flat=True).distinct()
+    total_pacientes = len(set(membros_ids))
+
+    # Todos os profissionais
+    profissionais_ids = MembroProjeto.objects.filter(
+        ativo=True, projeto__ativo=True
+    ).exclude(tipo='atleta').values_list('usuario_id', flat=True).distinct()
+    total_profissionais = len(set(profissionais_ids))
+
+    # Total de evoluções físicas registradas
+    total_evolucoes = EvolucaoFisica.objects.count()
+
+    # Média de recuperação (se houver evoluções)
+    evolucoes = EvolucaoFisica.objects.all()
+    if evolucoes.exists():
+        media_recuperacao = sum(e.percentual_recuperacao for e in evolucoes) / evolucoes.count()
+        media_recuperacao = round(media_recuperacao, 1)
+    else:
+        media_recuperacao = 0
+
+    # Cria planos padrão se não existirem
+    if not Plano.objects.exists():
+        Plano.objects.create(
+            tipo='trial', nome='Trial Grátis',
+            descricao='Ideal para testar a plataforma por 30 dias.',
+            preco_mensal=0, max_usuarios=5, max_projetos=1,
+            modulos_inclusos=['fisioterapia'], destaque=False, ordem=1, ativo=True,
+        )
+        Plano.objects.create(
+            tipo='profissional', nome='Profissional',
+            descricao='Para clínicas, times e pro
+
+===== TRECHO DO MENU EM templates/base.html =====
+    
+    <link rel="stylesheet" href="{% static 'css/design-system.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/internal-effects.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animations.css' %}">
+    <link rel="stylesheet" href="{% static 'css/premium-effects.css' %}">
+    <link rel="stylesheet" href="{% static 'css/premium-responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/premium-pages.css' %}">
+    <link rel="stylesheet" href="{% static 'css/premium-glass-3d.css' %}">
+    <link rel="stylesheet" href="{% static 'css/glass-sidebar-3d.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dark-mode-fixes.css' %}">
+
+    <style>
+        /* ================================================================
+           LAYOUT BASE — usa as variáveis do theme.css
+           ================================================================ */
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {  }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.4s ease;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Fundo animado de fundo (blobs) */
+        .bg-animated-internal {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            background: var(--bg-primary);
+            pointer-events: none;
+        }
+
+        /* ---------- Sidebar (glass + gradiente verde) ---------- */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 280px;
+            background: linear-gradient(180deg, #0a3d2e 0%, #0f2937 60%, #0a1929 100%);
+            color: white;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            box-shadow: 4px 0 30px rgba(10, 61, 46, 0.25);
+            overflow-y: auto;
+        }
+
+        .sidebar.active { left: -280px; }
+
+        .sidebar-logo {
+            padding: 18px 16px 14px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 12px;
+        }
+
+        .sidebar-logo img {
+            max-width: 190px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 6px;
+            border-radius: 12px;
+            filter: drop-shadow(0 6px 20px rgba(52, 211, 153, 0.35));
+        }
+
+        .sidebar-logo h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a7f3d0, #34d399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0;
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+
+        .sidebar-logo p {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 4px;
+            letter-spacing: 0.05em;
+            line-height: 1;
+        }
+
+        .sidebar-menu { padding: 0 12px; }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            margin: 4px 0;
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+            font-size: 0.9rem;
+
+===== TRECHO DO MENU EM templates/navbar.html =====
+
+(Arquivo templates/dashboard/sidebar.html não encontrado)

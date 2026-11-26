@@ -1,0 +1,88 @@
+{% extends 'base.html' %}{% load static %}{% block content %}
+<div class="container-fluid py-4">
+    
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="ph ph-squares-four text-success me-2"></i> Visão Geral do SaaS</h2>
+        <p class="text-muted mb-0">Métricas e monitoramento em tempo real.</p>
+    </div>
+    
+</div>
+
+    
+    <!-- Cards de KPIs -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm" style="background: linear-gradient(145deg, var(--bg-elevated) 0%, rgba(16,185,129,0.05) 100%); border-left: 4px solid #10b981 !important;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="rounded-circle bg-success bg-opacity-10 p-3 text-success"><i class="ph ph-currency-dollar fs-3"></i></div>
+                        <span class="badge bg-success bg-opacity-10 text-success">+12% este mês</span>
+                    </div>
+                    <h6 class="text-muted fw-normal">Receita Mensal (MRR)</h6>
+                    <h2 class="fw-bold mb-0">R$ {{ receita_estimada|floatformat:2 }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm" style="background: var(--bg-elevated);">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="rounded-circle bg-primary bg-opacity-10 p-3 text-primary"><i class="ph ph-users fs-3"></i></div>
+                    </div>
+                    <h6 class="text-muted fw-normal">Clientes Ativos</h6>
+                    <h2 class="fw-bold mb-0">{{ total_clientes }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm" style="background: var(--bg-elevated);">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="rounded-circle bg-warning bg-opacity-10 p-3 text-warning"><i class="ph ph-user-gear fs-3"></i></div>
+                    </div>
+                    <h6 class="text-muted fw-normal">Usuários Cadastrados</h6>
+                    <h2 class="fw-bold mb-0">{{ total_usuarios }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm" style="background: var(--bg-elevated);">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="rounded-circle bg-info bg-opacity-10 p-3 text-info"><i class="ph ph-cube fs-3"></i></div>
+                    </div>
+                    <h6 class="text-muted fw-normal">Planos Ativos</h6>
+                    <h2 class="fw-bold mb-0">{{ total_planos }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h5 class="fw-bold mb-3">Últimos Clientes Assinantes</h5>
+    <div class="card shadow-sm border-0" style="background: var(--bg-elevated); border-radius: 16px;">
+        <div class="table-responsive p-3">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Projeto</th><th>Coordenador</th><th>Plano Atual</th><th>Data de Cadastro</th><th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for projeto in projetos_recentes %}
+                    <tr>
+                        <td class="fw-bold">{{ projeto.nome }}</td>
+                        <td>{{ projeto.coordenador.get_full_name }}</td>
+                        <td><span class="badge bg-success bg-opacity-10 text-success border border-success">{{ projeto.plano.nome|default:"Sem plano" }}</span></td>
+                        <td>{{ projeto.criado_em|date:"d/m/Y" }}</td>
+                        <td><a href="{% url 'dashboard:superadmin_clientes' %}" class="btn btn-sm btn-outline-success">Gerenciar</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5" class="text-center py-4 text-muted">Nenhum cliente cadastrado.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -2524,6 +2524,47 @@
     <link rel="stylesheet" href="/static/css/reabitech-global-effects.css">
 <link rel="stylesheet" href="{% static 'css/efeito-fisio-global.css' %}">
 <link rel="stylesheet" href="{% static 'css/chart-premium.css' %}">
+
+        <style id="esconder-config-falso">
+            /* Esconde o botão falso que tem href="#" e o ícone ph-gear */
+            .sidebar-menu a[href="#"] {
+                display: none !important;
+            }
+        </style>
+        
+
+    
+    
+
+
+
+    
+    
+
+
+
+    
+    
+
+<style id="dynamic-sidebar-logo">
+    .sidebar-logo h3, .sidebar-logo p { display: none !important; }
+    .sidebar-logo .logo-img-light, .sidebar-logo .logo-img-dark {
+        width: 100% !important; max-width: 170px !important; height: auto !important;
+        margin: 0 auto 15px auto !important; display: block !important;
+        filter: drop-shadow(0 4px 15px rgba(52, 211, 153, 0.3)) !important;
+    }
+    [data-theme="light"] .sidebar-logo .logo-img-light { display: block !important; }
+    [data-theme="light"] .sidebar-logo .logo-img-dark { display: none !important; }
+    [data-theme="dark"] .sidebar-logo .logo-img-light { display: none !important; }
+    [data-theme="dark"] .sidebar-logo .logo-img-dark { display: block !important; }
+</style>
+
+    
+    
+    
+    
+    
+    <link rel="icon" type="image/png" href="{% static 'images/favicon-reabitech.png' %}?v=999">
 </head>
 <body>
 
@@ -2591,18 +2632,16 @@
 {% if user.is_authenticated %}
 <div class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-        
-        <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.src='https://via.placeholder.com/140x140?text=REABITECH'" loading="lazy">
-        <h3>REABITECH</h3>
+        <img src="{% static 'images/logo-clara.png' %}" alt="REABITECH" style="max-width: 180px; margin-bottom: 8px; object-fit: contain;">
         <p>Soluções em Reabilitação</p>
- </div>
+    </div>
 
     <!-- CARD DO PROJETO ATIVO -->
     {% if projeto_ativo_global %}
     <div style="padding: 0 12px 16px;">
         <div style="background: rgba(52, 211, 153, 0.15); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 14px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
             {% if projeto_ativo_global.logo %}
-            <img src="{{ projeto_ativo_global.logo.url }}" alt="{{ projeto_ativo_global.nome }}" style="width: 42px; height: 42px; object-fit: cover; border-radius: 10px; flex-shrink: 0;" loading="lazy">
+            <img src="/static/images/logodark.png" alt="REABITECH" style="max-width: 190px; width: 100%; height: auto; margin-bottom: 6px; filter: drop-shadow(0 6px 20px rgba(52, 211, 153, 0.35));">
             {% else %}
             <div style="width: 42px; height: 42px; border-radius: 10px; background: linear-gradient(135deg, #34d399, #2BA181); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 1rem; flex-shrink: 0;">
                 {{ projeto_ativo_global.nome|first|upper }}
@@ -2621,7 +2660,16 @@
     {% endif %}
 
         <div class="sidebar-menu" data-lenis-prevent>
-        {% if user.perfil.tipo == 'coordenador' %}
+        {% if user.perfil.tipo == 'superadmin' %}
+        <a href="{% url 'dashboard:superadmin_dashboard' %}" class="sidebar-item {% if request.resolver_match.url_name == 'superadmin_dashboard' %}active{% endif %}"><i class="ph ph-squares-four"></i><span>Visão Geral</span></a>
+        <a href="{% url 'dashboard:superadmin_clientes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'superadmin_clientes' %}active{% endif %}"><i class="ph ph-users"></i><span>Clientes</span></a>
+        <a href="{% url 'dashboard:superadmin_planos' %}" class="sidebar-item {% if request.resolver_match.url_name == 'superadmin_planos' %}active{% endif %}"><i class="ph ph-cube"></i><span>Planos</span></a>
+        <a href="{% url 'dashboard:superadmin_pagamentos' %}" class="sidebar-item {% if request.resolver_match.url_name == 'superadmin_pagamentos' %}active{% endif %}"><i class="ph ph-currency-dollar"></i><span>Pagamentos</span></a>
+        <a href="{% url 'dashboard:superadmin_feedbacks' %}" class="sidebar-item {% if request.resolver_match.url_name == 'superadmin_feedbacks' %}active{% endif %}"><i class="ph ph-chat-circle-text"></i><span>Feedbacks</span></a>
+        <a href="{% url 'dashboard:superadmin_usuarios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'superadmin_usuarios' %}active{% endif %}"><i class="ph ph-user-gear"></i><span>Usuários</span></a>
+        <a href="{% url 'dashboard:superadmin_logs' %}" class="sidebar-item {% if request.resolver_match.url_name == 'superadmin_logs' %}active{% endif %}"><i class="ph ph-list-dashes"></i><span>Logs do Sistema</span></a>
+        <a href="{% url 'dashboard:superadmin_configuracoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'superadmin_configuracoes' %}active{% endif %}"><i class="ph ph-gear-six"></i><span>Configurações</span></a>
+        {% elif user.perfil.tipo == 'coordenador' %}
         <a href="{% url 'dashboard:dashboard_coordenador' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_coordenador' %}active{% endif %}"><i class="ph ph-squares-four"></i><span>Dashboard</span></a>
         <a href="{% url 'dashboard:coordenador_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_atletas' %}active{% endif %}"><i class="ph ph-users-three"></i><span>Atletas</span></a>
         <a href="{% url 'dashboard:coordenador_fisioterapia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_fisioterapia' %}active{% endif %}"><i class="ph ph-barbell"></i><span>Fisioterapia</span></a>
@@ -2683,7 +2731,9 @@
         {% endif %}
 
         <div style="height: 1px; background: rgba(255,255,255,0.08); margin: 15px 8px;"></div>
+        {% if user.perfil.tipo != 'superadmin' %}
         <a href="{% url 'dashboard:coordenador_configuracoes' %}" class="sidebar-item"><i class="ph ph-gear-six"></i><span>Configurações</span></a>
+        {% endif %}
         <a href="{% url 'logout' %}" class="sidebar-item"><i class="ph ph-sign-out"></i><span>Sair</span></a>
     </div>
 

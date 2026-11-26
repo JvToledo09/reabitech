@@ -125,3 +125,48 @@ input:focus, select:focus, textarea:focus {
     background-color: rgba(43, 161, 129, 0.08) !important;
     transform: scale(1.005);
 }
+
+
+/* =======================================================
+   CORREÇÃO DO BACKDROP DO MODAL (NÃO FICAR PRETO)
+   ======================================================= */
+.modal-backdrop.show {
+    opacity: 0.4 !important; /* Deixa o fundo cinza transparente em vez de preto */
+    background-color: #000 !important;
+}
+.modal-content {
+    background-color: var(--bg-elevated) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+
+/* =======================================================
+   FIX DO MODAL E INPUTS (PARA NÃO FICAR TUDO PRETO)
+   ======================================================= */
+.modal-backdrop.show {
+    opacity: 0.6 !important; /* Fundo escurecido, mas não 100% preto */
+    background-color: #000 !important;
+}
+.modal-content {
+    background-color: #1e293b !important; /* Fundo sólido do modal */
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.8) !important;
+}
+.form-control-dark {
+    background-color: #0f172a !important; /* Input escuro, mas visível */
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important; /* Texto branco */
+    font-size: 0.95rem;
+}
+.form-control-dark:focus {
+    background-color: #0f172a !important;
+    border-color: #10b981 !important;
+    box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25) !important;
+    color: #ffffff !important;
+}
+.modal-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+.modal-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}

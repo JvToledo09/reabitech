@@ -2157,7 +2157,7 @@
         <div class="lp-nav-inner">
             <a href="/" class="lp-logo">
                 <div class="lp-logo-img-wrapper">
-                    <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'" loading="lazy">
+                    <img src="{% static 'images/logo-icone.png' %}" alt="REABITECH" onerror="this.style.display='none'" loading="lazy">
                 </div>
                 <span>REABITECH</span>
             </a>
@@ -2218,7 +2218,7 @@
                     <!--  LOGO GRANDE DESTACADA -->
                     <div class="hero-logo-display reveal visible">
                         <div class="hero-logo-icon">
-                            <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'" loading="lazy">
+                            <img src="{% static 'images/logo-icone.png' %}" alt="REABITECH" onerror="this.style.display='none'" loading="lazy">
  </div>
                         <div class="hero-logo-text">
                             <span class="hero-logo-name">REABITECH</span>
@@ -2354,7 +2354,7 @@
             <div class="projeto-card">
                 <div class="projeto-logo-wrap">
                     {% if projeto.logo %}
-                        <img src="{{ projeto.logo.url }}" alt="{{ projeto.nome }}">
+                        <img src="{% static 'images/projetos/esportetec.png' %}" alt="{{ projeto.nome }}">
                     {% else %}
                         <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #10b981, #059669); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: 800;">
                             {{ projeto.nome|first|upper }}
@@ -2929,7 +2929,7 @@
             <div class="footer-brand">
                 <a href="/" class="lp-logo">
                     <div class="lp-logo-img-wrapper">
-                        <img src="{% static 'images/logo.png' %}" alt="REABITECH" onerror="this.style.display='none'" loading="lazy">
+                        <img src="{% static 'images/logo-icone.png' %}" alt="REABITECH" onerror="this.style.display='none'" loading="lazy">
  </div>
                     <span>REABITECH</span>
  </a>

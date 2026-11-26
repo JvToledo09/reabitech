@@ -205,6 +205,8 @@ def logout_view(request):
 # ==============================================================================
 @login_required
 def dashboard(request):
+    if request.user.perfil.tipo == 'superadmin':
+        return redirect('dashboard:superadmin_dashboard')
     """Redireciona para o dashboard específico do perfil."""
     if hasattr(request.user, 'perfil'):
         tipo = request.user.perfil.tipo
@@ -2118,3 +2120,112 @@ def coordenador_membros(request):
         'total_pacientes': total_pacientes_geral,
         'total_profissionais': total_profissionais_geral,
     })
+
+
+# ==============================================================================
+# PAINEL DO DONO (SUPER ADMIN)
+# ==============================================================================
+from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
+from projetos.models import Projeto, Plano
+from usuarios.models import Perfil
+from django.contrib.auth.models import User
+
+@login_required
+def superadmin_dashboard(request):
+    if request.user.perfil.tipo != 'superadmin':
+        return redirect('dashboard:dashboard')
+        
+    # Estatísticas Globais
+    total_clientes = Projeto.objects.filter(ativo=True).count()
+    total_usuarios = User.objects.count()
+    total_planos = Plano.objects.count()
+    
+    # Receita Estimada (Soma do preço do plano de todos os projetos ativos)
+    receita_estimada = Projeto.objects.filter(ativo=True, plano__isnull=False).aggregate(Sum('plano__preco_mensal'))['plano__preco_mensal__sum'] or 0
+    
+    context = {
+        'total_clientes': total_clientes,
+        'total_usuarios': total_usuarios,
+        'total_planos': total_planos,
+        'receita_estimada': receita_estimada,
+        'projetos_recentes': Projeto.objects.order_by('-criado_em')[:5]
+    }
+    return render(request, 'dashboard/admin/dashboard.html', context)
+
+
+# ==============================================
+# TELAS DO SUPER ADMIN (MÓDULOS)
+# ==============================================
+@login_required
+def superadmin_clientes(request):
+    return render(request, 'dashboard/admin/clientes.html', {'projetos': Projeto.objects.all()})
+
+@login_required
+def superadmin_planos(request):
+    return render(request, 'dashboard/admin/planos.html', {'planos': Plano.objects.all()})
+
+@login_required
+def superadmin_pagamentos(request):
+    from usuarios.models import Pagamento
+    return render(request, 'dashboard/admin/pagamentos.html', {'pagamentos': Pagamento.objects.all()})
+
+@login_required
+def superadmin_logs(request):
+    from usuarios.models import LogSistema
+    return render(request, 'dashboard/admin/logs.html', {'logs': LogSistema.objects.all().order_by('-data_hora')})
+
+@login_required
+def superadmin_feedbacks(request):
+    if request.user.perfil.tipo != 'superadmin': return redirect('dashboard:dashboard')
+    return render(request, 'dashboard/admin/feedbacks.html')
+
+@login_required
+def superadmin_usuarios(request):
+    if request.user.perfil.tipo != 'superadmin': return redirect('dashboard:dashboard')
+    from django.contrib.auth.models import User
+    usuarios = User.objects.all().order_by('-date_joined')
+    return render(request, 'dashboard/admin/usuarios.html', {'usuarios': usuarios})
+
+@login_required
+def superadmin_configuracoes(request):
+    if request.user.perfil.tipo != 'superadmin': 
+        return redirect('dashboard:dashboard')
+    
+    from usuarios.models import ConfiguracaoGlobal
+    config = ConfiguracaoGlobal.load()
+    
+    if request.method == 'POST':
+        config.nome_plataforma = request.POST.get('nome_plataforma', config.nome_plataforma)
+        config.email_suporte = request.POST.get('email_suporte', config.email_suporte)
+        # Checkbox só envia se estiver marcado
+        config.modo_manutencao = 'modo_manutencao' in request.POST
+        config.save()
+        messages.success(request, 'Configurações atualizadas com sucesso!')
+        return redirect('dashboard:superadmin_configuracoes')
+        
+    return render(request, 'dashboard/admin/configuracoes.html', {'config': config})
+
+@login_required
+def superadmin_editar_plano(request, plano_id):
+    if request.user.perfil.tipo != 'superadmin': 
+        return redirect('dashboard:dashboard')
+    
+    try:
+        plano = Plano.objects.get(id=plano_id)
+    except Plano.DoesNotExist:
+        messages.error(request, 'Plano não encontrado.')
+        return redirect('dashboard:superadmin_planos')
+    
+    if request.method == 'POST':
+        plano.nome = request.POST.get('nome', plano.nome)
+        plano.preco_mensal = request.POST.get('preco_mensal', plano.preco_mensal)
+        plano.max_usuarios = request.POST.get('max_usuarios', plano.max_usuarios)
+        plano.max_projetos = request.POST.get('max_projetos', plano.max_projetos)
+        plano.descricao = request.POST.get('descricao', plano.descricao)
+        plano.save()
+        
+        messages.success(request, f'Plano "{plano.nome}" atualizado com sucesso!')
+        return redirect('dashboard:superadmin_planos')
+        
+    return render(request, 'dashboard/admin/editar_plano.html', {'plano': plano})

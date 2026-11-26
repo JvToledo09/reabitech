@@ -1,0 +1,49 @@
+{% extends 'base.html' %}{% load static %}{% block content %}
+<div class="container-fluid py-4">
+    
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="ph ph-currency-dollar text-success me-2"></i> Gestão de Pagamentos</h2>
+        <p class="text-muted mb-0">Controle de faturamento e cobranças.</p>
+    </div>
+    <button class="btn btn-success"><i class="ph ph-receipt"></i> Gerar Cobrança</button>
+</div>
+
+    
+    <div class="card border-0 shadow-sm" style="background: var(--bg-elevated); border-radius: 16px;">
+        <div class="card-body p-4">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr><th>ID Fatura</th><th>Projeto</th><th>Valor</th><th>Vencimento</th><th>Status</th><th>Ações</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for p in pagamentos %}
+                        <tr>
+                            <td><code>#INV-{{ p.id|stringformat:"04d" }}</code></td>
+                            <td class="fw-bold">{{ p.projeto.nome }}</td>
+                            <td class="fw-bold">R$ {{ p.valor|floatformat:2 }}</td>
+                            <td>{{ p.data_vencimento|date:"d/m/Y" }}</td>
+                            <td>
+                                {% if p.status == 'Pago' %}<span class="badge bg-success"><i class="ph ph-check"></i> Pago</span>
+                                {% elif p.status == 'Pendente' %}<span class="badge bg-warning text-dark"><i class="ph ph-clock"></i> Pendente</span>
+                                {% else %}<span class="badge bg-danger"><i class="ph ph-warning"></i> Atrasado</span>{% endif %}
+                            </td>
+                            <td>
+                                {% if p.status != 'Pago' %}
+                                <button class="btn btn-sm btn-success">Dar Baixa</button>
+                                {% else %}
+                                <button class="btn btn-sm btn-outline-secondary">Ver Recibo</button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6" class="text-center py-4 text-muted">Nenhum pagamento registrado.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

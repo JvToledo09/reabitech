@@ -9,6 +9,7 @@ class Perfil(models.Model):
         ('fisioterapeuta', 'Fisioterapeuta'),
         ('psicologo', 'Psicólogo'),
         ('atleta', 'Atleta'),
+        ('superadmin', 'Super Admin (Dono)'),
     ]
 
     SEXO_CHOICES = [
@@ -228,3 +229,53 @@ class Alerta(models.Model):
 
     def __str__(self):
         return f"{self.atleta} - {self.get_tipo_display()}"
+
+# ==============================================
+# MODELOS DE GESTÃO DO DONO DO SISTEMA (SAAS)
+# ==============================================
+from projetos.models import Projeto
+
+class Pagamento(models.fields.Field if False else models.Model):
+    projeto = models.ForeignKey('projetos.Projeto', on_delete=models.CASCADE, related_name='pagamentos')
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=[('Pago', 'Pago'), ('Pendente', 'Pendente'), ('Atrasado', 'Atrasado')], default='Pendente')
+    data_vencimento = models.DateField()
+    data_pagamento = models.DateField(null=True, blank=True)
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.projeto.nome} - R$ {self.valor} ({self.status})"
+
+class LogSistema(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    acao = models.CharField(max_length=255)
+    data_hora = models.DateTimeField(auto_now_add=True)
+    ip = models.GenericIPAddressField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.usuario.username if self.usuario else 'Sistema'} - {self.acao}"
+
+
+# ==============================================
+# CONFIGURAÇÕES GLOBAIS DO SISTEMA
+# ==============================================
+class ConfiguracaoGlobal(models.Model):
+    modo_manutencao = models.BooleanField(default=False, verbose_name='Modo Manutenção')
+    nome_plataforma = models.CharField(max_length=100, default='REABITECH')
+    email_suporte = models.EmailField(default='suporte@reabitech.com.br')
+
+    class Meta:
+        verbose_name = 'Configuração Global'
+        verbose_name_plural = 'Configurações Globais'
+
+    def save(self, *args, **kwargs):
+        self.pk = 1 # Força a ser um registro único (Singleton)
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj
+
+    def __str__(self):
+        return 'Configurações do Sistema'

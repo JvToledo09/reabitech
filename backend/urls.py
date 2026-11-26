@@ -4,6 +4,7 @@
 
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from django.contrib.sitemaps.views import sitemap
 from django.http import HttpResponse
@@ -49,9 +50,22 @@ def health_check(request):
 
 
 urlpatterns = [
+
+    # ROTAS DE RECUPERAÇÃO DE SENHA
+    path('password-reset/', auth_views.PasswordResetView.as_view(
+        template_name='registration/password_reset_form.html', 
+        html_email_template_name='registration/password_reset_email.html', 
+        email_template_name='registration/password_reset_email.txt', 
+        subject_template_name='registration/password_reset_subject.txt', 
+        success_url='/password-reset/done/'
+    ), name='password_reset'),
+    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='registration/password_reset_done.html'), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='registration/password_reset_confirm.html'), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='registration/password_reset_complete.html'), name='password_reset_complete'),
+
     path('google8081bb22bba32339.html', google_verification, name='google_verification'),
 
-    path('favicon.ico', RedirectView.as_view(url='/static/images/projetos/esportetec.png', permanent=True)),
+    path('favicon.ico', RedirectView.as_view(url='/static/images/favicon-reabitech.png', permanent=True)),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', robots_txt, name='robots_txt'),
     path('llms.txt', llms_txt, name='llms_txt'),

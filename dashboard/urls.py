@@ -4,6 +4,20 @@ from . import views
 app_name = 'dashboard'
 
 urlpatterns = [
+    path("super-admin/plano/editar/<int:plano_id>/", views.superadmin_editar_plano, name="superadmin_editar_plano"),
+    path("super-admin/clientes/", views.superadmin_clientes, name="superadmin_clientes"),
+    path("super-admin/planos/", views.superadmin_planos, name="superadmin_planos"),
+    path("super-admin/pagamentos/", views.superadmin_pagamentos, name="superadmin_pagamentos"),
+    path("super-admin/logs/", views.superadmin_logs, name="superadmin_logs"),
+        path("super-admin/", views.superadmin_dashboard, name="superadmin_dashboard"),
+    path("super-admin/clientes/", views.superadmin_clientes, name="superadmin_clientes"),
+    path("super-admin/planos/", views.superadmin_planos, name="superadmin_planos"),
+    path("super-admin/pagamentos/", views.superadmin_pagamentos, name="superadmin_pagamentos"),
+    path("super-admin/logs/", views.superadmin_logs, name="superadmin_logs"),
+    path("super-admin/usuarios/", views.superadmin_usuarios, name="superadmin_usuarios"),
+    path("super-admin/configuracoes/", views.superadmin_configuracoes, name="superadmin_configuracoes"),
+    path("super-admin/feedbacks/", views.superadmin_feedbacks, name="superadmin_feedbacks"),
+
     # ============================================
     # Rotas Gerais
     # ============================================
