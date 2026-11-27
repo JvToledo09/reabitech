@@ -1,0 +1,289 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#07111f">
+    <title>{% block title %}REABITECH | Acesso seguro{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #07111f;
+            --panel: #101d2d;
+            --green: #34d399;
+            --text: #f1f5f9;
+            --muted: #9aabc0;
+            --line: rgba(148,163,184,.17);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Inter, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(ellipse at 12% 15%, rgba(16,185,129,.17), transparent 34%),
+                radial-gradient(ellipse at 90% 85%, rgba(14,165,233,.11), transparent 35%),
+                var(--bg);
+        }
+        .auth-container {
+            display: grid;
+            grid-template-columns: minmax(0,1fr) minmax(440px,.9fr);
+            min-height: 100vh;
+        }
+        .auth-brand {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 56px;
+            text-align: center;
+            border-right: 1px solid var(--line);
+            background: linear-gradient(145deg,rgba(8,42,39,.72),rgba(7,17,31,.3));
+        }
+        .auth-brand:before, .auth-brand:after {
+            content: "";
+            position: absolute;
+            width: 340px;
+            height: 340px;
+            border: 1px solid rgba(52,211,153,.10);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .auth-brand:after { width: 480px; height: 480px; }
+        .auth-brand img {
+            position: relative;
+            z-index: 1;
+            display: block;
+            width: 138px;
+            max-width: 42vw;
+            height: auto;
+            margin-bottom: 32px;
+            filter: drop-shadow(0 12px 28px rgba(52,211,153,.22));
+        }
+        .brand-kicker {
+            color: var(--green);
+            font-size: .72rem;
+            font-weight: 800;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .auth-brand h1 {
+            position: relative;
+            z-index: 1;
+            margin: 0 0 18px;
+            font-size: clamp(2.3rem,4vw,3.7rem);
+            line-height: 1.08;
+            font-weight: 800;
+            letter-spacing: -.055em;
+        }
+        .auth-brand h1 span { color: var(--green); }
+        .auth-brand p {
+            position: relative;
+            z-index: 1;
+            max-width: 390px;
+            margin: 0;
+            color: var(--muted);
+            font-size: .98rem;
+            line-height: 1.8;
+        }
+        .auth-form-side {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px;
+        }
+        .auth-content { width: 100%; max-width: 470px; }
+        .mobile-brand { display: none; }
+        .glass-card {
+            width: 100%;
+            padding: 42px;
+            border: 1px solid rgba(148,163,184,.19);
+            border-radius: 25px;
+            background: linear-gradient(145deg,rgba(23,39,57,.91),rgba(13,25,40,.96));
+            box-shadow: 0 28px 80px rgba(0,0,0,.32);
+            backdrop-filter: blur(22px);
+        }
+        .auth-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 54px;
+            height: 54px;
+            margin-bottom: 23px;
+            border: 1px solid rgba(52,211,153,.22);
+            border-radius: 17px;
+            background: rgba(52,211,153,.10);
+            color: var(--green);
+            font-size: 1.25rem;
+        }
+        .auth-eyebrow {
+            margin-bottom: 9px;
+            color: var(--green);
+            font-size: .7rem;
+            font-weight: 800;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+        }
+        .auth-title {
+            margin: 0 0 11px;
+            color: #f8fafc;
+            font-size: clamp(1.65rem,3vw,2rem);
+            font-weight: 800;
+            letter-spacing: -.04em;
+        }
+        .auth-description {
+            margin: 0 0 28px;
+            color: var(--muted);
+            font-size: .91rem;
+            line-height: 1.7;
+        }
+        .form-label {
+            margin-bottom: 9px;
+            color: #dbe5f0;
+            font-size: .82rem;
+            font-weight: 700;
+        }
+        .form-control {
+            min-height: 53px;
+            padding: 13px 15px;
+            border: 1px solid rgba(148,163,184,.23);
+            border-radius: 12px;
+            background: rgba(3,10,20,.42);
+            color: #fff;
+            font-size: .9rem;
+        }
+        .form-control::placeholder { color: #718096; }
+        .form-control:focus {
+            border-color: var(--green);
+            background: rgba(3,10,20,.65);
+            color: #fff;
+            box-shadow: 0 0 0 4px rgba(52,211,153,.10);
+        }
+        .btn-auth {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            min-height: 54px;
+            margin-top: 23px;
+            border: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg,#34d399,#059669);
+            color: #03251b;
+            font-size: .9rem;
+            font-weight: 800;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .btn-auth:hover {
+            transform: translateY(-2px);
+            color: #03251b;
+            box-shadow: 0 12px 28px rgba(16,185,129,.22);
+        }
+        .auth-back {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            margin-top: 25px;
+            color: #b6c5d5;
+            font-size: .83rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .auth-back:hover { color: var(--green); }
+        .auth-footer {
+            margin-top: 22px;
+            color: #64748b;
+            font-size: .72rem;
+            text-align: center;
+        }
+        .auth-alert {
+            padding: 12px 14px;
+            border: 1px solid rgba(248,113,113,.25);
+            border-radius: 11px;
+            background: rgba(127,29,29,.18);
+            color: #fecaca;
+            font-size: .82rem;
+        }
+        @media(max-width: 900px) {
+            .auth-container { grid-template-columns: 1fr; }
+            .auth-brand { display: none; }
+            .auth-form-side { padding: 38px 24px; }
+            .mobile-brand {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 13px;
+                margin-bottom: 27px;
+            }
+            .mobile-brand img {
+                width: 65px;
+                height: 65px;
+                object-fit: contain;
+            }
+            .mobile-brand strong {
+                display: block;
+                color: #f8fafc;
+                font-size: 1.08rem;
+                font-weight: 800;
+                letter-spacing: .04em;
+            }
+            .mobile-brand span {
+                color: var(--green);
+                font-size: .69rem;
+                letter-spacing: .12em;
+            }
+        }
+        @media(max-width: 520px) {
+            .auth-form-side {
+                align-items: flex-start;
+                padding: 28px 17px;
+            }
+            .auth-content { margin: auto 0; }
+            .glass-card {
+                padding: 27px 22px;
+                border-radius: 20px;
+            }
+            .mobile-brand { margin-bottom: 22px; }
+            .mobile-brand img { width: 55px; height: 55px; }
+            .auth-icon { width: 48px; height: 48px; margin-bottom: 18px; }
+        }
+        @media(prefers-reduced-motion: reduce) {
+            *, *:before, *:after { transition: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <main class="auth-container">
+        <section class="auth-brand">
+            <img src="{% static 'images/logo-icone.png' %}" alt="REABITECH">
+            <div class="brand-kicker">Tecnologia e cuidado esportivo</div>
+            <h1>Reabilitação<br><span>em movimento.</span></h1>
+            <p>Fisioterapia, psicologia e performance integradas em uma plataforma para acompanhar cada etapa da recuperação esportiva.</p>
+        </section>
+        <section class="auth-form-side">
+            <div class="auth-content">
+                <div class="mobile-brand">
+                    <img src="{% static 'images/logo-icone.png' %}" alt="REABITECH">
+                    <div><strong>REABITECH</strong><span>REABILITAÇÃO EM MOVIMENTO</span></div>
+                </div>
+                <div class="glass-card">
+                    {% block content %}{% endblock %}
+                </div>
+                <div class="auth-footer">REABITECH · Plataforma de reabilitação esportiva</div>
+            </div>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
