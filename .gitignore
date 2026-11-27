@@ -48,3 +48,26 @@ settings.py.bak
 # Pasta duplicada antiga do projeto (histórico)
 reabitech/
 reabitech_old_backup/
+
+# Protecao adicional REABITECH
+
+# Protecao de segredos
+.env
+.env.*
+!.env.example
+.env.prod
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Testes e cobertura
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Arquivos gerados
+media/
+staticfiles/

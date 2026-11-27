@@ -119,6 +119,9 @@ def signup_saas(request):
 
     # Planos disponíveis para o dropdown
     planos = Plano.objects.filter(ativo=True).order_by('ordem', 'preco_mensal')
+    from django.conf import settings as checkout_settings
+    if not (checkout_settings.DEBUG and getattr(checkout_settings, 'REABITECH_DEMO_PAYMENTS', False)):
+        planos = planos.filter(preco_mensal=0)
 
     # Plano vindo por GET (?plano=X)
     plano_selecionado_id = request.GET.get('plano')
@@ -160,7 +163,14 @@ def signup_saas(request):
                 'plano_selecionado_id': int(plano_id) if plano_id and plano_id.isdigit() else None,
             })
 
-        plano = get_object_or_404(Plano, id=plano_id)
+        plano = get_object_or_404(Plano, id=plano_id, ativo=True)
+        from django.conf import settings as app_settings
+        if plano.preco_mensal > 0 and not (
+            app_settings.DEBUG and getattr(app_settings, 'REABITECH_DEMO_PAYMENTS', False)
+        ):
+            messages.error(request, 'Contratação de planos pagos indisponível no momento.')
+            return redirect(request.path)
+
 
         try:
             with transaction.atomic():
@@ -234,6 +244,7 @@ def signup_saas(request):
 # CRIAR PROJETO (usuário já logado)
 # ==============================================================================
 @login_required
+@perfil_required('coordenador')
 def criar_projeto(request):
     """
     Permite que um usuário logado crie um novo projeto.
@@ -251,9 +262,26 @@ def criar_projeto(request):
             return redirect('projetos:criar_projeto')
 
         plano = get_object_or_404(Plano, id=plano_id, ativo=True)
+        from django.conf import settings as app_settings
+        if plano.preco_mensal > 0 and not (
+            app_settings.DEBUG and getattr(app_settings, 'REABITECH_DEMO_PAYMENTS', False)
+        ):
+            messages.error(request, 'Contratação de planos pagos indisponível no momento.')
+            return redirect(request.path)
+
 
         try:
             with transaction.atomic():
+                from .services import validar_capacidade_projetos
+
+                User.objects.select_for_update().get(
+                    pk=request.user.pk
+                )
+
+                validar_capacidade_projetos(
+                    request.user, plano
+                )
+
                 projeto = Projeto.objects.create(
                     nome=nome,
                     tipo=tipo,
@@ -280,6 +308,9 @@ def criar_projeto(request):
             messages.error(request, f'Erro ao criar projeto: {e}')
 
     planos = Plano.objects.filter(ativo=True).order_by('ordem', 'preco_mensal')
+    from django.conf import settings as checkout_settings
+    if not (checkout_settings.DEBUG and getattr(checkout_settings, 'REABITECH_DEMO_PAYMENTS', False)):
+        planos = planos.filter(preco_mensal=0)
     return render(request, 'projetos/criar_projeto.html', {'planos': planos})
 
 
@@ -381,6 +412,21 @@ def convidar_membro(request):
         messages.error(request, 'Informe um e-mail.')
         return redirect('dashboard:coordenador_membros')
 
+    from .services import (
+        validar_capacidade_usuarios,
+        validar_funcao_membro,
+        validar_gestao_projeto,
+    )
+    from django.core.exceptions import ValidationError
+
+    try:
+        validar_gestao_projeto(request.user, projeto)
+        validar_funcao_membro(tipo)
+        validar_capacidade_usuarios(projeto)
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+        return redirect('dashboard:coordenador_membros')
+
     # Caso 1: Usuário já existe
     try:
         user = User.objects.get(email=email)
@@ -472,6 +518,40 @@ def aceitar_convite(request, token):
 
         try:
             with transaction.atomic():
+                from .services import (
+                    validar_capacidade_usuarios,
+                    validar_funcao_membro,
+                )
+                from django.core.exceptions import ValidationError
+
+                projeto = Projeto.objects.select_for_update().get(
+                    pk=convite.projeto_id
+                )
+
+                convite = ConviteProjeto.objects.select_for_update().get(
+                    pk=convite.pk
+                )
+
+                if convite.aceito:
+                    raise ValidationError(
+                        'Este convite ja foi utilizado.'
+                    )
+
+                if convite.expiracao and convite.expiracao <= timezone.now():
+                    raise ValidationError(
+                        'Este convite expirou.'
+                    )
+
+                if User.objects.filter(
+                    email__iexact=convite.email
+                ).exists():
+                    raise ValidationError(
+                        'Este email ja possui uma conta.'
+                    )
+
+                validar_funcao_membro(convite.tipo_membro)
+                validar_capacidade_usuarios(projeto)
+
                 # Gera username único
                 username = convite.email.split('@')[0] + str(uuid.uuid4().hex[:4])
 

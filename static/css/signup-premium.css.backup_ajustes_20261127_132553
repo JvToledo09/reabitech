@@ -1,0 +1,174 @@
+/* ============================================================================
+   REABITECH — SIGNUP PREMIUM (Layout + Checkout + Cyber)
+   ========================================================================== */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: #050b14 !important;
+    transition: background 0.4s ease;
+    font-family: 'Inter', sans-serif;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 40px 20px !important;
+    min-height: 100vh !important;
+}
+[data-theme="light"] body { background: #f8fafc !important; }
+
+#signup-particles-canvas {
+    position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none;
+}
+
+/* Header */
+.signup-wrapper { width: 100%; max-width: 720px; margin: 0 auto; }
+.signup-header { text-align: center; margin-bottom: 32px; color: white; }
+.signup-header a { 
+    display: inline-flex; align-items: center; justify-content: center; gap: 15px; 
+    text-decoration: none; color: white; margin-bottom: 20px; 
+}
+.signup-header a img { 
+    height: 40px !important; width: auto !important; 
+    transform: translateY(2px) scale(3) !important; 
+    transform-origin: center; filter: drop-shadow(0 0 15px rgba(52, 211, 153, 0.6));
+}
+.signup-header a .logo-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; }
+.signup-header h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+.signup-header p { opacity: 0.85; font-size: 1rem; }
+[data-theme="light"] .signup-header, [data-theme="light"] .signup-header a, [data-theme="light"] .signup-header a .logo-text { color: #0f172a; }
+
+/* Card Principal */
+.signup-card {
+    background: rgba(15, 23, 42, 0.75) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(52, 211, 153, 0.3) !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(16, 185, 129, 0.15) !important;
+    color: #ffffff !important; border-radius: 24px !important; padding: 40px; transition: all 0.3s ease;
+}
+[data-theme="light"] .signup-card {
+    background: rgba(255, 255, 255, 0.9) !important; border: 1px solid rgba(15, 23, 42, 0.1) !important;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08) !important; color: #0f172a !important;
+}
+
+/* Formulário */
+.form-section { padding-bottom: 32px; margin-bottom: 32px; border-bottom: 1px solid rgba(148, 163, 184, 0.2); }
+[data-theme="light"] .form-section { border-color: #e2e8f0; }
+.form-section:last-of-type { border-bottom: none; padding-bottom: 0; margin-bottom: 24px; }
+
+.step-label {
+    display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px;
+    background: rgba(52, 211, 153, 0.15); color: #34d399; border-radius: 999px;
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 16px;
+    border: 1px solid rgba(52, 211, 153, 0.3);
+}
+.form-section-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.form-section-title i { color: #34d399; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; color: #cbd5e1; }
+[data-theme="light"] .form-label { color: #475569; }
+.form-label .required { color: #ef4444; margin-left: 2px; }
+
+.form-input, .form-select {
+    width: 100%; padding: 13px 16px; font-family: 'Inter', sans-serif; font-size: 0.95rem;
+    background: rgba(0, 0, 0, 0.4) !important; border: 1px solid rgba(148, 163, 184, 0.3) !important;
+    color: #ffffff !important; border-radius: 12px; outline: none; transition: all 0.2s ease;
+}
+.form-input:focus, .form-select:focus { border-color: #34d399 !important; box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.2) !important; }
+[data-theme="light"] .form-input, [data-theme="light"] .form-select { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; color: #1e293b !important; }
+[data-theme="light"] .form-input:focus, [data-theme="light"] .form-select:focus { background: #ffffff !important; border-color: #10b981 !important; }
+
+/* Planos */
+.planos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
+@media (max-width: 700px) { .planos-grid { grid-template-columns: 1fr; } }
+.plano-option { position: relative; cursor: pointer; }
+.plano-option input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+.plano-card {
+    padding: 18px 16px; border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 14px;
+    text-align: center; transition: all 0.2s ease; background: rgba(0, 0, 0, 0.2); height: 100%;
+}
+[data-theme="light"] .plano-card { background: #f8fafc; border-color: #e2e8f0; }
+.plano-option:hover .plano-card { border-color: #34d399; transform: translateY(-2px); }
+.plano-option input:checked + .plano-card { border-color: #34d399 !important; background: rgba(52, 211, 153, 0.15) !important; box-shadow: 0 8px 20px rgba(52, 211, 153, 0.15); }
+[data-theme="light"] .plano-option input:checked + .plano-card { background: #ecfdf5 !important; }
+.plano-badge { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 3px 12px; border-radius: 999px; font-size: 0.65rem; font-weight: 700; white-space: nowrap; }
+.plano-nome { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 4px; color: #fff; }
+.plano-preco { font-size: 1.3rem; font-weight: 800; color: #34d399; margin-bottom: 6px; }
+.plano-desc { font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
+[data-theme="light"] .plano-nome { color: #0f172a; }
+[data-theme="light"] .plano-desc { color: #64748b; }
+
+/* Botão Submit */
+.btn-submit {
+    width: 100%; padding: 16px 24px; font-size: 1.05rem; font-weight: 700; color: white;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; border-radius: 14px;
+    cursor: pointer; transition: all 0.25s ease; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+}
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(16, 185, 129, 0.4); }
+
+/* ============================================================================
+   MODAL DE CHECKOUT (Sobreposição)
+   ========================================================================== */
+#checkout-modal {
+    position: fixed; inset: 0; background: rgba(5, 11, 20, 0.85);
+    backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+    z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px;
+    opacity: 0; transition: opacity 0.3s ease;
+}
+#checkout-modal.active { display: flex; opacity: 1; }
+.checkout-box {
+    background: #0f172a; border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 24px;
+    width: 100%; max-width: 440px; padding: 32px; box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    position: relative; transform: translateY(20px); transition: transform 0.3s ease;
+}
+#checkout-modal.active .checkout-box { transform: translateY(0); }
+.close-checkout { position: absolute; top: 16px; right: 16px; background: none; border: none; color: #94a3b8; font-size: 1.2rem; cursor: pointer; transition: color 0.2s; }
+.close-checkout:hover { color: #ef4444; }
+.checkout-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.3rem; font-weight: 800; color: #fff; margin-bottom: 8px; text-align: center; }
+.checkout-subtitle { font-size: 0.85rem; color: #94a3b8; text-align: center; margin-bottom: 24px; }
+
+/* Abas Cartão / PIX */
+.payment-tabs { display: flex; gap: 12px; margin-bottom: 20px; }
+.pay-tab {
+    flex: 1; padding: 12px; text-align: center; border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.9rem; color: #cbd5e1;
+    transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.pay-tab.active { border-color: #10b981; background: rgba(16, 185, 129, 0.1); color: #34d399; }
+
+/* Formas de Pagamento */
+.pay-content { display: none; }
+.pay-content.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* PIX */
+.pix-box { text-align: center; }
+.pix-qrcode img { width: 160px; height: 160px; border-radius: 12px; background: #fff; padding: 8px; margin: 0 auto 16px; display: block; }
+.pix-copy-box { display: flex; gap: 8px; margin-bottom: 16px; }
+.pix-copy-box input { flex: 1; font-size: 0.75rem; padding: 10px; background: rgba(0,0,0,0.3) !important; border: 1px solid rgba(148,163,184,0.3) !important; color: #94a3b8 !important; border-radius: 8px; outline: none; }
+.btn-copy { background: #10b981; color: white; border: none; border-radius: 8px; width: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; }
+.btn-copy:hover { background: #059669; }
+
+/* Botão Pagar */
+.btn-pay { width: 100%; padding: 14px; background: #10b981; color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; margin-top: 16px; }
+.btn-pay:hover { background: #059669; transform: translateY(-1px); }
+.btn-pay.loading { pointer-events: none; opacity: 0.8; }
+.btn-pay.loading i { animation: spin 1s infinite linear; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* Botão de Tema */
+.theme-toggle { position: fixed; bottom: 24px; right: 24px; width: 52px; height: 52px; border-radius: 50%; background: #10b981; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4); transition: all 0.3s ease; z-index: 999; }
+.theme-toggle:hover { transform: scale(1.1) rotate(15deg); }
+
+[data-theme="light"] #checkout-modal { background: rgba(248, 250, 252, 0.85); }
+[data-theme="light"] .checkout-box { background: #ffffff; border-color: #10b981; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+[data-theme="light"] .checkout-title { color: #0f172a; }
+[data-theme="light"] .checkout-subtitle { color: #475569; }
+[data-theme="light"] .pay-tab { border-color: #e2e8f0; color: #64748b; }
+[data-theme="light"] .pay-tab.active { color: #047857; background: #ecfdf5; border-color: #10b981; }
+[data-theme="light"] .pix-copy-box input { background: #f8fafc !important; color: #475569 !important; border-color: #cbd5e1 !important; }

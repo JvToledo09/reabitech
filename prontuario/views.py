@@ -49,15 +49,113 @@ def get_projeto_ativo(request):
     return None
 
 
+
+
+
+
+def acesso_clinico_required(*tipos):
+    """Exige vinculo ativo e cargo autorizado no projeto."""
+
+    def decorator(view_func):
+        @wraps(view_func)
+        def wrapper(request, *args, **kwargs):
+            if not request.user.is_authenticated:
+                return redirect('login')
+
+            projeto = get_projeto_ativo(request)
+
+            if not projeto:
+                return HttpResponseForbidden(
+                    'Nenhum projeto autorizado selecionado.'
+                )
+
+            membro = MembroProjeto.objects.filter(
+                projeto=projeto,
+                usuario=request.user,
+                ativo=True
+            ).first()
+
+            if not membro or membro.tipo not in tipos:
+                return HttpResponseForbidden(
+                    'Acesso clinico nao autorizado.'
+                )
+
+            perfil = getattr(request.user, 'perfil', None)
+
+            if getattr(perfil, 'tipo', None) != membro.tipo:
+                return HttpResponseForbidden(
+                    'Perfil incompativel com o projeto ativo.'
+                )
+
+            return view_func(request, *args, **kwargs)
+
+        return wrapper
+
+    return decorator
+
+
+def get_registro_clinico_ativo(request, model, **kwargs):
+    """Busca registros clinicos somente no projeto autorizado."""
+
+    from django.http import Http404
+
+    projeto = get_projeto_ativo(request)
+
+    if not projeto:
+        raise Http404("Registro nao encontrado.")
+
+    membro = MembroProjeto.objects.filter(
+        projeto=projeto,
+        usuario=request.user,
+        ativo=True,
+    ).first()
+
+    if not membro:
+        raise Http404("Registro nao encontrado.")
+
+    perfil = getattr(request.user, "perfil", None)
+    tipo_global = getattr(perfil, "tipo", None)
+
+    if membro.tipo != tipo_global:
+        raise Http404("Registro nao encontrado.")
+
+    if membro.tipo not in (
+        "coordenador", "fisioterapeuta", "tecnico"
+    ):
+        raise Http404("Registro nao encontrado.")
+
+    if model is Prontuario:
+        queryset = model.objects.filter(projeto=projeto)
+
+        if membro.tipo == "tecnico":
+            queryset = queryset.filter(
+                compartilhamentos__tecnico=request.user,
+                compartilhamentos__ativo=True,
+            ).distinct()
+
+    else:
+        queryset = model.objects.filter(
+            prontuario__projeto=projeto
+        )
+
+        if membro.tipo == "tecnico":
+            queryset = queryset.filter(
+                prontuario__compartilhamentos__tecnico=request.user,
+                prontuario__compartilhamentos__ativo=True,
+            ).distinct()
+
+    return get_object_or_404(queryset, **kwargs)
+
+
 def get_prontuario_ativo(request, prontuario_id):
     """Retorna um prontuário específico do projeto ativo."""
     projeto = get_projeto_ativo(request)
     if not projeto:
         return None
-    return get_object_or_404(
+    return get_registro_clinico_ativo(
+        request,
         Prontuario,
-        id=prontuario_id,
-        projeto=projeto
+        id=prontuario_id
     )
 
 
@@ -267,7 +365,15 @@ def criar_prontuario(request, atleta_id):
         messages.error(request, 'Nenhum projeto ativo.')
         return redirect('dashboard:dashboard')
 
-    atleta = get_object_or_404(Atleta, id=atleta_id)
+    atleta = get_object_or_404(
+        Atleta,
+        id=atleta_id,
+        usuario_id__in=MembroProjeto.objects.filter(
+            projeto=projeto,
+            ativo=True,
+            tipo='atleta'
+        ).values_list('usuario_id', flat=True)
+    )
 
     if hasattr(atleta, 'prontuario'):
         messages.info(request, 'Este atleta já possui prontuário. Redirecionando...')
@@ -335,7 +441,7 @@ def criar_triagem(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
 def editar_triagem(request, triagem_id):
-    triagem = get_object_or_404(Triagem, id=triagem_id)
+    triagem = get_registro_clinico_ativo(request, Triagem, id=triagem_id)
     prontuario = triagem.prontuario
 
     if request.method == 'POST':
@@ -376,6 +482,7 @@ def lista_triagens(request, prontuario_id):
 # ==============================================================================
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
+@acesso_clinico_required('fisioterapeuta', 'coordenador')
 def criar_objetivo(request, prontuario_id):
     prontuario = get_prontuario_ativo(request, prontuario_id)
     if not prontuario:
@@ -403,8 +510,9 @@ def criar_objetivo(request, prontuario_id):
 
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
+@acesso_clinico_required('fisioterapeuta', 'coordenador')
 def editar_objetivo(request, objetivo_id):
-    objetivo = get_object_or_404(Objetivo, id=objetivo_id)
+    objetivo = get_registro_clinico_ativo(request, Objetivo, id=objetivo_id)
     prontuario = objetivo.prontuario
 
     if request.method == 'POST':
@@ -446,8 +554,9 @@ def lista_objetivos(request, prontuario_id):
 
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
+@acesso_clinico_required('fisioterapeuta', 'coordenador')
 def deletar_objetivo(request, objetivo_id):
-    objetivo = get_object_or_404(Objetivo, id=objetivo_id)
+    objetivo = get_registro_clinico_ativo(request, Objetivo, id=objetivo_id)
     prontuario = objetivo.prontuario
 
     if request.method == 'POST':
@@ -496,7 +605,7 @@ def criar_medicamento(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
 def editar_medicamento(request, medicamento_id):
-    med = get_object_or_404(Medicamento, id=medicamento_id)
+    med = get_registro_clinico_ativo(request, Medicamento, id=medicamento_id)
     prontuario = med.prontuario
 
     if request.method == 'POST':
@@ -537,7 +646,7 @@ def lista_medicamentos(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
 def deletar_medicamento(request, medicamento_id):
-    med = get_object_or_404(Medicamento, id=medicamento_id)
+    med = get_registro_clinico_ativo(request, Medicamento, id=medicamento_id)
     prontuario = med.prontuario
 
     if request.method == 'POST':
@@ -585,7 +694,7 @@ def criar_cif(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
 def editar_cif(request, cif_id):
-    cif = get_object_or_404(AvaliacaoCIF, id=cif_id)
+    cif = get_registro_clinico_ativo(request, AvaliacaoCIF, id=cif_id)
     prontuario = cif.prontuario
 
     if request.method == 'POST':
@@ -624,7 +733,7 @@ def lista_cif(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
 def detalhes_cif(request, cif_id):
-    cif = get_object_or_404(AvaliacaoCIF, id=cif_id)
+    cif = get_registro_clinico_ativo(request, AvaliacaoCIF, id=cif_id)
     prontuario = cif.prontuario
 
     return render(request, 'prontuario/cif/detalhes.html', {
@@ -666,7 +775,7 @@ def criar_cardio(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
 def editar_cardio(request, cardio_id):
-    cardio = get_object_or_404(AvaliacaoCardiorrespiratoria, id=cardio_id)
+    cardio = get_registro_clinico_ativo(request, AvaliacaoCardiorrespiratoria, id=cardio_id)
     prontuario = cardio.prontuario
 
     if request.method == 'POST':
@@ -705,7 +814,7 @@ def lista_cardio(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
 def detalhes_cardio(request, cardio_id):
-    cardio = get_object_or_404(AvaliacaoCardiorrespiratoria, id=cardio_id)
+    cardio = get_registro_clinico_ativo(request, AvaliacaoCardiorrespiratoria, id=cardio_id)
     return render(request, 'prontuario/cardio/detalhes.html', {
         'cardio': cardio,
         'prontuario': cardio.prontuario,
@@ -792,7 +901,7 @@ def criar_relatorio(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
 def editar_relatorio(request, relatorio_id):
-    relatorio = get_object_or_404(RelatorioDiario, id=relatorio_id)
+    relatorio = get_registro_clinico_ativo(request, RelatorioDiario, id=relatorio_id)
     prontuario = relatorio.prontuario
 
     if request.method == 'POST':
@@ -831,7 +940,7 @@ def lista_relatorios(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
 def detalhes_relatorio(request, relatorio_id):
-    relatorio = get_object_or_404(RelatorioDiario, id=relatorio_id)
+    relatorio = get_registro_clinico_ativo(request, RelatorioDiario, id=relatorio_id)
     return render(request, 'prontuario/relatorio/detalhes.html', {
         'relatorio': relatorio,
         'prontuario': relatorio.prontuario,
@@ -886,7 +995,7 @@ def lista_encaminhamentos(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
 def editar_encaminhamento(request, encaminhamento_id):
-    enc = get_object_or_404(EncaminhamentoMedico, id=encaminhamento_id)
+    enc = get_registro_clinico_ativo(request, EncaminhamentoMedico, id=encaminhamento_id)
     prontuario = enc.prontuario
 
     if request.method == 'POST':
@@ -954,7 +1063,7 @@ def lista_exames(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
 def editar_exame(request, exame_id):
-    exame = get_object_or_404(Exame, id=exame_id)
+    exame = get_registro_clinico_ativo(request, Exame, id=exame_id)
     prontuario = exame.prontuario
 
     if request.method == 'POST':
@@ -1008,7 +1117,7 @@ def criar_evolucao(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
 def editar_evolucao(request, evolucao_id):
-    ev = get_object_or_404(EvolucaoFisioterapeutica, id=evolucao_id)
+    ev = get_registro_clinico_ativo(request, EvolucaoFisioterapeutica, id=evolucao_id)
     prontuario = ev.prontuario
 
     if request.method == 'POST':
@@ -1046,7 +1155,7 @@ def lista_evolucoes(request, prontuario_id):
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
 def detalhes_evolucao(request, evolucao_id):
-    ev = get_object_or_404(EvolucaoFisioterapeutica, id=evolucao_id)
+    ev = get_registro_clinico_ativo(request, EvolucaoFisioterapeutica, id=evolucao_id)
     return render(request, 'prontuario/evolucao/detalhes.html', {
         'evolucao': ev,
         'prontuario': ev.prontuario,
@@ -1058,6 +1167,7 @@ def detalhes_evolucao(request, evolucao_id):
 # ==============================================================================
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
+@acesso_clinico_required('fisioterapeuta', 'coordenador')
 def imprimir_prontuario(request, prontuario_id):
     """Página de impressão do prontuário completo (visualização em HTML)."""
     prontuario = get_prontuario_ativo(request, prontuario_id)
@@ -1086,6 +1196,7 @@ def imprimir_prontuario(request, prontuario_id):
 # ==============================================================================
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador', 'tecnico')
+@acesso_clinico_required('fisioterapeuta', 'coordenador')
 def exportar_pdf_prontuario(request, prontuario_id):
     """Gera e faz download do PDF do prontuário completo."""
     prontuario = get_prontuario_ativo(request, prontuario_id)
@@ -1198,6 +1309,7 @@ def pode_acessar_prontuario(view_func):
 
 
 @login_required
+@acesso_clinico_required('tecnico')
 def tecnico_prontuarios_compartilhados(request):
     """Lista os prontuários compartilhados com o técnico logado."""
     if not hasattr(request.user, 'perfil') or request.user.perfil.tipo != 'tecnico':
@@ -1205,7 +1317,9 @@ def tecnico_prontuarios_compartilhados(request):
         return redirect('dashboard:dashboard')
 
     compartilhamentos = CompartilhamentoProntuario.objects.filter(
-        tecnico=request.user, ativo=True
+        tecnico=request.user,
+        ativo=True,
+        prontuario__projeto=get_projeto_ativo(request)
     ).select_related(
         'prontuario', 'prontuario__atleta', 'prontuario__atleta__usuario',
         'prontuario__atleta__modalidade', 'liberado_por'
@@ -1218,9 +1332,10 @@ def tecnico_prontuarios_compartilhados(request):
 
 
 @login_required
+@acesso_clinico_required('tecnico')
 def tecnico_ver_prontuario(request, prontuario_id):
     """Técnico visualiza prontuário compartilhado (leitura + comentar)."""
-    prontuario = get_object_or_404(Prontuario, id=prontuario_id)
+    prontuario = get_registro_clinico_ativo(request, Prontuario, id=prontuario_id)
     compartilhamento = get_object_or_404(
         CompartilhamentoProntuario,
         prontuario=prontuario, tecnico=request.user, ativo=True
@@ -1240,9 +1355,10 @@ def tecnico_ver_prontuario(request, prontuario_id):
 
 
 @login_required
+@acesso_clinico_required('tecnico')
 def tecnico_adicionar_observacao(request, prontuario_id):
     """Técnico registra observação de treino no prontuário compartilhado."""
-    prontuario = get_object_or_404(Prontuario, id=prontuario_id)
+    prontuario = get_registro_clinico_ativo(request, Prontuario, id=prontuario_id)
     compartilhamento = get_object_or_404(
         CompartilhamentoProntuario,
         prontuario=prontuario, tecnico=request.user, ativo=True
@@ -1295,11 +1411,12 @@ def tecnico_adicionar_observacao(request, prontuario_id):
 
 @login_required
 @perfil_required('fisioterapeuta', 'coordenador')
+@acesso_clinico_required('fisioterapeuta', 'coordenador')
 def fisio_gerenciar_compartilhamento(request, prontuario_id):
     """Fisio libera/revoga acesso do técnico ao prontuário."""
     from django.contrib.auth.models import User as UserModel
 
-    prontuario = get_object_or_404(Prontuario, id=prontuario_id)
+    prontuario = get_registro_clinico_ativo(request, Prontuario, id=prontuario_id)
     projeto = prontuario.projeto
 
     tecnicos = UserModel.objects.filter(
@@ -1314,7 +1431,7 @@ def fisio_gerenciar_compartilhamento(request, prontuario_id):
         tecnico_id = request.POST.get('tecnico_id')
 
         if acao == 'liberar' and tecnico_id:
-            tecnico = get_object_or_404(UserModel, id=tecnico_id)
+            tecnico = get_object_or_404(tecnicos, id=tecnico_id)
             CompartilhamentoProntuario.objects.update_or_create(
                 prontuario=prontuario, tecnico=tecnico,
                 defaults={
@@ -1356,7 +1473,7 @@ def fisio_gerenciar_compartilhamento(request, prontuario_id):
 @perfil_required('fisioterapeuta', 'coordenador', 'psicologo')
 def fisio_ver_observacoes_tecnico(request, prontuario_id):
     """Fisio vê todas as observações de treino registradas pelos técnicos."""
-    prontuario = get_object_or_404(Prontuario, id=prontuario_id)
+    prontuario = get_registro_clinico_ativo(request, Prontuario, id=prontuario_id)
     observacoes = prontuario.observacoes_tecnico.select_related(
         'tecnico', 'compartilhamento'
     ).order_by('-criado_em')
@@ -1374,6 +1491,7 @@ def fisio_ver_observacoes_tecnico(request, prontuario_id):
 # ==============================================================================
 
 @login_required
+@acesso_clinico_required('fisioterapeuta', 'coordenador', 'atleta')
 def timeline_atleta(request, atleta_id):
     """Linha do tempo clínica completa de um atleta."""
     from .timeline_utils import (
@@ -1395,6 +1513,12 @@ def timeline_atleta(request, atleta_id):
     if not atleta.usuario.membros_projeto.filter(projeto=projeto, ativo=True).exists():
         messages.error(request, 'Atleta não pertence ao projeto ativo.')
         return redirect('prontuario:lista_prontuarios')
+
+    if request.user.perfil.tipo == 'atleta':
+        if atleta.usuario_id != request.user.id:
+            return HttpResponseForbidden(
+                'Voce so pode acessar sua propria timeline.'
+            )
 
     # Filtro por tipo (querystring: ?tipos=consulta,evolucao)
     tipos_filtro = request.GET.get('tipos', '').strip()
@@ -1419,6 +1543,7 @@ def timeline_atleta(request, atleta_id):
 
 @login_required
 @perfil_required('coordenador', 'fisioterapeuta', 'psicologo', 'tecnico')
+@acesso_clinico_required('fisioterapeuta', 'coordenador')
 def timeline_global(request):
     """Linha do tempo global do projeto — todos os atletas juntos.
 
@@ -1492,11 +1617,12 @@ import hashlib
 from io import BytesIO
 
 @login_required
+@acesso_clinico_required('fisioterapeuta', 'coordenador')
 def arquivar_prontuario_coffito(request, prontuario_id):
     """
     View para gerar o PDF selado (Hash) e arquivar o prontuário por 20 anos.
     """
-    prontuario = get_object_or_404(Prontuario, id=prontuario_id)
+    prontuario = get_registro_clinico_ativo(request, Prontuario, id=prontuario_id)
     
     if request.method == 'POST':
         try:

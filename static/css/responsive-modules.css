@@ -1,0 +1,708 @@
+/* ==========================================================
+   REABITECH - RESPONSIVIDADE DOS MODULOS
+   Agenda, mensageria, prontuarios, avaliacoes, analytics,
+   projetos e formularios.
+   ========================================================== */
+
+@media screen and (max-width: 991.98px) {
+
+    /* ESTRUTURA GERAL */
+
+    .main-content :is(
+        .page-header,
+        .card-premium,
+        .card-modern,
+        .section-grid,
+        .section-card,
+        .info-grid,
+        .info-item,
+        .form-card,
+        .chart-card,
+        .kpi-card
+    ) {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .main-content .page-header-title {
+        font-size: clamp(1.45rem, 5vw, 2.2rem) !important;
+        line-height: 1.25 !important;
+        overflow-wrap: anywhere;
+    }
+
+    .main-content .page-header-subtitle {
+        white-space: normal;
+        overflow-wrap: break-word;
+    }
+
+    .main-content .page-header {
+        margin-bottom: 20px !important;
+    }
+
+    .main-content :is(
+        .btn-primary-custom,
+        .btn-outline-custom
+    ) {
+        min-height: 44px;
+        max-width: 100%;
+        box-sizing: border-box;
+        white-space: normal;
+        touch-action: manipulation;
+    }
+
+    /* ==================================================
+       AGENDA E CALENDARIO
+       ================================================== */
+
+    .main-content .cal-wrapper {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        padding: 16px !important;
+        box-sizing: border-box;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .main-content .cal-wrapper .cal-grid {
+        grid-template-columns: repeat(7, minmax(90px, 1fr)) !important;
+        min-width: 680px;
+        gap: 6px !important;
+    }
+
+    .main-content .cal-header {
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .main-content .cal-title {
+        font-size: 1.25rem !important;
+        overflow-wrap: anywhere;
+    }
+
+    .main-content .cal-nav-btns {
+        flex-shrink: 0;
+        gap: 6px !important;
+    }
+
+    .main-content .cal-nav-btns a {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .main-content .cal-wrapper .cal-dia {
+        min-width: 0;
+        min-height: 100px;
+        padding: 6px !important;
+        gap: 4px;
+        box-sizing: border-box;
+    }
+
+    .main-content .cal-evento {
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+        font-size: .75rem !important;
+        line-height: 1.4;
+        padding: 6px !important;
+    }
+
+    .main-content .filtros-bar {
+        display: flex;
+        flex-wrap: wrap;
+        min-width: 0;
+        gap: 12px !important;
+    }
+
+    .main-content .filtros-bar .campo {
+        flex: 1 1 180px;
+        min-width: 0 !important;
+    }
+
+    .main-content .stats-grid {
+        grid-template-columns: repeat(
+            auto-fit, minmax(min(100%, 160px), 1fr)
+        ) !important;
+        gap: 12px;
+    }
+
+    .main-content .consulta-row {
+        min-width: 0;
+        max-width: 100%;
+        flex-wrap: wrap;
+        gap: 10px !important;
+    }
+
+    .main-content .consulta-info {
+        min-width: 0;
+        flex: 1 1 120px;
+        overflow-wrap: anywhere;
+    }
+
+    .main-content .consulta-hora,
+    .main-content .consulta-icon {
+        flex-shrink: 0;
+    }
+
+    /* ==================================================
+       MENSAGERIA - LISTA DE CONVERSAS
+       ================================================== */
+
+    .main-content .msg-layout {
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 16px !important;
+        min-width: 0;
+    }
+
+    .main-content .msg-layout > * {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .main-content .conversa-card {
+        min-width: 0;
+        max-width: 100%;
+        padding: 14px !important;
+        gap: 10px !important;
+        box-sizing: border-box;
+    }
+
+    .main-content .conv-info {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+
+    .main-content .conv-header {
+        flex-wrap: wrap;
+        gap: 6px !important;
+    }
+
+    .main-content .conv-name {
+        min-width: 0;
+        flex-wrap: wrap;
+        font-size: .95rem !important;
+        overflow-wrap: anywhere;
+    }
+
+    .main-content .conv-preview {
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    .main-content .conv-avatar {
+        width: 44px !important;
+        height: 44px !important;
+        flex-shrink: 0;
+    }
+
+    .main-content .badge-unread {
+        flex-shrink: 0;
+        margin-left: 0 !important;
+    }
+
+    .main-content .equipe-card {
+        position: static !important;
+        padding: 16px !important;
+        min-width: 0;
+    }
+
+    .main-content .membro-info,
+    .main-content .dest-info {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    /* ==================================================
+       MENSAGERIA - CHAT
+       ================================================== */
+
+    .main-content .chat-wrapper {
+        grid-template-columns: minmax(0, 1fr) !important;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        min-height: 0 !important;
+        height: auto !important;
+        gap: 12px !important;
+    }
+
+    .main-content .chat-main {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        min-height: 0;
+        box-sizing: border-box;
+        border-radius: 16px;
+    }
+
+    .main-content .chat-header {
+        padding: 12px !important;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .main-content .chat-header-info {
+        flex: 1 1 160px;
+        min-width: 0;
+    }
+
+    .main-content .chat-header-nome,
+    .main-content .chat-header-sub {
+        overflow-wrap: anywhere;
+        white-space: normal;
+    }
+
+    .main-content .chat-mensagens {
+        min-height: 180px !important;
+        height: 52vh;
+        height: 52dvh;
+        max-height: 540px;
+        min-width: 0;
+        padding: 12px !important;
+        overflow-y: auto !important;
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
+        flex: 1 1 auto;
+    }
+
+    .main-content .msg-row {
+        min-width: 0;
+        max-width: 92% !important;
+        flex-shrink: 0;
+        gap: 6px !important;
+    }
+
+    .main-content .msg-bubble {
+        min-width: 0;
+        max-width: 100%;
+        padding: 10px !important;
+        overflow-wrap: anywhere;
+    }
+
+    .main-content .msg-texto,
+    .main-content .msg-autor {
+        overflow-wrap: anywhere;
+        word-break: normal;
+    }
+
+    .main-content .msg-anexo-img {
+        width: auto;
+        height: auto;
+        max-width: 100% !important;
+    }
+
+    .main-content .msg-anexo-pdf {
+        max-width: 100%;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        box-sizing: border-box;
+    }
+
+    .main-content .chat-input-area {
+        min-width: 0;
+        padding: 10px !important;
+        padding-bottom: max(
+            10px, env(safe-area-inset-bottom)
+        ) !important;
+    }
+
+    .main-content .chat-input-form {
+        display: flex;
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+        align-items: flex-end;
+        min-width: 0;
+    }
+
+    .main-content .chat-input-form textarea {
+        flex: 1 1 0;
+        width: 0 !important;
+        min-width: 0 !important;
+        max-width: 100%;
+        font-size: 16px !important;
+        padding: 10px !important;
+        min-height: 46px;
+        box-sizing: border-box;
+    }
+
+    .main-content .chat-input-form label,
+    .main-content .chat-send-btn {
+        flex: 0 0 44px;
+        width: 44px !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px !important;
+        touch-action: manipulation;
+    }
+
+    .main-content .anexo-preview {
+        min-width: 0;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        gap: 8px;
+    }
+
+    .main-content .participantes-pills {
+        flex-wrap: wrap;
+    }
+
+    /* ==================================================
+       PRONTUARIOS E AVALIACOES
+       ================================================== */
+
+    .main-content :is(
+        .section-grid,
+        .prontuarios-grid,
+        .atletas-grid,
+        .objetivos-grid,
+        .triagens-grid
+    ) {
+        grid-template-columns: repeat(
+            auto-fit, minmax(min(100%, 260px), 1fr)
+        ) !important;
+        min-width: 0;
+        max-width: 100%;
+        gap: 12px !important;
+    }
+
+    .main-content :is(
+        .section-grid,
+        .prontuarios-grid,
+        .atletas-grid,
+        .objetivos-grid,
+        .triagens-grid
+    ) > * {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+        overflow-wrap: break-word;
+    }
+
+    .main-content .section-card {
+        min-height: 0;
+        padding: 18px !important;
+    }
+
+    .main-content :is(
+        .section-card-title,
+        .section-card-desc,
+        .header-info-value,
+        .info-item .value
+    ) {
+        overflow-wrap: anywhere;
+        white-space: normal;
+    }
+
+    .main-content :is(
+        .header-info-grid,
+        .info-grid
+    ) {
+        grid-template-columns: repeat(
+            auto-fit, minmax(min(100%, 140px), 1fr)
+        ) !important;
+        gap: 12px !important;
+    }
+
+    .main-content .prontuario-info {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .main-content .alert-banner {
+        min-width: 0;
+        max-width: 100%;
+        padding: 12px !important;
+        overflow-wrap: anywhere;
+    }
+
+    /* Historicos e timelines */
+
+    .main-content :is(
+        .tl-header,
+        .tl-header-info,
+        .tl-stats,
+        .tl-filtros,
+        .tl-evento-header
+    ) {
+        flex-wrap: wrap;
+        min-width: 0;
+        gap: 10px !important;
+    }
+
+    .main-content :is(
+        .tl-evento,
+        .tl-evento-meta,
+        .tl-evento-body,
+        .tl-evento-extra
+    ) {
+        min-width: 0;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .main-content .tl-evento-data {
+        white-space: normal !important;
+    }
+
+    .main-content .tl-chip {
+        max-width: 100%;
+        white-space: normal;
+    }
+
+    /* ==================================================
+       ANALYTICS E RELATORIOS
+       ================================================== */
+
+    .main-content .periodo-bar,
+    .main-content .periodo-pills {
+        min-width: 0;
+        flex-wrap: wrap;
+        gap: 8px !important;
+    }
+
+    .main-content .periodo-pill {
+        white-space: normal;
+        min-height: 40px;
+    }
+
+    .main-content .kpi-card,
+    .main-content .chart-card {
+        min-width: 0;
+        max-width: 100%;
+        padding: 16px !important;
+        box-sizing: border-box;
+    }
+
+    .main-content .kpi-valor {
+        font-size: clamp(1.4rem, 5vw, 2rem) !important;
+        overflow-wrap: anywhere;
+    }
+
+    .main-content .chart-wrapper {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        position: relative;
+    }
+
+    .main-content .chart-wrapper canvas {
+        max-width: 100% !important;
+    }
+
+    .main-content .heat-bars {
+        grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+        gap: 3px !important;
+    }
+
+    .main-content .heat-cell {
+        min-width: 0;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .main-content .heat-cell .valor {
+        font-size: clamp(.8rem, 3vw, 1.2rem) !important;
+    }
+
+    .main-content .rank-item {
+        min-width: 0;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .main-content .rank-info {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    /* ==================================================
+       FORMULARIOS, ABAS E MODAIS
+       ================================================== */
+
+    .main-content fieldset {
+        min-inline-size: 0;
+        max-width: 100%;
+    }
+
+    .main-content :is(
+        .form-card,
+        .form-section,
+        .form-group,
+        .form-row
+    ) {
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .main-content :is(
+        .form-label,
+        .form-label-custom,
+        .form-text,
+        .invalid-feedback
+    ) {
+        overflow-wrap: anywhere;
+    }
+
+    .main-content input[type="file"] {
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .main-content .nav-tabs,
+    .main-content .nav-pills {
+        flex-wrap: wrap;
+        gap: 6px;
+        min-width: 0;
+    }
+
+    .main-content .nav-link {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .modal-dialog {
+        min-width: 0;
+    }
+
+    .modal-body :is(
+        input, select, textarea
+    ) {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .modal-footer {
+        padding-bottom: max(
+            14px, env(safe-area-inset-bottom)
+        ) !important;
+    }
+}
+
+/* ==========================================================
+   CELULARES
+   ========================================================== */
+
+@media screen and (max-width: 575.98px) {
+
+    .main-content :is(
+        .card-premium,
+        .form-card,
+        .chart-card
+    ) {
+        padding: 14px !important;
+    }
+
+    .main-content :is(
+        .section-grid,
+        .prontuarios-grid,
+        .atletas-grid,
+        .objetivos-grid,
+        .triagens-grid,
+        .prontuario-info,
+        .tipo-selector
+    ) {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .main-content .filtros-bar .campo {
+        flex-basis: 100%;
+    }
+
+    .main-content .cal-wrapper {
+        padding: 10px !important;
+    }
+
+    .main-content .chart-wrapper,
+    .main-content .chart-wrapper.tall {
+        height: 240px !important;
+    }
+
+    .main-content .display-4 {
+        font-size: 1.8rem !important;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+    }
+
+    .main-content .lead {
+        font-size: 1rem;
+        overflow-wrap: anywhere;
+    }
+
+    .main-content .container.py-5 {
+        padding-top: 20px !important;
+        padding-bottom: 24px !important;
+    }
+
+    .main-content .empty-chat {
+        padding: 20px 12px !important;
+    }
+
+    .main-content .msg-avatar {
+        width: 26px;
+        height: 26px;
+    }
+
+    .main-content .chat-header-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .main-content .header-info-value {
+        font-size: 1.2rem !important;
+    }
+}
+
+/* CELULARES COMPACTOS */
+
+@media screen and (max-width: 359.98px) {
+
+    .main-content :is(
+        .card-premium,
+        .form-card,
+        .chart-card
+    ) {
+        padding: 10px !important;
+    }
+
+    .main-content .chat-input-form {
+        gap: 4px !important;
+    }
+
+    .main-content .chat-input-form textarea {
+        padding: 8px !important;
+    }
+
+    .main-content .msg-row {
+        max-width: 96% !important;
+    }
+
+    .main-content .conv-avatar {
+        width: 36px !important;
+        height: 36px !important;
+    }
+}
+
+/* CELULAR NA HORIZONTAL */
+
+@media screen and (max-width: 991.98px)
+       and (orientation: landscape)
+       and (max-height: 500px) {
+
+    .main-content .chat-mensagens {
+        height: 42vh;
+        height: 42dvh;
+        min-height: 120px !important;
+    }
+
+    .main-content .chart-wrapper {
+        height: 220px !important;
+    }
+}

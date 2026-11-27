@@ -11,7 +11,7 @@ import calendar as cal
 
 from usuarios.decorators import perfil_required
 from usuarios.models import Atleta
-from projetos.models import Projeto
+from projetos.models import Projeto, MembroProjeto
 from .models import Consulta
 from .forms import ConsultaForm, CancelamentoForm
 
@@ -21,14 +21,31 @@ from .forms import ConsultaForm, CancelamentoForm
 # ==============================================================================
 
 def _get_projeto_ativo(request):
-    """Recupera o projeto ativo da sessão."""
+    """Recupera o projeto ativo e valida a associação do usuário."""
+    if not request.user.is_authenticated:
+        return None
+
     projeto_id = request.session.get('projeto_id')
     if not projeto_id:
         return None
+
     try:
-        return Projeto.objects.get(id=projeto_id, ativo=True)
-    except Projeto.DoesNotExist:
+        projeto = Projeto.objects.get(id=projeto_id, ativo=True)
+    except (Projeto.DoesNotExist, ValueError, TypeError):
+        request.session.pop('projeto_id', None)
         return None
+
+    membro_ativo = MembroProjeto.objects.filter(
+        projeto=projeto,
+        usuario=request.user,
+        ativo=True,
+    ).exists()
+
+    if not membro_ativo:
+        request.session.pop('projeto_id', None)
+        return None
+
+    return projeto
 
 
 def _pode_gerenciar(user):

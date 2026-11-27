@@ -172,3 +172,268 @@ body {
 [data-theme="light"] .pay-tab { border-color: #e2e8f0; color: #64748b; }
 [data-theme="light"] .pay-tab.active { color: #047857; background: #ecfdf5; border-color: #10b981; }
 [data-theme="light"] .pix-copy-box input { background: #f8fafc !important; color: #475569 !important; border-color: #cbd5e1 !important; }
+
+
+/* REABITECH — refinamento visual dos planos */
+.planos-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 18px;
+    margin-top: 18px;
+}
+.plano-option {
+    display: flex;
+    min-width: 0;
+    height: 100%;
+}
+.plano-card {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    min-height: 100%;
+    padding: 24px 21px;
+    border: 1px solid rgba(148,163,184,.22);
+    border-radius: 18px;
+    background: linear-gradient(155deg, rgba(30,41,59,.82), rgba(15,23,42,.94));
+    text-align: left;
+    box-shadow: 0 8px 24px rgba(0,0,0,.14);
+    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.plano-option:hover .plano-card {
+    transform: translateY(-3px);
+    border-color: rgba(52,211,153,.55);
+    box-shadow: 0 14px 32px rgba(0,0,0,.22);
+}
+.plano-option input:checked + .plano-card {
+    border: 2px solid #34d399 !important;
+    padding: 23px 20px;
+    background: linear-gradient(155deg, rgba(6,78,59,.48), rgba(15,23,42,.97)) !important;
+    box-shadow: 0 0 0 3px rgba(52,211,153,.10), 0 16px 34px rgba(0,0,0,.2) !important;
+}
+.plano-nome {
+    margin: 8px 0 10px;
+    font-size: 1.12rem;
+    font-weight: 800;
+    line-height: 1.3;
+    color: #f8fafc;
+}
+.plano-preco {
+    margin: 8px 0;
+    font-size: 1.8rem;
+    font-weight: 850;
+    line-height: 1.15;
+    color: #fff;
+}
+.plano-desc {
+    min-height: 48px;
+    margin: 5px 0 14px;
+    font-size: .82rem;
+    line-height: 1.55;
+    color: #aebed0;
+}
+.plano-limites {
+    gap: 10px;
+    margin: 8px 0 16px;
+    padding: 14px 0;
+    border-top: 1px solid rgba(148,163,184,.16);
+    border-bottom: 1px solid rgba(148,163,184,.16);
+    font-size: .8rem;
+}
+.plano-modulos-titulo {
+    margin: 2px 0 12px;
+    font-size: .69rem;
+    letter-spacing: .09em;
+}
+.plano-modulos {
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    font-size: .81rem;
+}
+.plano-modulos li {
+    line-height: 1.4;
+}
+.plano-modulos li i {
+    flex: 0 0 15px;
+}
+.plano-modulos .incluido {
+    color: #a7f3d0;
+}
+.plano-modulos .indisponivel {
+    color: #94a3b8;
+}
+@media (max-width: 900px) {
+    .planos-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+    .planos-grid { grid-template-columns: 1fr; gap: 13px; }
+    .plano-card { min-height: 0; padding: 20px; }
+    .plano-option input:checked + .plano-card { padding: 19px; }
+    .plano-desc { min-height: 0; }
+}
+[data-theme="light"] .plano-card {
+    background: linear-gradient(155deg, #fff, #f4f8fc);
+    border-color: rgba(100,116,139,.22);
+    box-shadow: 0 8px 24px rgba(15,23,42,.06);
+}
+[data-theme="light"] .plano-nome,
+[data-theme="light"] .plano-preco { color: #0f172a; }
+[data-theme="light"] .plano-desc { color: #64748b; }
+[data-theme="light"] .plano-limites { color: #475569; }
+[data-theme="light"] .plano-modulos .incluido { color: #047857; }
+
+
+/* ===== REABITECH | PLANOS — REDESIGN ===== */
+.planos-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    align-items: stretch;
+    gap: 20px !important;
+    margin: 24px 0 30px !important;
+}
+.plano-option {
+    display: flex;
+    position: relative;
+    min-width: 0;
+    cursor: pointer;
+}
+.plano-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.plano-card {
+    position: relative;
+    display: flex !important;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    min-height: 390px;
+    box-sizing: border-box;
+    padding: 25px 22px !important;
+    border: 1px solid rgba(148,163,184,.2) !important;
+    border-radius: 20px !important;
+    background: linear-gradient(145deg,#172438,#101827) !important;
+    text-align: left !important;
+    box-shadow: 0 12px 30px rgba(0,0,0,.16);
+    transition: .22s ease;
+}
+.plano-badge {
+    position: static !important;
+    display: inline-flex;
+    align-self: flex-start;
+    width: fit-content;
+    margin: 0 0 18px;
+    padding: 6px 11px;
+    border-radius: 7px;
+    transform: none !important;
+    background: rgba(16,185,129,.16);
+    color: #6ee7b7;
+    font-size: .65rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+}
+.plano-nome {
+    margin: 0 0 10px !important;
+    color: #f8fafc !important;
+    font-size: 1.12rem !important;
+    font-weight: 800 !important;
+    text-align: left;
+}
+.plano-preco {
+    margin: 0 0 12px !important;
+    color: #6ee7b7 !important;
+    font-size: 2rem !important;
+    font-weight: 850 !important;
+    line-height: 1.2;
+    text-align: left;
+}
+.plano-desc {
+    min-height: 58px;
+    margin: 0 0 18px !important;
+    color: #a8b6c9 !important;
+    font-size: .8rem !important;
+    line-height: 1.55 !important;
+    text-align: left;
+}
+.plano-limites {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: 9px !important;
+    margin: 0 0 19px !important;
+    padding: 15px 0 !important;
+    border-top: 1px solid rgba(148,163,184,.16);
+    border-bottom: 1px solid rgba(148,163,184,.16);
+    color: #d5deea;
+    font-size: .78rem !important;
+    text-align: left;
+}
+.plano-limites div {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+.plano-limites i {
+    width: 17px;
+    color: #6ee7b7;
+}
+.plano-modulos-titulo {
+    margin: 0 0 12px !important;
+    color: #94a3b8;
+    font-size: .68rem !important;
+    font-weight: 800;
+    letter-spacing: .09em;
+    text-align: left;
+}
+.plano-modulos {
+    display: grid !important;
+    gap: 11px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    text-align: left;
+}
+.plano-modulos li {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: .8rem;
+}
+.plano-modulos li i {
+    width: 15px;
+    flex: 0 0 15px;
+}
+.plano-modulos .incluido { color: #6ee7b7 !important; }
+.plano-modulos .indisponivel { color: #718096 !important; }
+.plano-option:hover .plano-card {
+    transform: translateY(-4px);
+    border-color: rgba(52,211,153,.55) !important;
+    box-shadow: 0 18px 38px rgba(0,0,0,.25);
+}
+.plano-option input:checked + .plano-card {
+    border: 2px solid #34d399 !important;
+    padding: 24px 21px !important;
+    background: linear-gradient(145deg,#123b35,#102338) !important;
+    box-shadow: 0 0 0 4px rgba(52,211,153,.1),0 18px 38px rgba(0,0,0,.22) !important;
+}
+[data-theme="light"] .plano-card {
+    background: linear-gradient(145deg,#fff,#f5f8fc) !important;
+    border-color: #dce5ef !important;
+    box-shadow: 0 10px 28px rgba(15,23,42,.07);
+}
+[data-theme="light"] .plano-nome { color: #172033 !important; }
+[data-theme="light"] .plano-desc { color: #64748b !important; }
+[data-theme="light"] .plano-limites { color: #475569; }
+[data-theme="light"] .plano-modulos-titulo { color: #64748b; }
+[data-theme="light"] .plano-modulos .incluido { color: #047857 !important; }
+@media(max-width: 900px) {
+    .planos-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+}
+@media(max-width: 620px) {
+    .planos-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+    .plano-card { min-height: 0; padding: 22px !important; }
+    .plano-option input:checked + .plano-card { padding: 21px !important; }
+    .plano-desc { min-height: 0; }
+}

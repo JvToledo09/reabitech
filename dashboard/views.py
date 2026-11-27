@@ -544,6 +544,7 @@ def dashboard_coordenador(request):
 
         atletas_lesionados = Atleta.objects.filter(
             usuario_id__in=membros_atletas_ids,
+            lesoes__projeto=projeto,
             lesoes__tratamentos__ativo=True
         ).distinct().count()
 
@@ -600,7 +601,16 @@ def dashboard_coordenador(request):
             ).aggregate(Avg('desempenho'))['desempenho__avg']
             chart_perf_data.append(round(perf, 1) if perf else 0)
 
-        alertas_recentes = Alerta.objects.filter(resolvido=False).order_by('-criado_em')[:5]
+        usuarios_outros_projetos = MembroProjeto.objects.exclude(
+            projeto=projeto
+        ).values_list('usuario_id', flat=True)
+
+        alertas_recentes = Alerta.objects.filter(
+            resolvido=False,
+            atleta__usuario_id__in=membros_atletas_ids
+        ).exclude(
+            atleta__usuario_id__in=usuarios_outros_projetos
+        ).order_by('-criado_em')[:5]
 
         # ONBOARDING — Passos iniciais do coordenador
         total_membros = MembroProjeto.objects.filter(projeto=projeto, ativo=True).count()
@@ -909,6 +919,19 @@ def coordenador_adicionar_membro(request):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
+    from projetos.services import (
+        validar_capacidade_usuarios,
+        validar_funcao_membro,
+        validar_gestao_projeto,
+    )
+    from django.core.exceptions import ValidationError
+
+    try:
+        validar_gestao_projeto(request.user, projeto)
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+        return redirect('dashboard:dashboard')
+
     funcoes = MembroProjeto.TIPO_MEMBRO
     modalidades = ModalidadeEsportiva.objects.all()
     sexos = MembroProjeto.SEXO_CHOICES
@@ -924,6 +947,29 @@ def coordenador_adicionar_membro(request):
                     messages.error(request, 'Voce nao pode alterar a sua propria funcao de Coordenador!')
                     return redirect('dashboard:coordenador_membros')
                 
+                if (
+                    membro.usuario.is_superuser
+                    or membro.usuario.is_staff
+                    or getattr(
+                        getattr(membro.usuario, 'perfil', None),
+                        'tipo', None
+                    ) == 'superadmin'
+                    or MembroProjeto.objects.filter(
+                        usuario=membro.usuario
+                    ).exclude(projeto=projeto).exists()
+                    or Projeto.objects.filter(
+                        coordenador=membro.usuario
+                    ).exclude(pk=projeto.pk).exists()
+                ):
+                    messages.error(
+                        request,
+                        'Esta conta possui vinculos ou permissoes '
+                        'que impedem sua edicao por esta instituicao.'
+                    )
+                    return redirect(
+                        'dashboard:coordenador_membros'
+                    )
+
                 # --- Dados do User ---
                 novo_nome = request.POST.get('edit_nome', '').strip()
                 novo_sobrenome = request.POST.get('edit_sobrenome', '').strip()
@@ -943,6 +989,28 @@ def coordenador_adicionar_membro(request):
                     messages.error(request, 'Este e-mail ja esta em uso por outro usuario.')
                     return redirect(f'/dashboard/coordenador/membros/adicionar/?membro_id={membro.id}')
                 
+                # Validar reativacao antes de alterar dados.
+                try:
+                    nova_funcao_validacao = request.POST.get(
+                        'nova_funcao'
+                    )
+
+                    if nova_funcao_validacao:
+                        validar_funcao_membro(
+                            nova_funcao_validacao
+                        )
+
+                    vai_ativar = (
+                        request.POST.get('novo_status') == 'on'
+                    )
+
+                    if vai_ativar and not membro.ativo:
+                        validar_capacidade_usuarios(projeto)
+
+                except ValidationError as exc:
+                    messages.error(request, exc.messages[0])
+                    return redirect('dashboard:coordenador_membros')
+
                 # Atualiza o User
                 membro.usuario.first_name = novo_nome
                 membro.usuario.last_name = novo_sobrenome
@@ -1001,6 +1069,13 @@ def coordenador_adicionar_membro(request):
             elif novo_email and User.objects.filter(email=novo_email).exists():
                 messages.error(request, 'Este e-mail ja esta cadastrado.')
             else:
+                try:
+                    validar_funcao_membro(nova_funcao)
+                    validar_capacidade_usuarios(projeto)
+                except ValidationError as exc:
+                    messages.error(request, exc.messages[0])
+                    return redirect('dashboard:coordenador_membros')
+
                 senha_definida = novo_senha if novo_senha else secrets.token_urlsafe(8)
                 novo_user = User.objects.create_user(
                     username=novo_username, email=novo_email, password=senha_definida,
@@ -1028,7 +1103,12 @@ def coordenador_adicionar_membro(request):
                     )
                     messages.success(request, f'Usuario criado! Senha enviada para {novo_email}.')
                 except Exception:
-                    messages.success(request, f'Usuario criado! Senha temporaria: {senha_definida}')
+                    messages.warning(
+                        request,
+                        'Usuario criado, mas nao foi possivel enviar '
+                        'o email. Oriente o usuario a utilizar a '
+                        'recuperacao de senha.'
+                    )
                 return redirect('dashboard:coordenador_membros')
 
     membros_ativos = MembroProjeto.objects.filter(
@@ -1760,7 +1840,7 @@ def psicologo_nova_avaliacao(request, atleta_id):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    atleta = get_object_or_404(Atleta, id=atleta_id, usuario__membros_projeto__projeto=projeto)
+    atleta = get_object_or_404(Atleta, id=atleta_id, usuario__membros_projeto__projeto=projeto, usuario__membros_projeto__ativo=True, usuario__membros_projeto__tipo='atleta')
 
     if request.method == 'POST':
         try:
@@ -1812,9 +1892,9 @@ def psicologo_detalhes_avaliacao(request, avaliacao_id):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    avaliacao = get_object_or_404(AvaliacaoPsicologica, id=avaliacao_id)
+    avaliacao = get_object_or_404(AvaliacaoPsicologica, id=avaliacao_id, projeto=projeto)
     avaliacoes_anteriores = AvaliacaoPsicologica.objects.filter(
-        atleta=avaliacao.atleta
+        atleta=avaliacao.atleta, projeto=projeto
     ).order_by('-data').exclude(id=avaliacao.id)[:5]
 
     return render(request, 'dashboard/psicologo/detalhes_avaliacao.html', {
@@ -1833,7 +1913,7 @@ def psicologo_novo_questionario(request, atleta_id):
         messages.warning(request, 'Nenhum projeto ativo.')
         return redirect('landing')
 
-    atleta = get_object_or_404(Atleta, id=atleta_id, usuario__membros_projeto__projeto=projeto)
+    atleta = get_object_or_404(Atleta, id=atleta_id, usuario__membros_projeto__projeto=projeto, usuario__membros_projeto__ativo=True, usuario__membros_projeto__tipo='atleta')
 
     if request.method == 'POST':
         QuestionarioPeriodico.objects.create(
@@ -2166,6 +2246,7 @@ def superadmin_planos(request):
     return render(request, 'dashboard/admin/planos.html', {'planos': Plano.objects.all()})
 
 @login_required
+@perfil_required('superadmin')
 def superadmin_pagamentos(request):
     from usuarios.models import Pagamento
     return render(request, 'dashboard/admin/pagamentos.html', {'pagamentos': Pagamento.objects.all()})
@@ -2223,6 +2304,21 @@ def superadmin_editar_plano(request, plano_id):
         plano.max_usuarios = request.POST.get('max_usuarios', plano.max_usuarios)
         plano.max_projetos = request.POST.get('max_projetos', plano.max_projetos)
         plano.descricao = request.POST.get('descricao', plano.descricao)
+
+        from django.core.exceptions import ValidationError
+
+        try:
+            plano.full_clean()
+        except ValidationError:
+            messages.error(
+                request,
+                'Dados invalidos. Verifique o preco e os limites.'
+            )
+            return redirect(
+                'dashboard:superadmin_editar_plano',
+                plano_id=plano.pk
+            )
+
         plano.save()
         
         messages.success(request, f'Plano "{plano.nome}" atualizado com sucesso!')

@@ -55,13 +55,13 @@ class Plano(models.Model):
     # ----- Limites -----
     max_usuarios = models.IntegerField(
         default=10,
-        validators=[MinValueValidator(1)],
+        validators=[MinValueValidator(0)],
         help_text='Número máximo de membros (0 = ilimitado)',
         verbose_name='Máximo de Usuários'
     )
     max_projetos = models.IntegerField(
         default=1,
-        validators=[MinValueValidator(1)],
+        validators=[MinValueValidator(0)],
         help_text='Quantos projetos o coordenador pode ter (0 = ilimitado)',
         verbose_name='Máximo de Projetos'
     )
@@ -259,7 +259,16 @@ class Projeto(models.Model):
     # ----- Métodos -----
     def tem_modulo(self, modulo):
         """Verifica se o projeto tem um módulo ativo."""
-        return modulo in (self.modulos_ativos or [])
+        if not self.esta_ativo():
+            return False
+
+        if not self.plano:
+            return False
+
+        return (
+            modulo in (self.modulos_ativos or [])
+            and modulo in (self.plano.modulos_inclusos or [])
+        )
 
     def esta_ativo(self):
         """Verifica se o projeto está ativo e o trial não expirou."""

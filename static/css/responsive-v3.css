@@ -1,0 +1,316 @@
+/* =========================================================
+   REABITECH RESPONSIVE V3
+   Mobile, tablet e compatibilidade WebKit/iOS.
+   Nenhuma regra visual aplicada ao desktop.
+   ========================================================= */
+
+@media screen and (max-width: 991.98px) {
+
+    html {
+        width: 100% !important;
+        max-width: 100% !important;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    body {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box;
+    }
+
+    .main-content,
+    .main-content:not(.no-sidebar) {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        margin-left: 0 !important;
+        padding: 14px !important;
+        padding-left: max(14px, env(safe-area-inset-left)) !important;
+        padding-right: max(14px, env(safe-area-inset-right)) !important;
+        padding-bottom: max(24px, env(safe-area-inset-bottom)) !important;
+        box-sizing: border-box !important;
+    }
+
+    .main-content > *,
+    .card,
+    .card-modern,
+    .stat-card,
+    .page-title,
+    .page-title > div {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    /* MENU LATERAL */
+
+    #sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: min(290px, 85vw) !important;
+        max-width: 100% !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        transform: translate3d(-105%, 0, 0) !important;
+        transition: transform .25s ease !important;
+        z-index: 11000 !important;
+        visibility: hidden;
+    }
+
+    #sidebar.active {
+        transform: translate3d(0, 0, 0) !important;
+        visibility: visible;
+    }
+
+    #sidebar .sidebar-menu {
+        flex: 1 0 auto;
+        min-height: 0;
+    }
+
+    #sidebar .sidebar-logo,
+    #sidebar .sidebar-user {
+        flex-shrink: 0;
+    }
+
+    #sidebarOverlay {
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 10999 !important;
+        background: rgba(0, 0, 0, .6);
+    }
+
+    #sidebarOverlay.active {
+        display: block !important;
+        opacity: 1 !important;
+    }
+
+    #mobileToggleBtn {
+        flex: 0 0 44px;
+        min-width: 44px;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        touch-action: manipulation;
+    }
+
+    /* NAVEGACAO SUPERIOR */
+
+    .top-navbar {
+        position: relative;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        padding: 12px !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        overflow: visible !important;
+    }
+
+    .top-navbar .page-title {
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+        gap: 10px;
+    }
+
+    .top-navbar .page-title h2 {
+        overflow-wrap: anywhere;
+        font-size: clamp(.95rem, 3.5vw, 1.15rem) !important;
+    }
+
+    .top-navbar > .d-flex.align-items-center.gap-3 {
+        width: auto !important;
+        flex: 0 0 auto;
+        gap: 8px !important;
+        margin-left: auto;
+    }
+
+    .top-navbar .btn-outline-custom {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .top-navbar .dropdown-menu,
+    .top-navbar .dropdown-menu.show {
+        min-width: 0 !important;
+        width: min(320px, calc(100vw - 32px)) !important;
+        max-width: calc(100vw - 32px) !important;
+        max-height: 65vh;
+        max-height: 65dvh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .dropdown-item {
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+    }
+
+    /* FORMULARIOS E TECLADO IOS */
+
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+    select,
+    textarea {
+        min-width: 0;
+        max-width: 100%;
+        font-size: 16px !important;
+        box-sizing: border-box;
+    }
+
+    input[type="date"],
+    input[type="datetime-local"],
+    input[type="time"] {
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    input[type="file"] {
+        width: 100%;
+    }
+
+    button,
+    .btn,
+    [role="button"] {
+        touch-action: manipulation;
+    }
+
+    /* TABELAS */
+
+    table {
+        min-width: 0 !important;
+        max-width: none;
+    }
+
+    .table-responsive,
+    .table-container,
+    .reabi-table-scroll {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table-responsive > table,
+    .table-container > table,
+    .reabi-table-scroll > table {
+        min-width: 540px !important;
+        width: 100%;
+    }
+
+    /* MODAIS */
+
+    .modal {
+        max-width: 100%;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .modal-dialog {
+        width: auto !important;
+        max-width: calc(100% - 24px) !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    .modal-content {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .modal-body {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .modal-footer {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    /* CONTEUDO E MIDIAS */
+
+    img,
+    video {
+        max-width: 100%;
+    }
+
+    iframe {
+        max-width: 100%;
+    }
+
+    pre {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    .card-body,
+    .card-header,
+    .card-footer {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    /* Estado do menu para leitores de tela e toque. */
+
+    body.reabi-sidebar-open {
+        overscroll-behavior: none;
+    }
+}
+
+@media screen and (max-width: 575.98px) {
+
+    .main-content,
+    .main-content:not(.no-sidebar) {
+        padding: 10px !important;
+        padding-left: max(10px, env(safe-area-inset-left)) !important;
+        padding-right: max(10px, env(safe-area-inset-right)) !important;
+        padding-bottom: max(20px, env(safe-area-inset-bottom)) !important;
+    }
+
+    .top-navbar .page-title {
+        flex-basis: 100%;
+    }
+
+    .modal-dialog {
+        max-width: calc(100% - 16px) !important;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: 14px !important;
+    }
+
+    .modal-footer > .btn {
+        flex: 1 1 auto;
+    }
+
+    .card-modern,
+    .stat-card {
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 991.98px)
+       and (prefers-reduced-motion: reduce) {
+
+    #sidebar,
+    #sidebarOverlay {
+        transition: none !important;
+    }
+}

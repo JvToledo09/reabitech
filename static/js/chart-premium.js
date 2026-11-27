@@ -52,14 +52,30 @@ if (typeof Chart !== 'undefined') {
     Chart.defaults.elements.bar.borderSkipped = false;
     Chart.defaults.elements.bar.maxBarThickness = 40;
 
+
     // --- 7. EIXOS E GRID ---
-    Chart.defaults.scales.linear.grid.color = 'rgba(255, 255, 255, 0.04)';
-    Chart.defaults.scales.linear.grid.borderDash = [5, 5]; // Pontilhado
-    Chart.defaults.scales.linear.grid.tickLength = 0;
-    Chart.defaults.scales.linear.border.display = false;
-    
-    Chart.defaults.scales.category.grid.display = false;
-    Chart.defaults.scales.category.border.display = false;
+    // Configuracoes defensivas para diferentes versoes do Chart.js.
+
+    const linearDefaults = Chart.defaults.scales?.linear;
+    const categoryDefaults = Chart.defaults.scales?.category;
+
+    if (linearDefaults?.grid) {
+        linearDefaults.grid.color = 'rgba(255, 255, 255, 0.04)';
+        linearDefaults.grid.tickLength = 0;
+    }
+
+    if (linearDefaults?.border) {
+        linearDefaults.border.display = false;
+        linearDefaults.border.dash = [5, 5];
+    }
+
+    if (categoryDefaults?.grid) {
+        categoryDefaults.grid.display = false;
+    }
+
+    if (categoryDefaults?.border) {
+        categoryDefaults.border.display = false;
+    }
 
     // --- 8. INTERACAO ---
     Chart.defaults.interaction.mode = 'index';

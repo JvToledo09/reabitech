@@ -49,10 +49,13 @@ def health_check(request):
     return HttpResponse("OK", status=200)
 
 
+from usuarios.password_reset_forms import ReabitechPasswordResetForm
+
 urlpatterns = [
 
     # ROTAS DE RECUPERAÇÃO DE SENHA
     path('password-reset/', auth_views.PasswordResetView.as_view(
+        form_class=ReabitechPasswordResetForm,
         template_name='registration/password_reset_form.html', 
         html_email_template_name='registration/password_reset_email.html', 
         email_template_name='registration/password_reset_email.txt', 

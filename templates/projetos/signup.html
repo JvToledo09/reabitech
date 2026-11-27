@@ -45,6 +45,7 @@
     }
 </style>
 
+<link rel="stylesheet" href="{% static 'css/responsive-public.css' %}?v=1">
 </head>
 <body>
 
@@ -108,10 +109,10 @@
                 <!-- ETAPA 2 -->
                 <div class="form-section">
                     <div class="step-label"><i class="fas fa-building"></i> Etapa 2 de 3</div>
-                    <h2 class="form-section-title"><i class="fas fa-clinic-medical"></i> Seu projeto / clínica</h2>
+                    <h2 class="form-section-title"><i class="fas fa-clinic-medical"></i> Sua instituição ou projeto</h2>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="nome_projeto">Nome do projeto <span class="required">*</span></label>
+                            <label class="form-label" for="nome_projeto">Nome da instituição / projeto <span class="required">*</span></label>
                             <input type="text" id="nome_projeto" name="nome_projeto" class="form-input" placeholder="Ex: Clínica FisioVida" required>
                         </div>
                         <div class="form-group">
@@ -144,14 +145,30 @@
                     <div class="planos-grid">
                         {% for plano in planos %}
                         <label class="plano-option">
-                            <input type="radio" name="plano_id" value="{{ plano.id }}" {% if plano_selecionado_id == plano.id %}checked{% elif not plano_selecionado_id and plano.destaque %}checked{% endif %} required>
+                            <input type="radio" name="plano_id" data-free="{% if plano.preco_mensal == 0 %}true{% else %}false{% endif %}" value="{{ plano.id }}" {% if plano_selecionado_id == plano.id %}checked{% elif not plano_selecionado_id and plano.destaque %}checked{% endif %} required>
                             <div class="plano-card">
                                 {% if plano.destaque %}<span class="plano-badge">MAIS POPULAR</span>{% endif %}
                                 <div class="plano-nome">{{ plano.nome }}</div>
                                 <div class="plano-preco">
-                                    {% if plano.preco_mensal == 0 %}Grátis{% else %}R$ {{ plano.preco_mensal|floatformat:0 }}<span style="font-size:0.7rem;font-weight:500;color:#94a3b8;">/mês</span>{% endif %}
+                                    {% if plano.preco_mensal == 0 %}Grátis{% else %}R$ {{ plano.preco_mensal|floatformat:2 }}<span style="font-size:0.7rem;font-weight:500;color:#94a3b8;">/mês</span>{% endif %}
                                 </div>
-                                <div class="plano-desc">{{ plano.descricao|truncatechars:60 }}</div>
+                                <div class="plano-desc">{{ plano.descricao|default:"Plano para gestão e acompanhamento da reabilitação." }}</div>
+                                <div class="plano-limites">
+                                    <div><i class="fas fa-users"></i> {% if plano.max_usuarios == 0 %}Usuários ilimitados{% else %}Até {{ plano.max_usuarios }} usuários{% endif %}</div>
+                                    <div><i class="fas fa-building"></i> {% if plano.max_projetos == 0 %}Projetos ilimitados{% else %}Até {{ plano.max_projetos }} projeto(s){% endif %}</div>
+                                </div>
+                                <div class="plano-modulos-titulo">Módulos incluídos</div>
+                                <ul class="plano-modulos">
+                                    <li class="{% if 'fisioterapia' in plano.modulos_inclusos %}incluido{% else %}indisponivel{% endif %}">
+                                        <i class="fas {% if 'fisioterapia' in plano.modulos_inclusos %}fa-check{% else %}fa-minus{% endif %}"></i> Fisioterapia
+                                    </li>
+                                    <li class="{% if 'psicologia' in plano.modulos_inclusos %}incluido{% else %}indisponivel{% endif %}">
+                                        <i class="fas {% if 'psicologia' in plano.modulos_inclusos %}fa-check{% else %}fa-minus{% endif %}"></i> Psicologia
+                                    </li>
+                                    <li class="{% if 'tecnico' in plano.modulos_inclusos %}incluido{% else %}indisponivel{% endif %}">
+                                        <i class="fas {% if 'tecnico' in plano.modulos_inclusos %}fa-check{% else %}fa-minus{% endif %}"></i> Acompanhamento técnico
+                                    </li>
+                                </ul>
                             </div>
                         </label>
                         {% empty %}
@@ -174,50 +191,24 @@
     <!-- MODAL DE CHECKOUT -->
     <div id="checkout-modal">
         <div class="checkout-box">
-            <button class="close-checkout" title="Cancelar"><i class="fas fa-times"></i></button>
-            <h2 class="checkout-title">Finalizar Pagamento</h2>
-            <p class="checkout-subtitle">Escolha a forma de pagamento para ativar sua conta.</p>
-
+            <button type="button" class="close-checkout" title="Cancelar"><i class="fas fa-times"></i></button>
+            <h2 class="checkout-title">Pagamento demonstrativo</h2>
+            <p class="checkout-subtitle">Nenhuma cobrança será realizada. Não informe dados bancários reais.</p>
             <div class="payment-tabs">
-                <div class="pay-tab active" id="tab-card"><i class="fas fa-credit-card"></i> Cartão</div>
-                <div class="pay-tab" id="tab-pix"><i class="fab fa-pix"></i> PIX</div>
+                <button type="button" class="pay-tab active" id="tab-card">Cartão demo</button>
+                <button type="button" class="pay-tab" id="tab-pix">PIX demo</button>
             </div>
-
-            <!-- Cartão -->
             <div class="pay-content active" id="content-card">
-                <div class="form-group">
-                    <label class="form-label">Número do Cartão</label>
-                    <input type="text" class="form-input" placeholder="0000 0000 0000 0000">
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Validade</label>
-                        <input type="text" class="form-input" placeholder="MM/AA">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">CVV</label>
-                        <input type="text" class="form-input" placeholder="123">
-                    </div>
-                </div>
-                <button type="button" class="btn-pay"><i class="fas fa-lock"></i> Confirmar Pagamento</button>
+                <button type="button" class="btn-pay">Simular pagamento com cartão</button>
             </div>
-
-            <!-- PIX -->
             <div class="pay-content" id="content-pix">
-                <div class="pix-box">
-                    <img class="pix-qrcode" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=REABITECH-PIX-DEMO" alt="QR Code PIX">
-                    <p style="font-size:0.8rem; color:#94a3b8; margin-bottom:12px;">Escaneie o QR Code ou copie o código abaixo.</p>
-                    <div class="pix-copy-box">
-                        <input type="text" value="00020126580014BR.GOV.BCB.PIX0136a1b2c3d4-e5f6-7890-1234-56789abcdef0520400005303986540515.005802BR5913REABITECH TCC6009SAO PAULO62070503***6304ABCD" readonly id="pix-code">
-                        <button type="button" class="btn-copy" onclick="copyPix()"><i class="fas fa-copy"></i></button>
-                    </div>
-                    <button type="button" class="btn-pay" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-check-circle"></i> Já realizei o PIX</button>
-                </div>
+                <p>PIX fictício, sem transferência.</p>
+                <button type="button" class="btn-pay">Simular pagamento PIX</button>
             </div>
         </div>
     </div>
 
-    <script src="{% static 'js/signup-premium.js' %}"></script>
+    <script src="{% static 'js/signup-premium.js' %}?v=checkout-demo-2"></script>
     <script>
         // Toggle de Tema
         const themeToggle = document.getElementById('themeToggle');

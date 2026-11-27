@@ -10,11 +10,11 @@
 <meta property="og:url" content="{{ request.build_absolute_uri }}">
 <meta property="og:title" content="REABITECH - Soluções em Reabilitação">
 <meta property="og:description" content="Plataforma web multi-tenant SaaS para gestão de reabilitação física e emocional.">
-<meta property="og:image" content="{% static 'images/projetos/esportetec.png' %}">
+<meta property="og:image" content="{% static 'images/esportetec.png' %}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="REABITECH - Soluções em Reabilitação">
 <meta name="twitter:description" content="Plataforma web multi-tenant SaaS para gestão de reabilitação física e emocional.">
-<meta name="twitter:image" content="{% static 'images/projetos/esportetec.png' %}">
+<meta name="twitter:image" content="{% static 'images/esportetec.png' %}">
 
 
     <meta charset="UTF-8">
@@ -97,10 +97,10 @@
         .sidebar.active { left: -280px; }
 
         .sidebar-logo {
-            padding: 18px 16px 14px;
+            padding: 8px 16px 6px;
             text-align: center;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            margin-bottom: 12px;
+            margin-bottom: 6px;
         }
 
         .sidebar-logo img {
@@ -181,9 +181,17 @@
         .sidebar-item.active::before { transform: scaleY(1); }
 
         .sidebar-item i {
-            width: 22px;
-            font-size: 1.05rem;
+            width: 26px;
+            min-width: 26px;
+            font-size: 1.25rem;
+            line-height: 1;
             text-align: center;
+            flex-shrink: 0;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .sidebar-item:hover i {
+            transform: scale(1.08);
         }
 
         /*  Badge de mensagens não lidas na sidebar */
@@ -2466,7 +2474,7 @@
           "@type": "WebSite",
           "name": "REABITECH",
           "url": "https://reabitech.onrender.com/",
-          "description": "Plataforma de gestão de reabilitação física e emocional para projetos esportivos.",
+          "description": "Plataforma de gestão e acompanhamento da reabilitação física e emocional para clínicas, academias, escolas, consultórios, projetos sociais e organizações esportivas.",
           "inLanguage": "pt-BR"
         },
         {
@@ -2501,9 +2509,7 @@
     .sidebar-item[href*="membros"] { margin-top: auto !important; }
 </style>
     <link rel="stylesheet" href="/static/css/responsive-master.css">
-    <link rel="stylesheet" href="/static/css/glass-premium-v2.css">
 
-<link rel="stylesheet" href="{% static 'css/global-super-effects.css' %}?v=1.0">
 
     <style id="hide-menu-fix">
         /* Esconde o botão de menu branco no Desktop */
@@ -2549,14 +2555,14 @@
 <style id="dynamic-sidebar-logo">
     .sidebar-logo h3, .sidebar-logo p { display: none !important; }
     .sidebar-logo .logo-img-light, .sidebar-logo .logo-img-dark {
-        width: 100% !important; max-width: 170px !important; height: auto !important;
-        margin: 0 auto 15px auto !important; display: block !important;
+        width: 100% !important; max-width: 210px !important; height: auto !important;
+        margin: 0 auto 6px auto !important; display: block !important;
         filter: drop-shadow(0 4px 15px rgba(52, 211, 153, 0.3)) !important;
     }
-    [data-theme="light"] .sidebar-logo .logo-img-light { display: block !important; }
-    [data-theme="light"] .sidebar-logo .logo-img-dark { display: none !important; }
-    [data-theme="dark"] .sidebar-logo .logo-img-light { display: none !important; }
-    [data-theme="dark"] .sidebar-logo .logo-img-dark { display: block !important; }
+    [data-theme="light"] .sidebar-logo .logo-img-light { display: none !important; }
+    [data-theme="light"] .sidebar-logo .logo-img-dark { display: block !important; }
+    [data-theme="dark"] .sidebar-logo .logo-img-light { display: block !important; }
+    [data-theme="dark"] .sidebar-logo .logo-img-dark { display: none !important; }
 </style>
 
     
@@ -2564,44 +2570,16 @@
     
     
     
-    <link rel="icon" type="image/png" href="{% static 'images/favicon-reabitech.png' %}?v=999">
+    <link rel="icon" type="image/png" sizes="512x512" href="{% static 'images/favicon-reabitech.png' %}?v=1000"><link rel="icon" type="image/x-icon" href="{% static 'images/favicon-reabitech.ico' %}?v=1000">
+<link rel="stylesheet" href="{% static 'css/responsive-v3.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'css/responsive-system.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'css/responsive-dashboards.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'css/responsive-modules.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'css/project-sidebar.css' %}?v=1">
 </head>
 <body>
 
-<!-- BOTAO HAMBURGER MOBILE -->
-<button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menu">
-    <i class="fas fa-bars"></i>
-</button>
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const btn = document.getElementById('mobileMenuBtn');
-        const overlay = document.getElementById('sidebarOverlay');
-        const sidebar = document.querySelector('.sidebar');
-        const icon = btn.querySelector('i');
-
-        function toggleMenu() {
-            if (sidebar) {
-                sidebar.classList.toggle('active');
-                overlay.classList.toggle('active');
-                
-                if (sidebar.classList.contains('active')) {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                    document.body.style.overflow = 'hidden'; // Trava o scroll do fundo
-                } else {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                    document.body.style.overflow = ''; // Libera o scroll
-                }
-            }
-        }
-
-        if (btn) btn.addEventListener('click', toggleMenu);
-        if (overlay) overlay.addEventListener('click', toggleMenu);
-    });
-</script>
 
 <!-- Barra de Progresso Premium no Topo -->
 <div id="progress-bar" style="position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, #10b981, #34d399); width: 0%; z-index: 999999; transition: width 0.2s ease, opacity 0.3s ease; box-shadow: 0 0 10px rgba(16, 185, 129, 0.6); pointer-events: none;"></div>
@@ -2632,7 +2610,7 @@
 {% if user.is_authenticated %}
 <div class="sidebar" id="sidebar">
     <div class="sidebar-logo">
-        <img src="{% static 'images/logo-clara.png' %}" alt="REABITECH" style="max-width: 180px; margin-bottom: 8px; object-fit: contain;">
+        <img class="logo-img-light" src="{% static 'images/logo-escura.png' %}" alt="REABITECH"><img class="logo-img-dark" src="{% static 'images/logo-clara.png' %}" alt="REABITECH">
         <p>Soluções em Reabilitação</p>
     </div>
 
@@ -2641,7 +2619,7 @@
     <div style="padding: 0 12px 16px;">
         <div style="background: rgba(52, 211, 153, 0.15); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 14px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;">
             {% if projeto_ativo_global.logo %}
-            <img src="/static/images/logodark.png" alt="REABITECH" style="max-width: 190px; width: 100%; height: auto; margin-bottom: 6px; filter: drop-shadow(0 6px 20px rgba(52, 211, 153, 0.35));">
+            <img class="active-project-logo" src="{{ projeto_ativo_global.logo.url }}" alt="{{ projeto_ativo_global.nome }}" style="width: 62px; height: 62px; min-width: 62px; object-fit: contain; flex-shrink: 0; padding: 0; border-radius: 8px; background: transparent;">
             {% else %}
             <div style="width: 42px; height: 42px; border-radius: 10px; background: linear-gradient(135deg, #34d399, #2BA181); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 1rem; flex-shrink: 0;">
                 {{ projeto_ativo_global.nome|first|upper }}
@@ -2671,7 +2649,7 @@
         <a href="{% url 'dashboard:superadmin_configuracoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'superadmin_configuracoes' %}active{% endif %}"><i class="ph ph-gear-six"></i><span>Configurações</span></a>
         {% elif user.perfil.tipo == 'coordenador' %}
         <a href="{% url 'dashboard:dashboard_coordenador' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_coordenador' %}active{% endif %}"><i class="ph ph-squares-four"></i><span>Dashboard</span></a>
-        <a href="{% url 'dashboard:coordenador_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_atletas' %}active{% endif %}"><i class="ph ph-users-three"></i><span>Atletas</span></a>
+        <a href="{% url 'dashboard:coordenador_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_atletas' %}active{% endif %}"><i class="ph ph-users-three"></i><span>{{ pessoas_label }}</span></a>
         <a href="{% url 'dashboard:coordenador_fisioterapia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_fisioterapia' %}active{% endif %}"><i class="ph ph-barbell"></i><span>Fisioterapia</span></a>
         <a href="{% url 'dashboard:coordenador_psicologia' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_psicologia' %}active{% endif %}"><i class="ph ph-brain"></i><span>Psicologia</span></a>
         <a href="{% url 'dashboard:coordenador_relatorios' %}" class="sidebar-item {% if request.resolver_match.url_name == 'coordenador_relatorios' %}active{% endif %}"><i class="ph ph-chart-line-up"></i><span>Relatórios</span></a>
@@ -2687,7 +2665,7 @@
 
         {% elif user.perfil.tipo == 'tecnico' %}
         <a href="{% url 'dashboard:dashboard_tecnico' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_tecnico' %}active{% endif %}"><i class="ph ph-squares-four"></i><span>Dashboard</span></a>
-        <a href="{% url 'dashboard:tecnico_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_atletas' %}active{% endif %}"><i class="ph ph-soccer-ball"></i><span>Meus Atletas</span></a>
+        <a href="{% url 'dashboard:tecnico_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_atletas' %}active{% endif %}"><i class="ph ph-soccer-ball"></i><span>Meus {{ pessoas_label|lower }}</span></a>
         <a href="{% url 'dashboard:tecnico_desempenho' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_desempenho' %}active{% endif %}"><i class="ph ph-chart-bar"></i><span>Desempenho</span></a>
         <a href="{% url 'dashboard:tecnico_recuperacao' %}" class="sidebar-item {% if request.resolver_match.url_name == 'tecnico_recuperacao' %}active{% endif %}"><i class="ph ph-heartbeat"></i><span>Recuperação</span></a>
         <a href="{% url 'prontuario:tecnico_prontuarios_compartilhados' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="ph ph-share-network"></i><span>Compartilhados</span></a>
@@ -2706,7 +2684,7 @@
 
         {% elif user.perfil.tipo == 'fisioterapeuta' %}
         <a href="{% url 'dashboard:dashboard_fisioterapeuta' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_fisioterapeuta' %}active{% endif %}"><i class="ph ph-squares-four"></i><span>Dashboard</span></a>
-        <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_atletas' %}active{% endif %}"><i class="ph ph-user-focus"></i><span>Pacientes</span></a>
+        <a href="{% url 'dashboard:fisioterapeuta_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_atletas' %}active{% endif %}"><i class="ph ph-user-focus"></i><span>{{ pessoas_label }}</span></a>
         <a href="{% url 'dashboard:fisioterapeuta_tratamentos' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_tratamentos' %}active{% endif %}"><i class="ph ph-clipboard-text"></i><span>Tratamentos</span></a>
         <a href="{% url 'dashboard:fisioterapeuta_evolucoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'fisioterapeuta_evolucoes' %}active{% endif %}"><i class="ph ph-chart-line-up"></i><span>Evoluções</span></a>
         <a href="{% url 'prontuario:lista_prontuarios' %}" class="sidebar-item {% if 'prontuario' in request.path and 'timeline' not in request.path %}active{% endif %}"><i class="ph ph-folder-notch-open"></i><span>Prontuários</span></a>
@@ -2720,7 +2698,7 @@
 
         {% elif user.perfil.tipo == 'psicologo' %}
         <a href="{% url 'dashboard:dashboard_psicologo' %}" class="sidebar-item {% if request.resolver_match.url_name == 'dashboard_psicologo' %}active{% endif %}"><i class="ph ph-squares-four"></i><span>Dashboard</span></a>
-        <a href="{% url 'dashboard:psicologo_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_atletas' %}active{% endif %}"><i class="ph ph-users-three"></i><span>Atendimentos</span></a>
+        <a href="{% url 'dashboard:psicologo_atletas' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_atletas' %}active{% endif %}"><i class="ph ph-users-three"></i><span>{{ pessoas_label }}</span></a>
         <a href="{% url 'dashboard:psicologo_avaliacoes' %}" class="sidebar-item {% if request.resolver_match.url_name == 'psicologo_avaliacoes' %}active{% endif %}"><i class="ph ph-list-checks"></i><span>Avaliações</span></a>
         <a href="{% url 'consultas:dashboard_consultas' %}" class="sidebar-item {% if 'consultas' in request.path %}active{% endif %}"><i class="ph ph-calendar-check"></i><span>Agenda</span></a>
         <a href="{% url 'analytics:dashboard_analitico' %}" class="sidebar-item {% if 'analytics' in request.path %}active{% endif %}"><i class="ph ph-chart-pie-slice"></i><span>Analytics</span></a>
@@ -2877,7 +2855,7 @@
         const sidebarOverlay = document.getElementById('sidebarOverlay');
 
         function isDesktop() {
-            return window.innerWidth > 992;
+            return window.matchMedia("(min-width: 992px)").matches;
         }
 
         function toggleSidebar() {
@@ -2902,12 +2880,12 @@
 
         document.querySelectorAll('.sidebar-item').forEach(item => {
             item.addEventListener('click', function() {
-                if (window.innerWidth <= 992) closeSidebar();
+                if (window.matchMedia("(max-width: 991.98px)").matches) closeSidebar();
             });
         });
 
         window.addEventListener('resize', function() {
-            if (window.innerWidth > 992) {
+            if (window.matchMedia("(min-width: 992px)").matches) {
                 // Voltando pro desktop: fecha overlay mobile, limpa .active
                 closeSidebar();
             } else {
@@ -3079,7 +3057,6 @@
 
     
     
-    <script src="{% static 'js/premium-effects.js' %}"></script>
 
     <script>
     // ============================================
@@ -3594,8 +3571,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-<script src="/static/js/mega-effects.js"></script>
-<script src="/static/js/glass-premium-v2.js"></script>
     <script src="/static/js/reabitech-global-effects.js"></script>
 
 <!-- BOTAO DE DARK MODE GLOBAL (INJETADO) -->
@@ -3639,6 +3614,8 @@ document.addEventListener('DOMContentLoaded', function() {
     })();
 </script>
 
-<script src="{% static 'js/chart-premium.js' %}"></script>
+<script src="{% static 'js/chart-premium.js' %}?v=2"></script>
+<script src="{% static 'js/responsive-v3.js' %}?v=1" defer></script>
+<script src="{% static 'js/responsive-system.js' %}?v=1" defer></script>
 </body>
 </html>

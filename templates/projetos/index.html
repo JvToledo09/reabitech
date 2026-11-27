@@ -8,10 +8,10 @@
 
     <!-- HERO -->
     <div style="background: linear-gradient(135deg, #000000, #1a1a2e); padding: 60px 40px; text-align: center; border-radius: 24px; margin-bottom: 40px; color: white;">
-        <img src="{% static 'images/logo.png' %}" alt="REABITECH" style="width: 120px; height: 120px; object-fit: contain; margin-bottom: 15px;" onerror="this.style.display='none'" loading="lazy">
+        <img src="{% static 'images/logo-escura.png' %}" alt="REABITECH" style="width: 120px; height: 120px; object-fit: contain; margin-bottom: 15px;" onerror="this.style.display='none'" loading="lazy">
         <h1 style="font-size: 3rem; font-weight: 700; margin: 0;">REABITECH</h1>
-        <p style="font-size: 1.2rem; opacity: 0.8; margin: 10px 0;">Plataforma SaaS para reabilitação esportiva</p>
-        <p style="font-size: 1rem; opacity: 0.7;">Gerencie clubes, equipes e atletas em um só lugar</p>
+        <p style="font-size: 1.2rem; opacity: 0.8; margin: 10px 0;">Plataforma integrada de gestão e acompanhamento da reabilitação</p>
+        <p style="font-size: 1rem; opacity: 0.7;">Organize pessoas, profissionais e acompanhamentos em um só lugar</p>
  </div>
 
     <!-- PROJETOS PARCEIROS -->
@@ -23,11 +23,11 @@
         <a href="{% url 'login_projeto' projeto.id %}" style="text-decoration: none; flex: 1; min-width: 250px; max-width: 300px;">
             <div style="background: white; border-radius: 20px; padding: 30px 25px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid #eee; transition: all 0.3s ease; cursor: pointer; height: 100%;">
                 {% load static %}
-<img src="{% static 'images/projetos/esportetec.png' %}" alt="EsporteTec" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 15px;" loading="lazy">
+<img src="{% static 'images/esportetec.png' %}" alt="EsporteTec" style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 15px;" loading="lazy">
                 <h4 style="color: #000; margin: 0;">{{ projeto.nome }}</h4>
                 <p style="color: #888; font-size: 0.9rem; margin: 10px 0;">{{ projeto.descricao|truncatechars:60 }}</p>
                 <div style="display: flex; justify-content: center; gap: 15px; font-size: 0.85rem; color: #888;">
-                    <span><i class="fas fa-users"></i> {{ projeto.quantidade_atletas }} atletas</span>
+                    <span><i class="fas fa-users"></i> {{ projeto.quantidade_atletas }} pessoas</span>
                     <span><i class="fas fa-user-md"></i> {{ projeto.quantidade_profissionais }} profissionais</span>
  </div>
                 <div style="margin-top: 15px; background: #2BA181; color: white; padding: 8px 20px; border-radius: 20px; display: inline-block; font-size: 0.85rem;">
@@ -75,7 +75,7 @@
                         <i class="fas fa-check-circle" style="color:#2BA181;"></i> Até {{ plano.max_projetos }} projeto(s)
  </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-check-circle" style="color:#2BA181;"></i> Até {{ plano.max_atletas }} atletas
+                        <i class="fas fa-check-circle" style="color:#2BA181;"></i> Até {{ plano.max_atletas }} pessoas acompanhadas
  </li>
                     <li style="padding: 8px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 10px;">
                         <i class="fas fa-check-circle" style="color:#2BA181;"></i> Até {{ plano.max_profissionais }} profissionais
@@ -101,7 +101,7 @@
 
     <!-- FOOTER -->
     <div style="text-align: center; padding: 30px; color: #999; font-size: 0.85rem; border-top: 1px solid #eee; margin-top: 40px;">
-        &copy; {% now "Y" %} REABITECH - Soluções em Reabilitação Esportiva
+        &copy; {% now "Y" %} REABITECH - Gestão integrada em reabilitação
  </div>
 </div>
 {% endblock %}

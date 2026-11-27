@@ -1,0 +1,360 @@
+/* =====================================================
+   REABITECH - RESPONSIVIDADE PUBLICA
+   Landing, cadastro, login e recuperacao de senha.
+   Desktop preservado.
+   ===================================================== */
+
+@media screen and (max-width: 991.98px) {
+
+    html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+        max-width: 100%;
+    }
+
+    body {
+        min-width: 0 !important;
+        max-width: 100%;
+    }
+
+    /* Formularios - Safari iOS */
+
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+    select,
+    textarea {
+        font-size: 16px !important;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    input[type="date"],
+    input[type="time"] {
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+
+    button,
+    .btn,
+    a.hero-btn {
+        touch-action: manipulation;
+    }
+
+    /* Landing page */
+
+    .lp-nav {
+        max-width: 100%;
+    }
+
+    .lp-nav-inner {
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .lp-nav-toggle {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    .lp-nav-links {
+        max-height: 75vh;
+        max-height: 75dvh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .lp-hero {
+        min-height: 100vh;
+        min-height: 100svh;
+    }
+
+    .lp-hero-content,
+    .lp-hero-grid,
+    .lp-hero-grid > *,
+    .lp-hero-card-wrapper,
+    .lp-hero-card {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .lp-hero-title {
+        overflow-wrap: break-word;
+    }
+
+    .lp-hero-desc {
+        overflow-wrap: anywhere;
+    }
+
+    .lp-hero-actions {
+        flex-wrap: wrap;
+    }
+
+    .hero-btn {
+        max-width: 100%;
+        white-space: normal;
+        text-align: center;
+        min-height: 44px;
+        box-sizing: border-box;
+    }
+
+    .hero-logo-display,
+    .hero-logo-text {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .features-grid,
+    .steps-grid,
+    .lp-stats-grid {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .features-grid > *,
+    .steps-grid > *,
+    .lp-stats-grid > * {
+        min-width: 0;
+        max-width: 100%;
+        overflow-wrap: break-word;
+    }
+
+    /* Cadastro */
+
+    .signup-wrapper {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box;
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+
+    .signup-header,
+    .signup-card,
+    .signup-footer,
+    .form-section,
+    .form-row,
+    .form-row > *,
+    .planos-grid,
+    .plano-option,
+    .plano-card {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .signup-card {
+        padding: 26px !important;
+    }
+
+    .plano-nome,
+    .plano-desc,
+    .plano-limites,
+    .plano-modulos {
+        overflow-wrap: break-word;
+    }
+
+    .btn-submit {
+        min-height: 48px;
+        white-space: normal;
+    }
+
+    /* Checkout */
+
+    #checkout-modal {
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding: 16px !important;
+    }
+
+    .checkout-box {
+        width: 100% !important;
+        max-width: 480px !important;
+        min-width: 0 !important;
+        max-height: calc(100vh - 32px);
+        max-height: calc(100dvh - 32px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        box-sizing: border-box;
+    }
+
+    .payment-tabs,
+    .pay-tab,
+    .pix-copy-box {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .pay-tab {
+        min-height: 44px;
+    }
+
+    .pix-copy-box input {
+        min-width: 0 !important;
+        flex: 1 1 0;
+    }
+
+    .close-checkout {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    /* Login e recuperacao */
+
+    body:has(.auth-immersive) .main-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+
+    .auth-immersive,
+    .auth-container {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        min-height: 100vh;
+        min-height: 100svh;
+        box-sizing: border-box;
+    }
+
+    .auth-brand,
+    .auth-form-side,
+    .auth-glass-card,
+    .auth-content,
+    .auth-form,
+    .auth-field,
+    .auth-input-wrap {
+        min-width: 0 !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .auth-input {
+        width: 100%;
+        font-size: 16px !important;
+    }
+
+    .auth-eye {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .auth-btn {
+        min-height: 48px;
+        max-width: 100%;
+    }
+
+    .auth-title,
+    .auth-form-title,
+    .auth-desc,
+    .auth-form-subtitle {
+        overflow-wrap: break-word;
+    }
+
+    img,
+    video {
+        max-width: 100%;
+    }
+}
+
+/* Celulares */
+
+@media screen and (max-width: 575.98px) {
+
+    .signup-wrapper {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+
+    .signup-card {
+        padding: 18px !important;
+    }
+
+    .form-row,
+    .planos-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .plano-card {
+        min-height: 0 !important;
+    }
+
+    .lp-hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .lp-hero-actions .hero-btn {
+        width: 100%;
+    }
+
+    .lp-hero-title {
+        font-size: clamp(1.8rem, 7vw, 2.7rem) !important;
+    }
+
+    .auth-form-side {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    .auth-meta {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .auth-glass-card,
+    .auth-content {
+        width: 100% !important;
+    }
+
+    #checkout-modal {
+        padding: 10px !important;
+    }
+
+    .checkout-box {
+        padding: 20px 16px !important;
+        max-height: calc(100vh - 20px);
+        max-height: calc(100dvh - 20px);
+    }
+}
+
+/* Celulares compactos */
+
+@media screen and (max-width: 359.98px) {
+
+    .signup-wrapper {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+    .signup-card {
+        padding: 14px !important;
+    }
+
+    .auth-form-side {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+}
+
+/* Celular em orientacao horizontal */
+
+@media screen and (max-width: 991.98px)
+       and (orientation: landscape)
+       and (max-height: 500px) {
+
+    .auth-container,
+    .auth-immersive,
+    .lp-hero {
+        min-height: 100vh;
+        min-height: 100svh;
+    }
+
+    .checkout-box {
+        max-height: calc(100dvh - 20px);
+    }
+}

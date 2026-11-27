@@ -1,0 +1,36 @@
+/* REABITECH - IDENTIDADE DO PROJETO ATIVO */
+
+#sidebar .active-project-logo {
+    display: block;
+    width: 62px !important;
+    height: 62px !important;
+    min-width: 62px !important;
+    max-width: 62px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    object-fit: contain !important;
+    object-position: center;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    flex-shrink: 0 !important;
+    filter: none !important;
+    box-shadow: none !important;
+}
+
+[data-theme="dark"] #sidebar .active-project-logo {
+    background: transparent !important;
+}
+
+[data-theme="light"] #sidebar .active-project-logo {
+    background: transparent !important;
+}
+
+@media screen and (max-width: 575.98px) {
+    #sidebar .active-project-logo {
+        width: 54px !important;
+        height: 54px !important;
+        min-width: 54px !important;
+        max-width: 54px !important;
+    }
+}

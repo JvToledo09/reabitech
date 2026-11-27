@@ -59,84 +59,31 @@
     resize(); draw();
 })();
 
-// --- 2. LÓGICA DO FORMULÁRIO E CHECKOUT ---
+// Checkout demonstrativo: nenhuma transação financeira.
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('form[action*="signup"]');
-    const checkoutModal = document.getElementById('checkout-modal');
-    const closeCheckout = document.querySelector('.close-checkout');
-    const planRadios = document.querySelectorAll('input[name="plano_id"]');
-    
-    // Controle de Abas no Modal
-    const tabCard = document.getElementById('tab-card');
-    const tabPix = document.getElementById('tab-pix');
-    const contentCard = document.getElementById('content-card');
-    const contentPix = document.getElementById('content-pix');
-
-    if(tabCard && tabPix) {
-        tabCard.addEventListener('click', () => {
-            tabCard.classList.add('active'); tabPix.classList.remove('active');
-            contentCard.classList.add('active'); contentPix.classList.remove('active');
-        });
-        tabPix.addEventListener('click', () => {
-            tabPix.classList.add('active'); tabCard.classList.remove('active');
-            contentPix.classList.add('active'); contentCard.classList.remove('active');
-        });
-    }
-
-    // Interceptar envio do form
-    if(form) {
-        form.addEventListener('submit', (e) => {
-            const selectedPlan = document.querySelector('input[name="plano_id"]:checked');
-            if(!selectedPlan) return; // Deixa o Django validar
-
-            const card = selectedPlan.nextElementSibling;
-            const isFree = card.textContent.includes('Grátis');
-
-            if(isFree) {
-                // Se for grátis, envia direto
-                return;
-            } else {
-                // Se for pago, trava o form e abre o modal
-                e.preventDefault();
-                checkoutModal.classList.add('active');
-            }
-        });
-    }
-
-    // Fechar modal
-    if(closeCheckout) {
-        closeCheckout.addEventListener('click', () => {
-            checkoutModal.classList.remove('active');
-        });
-    }
-
-    // Simular Pagamento (Cartão / PIX)
-    document.querySelectorAll('.btn-pay').forEach(btn => {
-        btn.addEventListener('click', function() {
-            this.classList.add('loading');
-            this.innerHTML = '<i class="fas fa-spinner"></i> Processando...';
-            
-            // Simula um delay de 2 segundos para dar realismo
-            setTimeout(() => {
-                this.innerHTML = '<i class="fas fa-check"></i> Aprovado!';
-                this.style.background = '#059669';
-                
-                // Após 1 segundo, envia o formulário de verdade
-                setTimeout(() => {
-                    if(form) form.submit();
-                }, 1000);
-            }, 2000);
+    const modal = document.getElementById('checkout-modal');
+    if (!form || !modal) return;
+    let confirmed = false;
+    form.addEventListener('submit', event => {
+        const plan = form.querySelector('input[name="plano_id"]:checked');
+        if (!plan || plan.dataset.free === 'true' || confirmed) return;
+        event.preventDefault();
+        modal.classList.add('active');
+    });
+    modal.querySelector('.close-checkout').addEventListener('click', () => modal.classList.remove('active'));
+    ['card', 'pix'].forEach(method => {
+        document.getElementById('tab-' + method).addEventListener('click', () => {
+            ['card', 'pix'].forEach(item => {
+                document.getElementById('tab-' + item).classList.toggle('active', item === method);
+                document.getElementById('content-' + item).classList.toggle('active', item === method);
+            });
         });
     });
+    modal.querySelectorAll('.btn-pay').forEach(button => button.addEventListener('click', () => {
+        if (confirmed || !form.reportValidity()) return;
+        confirmed = true;
+        modal.querySelectorAll('.btn-pay').forEach(item => item.disabled = true);
+        form.requestSubmit();
+    }));
 });
-
-// Copiar PIX
-window.copyPix = function() {
-    const pixInput = document.getElementById('pix-code');
-    pixInput.select(); pixInput.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(pixInput.value);
-    const btn = document.querySelector('.btn-copy');
-    const original = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-check"></i>';
-    setTimeout(() => { btn.innerHTML = original; }, 2000);
-};

@@ -2137,6 +2137,7 @@
     }
 </style>
 
+<link rel="stylesheet" href="{% static 'css/responsive-public.css' %}?v=1">
 </head>
 <body>
 
@@ -2287,13 +2288,13 @@
     <div class="rv-marquee">
         <div class="rv-marquee-track">
             <div class="rv-marquee-item">Clínicas de fisioterapia</div>
-            <div class="rv-marquee-item">Times esportivos</div>
+            <div class="rv-marquee-item">Clubes e equipes</div>
             <div class="rv-marquee-item">Escolas &amp; instituições</div>
             <div class="rv-marquee-item">Consultórios individuais</div>
             <div class="rv-marquee-item">Academias</div>
             <div class="rv-marquee-item">Projetos sociais</div>
             <div class="rv-marquee-item">Clínicas de fisioterapia</div>
-            <div class="rv-marquee-item">Times esportivos</div>
+            <div class="rv-marquee-item">Clubes e equipes</div>
             <div class="rv-marquee-item">Escolas &amp; instituições</div>
             <div class="rv-marquee-item">Consultórios individuais</div>
             <div class="rv-marquee-item">Academias</div>
@@ -2354,7 +2355,7 @@
             <div class="projeto-card">
                 <div class="projeto-logo-wrap">
                     {% if projeto.logo %}
-                        <img src="{% static 'images/projetos/esportetec.png' %}" alt="{{ projeto.nome }}">
+                        <img src="{{ projeto.logo.url }}" alt="{{ projeto.nome }}">
                     {% else %}
                         <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #10b981, #059669); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: 800;">
                             {{ projeto.nome|first|upper }}
@@ -2366,13 +2367,13 @@
                 <div class="projeto-tipo">{{ projeto.get_tipo_display }}</div>
                 
                 <p class="projeto-desc">
-                    {{ projeto.descricao|default:"Um projeto incrível focado em reabilitação e cuidado com atletas." }}
+                    {{ projeto.descricao|default:"Um projeto dedicado ao acompanhamento, à saúde e à reabilitação das pessoas atendidas." }}
                 </p>
 
                 <div class="projeto-stats">
                     <div class="projeto-stat-item">
                         <span class="projeto-stat-value">{{ projeto.total_atletas }}</span>
-                        <span class="projeto-stat-label">Pacientes</span>
+                        <span class="projeto-stat-label">Pessoas acompanhadas</span>
                     </div>
                     <div class="projeto-stat-item">
                         <span class="projeto-stat-value">{{ projeto.total_profissionais }}</span>
@@ -2703,7 +2704,7 @@
                         <div class="testimonial-avatar">CA</div>
                         <div class="testimonial-info">
                             <span class="testimonial-name">Dr. Carlos Andrade</span>
-                            <span class="testimonial-role">Psicólogo Esportivo</span>
+                            <span class="testimonial-role">Psicólogo</span>
                             <div class="testimonial-rating">
                                 <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
  </div>
@@ -2714,7 +2715,7 @@
                 <div class="testimonial-card">
                     <div class="testimonial-quote">"</div>
                     <p class="testimonial-text">
-                        Gerenciar 47 alunos atletas era um caos. Hoje, em 5 minutos, sei quem está lesionado, quem precisa de atenção e quem está pronto para voltar.
+                        Acompanhar tantas pessoas e informações era um desafio. Hoje, em poucos minutos, consigo identificar quem precisa de atenção e acompanhar a evolução de cada pessoa.
  </p>
                     <div class="testimonial-author">
                         <div class="testimonial-avatar">MS</div>
@@ -2869,12 +2870,12 @@
 
             <div class="faq-item reveal">
                 <button class="faq-question">
-                    <span>Posso usar em escolas, times e clínicas?</span>
+                    <span>Para quais instituições o REABITECH é indicado?</span>
                     <span class="faq-icon"><i class="fas fa-plus"></i></span>
  </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
-                        Sim. O REABITECH foi desenhado para múltiplos contextos: clínicas de fisioterapia, escolas, times esportivos, academias, consultórios individuais e projetos sociais. Você escolhe o tipo ao criar sua conta.
+                        O REABITECH atende diferentes contextos, como clínicas de fisioterapia e reabilitação, academias, escolas, consultórios, projetos sociais e organizações esportivas. Ao criar sua conta, você seleciona o tipo de instituição para adequar a experiência ao seu ambiente.
  </div>
  </div>
  </div>
